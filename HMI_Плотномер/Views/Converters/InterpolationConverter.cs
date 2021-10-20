@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace HMI_Плотномер.Views.Converters
 {
-    class InterpolationConverter:IValueConverter
+    public class InterpolationConverter:IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

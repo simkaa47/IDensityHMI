@@ -19,13 +19,12 @@ namespace HMI_Плотномер
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public  partial class MainWindow : Window
     {        
-        public MainWindow()
-        {
+        internal MainWindow(VM vM )
+        {            
             InitializeComponent();
-            
-            
+            this.DataContext = vM;            
         }
     }
 }

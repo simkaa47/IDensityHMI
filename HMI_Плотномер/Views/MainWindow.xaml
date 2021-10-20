@@ -8,15 +8,41 @@
         xmlns:conv="clr-namespace:HMI_Плотномер.Views.Converters"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Window.DataContext >
-        <vm:VM/>
-    </Window.DataContext>
+        Title="MainWindow" Height="450" Width="800">    
     <Window.Resources>
         <conv:InterpolationConverter x:Key="InterpolationConverter"/>
     </Window.Resources>
     <Grid>
-        <TabControl>
+        <!--#region Верхний бар -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <!--#region Эмблема заказчика -->
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5" >
+                <TextBlock Text="Место для эмблемы заказчика" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            </Border>
+            <!--#endregion-->
+            <!--#region Серийный номер -->
+            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="5" >
+                <UniformGrid Rows="2">
+                    <TextBlock Text="Серийный номер:" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock Text="000000" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </UniformGrid>
+            </Border>
+            <!--#endregion-->
+            <!--#region Кнопка закрыть приложение -->
+            <Button Grid.Column="6" Margin="5" Command="{Binding CloseAppCommand}" >Закрыть приложение</Button>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+        <TabControl Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка управление -->
             <TabItem Header="УПРАВЛЕНИЕ">
                 <Grid>
@@ -37,11 +63,11 @@
                         </oxy:Plot.Annotations>
                         <oxy:Plot.Axes>
                             <oxy:LinearAxis    Title ="Значение"  Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
-                            <oxy:DateTimeAxis MaximumRange="{Binding PlotTime}" ></oxy:DateTimeAxis>
+                            <oxy:DateTimeAxis    MaximumRange="{Binding PlotTime}" IntervalType="Auto" ></oxy:DateTimeAxis>
                         </oxy:Plot.Axes>
                         <oxy:ThreeColorLineSeries      LineStyleHi="Dash"  
-                                           LineStyleLo="Dash"  CanTrackerInterpolatePoints="False"                                                     
-                                          
+                                           LineStyleLo="Dash"  CanTrackerInterpolatePoints="True"                                                     
+                                           InterpolationAlgorithm="{Binding InterpolIndex, Converter={StaticResource InterpolationConverter}}"
                                            ItemsSource="{Binding TimePoints}"
                                            DataFieldX="time" DataFieldY="y" 
                                            Color="Black" ColorHi="Red" 
@@ -49,13 +75,14 @@
                                            LimitLo="22"/>
 
                     </oxy:Plot>
+                    <TextBox Grid.Row="1" Text="{Binding PlotTime, Mode=OneWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                 </Grid>
             </TabItem>
             <!--#endregion-->
         </TabControl>
         <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" ></RowDefinition>
             <RowDefinition ></RowDefinition>
-            <RowDefinition Height="0.1*"></RowDefinition>
         </Grid.RowDefinitions>
             
         

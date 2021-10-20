@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using HMI_Плотномер.AddClasses;
 using HMI_Плотномер.Models;
 using HMI_Плотномер.Models.SQL;
+using HMI_Плотномер.ViewModels.Commands;
+using OxyPlot.Axes;
 
 namespace HMI_Плотномер.ViewModels
 {
@@ -15,8 +18,25 @@ namespace HMI_Плотномер.ViewModels
     /// </summary>
     class VM : PropertyChangedBase
     {
+        #region Пользователи
+
+        #region Текущий пользователь
+        public User CurUser { get; set; } 
+        #endregion
+
+
         #region Коллекция пользователей
-        public DataBaseCollection<User> Users { get; } = new DataBaseCollection<User>("Users", new User { Login = "admin",  Password = "0000" });
+        public DataBaseCollection<User> Users { get; } = new DataBaseCollection<User>("Users", new User { Login = "admin", Password = "0000" });
+        #endregion
+        #endregion
+
+        #region Команды
+
+        #region Команда "Закрыть приложение"
+        RelayCommand _closeAppCommand;
+        public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o => Application.Current.Shutdown(), o => true));
+        #endregion
+
         #endregion
         MainModel mainModel = new MainModel();
 
@@ -36,8 +56,12 @@ namespace HMI_Плотномер.ViewModels
         int _interpolIndex=3;
         public int InterpolIndex { get => _interpolIndex;set { Set(ref _interpolIndex, value); } }
 
-        TimeSpan _plotTime = new TimeSpan( 0, 1, 0);
-        public TimeSpan PlotTime { get => _plotTime; }
+        TimeSpan _plotTime = new TimeSpan(0,1,0);
+        public double PlotTime 
+        { 
+            get => DateTimeAxis.ToDouble(_plotTime)/100000; 
+        }
+
 
 
         #endregion
