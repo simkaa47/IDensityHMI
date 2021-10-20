@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HMI_Плотномер.ViewModels;
+using HMI_Плотномер.Views;
 
 namespace HMI_Плотномер
 {
@@ -20,11 +21,20 @@ namespace HMI_Плотномер
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public  partial class MainWindow : Window
-    {        
+    {
+        VM vm;
         internal MainWindow(VM vM )
         {            
             InitializeComponent();
+            this.vm = vM;
             this.DataContext = vM;            
+        }
+
+        private void Logout_click(object sender, RoutedEventArgs e)
+        {
+            Password password = new Password(vm);
+            password.Show();
+            this.Close();
         }
     }
 }

@@ -21,7 +21,8 @@ namespace HMI_Плотномер.ViewModels
         #region Пользователи
 
         #region Текущий пользователь
-        public User CurUser { get; set; } 
+        public User CurUser { get; set; }
+        public string CurUserName { get => CurUser.Somename +" "+ CurUser.Name; }
         #endregion
 
 
@@ -35,10 +36,10 @@ namespace HMI_Плотномер.ViewModels
         #region Команда "Закрыть приложение"
         RelayCommand _closeAppCommand;
         public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o => Application.Current.Shutdown(), o => true));
-        #endregion
+        #endregion        
 
         #endregion
-        MainModel mainModel = new MainModel();
+        MainModel mainModel { get;} = new MainModel();
 
         ObservableCollection<TimePoint> timePoints;
         public ObservableCollection<TimePoint> TimePoints
