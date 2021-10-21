@@ -40,12 +40,17 @@ namespace HMI_Плотномер.Models
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
-        public bool Connecting { get => _connecting; private set => Set(ref _connecting, value); }
+        public bool Connecting { get => _connecting;  set => Set(ref _connecting, value); }
         #endregion
+
+        RS485 rs;
+
 
         public async void ModelProcess()
         {
+            rs = new RS485(this);
             await Task.Run(() => AddCollection());
+            
         }
 
         void AddCollection()
@@ -56,6 +61,7 @@ namespace HMI_Плотномер.Models
             {
                 
                 App.Current?.Dispatcher?.Invoke(Add) ;
+                rs.GetData();
                 Thread.Sleep(1000);
             }
         }

@@ -11,6 +11,7 @@
         Title="MainWindow" Height="450" Width="800">    
     <Window.Resources>
         <conv:InterpolationConverter x:Key="InterpolationConverter"/>
+        <conv:ColorIndicator x:Key="ColorToBool"/>
         <Style TargetType="Border">
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="Black"/>            
@@ -42,7 +43,7 @@
             </Border>
             <!--#endregion-->
             <!--#region Индикатор связи с платой -->
-            <Border Grid.Column="2" Margin="5">
+            <Border Background="{Binding mainModel.Connecting, Converter={StaticResource ColorToBool}}"  Grid.Column="2" Margin="5">
                 <TextBlock Text="Сязь с платой" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </Border>
             <!--#endregion-->
@@ -53,6 +54,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding mainModel.Rtc}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                     <Button Grid.Row="1"  MouseDoubleClick="Logout_click"  Content="{Binding CurUserName}"></Button>
                 </Grid>
             </Border>
@@ -86,8 +88,7 @@
                             <oxy:DateTimeAxis    MaximumRange="{Binding PlotTime}" IntervalType="Auto" ></oxy:DateTimeAxis>
                         </oxy:Plot.Axes>
                         <oxy:ThreeColorLineSeries      LineStyleHi="Dash"  
-                                           LineStyleLo="Dash"  CanTrackerInterpolatePoints="True"                                                     
-                                           InterpolationAlgorithm="{Binding InterpolIndex, Converter={StaticResource InterpolationConverter}}"
+                                           LineStyleLo="Dash"  CanTrackerInterpolatePoints="True"
                                            ItemsSource="{Binding TimePoints}"
                                            DataFieldX="time" DataFieldY="y" 
                                            Color="Black" ColorHi="Red" 
@@ -97,6 +98,28 @@
                     </oxy:Plot>
                     <TextBox Grid.Row="1" Text="{Binding PlotTime, Mode=OneWay, UpdateSourceTrigger=LostFocus}"></TextBox>
                 </Grid>
+            </TabItem>
+            <TabItem Header="НАСТРОЙКИ">
+                <TabControl TabStripPlacement="Left">
+                    <TabItem Header="НАСТРОЙКИ СВЯЗИ">
+                        <Grid>
+                            <ListBox>
+                                <GroupBox Header="Способ связи с платой">
+                                    <StackPanel>
+                                        <RadioButton GroupName="comm" Content="RS-485(Modbus RTU)"/>
+                                        <RadioButton GroupName="comm" Content="Ethernet (TCP)"/>
+                                        <RadioButton GroupName="comm" Content="HART"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Настройки RS-485">
+
+                                </GroupBox>
+                            </ListBox>
+                            
+                            
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </TabItem>
             <!--#endregion-->
         </TabControl>

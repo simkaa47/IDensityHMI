@@ -39,7 +39,7 @@ namespace HMI_Плотномер.ViewModels
         #endregion        
 
         #endregion
-        MainModel mainModel { get;} = new MainModel();
+        public MainModel mainModel { get;} = new MainModel();
 
         ObservableCollection<TimePoint> timePoints;
         public ObservableCollection<TimePoint> TimePoints
