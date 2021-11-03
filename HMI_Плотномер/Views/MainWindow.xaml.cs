@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,17 @@ namespace HMI_Плотномер
             Password password = new Password(vm);
             password.Show();
             this.Close();
+        }       
+
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            var compobox = sender as ComboBox;
+            if (compobox != null)
+            {
+                var arr = SerialPort.GetPortNames();
+                compobox.ItemsSource = arr;
+            }
+            
         }
     }
 }

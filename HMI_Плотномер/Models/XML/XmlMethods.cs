@@ -1,0 +1,130 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Xml;
+
+namespace HMI_Плотномер.Models.XML
+{
+    /// <summary>
+    /// Набор статических методов для чтеня, записи, удаления, редактирования данных в XML документе
+    /// </summary>
+    class XmlMethods
+    {
+        #region Событие
+        static public event Action<string> XmlErrorEvent;
+        #endregion
+
+        #region Путь
+        readonly static string Path = "settings.xml";
+        #endregion
+
+        #region Метод чтения данных по дескриптору
+        /// <summary>
+        /// Чтение данных по дескриптору
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public static List<T>GetParam<T>()
+        {
+            var xDoc = new XmlDocument();// создаем документ
+            xDoc.Load(Path);// загружаем данные
+            Type type = typeof(T);
+            var props = typeof(T).GetProperties();
+            var paramList = new List<T>();
+            XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
+            try
+            {
+                for (int i = 0; i < nodeList.Count; i++)
+                {
+                    T cell = (T)Activator.CreateInstance(type);
+                    for (int j = 0; j < props.Length; j++)
+                    {
+                        type.GetProperty(props[j].Name).SetValue(cell, Parse(props[j].PropertyType, nodeList.Item(i).Attributes[props[j].Name].Value));
+                    }
+                    paramList.Add(cell);
+                }
+            }
+            catch (Exception ex)
+            {
+                XmlErrorEvent?.Invoke(ex.Message);
+            }
+            return paramList;           
+
+        }
+        #endregion
+
+        #region Преобразование из строки в зависимости от типа
+        static object Parse(Type type, string par)
+        {
+            switch (type.Name.ToLower())
+            {
+                case "boolean": return par.ToLower() == "true";
+                case "int32": return int.Parse(par);
+                case "byte": return byte.Parse(par);
+                case "single":
+                case "float": return float.Parse(par.Replace(",", "."), CultureInfo.InvariantCulture);
+                default: return par;
+            }
+        }
+        #endregion
+
+        #region Добавление записи
+        public static void AddToXml<T>(T param)
+        {
+            var xDoc = new XmlDocument();// создаем документ
+            xDoc.Load(Path);// загружаем данные
+            XmlNode xNode = xDoc.DocumentElement.SelectSingleNode("params");
+            Type type = typeof(T);
+            XmlElement deviceElem = xDoc.CreateElement(type.Name);
+            var props = typeof(T).GetProperties();
+            try
+            {
+                foreach (var prop in props)
+                {
+                    XmlAttribute attr = xDoc.CreateAttribute(prop.Name);
+                    XmlText text = xDoc.CreateTextNode(type.GetProperty(prop.Name).GetValue(param).ToString());
+                    attr.AppendChild(text);
+                    deviceElem.Attributes.Append(attr);
+
+                }
+                xNode.AppendChild(deviceElem);
+                xDoc.Save(Path);
+            }
+            catch (Exception ex)
+            {
+                XmlErrorEvent?.Invoke(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Редактирование записи
+        public static void EditParam<T>(T param, string changedProperty)
+        {
+            var xDoc = new XmlDocument();
+            xDoc.Load(Path);
+            Type type = typeof(T);
+            var props = typeof(T).GetProperties();
+            XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
+            try
+            {
+                for (int i = 0; i < nodeList.Count; i++)
+                {
+                    bool isEqual = true;
+                    foreach (var prop in props)
+                    {
+                        var xmlValue = nodeList.Item(i).Attributes[prop.Name].Value;
+                        var parValue = type.GetProperty(prop.Name).GetValue(param).ToString();
+                        if (prop.Name != changedProperty) isEqual = isEqual && (xmlValue == parValue);
+                    }
+                    if (isEqual) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
+                }
+                xDoc.Save(Path);
+            }            
+            catch (Exception ex)
+            {
+                XmlErrorEvent?.Invoke(ex.Message);
+            }            
+        }
+        #endregion
+    }
+}

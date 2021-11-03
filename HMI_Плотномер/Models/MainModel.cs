@@ -1,38 +1,33 @@
 ﻿using HMI_Плотномер.AddClasses;
+using HMI_Плотномер.Models.XML;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HMI_Плотномер.Models
 {
-    class MainModel: PropertyChangedBase
+    class MainModel : PropertyChangedBase
     {
-        #region Спсоб соединения с платой
-        enum ConnectionMode
+        public MainModel()
         {
-            RS485,
-            TCP,
-            HART
+            Init();// Инициализация параметров
         }
+        #region События
+        #region Обновились данные
+        public event Action UpdateDataEvent;
         #endregion
-        #region Данные для графика
-        ObservableCollection<TimePoint> _plotCollection;
-        public ObservableCollection<TimePoint> PlotCollection
-        {
-            get => _plotCollection ?? (_plotCollection = new ObservableCollection<TimePoint>());
-        }
+        #endregion
+
+        #region Спсоб соединения с платой
+        public CommMode CommMode { get; private set; }
         #endregion
 
         #region RTC контроллера платы
-        DateTime _rtc;
-        /// <summary>
-        /// Часы реального времени в плате контроллера
-        /// </summary>
-        public DateTime Rtc { get => _rtc; set => Set(ref _rtc, value); }
-
+        public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Часы реального времени", "hold", 19);
         #endregion
 
         #region Статус соединения с платой
@@ -40,34 +35,91 @@ namespace HMI_Плотномер.Models
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
-        public bool Connecting { get => _connecting;  set => Set(ref _connecting, value); }
+        public bool Connecting { get => _connecting; set => Set(ref _connecting, value); }
         #endregion
 
-        RS485 rs;
+        #region Данные измерения
+        #region ФВ усредненное по диапазонам мгновенное
+        public Parameter<float> PhysValueCur { get; } = new Parameter<float>("ФВ усредненное по диапазонам мгновенное", "read", 0);
+        #endregion
 
+        #region ФВ усредненное по диапазонам мгновенное
+        public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("ФВ усредненное по диапазонам усредненное", "read", 2);
+        #endregion
+
+        #region Статус циклических измерений
+        public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("Статус циклических измерений", "hold", 1);
+        #endregion
+
+
+        #endregion
+
+        #region Данные тлеметрии HV
+        public HvTelemetry TelemetryHV { get; } = new HvTelemetry();
+        #endregion
+
+        #region Данные телеметрии платы питания(темпратуры)
+        public TempBoardTelemetry TempTelemetry { get; } = new TempBoardTelemetry();
+        #endregion
+
+        public RS485 rs { get; private set; }
+        public TCP Tcp { get; private set; }
 
         public async void ModelProcess()
         {
-            rs = new RS485(this);
-            await Task.Run(() => AddCollection());
-            
+            await Task.Run(() => MainProcess());
+
         }
 
-        void AddCollection()
-        {
-            int sdfsd = 14;
-            sdfsd++;
+        void MainProcess()
+        {            
             while (true)
             {
-                
-                App.Current?.Dispatcher?.Invoke(Add) ;
-                rs.GetData();
-                Thread.Sleep(1000);
+                if (CommMode.RsEnable) rs.GetData(this);
+                else if (CommMode.EthEnable) Tcp.GetData(this);
+                else Connecting = false;
+                if (CycleMeasStatus.Value && Connecting)UpdateDataEvent?.Invoke();
+                Thread.Sleep(500);
             }
         }
-        void Add()
+
+        #region Инициализация
+        void Init()
         {
-            PlotCollection.Add(new TimePoint { time = DateTime.Now, y = new Random().Next(18, 32) });
+            rs = ClassInit<RS485>();
+            Tcp = ClassInit<TCP>();
+            CommMode = ClassInit<CommMode>();
         }
+
+        T ClassInit<T>() where T : PropertyChangedBase
+        {
+            T cell = XmlMethods.GetParam<T>().FirstOrDefault();
+            if (cell == null)
+            {
+                cell = (T)Activator.CreateInstance(typeof(T));
+                XmlMethods.AddToXml<T>(cell);
+            }
+            cell.PropertyChanged += (sender, e) => XmlMethods.EditParam<T>(cell, e.PropertyName);
+            return cell;
+        }
+        #endregion
+
+        #region Команды
+        #region Старт-стоп циклических измерений
+        public void SwitchMeas()
+        {
+            if (CommMode.EthEnable) Tcp.SwitchMeas(CycleMeasStatus.Value ? 0 : 1);
+        }
+        #endregion
+
+        #region Включитть-выключить HV 
+        public void SwitchHv()
+        {
+            if(CommMode.EthEnable)
+                Tcp.SwitchHv(TelemetryHV.HvOn.Value ? 0 : 1);
+        }
+        #endregion
+        #endregion
+
     }
 }

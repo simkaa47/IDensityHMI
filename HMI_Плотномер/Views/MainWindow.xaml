@@ -6,17 +6,118 @@
         xmlns:local="clr-namespace:HMI_Плотномер"
         xmlns:vm="clr-namespace:HMI_Плотномер.ViewModels"
         xmlns:conv="clr-namespace:HMI_Плотномер.Views.Converters"
-        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">    
+        Title="MainWindow" Height="450" Width="800">
+    <!--#region Общие ресурсы -->
     <Window.Resources>
+        <!--#region КОнвертеры -->
         <conv:InterpolationConverter x:Key="InterpolationConverter"/>
         <conv:ColorIndicator x:Key="ColorToBool"/>
+        <conv:GetStatusConveter x:Key="StatusFromNum"/>
+        <conv:BoolToVisible x:Key="VisibleConverter"/>
+        <!--#endregion-->
+        <!--#region Стили -->
         <Style TargetType="Border">
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="Black"/>            
-        </Style>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style >
+
+        <!--#region Шаблоны -->
+        <ControlTemplate TargetType="ListBoxItem" x:Key="TextBoxParameter">
+            <ListBoxItem>
+                <Grid>
+                    <TextBlock Text="{TemplateBinding Tag}" HorizontalAlignment="Left"/>
+                    <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>                    
+                </Grid>
+            </ListBoxItem>
+
+        </ControlTemplate>
+        <ControlTemplate TargetType="ListBoxItem" x:Key="TextBoxParameterFloat">
+            <ListBoxItem>
+                <Grid>
+                    <TextBlock Text="{TemplateBinding Tag}" HorizontalAlignment="Left"/>
+                    <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F1}}"  HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>
+                </Grid>
+            </ListBoxItem>
+
+        </ControlTemplate>
+        <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar">
+            <Grid>
+                <ComboBox Name="compobox" SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          ItemsSource="{TemplateBinding ItemsSource}"  Tag="{TemplateBinding Tag}">
+                </ComboBox>
+
+                <ContentControl Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                </ContentControl>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger SourceName="compobox" Property="SelectedItem" Value="{x:Null}">
+                    <Setter TargetName="compobox" Property="Text" Value="{Binding ElementName=compobox, Path=Tag}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--#region Шаблоны для compobox -->
+        <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar1">
+            <Grid>
+                <ComboBox Name="compobox" SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ItemsSource}"  Tag="{TemplateBinding Tag}" DropDownOpened="ComboBox_DropDownOpened">
+                </ComboBox>
+
+                <ContentControl Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                </ContentControl>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger SourceName="compobox" Property="SelectedItem" Value="{x:Null}">
+                    <Setter TargetName="compobox" Property="Text" Value="{Binding ElementName=compobox, Path=Tag}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate TargetType="TextBox" x:Key="TextBoxPar">
+            <Grid>
+                <TextBox Text="{Binding Value}"
+                         Height="{TemplateBinding Height}"
+                         Width="{TemplateBinding Width}"></TextBox>
+                <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                </ContentControl>
+                <Grid.ToolTip>
+                    <ToolTip Content="{Binding Description}" Placement="Mouse"></ToolTip>
+                </Grid.ToolTip>
+            </Grid>
+        </ControlTemplate>
+        <!--#endregion-->
+        <!--#endregion-->
+
+        <!--#endregion-->
+        <!--#region Баудрейт -->
+        <col1:ArrayList x:Key="baudrates">
+            <sys1:String>2400</sys1:String>
+            <sys1:String>4800</sys1:String>
+            <sys1:String>9600</sys1:String>
+            <sys1:String>19200</sys1:String>
+            <sys1:String>38400</sys1:String>
+            <sys1:String>115200</sys1:String>
+        </col1:ArrayList>
+        <!--#endregion-->
+        <!--#region Баудрейт -->
+        <col1:ArrayList x:Key="parityes">
+            <sys1:String>None</sys1:String>
+            <sys1:String>Even</sys1:String>
+            <sys1:String>Odd</sys1:String>
+        </col1:ArrayList>
+        <!--#endregion-->
+
+
     </Window.Resources>
+    <!--#endregion-->
+    <!--#region Страницы -->
     <Grid>
         <!--#region Верхний бар -->
         <Grid>
@@ -44,8 +145,38 @@
             <!--#endregion-->
             <!--#region Индикатор связи с платой -->
             <Border Background="{Binding mainModel.Connecting, Converter={StaticResource ColorToBool}}"  Grid.Column="2" Margin="5">
-                <TextBlock Text="Сязь с платой" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Text="Связь с платой" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </Border>
+            <!--#endregion-->
+            <!--#region Индикатор измерений -->
+            <Border Grid.Column="3" Margin="5" Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}}">
+                <Border.Resources>
+                    <col1:ArrayList x:Key="measStatus">
+                        <sys1:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys1:String>
+                        <sys1:String>ИЗМЕРЕНИЯ ВКЛЮЧЕНЫ</sys1:String>
+                    </col1:ArrayList>
+                </Border.Resources>
+                <TextBox Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatus}}"
+                         TextWrapping="Wrap"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"></TextBox>
+            </Border>
+            <!--#endregion-->
+            <!--#region Индикатор высокого напряжения -->
+            <Border Grid.Column="4" Margin="5" Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}}">
+                <Border.Resources>
+                    <col1:ArrayList x:Key="hvStatus">
+                        <sys1:String>HV ВЫКЛЮЧЕНО</sys1:String>
+                        <sys1:String>HV ВКЛЮЧЕНО</sys1:String>
+                    </col1:ArrayList>
+                </Border.Resources>
+                <TextBox Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource hvStatus}}"
+                         TextWrapping="Wrap"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"
+                         HorizontalContentAlignment="Center"></TextBox>
+            </Border>
+
             <!--#endregion-->
             <!--#region Время и пользователь -->
             <Border Grid.Column="5" Margin="5">
@@ -54,8 +185,18 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding mainModel.Rtc}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                    <Button Grid.Row="1"  MouseDoubleClick="Logout_click"  Content="{Binding CurUserName}"></Button>
+                    <TextBox Template="{StaticResource TextBoxPar }" 
+                             DataContext="{Binding mainModel.Rtc}"
+                             VerticalContentAlignment="Center"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"
+                             HorizontalContentAlignment="Center"
+                             
+                             ></TextBox>
+
+
+                    <Button Grid.Row="1"  MouseDoubleClick="Logout_click"  Content="{Binding CurUserName}" RenderTransformOrigin="0.5,0.5">
+                    </Button>
                 </Grid>
             </Border>
             <!--#endregion-->
@@ -64,59 +205,304 @@
             <!--#endregion-->
         </Grid>
         <!--#endregion-->
+        <!--#region Вкладки -->
         <TabControl Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка управление -->
             <TabItem Header="УПРАВЛЕНИЕ">
                 <Grid>
+
                     <!--#region Развбивка на 4 части экрана -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="1.5*"></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <!--#endregion-->
-                    <oxy:Plot Grid.Row="0" x:Name="plot"  PlotAreaBackground="LightGray">
-                        <oxy:Plot.Annotations >
-                            <oxy:LineAnnotation Type="Horizontal" Y="22" Color="Blue"  StrokeThickness="1"   />
-                            <oxy:LineAnnotation Type="Horizontal" Y="28" Color="Red"   StrokeThickness="1"  />
-                        </oxy:Plot.Annotations>
-                        <oxy:Plot.Axes>
-                            <oxy:LinearAxis    Title ="Значение"  Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
-                            <oxy:DateTimeAxis    MaximumRange="{Binding PlotTime}" IntervalType="Auto" ></oxy:DateTimeAxis>
-                        </oxy:Plot.Axes>
-                        <oxy:ThreeColorLineSeries      LineStyleHi="Dash"  
-                                           LineStyleLo="Dash"  CanTrackerInterpolatePoints="True"
-                                           ItemsSource="{Binding TimePoints}"
-                                           DataFieldX="time" DataFieldY="y" 
-                                           Color="Black" ColorHi="Red" 
-                                           ColorLo="Blue" LimitHi="28" 
-                                           LimitLo="22"/>
 
-                    </oxy:Plot>
-                    <TextBox Grid.Row="1" Text="{Binding PlotTime, Mode=OneWay, UpdateSourceTrigger=LostFocus}"></TextBox>
+                    <!--#region Тренды -->
+                    <TabControl TabStripPlacement="Bottom">
+                        <!--#region Текущй тренд -->
+                        <TabItem Header="Текущий тренд">
+                            <!--#region Текущий тренд -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.1*"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <DockPanel Grid.Column="0" >
+                                    <CheckBox x:Name="VisibleLine1" IsChecked="True" VerticalAlignment="Center"></CheckBox>
+                                    <TextBlock Text="Усредненная физическая величина" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
+                                </DockPanel>
+                                <DockPanel Grid.Column="1">
+                                    <CheckBox x:Name="VisibleLine2" VerticalAlignment="Center"></CheckBox>
+                                    <TextBlock Text="Мгновенная физическая величина" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
+                                </DockPanel>
+
+                                <oxy:Plot Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
+                                    <oxy:Plot.Annotations >
+                                        <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
+                                        <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
+                                    </oxy:Plot.Annotations>
+                                    <oxy:Plot.Axes>
+                                        <oxy:LinearAxis    Title ="Значение"  Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
+                                        <oxy:DateTimeAxis Title="Время" ></oxy:DateTimeAxis>
+                                    </oxy:Plot.Axes>
+                                    <oxy:ThreeColorLineSeries LineStyle="Dash"
+                                           Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
+                                           ItemsSource="{Binding PlotCollection}"
+                                           DataFieldX="time" DataFieldY="y1" 
+                                           Color="Black" ColorHi="Red" 
+                                           ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
+                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"
+                                           LineStyleHi="Dash"/>
+                                    <oxy:ThreeColorLineSeries LineStyle="Automatic" 
+                                           Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
+                                           ItemsSource="{Binding PlotCollection}"
+                                           DataFieldX="time" DataFieldY="y2" 
+                                           Color="Green" ColorHi="Green" 
+                                           ColorLo="Green" LimitHi="4.6"
+                                           LimitLo="4.4"
+                                           LineStyleHi="Dash"/>
+
+                                </oxy:Plot>
+                            </Grid>
+
+
+                            <!--#endregion-->
+                        </TabItem>
+                        <!--#endregion-->
+                        <!--#region Настройки отображения -->
+                        <TabItem Header="Настройки отображения">
+                            <ListBox HorizontalContentAlignment="Stretch">
+                                <!--#region Временоой интервал -->
+                                <ListBoxItem Template="{StaticResource TextBoxParameter}" Tag="Максимальное время отображения, мин" 
+                                             Content="{Binding TrendSettings.PlotTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Минимальный предел -->
+                                <ListBoxItem Template="{StaticResource TextBoxParameterFloat}" Tag="Минимальный предел" 
+                                             Content="{Binding TrendSettings.PlotLowLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Мксимальный предел -->
+                                <ListBoxItem Template="{StaticResource TextBoxParameterFloat}" Tag="Максимальный предел" 
+                                             Content="{Binding TrendSettings.PlotHighLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                </ListBoxItem>
+                                <!--#endregion-->                                
+                            </ListBox>
+                        </TabItem>
+                        <!--#endregion-->
+                        <TabItem Header="Архивный тренд"></TabItem>
+                    </TabControl>
+                    <!--#endregion-->
+
+                    <!--#region Числовая индикация ФВ -->
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Border Margin="5">
+                            <DockPanel>
+                                <Label DockPanel.Dock="Top" Content="Усредненное значение"/>
+                                <TextBlock  Grid.Column="1" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                            Text="{Binding mainModel.PhysValueAvg.Value, StringFormat={}{0:F1}}"></TextBlock>
+                            </DockPanel>
+                        </Border>
+                        <Border Grid.Column="1" Margin="5">
+                            <DockPanel>
+                                <Label DockPanel.Dock="Top" Content="Мгновенное значение"/>
+                                <TextBlock  Grid.Column="1" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                            Text="{Binding mainModel.PhysValueCur.Value, StringFormat={}{0:F1}}"></TextBlock>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Индикация узлов -->
+                    <StackPanel Grid.Row="1">
+                        <!--#region Индикация модуля HV -->
+                        <GroupBox Grid.Row="1" Header="Индикация модуля HV">
+                            <ListBox  DataContext="{Binding mainModel.TelemetryHV}">
+                                <!--#region Уставка напряжения -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <Grid>
+                                        <TextBlock Text="Уставка напряжения, В" HorizontalAlignment="Left"></TextBlock>
+                                        <TextBlock Text="{Binding VoltageSV.Value}" HorizontalAlignment="Right" ></TextBlock>
+                                    </Grid>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Входное напряжение -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <Grid>
+                                        <TextBlock Text="Входное напряжение, В" HorizontalAlignment="Left"></TextBlock>
+                                        <TextBlock Text="{Binding VoltageCurIn.Value}" HorizontalAlignment="Right" ></TextBlock>
+                                    </Grid>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Выходное напряжение -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <Grid>
+                                        <TextBlock Text="Выходное напряжение, В" HorizontalAlignment="Left"></TextBlock>
+                                        <TextBlock Text="{Binding VoltageCurOut.Value}" HorizontalAlignment="Right" ></TextBlock>
+                                    </Grid>
+                                </ListBoxItem>
+                                <!--#endregion-->
+
+                            </ListBox>
+                        </GroupBox>
+                        <!--#endregion-->
+                        <!--#region Индикация иодуля температуры -->
+                        <GroupBox Header="Индикация модуля температуры">
+                            <ListBox DataContext="{Binding mainModel.TempTelemetry}">
+                                <!--#region Внешняя температура, С -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <Grid>
+                                        <TextBlock Text="Внешняя температура, C"></TextBlock>
+                                        <TextBlock Text="{Binding TempExternal.Value}" HorizontalAlignment="Right"></TextBlock>
+                                    </Grid>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                            </ListBox>
+                        </GroupBox>
+                        <!--#endregion-->
+                    </StackPanel>
+                    <!--#endregion-->
+
+                    <!--#region Кнопки управления -->
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <!--#region Кнопка Вкл-выкл Hv -->
+                        <Button Margin="5" Command="{Binding SwitchHvCommand}" 
+                                Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
+                            <Button.Resources>
+                                <col1:ArrayList x:Key="hvStatus">
+                                    <sys1:String>ВКЛЮЧИТЬ HV</sys1:String>
+                                    <sys1:String>ВЫКЛЮЧИТЬ HV</sys1:String>
+                                </col1:ArrayList>
+                            </Button.Resources>
+                            <TextBlock Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource hvStatus}}"
+                                       IsEnabled="{Binding mainModel.Connecting}"
+                                       TextWrapping="Wrap"
+                                       ></TextBlock>
+                        </Button>
+                        <!--#endregion-->
+                        <!--#region Кнопка Вкл-выкл измерения -->
+                        <Button Grid.Column="1" Margin="5" Command="{Binding SwitchMeasCommand}" 
+                                Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
+                            <Button.Resources>
+                                <col1:ArrayList x:Key="measStatus">
+                                    <sys1:String>ВКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
+                                    <sys1:String>ВЫКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
+                                </col1:ArrayList>
+                            </Button.Resources>
+                            <TextBlock Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatus}}"
+                                       IsEnabled="{Binding mainModel.Connecting}"
+                                       TextWrapping="Wrap"
+                                       ></TextBlock>
+                        </Button>
+                        <!--#endregion-->
+
+                    </Grid>
+                    <!--#endregion-->
+
+
                 </Grid>
             </TabItem>
+            <!--#endregion-->
+            <!--#region Вкладка настроек -->
             <TabItem Header="НАСТРОЙКИ">
                 <TabControl TabStripPlacement="Left">
                     <TabItem Header="НАСТРОЙКИ СВЯЗИ">
                         <Grid>
-                            <ListBox>
-                                <GroupBox Header="Способ связи с платой">
+                            <ListBox HorizontalContentAlignment="Stretch" >
+                                <!--#region Способ связи с платой -->
+                                <GroupBox  Header="Способ связи с платой">
                                     <StackPanel>
-                                        <RadioButton GroupName="comm" Content="RS-485(Modbus RTU)"/>
-                                        <RadioButton GroupName="comm" Content="Ethernet (TCP)"/>
-                                        <RadioButton GroupName="comm" Content="HART"/>
+                                        <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.RsEnable}"  Content="RS-485(Modbus RTU)"/>
+                                        <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.EthEnable}" Content="Ethernet (TCP)"/>
+                                        <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.HartEnable}" Content="HART"  IsEnabled="False"/>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Header="Настройки RS-485">
+                                <!--#endregion-->
+                                <!--#region Параметры RS485 -->
+                                <GroupBox  Header="Настройки RS-485" HorizontalAlignment="Stretch">
+                                    <!--#region Параметры RS485 -->
+                                    <ListBox>
+                                        <!--#region Имя COM порта -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Text="Имя COM порта" HorizontalAlignment="Left"></TextBlock>
+                                                <ComboBox   Width="80" Template="{StaticResource CompoboxPar1}" Tag="{Binding mainModel.rs.ComName}"  SelectedItem="{Binding mainModel.rs.ComName}"  DropDownOpened="ComboBox_DropDownOpened"  HorizontalAlignment="Right">
 
+                                                </ComboBox>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Скорость передачи даных, бит/c -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Text="Скорость передачи даных, бит/c" HorizontalAlignment="Left"></TextBlock>
+                                                <ComboBox Template="{StaticResource CompoboxPar}"  Width="80"   ItemsSource="{StaticResource baudrates}" Tag="{Binding mainModel.rs.BaudRate}"  SelectedItem="{Binding mainModel.rs.BaudRate}"  HorizontalAlignment="Right">
+
+                                                </ComboBox>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Паритет -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Text="Паритет" HorizontalAlignment="Left"></TextBlock>
+                                                <ComboBox Template="{StaticResource CompoboxPar}"   Width="80"  ItemsSource="{StaticResource parityes}"  Tag="{Binding mainModel.rs.Par}"  SelectedItem="{Binding mainModel.rs.Par}" HorizontalAlignment="Right"></ComboBox>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Адрес устройства в сети Modbus -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Text="Адрес устройства в сети Modbus" HorizontalAlignment="Left"></TextBlock>
+                                                <TextBox Text="{Binding mainModel.rs.MbAddr}" HorizontalContentAlignment="Center" Width="80" HorizontalAlignment="Right"></TextBox>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                    </ListBox>
+
+                                    <!--#endregion-->
                                 </GroupBox>
+                                <!--#endregion-->
+                                <!--#region Параметры  Ethernet-->
+                                <GroupBox Header="Настройки Ethernet(TCP) соединения">
+                                    <ListBox HorizontalContentAlignment="Stretch">
+                                        <ListBoxItem Content="{Binding mainModel.Tcp.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
+                                        <ListBoxItem Content="{Binding mainModel.Tcp.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Номер порта"></ListBoxItem>
+                                    </ListBox>
+                                </GroupBox>
+                                <!--#endregion-->
                             </ListBox>
-                            
-                            
+
+
                         </Grid>
                     </TabItem>
                 </TabControl>
@@ -127,7 +513,9 @@
             <RowDefinition Height="0.1*" ></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-            
-        
+        <!--#endregion-->
+
+
     </Grid>
+    <!--#endregion-->
 </Window>

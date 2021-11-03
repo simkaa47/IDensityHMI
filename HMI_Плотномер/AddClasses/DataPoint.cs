@@ -7,6 +7,7 @@ namespace HMI_Плотномер.AddClasses
     internal struct TimePoint
     {
         public DateTime time { get; set; }
-        public float y { set; get; }
+        public float y1 { set; get; }
+        public float y2 { set; get; }
     }
 }

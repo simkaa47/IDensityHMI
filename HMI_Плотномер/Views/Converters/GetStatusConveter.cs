@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -7,13 +8,21 @@ using System.Windows.Media;
 
 namespace HMI_Плотномер.Views.Converters
 {
-    public class ColorIndicator : IValueConverter
+    class GetStatusConveter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value == true) return Brushes.Green;
-            if (parameter == null) return Brushes.Red;
-            else return parameter;
+            try
+            {
+                var arrStr = parameter as ArrayList;
+                var condition = (bool)value;
+             return condition ? arrStr[1] : arrStr[0];
+            }
+            catch (Exception ex)
+            {
+
+                return "ОШИБКА ПРЕОБРАЗОВАНИЯ В СТРОКУ";
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
