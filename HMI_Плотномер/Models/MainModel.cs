@@ -78,7 +78,10 @@ namespace HMI_Плотномер.Models
                 if (CommMode.RsEnable) rs.GetData(this);
                 else if (CommMode.EthEnable) Tcp.GetData(this);
                 else Connecting = false;
-                if (CycleMeasStatus.Value && Connecting)UpdateDataEvent?.Invoke();
+                PhysValueAvg.Value = PhysValueAvg.Value + 0.01f;
+                PhysValueCur.Value = PhysValueCur.Value + 0.02f;
+                //if (CycleMeasStatus.Value && Connecting)
+                UpdateDataEvent?.Invoke();
                 Thread.Sleep(500);
             }
         }

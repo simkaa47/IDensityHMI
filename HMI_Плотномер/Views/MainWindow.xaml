@@ -114,6 +114,36 @@
         </col1:ArrayList>
         <!--#endregion-->
 
+        <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
+            <oxy:Plot Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
+                <oxy:Plot.Annotations >
+                    <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
+                    <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
+                </oxy:Plot.Annotations>
+                <oxy:Plot.Axes>
+                    <oxy:LinearAxis    Title ="Значение"  Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
+                    <oxy:DateTimeAxis Title="Время" ></oxy:DateTimeAxis>
+                </oxy:Plot.Axes>
+                <oxy:ThreeColorLineSeries LineStyle="Dash"
+                                           Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
+                                           ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
+                                           DataFieldX="time" DataFieldY="y1" 
+                                           Color="Black" ColorHi="Red" 
+                                           ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
+                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"
+                                           LineStyleHi="Dash"/>
+                <oxy:ThreeColorLineSeries LineStyle="Automatic" 
+                                           Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
+                                           ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
+                                           DataFieldX="time" DataFieldY="y2" 
+                                           Color="Green" 
+                                           ColorHi="Green"
+                                           ColorLo="Green"
+                                           LineStyleHi="Dash"/>
+
+            </oxy:Plot>
+        </ControlTemplate>
+
 
     </Window.Resources>
     <!--#endregion-->
@@ -267,9 +297,9 @@
                                            Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
                                            ItemsSource="{Binding PlotCollection}"
                                            DataFieldX="time" DataFieldY="y2" 
-                                           Color="Green" ColorHi="Green" 
-                                           ColorLo="Green" LimitHi="4.6"
-                                           LimitLo="4.4"
+                                           Color="Green" 
+                                           ColorHi="Green"
+                                           ColorLo="Green"
                                            LineStyleHi="Dash"/>
 
                                 </oxy:Plot>
@@ -300,7 +330,31 @@
                             </ListBox>
                         </TabItem>
                         <!--#endregion-->
-                        <TabItem Header="Архивный тренд"></TabItem>
+                        <!--#region Архивный тренд -->
+                        <TabItem Header="Архивный тренд">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.1*"/>
+                                    <RowDefinition Height="0.1*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!--#region Тренд -->
+                                <oxy:Plot Grid.Row="2" Grid.ColumnSpan="4" Tag="{Binding ArchivalDataPotnts}" Template="{StaticResource Trend}"></oxy:Plot>
+                                <!--#endregion-->
+                                <!--#region Кнопка "Показать тренд" -->
+                                <Button Command="{Binding ShowArchivalTrendCommand}">
+                                    <TextBlock Text="Показать тренд" TextWrapping="Wrap"></TextBlock>
+                                </Button>
+                                <!--#endregion-->
+                            </Grid>
+                        </TabItem>
+                        <!--#endregion-->
                     </TabControl>
                     <!--#endregion-->
 
@@ -514,8 +568,6 @@
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
         <!--#endregion-->
-
-
     </Grid>
     <!--#endregion-->
 </Window>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HMI_Плотномер.AddClasses
 {
-    internal struct TimePoint
+    internal class TimePoint
     {
         public DateTime time { get; set; }
         public float y1 { set; get; }

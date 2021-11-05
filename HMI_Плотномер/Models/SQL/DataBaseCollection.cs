@@ -116,7 +116,8 @@ namespace HMI_Плотномер.Models.SQL
             {
                 case "int":
                 case "int32":
-                    return "int NOT NULL default 0";
+                case "int64":
+                    return "INTEGER NOT NULL default 0";
                 case "string": return "nvarchar(40) NOT NULL";
                 case "double": return "float NOT NULL";
                 case "float": return "real NOT NULL";

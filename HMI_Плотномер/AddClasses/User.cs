@@ -6,7 +6,7 @@ namespace HMI_Плотномер.AddClasses
 {
     class User: PropertyChangedBase
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         #region Логин пользователя
         private string login;
         /// <summary>

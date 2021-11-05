@@ -23,7 +23,7 @@ namespace HMI_Плотномер.ViewModels
 
         #region Текущий пользователь
         public User CurUser { get; set; }
-        public string CurUserName { get => CurUser.Somename +" "+ CurUser.Name; }
+        public string CurUserName { get => CurUser.Somename + " " + CurUser.Name; }
         #endregion
 
 
@@ -41,7 +41,7 @@ namespace HMI_Плотномер.ViewModels
 
         #region Команда вкл-выкл напряжение
         RelayCommand _switchHvCommand;
-        public RelayCommand SwitchHvCommand { get => _switchHvCommand ?? (_switchHvCommand = new RelayCommand(o => mainModel.SwitchHv(), o=>true)); }
+        public RelayCommand SwitchHvCommand { get => _switchHvCommand ?? (_switchHvCommand = new RelayCommand(o => mainModel.SwitchHv(), o => true)); }
         #endregion
 
         #region Команда вкл-выкл измерения
@@ -49,19 +49,24 @@ namespace HMI_Плотномер.ViewModels
         public RelayCommand SwitchMeasCommand { get => _switchMeasCommand ?? (_switchMeasCommand = new RelayCommand(o => mainModel.SwitchMeas(), o => true)); }
         #endregion
 
+        #region Команда плказать архивный тренд
+        RelayCommand _showArchivalTrendCommand;
+        public RelayCommand ShowArchivalTrendCommand { get => _showArchivalTrendCommand ?? (_showArchivalTrendCommand = new RelayCommand(o => ShowArchivalTrend(), o => true)); }
+        #endregion
+
 
         #endregion
-        public MainModel mainModel { get;} = new MainModel();        
+        public MainModel mainModel { get; } = new MainModel();
 
         #region Конструктор
         public VM()
-        { 
+        {
             mainModel.ModelProcess();
             mainModel.UpdateDataEvent += AddDataToCollection;
         }
         #endregion
 
-        #region Данные для графика
+        #region Данные для текущего тренда
         #region Алгоритм интерполяции
         int _interpolIndex = 3;
         public int InterpolIndex { get => _interpolIndex; set { Set(ref _interpolIndex, value); } }
@@ -79,19 +84,34 @@ namespace HMI_Плотномер.ViewModels
         }
         #endregion
 
+        #region Данные для архивного тренда
+        IEnumerable<TimePoint> _archivalDataPotnts;
+        public IEnumerable<TimePoint> ArchivalDataPotnts { get => _archivalDataPotnts; private set { Set(ref _archivalDataPotnts, value); } }
+        #endregion
+
+        #region Вывести данные из БД
+        void ShowArchivalTrend()
+        {
+            var list = SqlMethods.ReadFromSql<TimePoint>("SELECT * FROM TimePoints");
+            ArchivalDataPotnts = list;
+        }
+        #endregion
+
         #region Добавление данных в график
         void AddDataToCollection()
         {
             App.Current?.Dispatcher?.Invoke(
                 () =>
                 {
-                    PlotCollection.Add(new TimePoint { time = DateTime.Now, y1 = mainModel.PhysValueAvg.Value, y2=mainModel.PhysValueCur.Value });
+                    var tp = new TimePoint { time = DateTime.Now, y1 = mainModel.PhysValueAvg.Value, y2 = mainModel.PhysValueCur.Value };
+                    PlotCollection.Add(tp);
                     while (PlotCollection.Count>0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)))
                     {
                         PlotCollection.RemoveAt(0);
                     }
-                     
+                    SqlMethods.WritetoDb<TimePoint>(tp);
                 }); ;
+
         }
         #endregion
 
