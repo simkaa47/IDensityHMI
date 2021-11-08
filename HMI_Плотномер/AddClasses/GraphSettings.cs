@@ -28,11 +28,9 @@ namespace HMI_Плотномер.AddClasses
         {
             get => _plotLowLimit;
             set
-            {
-                float temp;
-                if (value >= PlotHighLimit) temp = 0;
-                else temp = value;
-                Set(ref _plotLowLimit, temp);
+            {                
+                if (value >= PlotHighLimit) PlotHighLimit = value+1;                
+                Set(ref _plotLowLimit, value);
             }
         }
         #endregion
@@ -43,11 +41,9 @@ namespace HMI_Плотномер.AddClasses
         {
             get => _plotHighlimit;
             set
-            {
-                float temp;
-                if (value <= PlotLowLimit) temp = PlotLowLimit + 1;
-                else temp = value;
-                Set(ref _plotHighlimit, temp);
+            {                
+                if (value <= PlotLowLimit) PlotLowLimit = value - 1;                
+                Set(ref _plotHighlimit, value);
             }
         } 
         #endregion

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HMI_Плотномер.ViewModels;
 using HMI_Плотномер.Views;
+using Microsoft.Win32;
 
 namespace HMI_Плотномер
 {
@@ -45,8 +46,30 @@ namespace HMI_Плотномер
             {
                 var arr = SerialPort.GetPortNames();
                 compobox.ItemsSource = arr;
+            }            
+        }
+        private void FileDialogOpen(TextBlock tb)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog()
+            {
+                CheckFileExists = false,
+                CheckPathExists = true,
+                Multiselect = true,
+                Title = "Выберите файл"
+            };
+            fileDialog.Filter = "  Текстовые файлы (*.txt)|*.txt";
+            Nullable<bool> dialogOK = fileDialog.ShowDialog();
+
+
+            if (dialogOK == true)
+            {
+                tb.Text = fileDialog.FileName;
+
             }
-            
+        }
+        private void BrowseLogPath(object sender, RoutedEventArgs e)
+        {
+            FileDialogOpen(LogPath);
         }
     }
 }

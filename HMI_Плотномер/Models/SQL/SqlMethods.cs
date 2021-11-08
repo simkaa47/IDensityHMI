@@ -65,6 +65,7 @@ namespace HMI_Плотномер.Models.SQL
             SqlExecuteCmd(command);
         }
         #endregion
+
         #region Сопоставление имен system и sql
         /// <summary>
         /// Сопоставление имен system и sql
@@ -136,28 +137,31 @@ namespace HMI_Плотномер.Models.SQL
         }
         #endregion
 
+        #region Чтение из ДБ
         public static List<T> ReadFromSql<T>(string commandString)
         {
             List<T> list = new List<T>();
             using (var connection = new SqliteConnection(ConnectionString))
             {
-                connection.Open(); 
+                connection.Open();
                 SqliteCommand command = new SqliteCommand(commandString, connection);
                 SqliteDataReader reader = command.ExecuteReader();
-                Type type = typeof(T);                
+                Type type = typeof(T);
                 var props = type.GetProperties();
                 while (reader.Read())
                 {
                     T cell = (T)Activator.CreateInstance(type);
                     for (int i = 0; i < props.Length; i++)
                     {
-                        type.GetProperty(props[i].Name).SetValue(cell, Parse(props[i].PropertyType, reader.GetValue(i).ToString()) );
+                        type.GetProperty(props[i].Name).SetValue(cell, Parse(props[i].PropertyType, reader.GetValue(i).ToString()));
                     }
                     list.Add(cell);
                 }
             }
             return list;
-        }
+        } 
+        #endregion
+
         #region Преобразование из строки в зависимости от типа
         static object Parse(Type type, string par)
         {

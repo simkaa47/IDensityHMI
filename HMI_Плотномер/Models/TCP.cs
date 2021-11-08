@@ -80,8 +80,6 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
-
-
         #region Соединение
         void Connect()
         {
@@ -110,8 +108,6 @@ namespace HMI_Плотномер.Models
             }
         }
         #endregion
-
-
 
         #region основной метод для получения данных из tcp соединения
         public void GetData(MainModel model)
@@ -147,8 +143,7 @@ namespace HMI_Плотномер.Models
                 Disconnect();
             }
         }
-        #endregion
-        
+        #endregion        
 
         #region Отправить телеграмму без требования ответа без ожидания
         void SendTlg(byte[] buffer)
@@ -172,7 +167,6 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
-
         #region Функция выполняющая запрос и ожидающая ответа
         /// <summary>
         ///  Функция выполняющая запрос и ожидающая ответа
@@ -193,6 +187,7 @@ namespace HMI_Плотномер.Models
             return Encoding.ASCII.GetString(inBuf, 0, num);// Получаем строку из байт;            
         }
         #endregion
+
         #region Получить ответ в байтах
         int AskResponseBytes(byte[] buffer)
         {
@@ -207,7 +202,6 @@ namespace HMI_Плотномер.Models
             return num;
         }
         #endregion
-
 
         #region Запрос текущего значения даты времени
         void GetCurDateTime()

@@ -77,10 +77,8 @@ namespace HMI_Плотномер.Models
             {
                 if (CommMode.RsEnable) rs.GetData(this);
                 else if (CommMode.EthEnable) Tcp.GetData(this);
-                else Connecting = false;
-                PhysValueAvg.Value = PhysValueAvg.Value + 0.01f;
-                PhysValueCur.Value = PhysValueCur.Value + 0.02f;
-                //if (CycleMeasStatus.Value && Connecting)
+                else Connecting = false;               
+                if (CycleMeasStatus.Value && Connecting)
                 UpdateDataEvent?.Invoke();
                 Thread.Sleep(500);
             }
@@ -92,6 +90,15 @@ namespace HMI_Плотномер.Models
             rs = ClassInit<RS485>();
             Tcp = ClassInit<TCP>();
             CommMode = ClassInit<CommMode>();
+            CycleMeasStatus.PropertyChanged += (obj, args) =>
+            {
+                if (args.PropertyName == "Value")
+                {
+                    PhysValueAvg.Value = 0;
+                    PhysValueCur.Value = 0;
+                    UpdateDataEvent?.Invoke();                    
+                }
+            };
         }
 
         T ClassInit<T>() where T : PropertyChangedBase
@@ -107,6 +114,8 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+       
+
         #region Команды
         #region Старт-стоп циклических измерений
         public void SwitchMeas()
@@ -118,8 +127,8 @@ namespace HMI_Плотномер.Models
         #region Включитть-выключить HV 
         public void SwitchHv()
         {
-            if(CommMode.EthEnable)
-                Tcp.SwitchHv(TelemetryHV.HvOn.Value ? 0 : 1);
+            if(CommMode.EthEnable) Tcp.SwitchHv(TelemetryHV.HvOn.Value ? 0 : 1);
+            else if(CommMode.RsEnable)rs.SwitchHv(TelemetryHV.HvOn.Value ? 0 : 1);
         }
         #endregion
         #endregion

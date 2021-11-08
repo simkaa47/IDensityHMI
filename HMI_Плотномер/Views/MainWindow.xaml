@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HMI_Плотномер"
+        xmlns:local="clr-namespace:HMI_Плотномер"        
         xmlns:vm="clr-namespace:HMI_Плотномер.ViewModels"
         xmlns:conv="clr-namespace:HMI_Плотномер.Views.Converters"
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
+        xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <!--#region Общие ресурсы -->
@@ -16,6 +17,7 @@
         <conv:ColorIndicator x:Key="ColorToBool"/>
         <conv:GetStatusConveter x:Key="StatusFromNum"/>
         <conv:BoolToVisible x:Key="VisibleConverter"/>
+        <conv:IsFilePathExist x:Key="FileExistConverter"/>
         <!--#endregion-->
         <!--#region Стили -->
         <Style TargetType="Border">
@@ -276,33 +278,7 @@
                                     <TextBlock Text="Мгновенная физическая величина" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
                                 </DockPanel>
 
-                                <oxy:Plot Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
-                                    <oxy:Plot.Annotations >
-                                        <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
-                                        <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
-                                    </oxy:Plot.Annotations>
-                                    <oxy:Plot.Axes>
-                                        <oxy:LinearAxis    Title ="Значение"  Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
-                                        <oxy:DateTimeAxis Title="Время" ></oxy:DateTimeAxis>
-                                    </oxy:Plot.Axes>
-                                    <oxy:ThreeColorLineSeries LineStyle="Dash"
-                                           Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
-                                           ItemsSource="{Binding PlotCollection}"
-                                           DataFieldX="time" DataFieldY="y1" 
-                                           Color="Black" ColorHi="Red" 
-                                           ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
-                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"
-                                           LineStyleHi="Dash"/>
-                                    <oxy:ThreeColorLineSeries LineStyle="Automatic" 
-                                           Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
-                                           ItemsSource="{Binding PlotCollection}"
-                                           DataFieldX="time" DataFieldY="y2" 
-                                           Color="Green" 
-                                           ColorHi="Green"
-                                           ColorLo="Green"
-                                           LineStyleHi="Dash"/>
-
-                                </oxy:Plot>
+                                <oxy:Plot Grid.Row="2" Grid.ColumnSpan="4" Tag="{Binding PlotCollection}" Template="{StaticResource Trend}"></oxy:Plot>
                             </Grid>
 
 
@@ -338,6 +314,8 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="0.1*"/>
@@ -345,13 +323,57 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <!--#region Тренд -->
-                                <oxy:Plot Grid.Row="2" Grid.ColumnSpan="4" Tag="{Binding ArchivalDataPotnts}" Template="{StaticResource Trend}"></oxy:Plot>
+                                <oxy:Plot Grid.Row="2" Grid.ColumnSpan="6" Tag="{Binding ArchivalDataPotnts}" Template="{StaticResource Trend}"></oxy:Plot>
+                                <!--#endregion-->
+                                <!--#region Стартовая точка тренда -->
+                                <Border Grid.ColumnSpan="2" Margin="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Стартовая точка тренда" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                                        <wpftool:DateTimePicker Grid.Column="1" Value="{Binding DisplayDateStart}" 
+                                            Format="Custom" 
+                                            FormatString="G"
+                                            TimeFormat="Custom"
+                                            TimeFormatString="hh:mm:ss"></wpftool:DateTimePicker>
+                                    </Grid>
+                                </Border>
+                                <!--#endregion-->
+                                <!--#region Конечная точка тренда -->
+                                <Border Grid.Column="2" Grid.ColumnSpan="2" Margin="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Конечная точка тренда" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                                        <wpftool:DateTimePicker Grid.Column="1" Value="{Binding DisplayDateEnd}" 
+                                            Format="Custom" 
+                                            FormatString="G"
+                                            TimeFormat="Custom"
+                                            TimeFormatString="hh:mm:ss"></wpftool:DateTimePicker>
+                                    </Grid>
+                                </Border>
                                 <!--#endregion-->
                                 <!--#region Кнопка "Показать тренд" -->
-                                <Button Command="{Binding ShowArchivalTrendCommand}">
-                                    <TextBlock Text="Показать тренд" TextWrapping="Wrap"></TextBlock>
+                                <Button Grid.Column="4" Margin="2" Command="{Binding ShowArchivalTrendCommand}">
+                                    <TextBlock  Text="Показать тренд" TextWrapping="Wrap"></TextBlock>
                                 </Button>
                                 <!--#endregion-->
+                                <!--#region Путь к файлу -->
+                                <Border Grid.Row="1" Grid.ColumnSpan="3" Margin="2">
+                                    <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" VerticalAlignment="Center"></TextBlock>
+                                </Border>
+                                <!--#endregion-->
+                                <!--#region Кнопка Browse -->
+                                <Button Grid.Row="1" Click="BrowseLogPath" Grid.Column="3" Margin="2">Browse</Button>
+                                <!--#endregion-->
+                                <!--#region Кнопка "Запись" -->
+                                <Button Grid.Row="1" Command="{Binding WriteLogCommand}" Grid.Column="4" Margin="2" IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}"  Content="Запись" ></Button>
+                                <!--#endregion-->
+
                             </Grid>
                         </TabItem>
                         <!--#endregion-->

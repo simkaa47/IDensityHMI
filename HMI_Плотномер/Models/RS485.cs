@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using EasyModbus;
 using HMI_Плотномер.AddClasses;
 
@@ -105,6 +106,7 @@ namespace HMI_Плотномер.Models
                         var command = commands.Pop();
                         command.f.Invoke(command.par1, command.par2);
                         model.Connecting = true;
+                        Thread.Sleep(20);
                     }
                 }
             }
@@ -151,6 +153,8 @@ namespace HMI_Плотномер.Models
         {
             GetRtc();
             GetCurMeas();
+            GetHVTelemetry();
+            GetTempTelemetry();
         }
         #endregion
 
@@ -191,7 +195,34 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
-       
+        #region Получить данные телеметрии HV
+        void GetHVTelemetry()
+        {
+            model.TelemetryHV.VoltageSV.Value = (ushort)(SelectRegs(model.TelemetryHV.VoltageSV.RegType)[model.TelemetryHV.VoltageSV.RegNum]/20);
+            model.TelemetryHV.VoltageCurIn.Value = ((float)SelectRegs(model.TelemetryHV.VoltageCurIn.RegType)[model.TelemetryHV.VoltageCurIn.RegNum]) / 1000;
+            model.TelemetryHV.VoltageCurOut.Value = (ushort)(SelectRegs(model.TelemetryHV.VoltageCurOut.RegType)[model.TelemetryHV.VoltageCurOut.RegNum] / 20);
+            model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
+        }
+        #endregion
+
+        #region Запрос телеметрии от платы температуры
+        void GetTempTelemetry()
+        {
+            model.TempTelemetry.TempExternal.Value = ((float)(SelectRegs(model.TempTelemetry.TempExternal.RegType)[model.TempTelemetry.TempExternal.RegNum] - 2730)) / 10;
+            model.TempTelemetry.TempInternal.Value = ((float)(SelectRegs(model.TempTelemetry.TempInternal.RegType)[model.TempTelemetry.TempInternal.RegNum] - 2730)) / 10;
+        }
+        #endregion
+
+        #region Команды
+        #region Включить-выключить HV
+        public void SwitchHv(int value)
+        {
+            commands.Push(new DoSomeClass((offset, value) => client.WriteSingleRegister(offset, value), model.CycleMeasStatus.RegNum, value));
+        }
+        #endregion
+        #endregion
+
+
 
     }
 }

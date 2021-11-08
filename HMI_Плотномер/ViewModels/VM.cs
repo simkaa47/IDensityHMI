@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -54,6 +55,11 @@ namespace HMI_Плотномер.ViewModels
         public RelayCommand ShowArchivalTrendCommand { get => _showArchivalTrendCommand ?? (_showArchivalTrendCommand = new RelayCommand(o => ShowArchivalTrend(), o => true)); }
         #endregion
 
+        #region Команда "Записать архивный тренд в файл"
+        RelayCommand _writeLogCommand;
+        public RelayCommand WriteLogCommand { get => _writeLogCommand ?? (_writeLogCommand = new RelayCommand(o => WriteArchivalTrendToText(), o => true)); }
+        #endregion
+
 
         #endregion
         public MainModel mainModel { get; } = new MainModel();
@@ -85,14 +91,52 @@ namespace HMI_Плотномер.ViewModels
         #endregion
 
         #region Данные для архивного тренда
+        #region Коллекция
         IEnumerable<TimePoint> _archivalDataPotnts;
         public IEnumerable<TimePoint> ArchivalDataPotnts { get => _archivalDataPotnts; private set { Set(ref _archivalDataPotnts, value); } }
         #endregion
 
+        #region Настройки
+        #region Стартовая точка отображаемого тренда
+        DateTime _displayDateStart = DateTime.Today.AddDays(-1);
+        public DateTime DisplayDateStart
+        {
+            get => _displayDateStart;
+            set
+            {                
+                Set(ref _displayDateStart, value);
+                if (value >= DisplayDateEnd) DisplayDateEnd = value.AddMinutes(1);
+                if (value.AddDays(2) < DisplayDateEnd) DisplayDateEnd = value.AddDays(2);
+            }
+        }
+        #endregion
+        #region Конечная точка отображаемого тренда
+        DateTime _displayDateEnd = DateTime.Today;
+        public DateTime DisplayDateEnd
+        {
+            get => _displayDateEnd;
+            set
+            {                
+                Set(ref _displayDateEnd, value);
+                if (value <= DisplayDateStart) DisplayDateStart = value.AddMinutes(-1);
+                if (value.AddDays(-2) > DisplayDateStart) DisplayDateStart = value.AddDays(-2);
+            }
+        }
+        #endregion
+        #region Путь к логируемому файлу
+        string _logPath;
+        public string LogPath { get => _logPath; set => Set(ref _logPath, value); }
+        #endregion
+
+        #endregion
+
+
+        #endregion
+
         #region Вывести данные из БД
         void ShowArchivalTrend()
-        {
-            var list = SqlMethods.ReadFromSql<TimePoint>("SELECT * FROM TimePoints");
+        {            
+            var list = SqlMethods.ReadFromSql<TimePoint>($"SELECT * FROM TimePoints WHERE time >= datetime('{DisplayDateStart.ToString("u")}') AND time <= datetime('{DisplayDateEnd.ToString("u")}');");
             ArchivalDataPotnts = list;
         }
         #endregion
@@ -128,6 +172,29 @@ namespace HMI_Плотномер.ViewModels
             return cell;
         }
         #endregion
+
+        #region Запись в файл
+        void WriteArchivalTrendToText()
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach (var item in ArchivalDataPotnts)
+                {
+                    builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000" + "\n"));
+                }
+                using (StreamWriter sw = new StreamWriter(LogPath, false, System.Text.Encoding.Default))
+                {                    
+                    sw.WriteLine(builder.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+        #endregion     
+        
 
 
     }
