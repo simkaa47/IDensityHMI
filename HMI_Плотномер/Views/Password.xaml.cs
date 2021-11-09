@@ -19,17 +19,12 @@ namespace HMI_Плотномер.Views
     /// </summary>
     public partial class Password : Window
     {
-        VM vM;
-        public Password()
-        {
-            InitializeComponent();
-            vM = new VM();
-        }
+        VM vM;       
 
         internal Password(VM vM)
         {
             InitializeComponent();
-            if (vM == null) this.vM = new VM();
+            if (vM == null) return;
             else this.vM = vM;
             this.DataContext = vM;
         }
@@ -40,10 +35,7 @@ namespace HMI_Плотномер.Views
                 .FirstOrDefault();
             if (user != null)
             {
-                vM.CurUser = user;
-                MainWindow mainWindow = new MainWindow(vM);
-                mainWindow.Show();
-                this.Close();
+                vM.CurUser = user;                
             }
             else
             {

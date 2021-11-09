@@ -24,8 +24,8 @@ namespace HMI_Плотномер.ViewModels
         #region Пользователи
 
         #region Текущий пользователь
-        public User CurUser { get; set; }
-        public string CurUserName { get => CurUser.Somename + " " + CurUser.Name; }
+        User _curUser;
+        public User CurUser { get => _curUser; set => Set(ref _curUser, value); }        
         #endregion
 
 

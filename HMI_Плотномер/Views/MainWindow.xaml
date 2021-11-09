@@ -11,14 +11,18 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:VM/>
+    </Window.DataContext>
     <!--#region Общие ресурсы -->
-    <Window.Resources>
+    <Window.Resources>        
         <!--#region КОнвертеры -->
         <conv:InterpolationConverter x:Key="InterpolationConverter"/>
         <conv:ColorIndicator x:Key="ColorToBool"/>
         <conv:GetStatusConveter x:Key="StatusFromNum"/>
         <conv:BoolToVisible x:Key="VisibleConverter"/>
         <conv:IsFilePathExist x:Key="FileExistConverter"/>
+        <conv:UserTextConverter x:Key="UserToName"/>
         <!--#endregion-->
         <!--#region Стили -->
         <Style TargetType="Border">
@@ -227,14 +231,15 @@
                              
                              ></TextBox>
 
-
                     <Button Grid.Row="1"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Center">
                         <Button.ToolTip>Авторизация</Button.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="User" HorizontalAlignment="Left" Margin="5,1,10,1"/>
-                            <TextBlock Text="{Binding CurUserName}" VerticalAlignment="Center"  HorizontalAlignment="Stretch"></TextBlock>
+                            <TextBlock Text="{Binding CurUser, Converter={StaticResource UserToName} }" VerticalAlignment="Center"  HorizontalAlignment="Stretch">                                
+                            </TextBlock>
                         </StackPanel>
                     </Button>
+                    
                 </Grid>
             </Border>
             <!--#endregion-->
@@ -347,7 +352,7 @@
                                             Format="Custom" 
                                             FormatString="G"
                                             TimeFormat="Custom"
-                                            TimeFormatString="hh:mm:ss"></wpftool:DateTimePicker>
+                                            TimeFormatString="HH:mm:ss"></wpftool:DateTimePicker>
                                     </Grid>
                                 </Border>
                                 <!--#endregion-->
@@ -363,7 +368,7 @@
                                             Format="Custom" 
                                             FormatString="G"
                                             TimeFormat="Custom"
-                                            TimeFormatString="hh:mm:ss"></wpftool:DateTimePicker>
+                                            TimeFormatString="HH:mm:ss"></wpftool:DateTimePicker>
                                     </Grid>
                                 </Border>
                                 <!--#endregion-->
