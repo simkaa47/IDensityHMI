@@ -8,6 +8,7 @@
         xmlns:conv="clr-namespace:HMI_Плотномер.Views.Converters"
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <!--#region Общие ресурсы -->
@@ -117,22 +118,22 @@
         <!--#endregion-->
 
         <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
-            <oxy:Plot Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
+            <oxy:Plot PlotMargins="30,0,0,30" Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">                
                 <oxy:Plot.Annotations >
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
                 </oxy:Plot.Annotations>
                 <oxy:Plot.Axes>
-                    <oxy:LinearAxis    Title ="Значение"  Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
+                    <oxy:LinearAxis    Title ="Значение"   Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
                     <oxy:DateTimeAxis Title="Время" ></oxy:DateTimeAxis>
                 </oxy:Plot.Axes>
-                <oxy:ThreeColorLineSeries LineStyle="Dash"
+                <oxy:ThreeColorLineSeries  LineStyle="Dash"
                                            Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
                                            ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
                                            DataFieldX="time" DataFieldY="y1" 
                                            Color="Black" ColorHi="Red" 
                                            ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
-                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"
+                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"                                             
                                            LineStyleHi="Dash"/>
                 <oxy:ThreeColorLineSeries LineStyle="Automatic" 
                                            Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
@@ -160,7 +161,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="0.4*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <!--#region Эмблема заказчика -->
             <Border Grid.Column="0" Margin="5" >
@@ -227,13 +228,21 @@
                              ></TextBox>
 
 
-                    <Button Grid.Row="1"  MouseDoubleClick="Logout_click"  Content="{Binding CurUserName}" RenderTransformOrigin="0.5,0.5">
+                    <Button Grid.Row="1"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Center">
+                        <Button.ToolTip>Авторизация</Button.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="User" HorizontalAlignment="Left" Margin="5,1,10,1"/>
+                            <TextBlock Text="{Binding CurUserName}" VerticalAlignment="Center"  HorizontalAlignment="Stretch"></TextBlock>
+                        </StackPanel>
                     </Button>
                 </Grid>
             </Border>
             <!--#endregion-->
             <!--#region Кнопка закрыть приложение -->
-            <Button Grid.Column="6" Margin="5" Command="{Binding CloseAppCommand}" >Закрыть приложение</Button>
+            <Button Grid.Column="6" Margin="5" Command="{Binding CloseAppCommand}">
+                <Button.ToolTip>Закрыть приложение</Button.ToolTip>
+                <fa:ImageAwesome Icon="TimesCircle"/>
+            </Button>
             <!--#endregion-->
         </Grid>
         <!--#endregion-->
@@ -323,7 +332,8 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <!--#region Тренд -->
-                                <oxy:Plot Grid.Row="2" Grid.ColumnSpan="6" Tag="{Binding ArchivalDataPotnts}" Template="{StaticResource Trend}"></oxy:Plot>
+                                <oxy:Plot  Grid.Row="2" Grid.ColumnSpan="6" Tag="{Binding ArchivalDataPotnts}" Template="{StaticResource Trend}"></oxy:Plot>
+                                <fa:ImageAwesome Grid.Row="2" Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"    Grid.ColumnSpan="6" Height="30"   Icon="Refresh" />
                                 <!--#endregion-->
                                 <!--#region Стартовая точка тренда -->
                                 <Border Grid.ColumnSpan="2" Margin="2">
@@ -368,10 +378,20 @@
                                 </Border>
                                 <!--#endregion-->
                                 <!--#region Кнопка Browse -->
-                                <Button Grid.Row="1" Click="BrowseLogPath" Grid.Column="3" Margin="2">Browse</Button>
+                                <Button Grid.Row="1" Click="BrowseLogPath" Grid.Column="3" Margin="2">
+                                    <DockPanel>
+                                        <fa:ImageAwesome Icon="FolderOutlinepenOutline" Margin="2"/>
+                                        <TextBlock Text="Browse" Margin="2" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                    </DockPanel>
+                                </Button>
                                 <!--#endregion-->
                                 <!--#region Кнопка "Запись" -->
-                                <Button Grid.Row="1" Command="{Binding WriteLogCommand}" Grid.Column="4" Margin="2" IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}"  Content="Запись" ></Button>
+                                <Button Grid.Row="1" Command="{Binding WriteLogCommand}" HorizontalContentAlignment="Stretch" Grid.Column="4" Margin="2" IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}">
+                                    <DockPanel>
+                                        <fa:ImageAwesome Margin="2" Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleConverter}}" Icon="Refresh" HorizontalAlignment="Center" Spin="{Binding ArchivalTrendUploading}"/>
+                                        <TextBlock Text="Запись" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                    </DockPanel>
+                                </Button>
                                 <!--#endregion-->
 
                             </Grid>

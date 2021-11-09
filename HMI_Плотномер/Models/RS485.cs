@@ -13,7 +13,15 @@ namespace HMI_Плотномер.Models
     /// Представляет набор свойств и методов, необходимых для связи с платой по RS485 (Modbus RTU)
     /// </summary>
     class RS485: PropertyChangedBase
-    { 
+    {
+        #region Перечисления номеров holding регистров, представляющих команды
+        enum Holds
+        { 
+            SwitchMeas = 1,
+            SwitchHv = 4
+        }
+        #endregion
+
         #region Свойства
         #region Адрес в сети Modbus
         byte _mbAddr = 1;
@@ -217,9 +225,17 @@ namespace HMI_Плотномер.Models
         #region Включить-выключить HV
         public void SwitchHv(int value)
         {
-            commands.Push(new DoSomeClass((offset, value) => client.WriteSingleRegister(offset, value), model.CycleMeasStatus.RegNum, value));
+            commands.Push(new DoSomeClass((offset, value) => client.WriteSingleRegister(offset, value), (int)Holds.SwitchHv, value));
         }
         #endregion
+
+        #region Включить-выключить измерения
+        public void SwitchMeas(int value)
+        {
+            commands.Push(new DoSomeClass((offset, value) => client.WriteSingleRegister(offset, value), (int)Holds.SwitchMeas, value));
+        }
+        #endregion
+
         #endregion
 
 

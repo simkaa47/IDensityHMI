@@ -120,15 +120,18 @@ namespace HMI_Плотномер.Models
         #region Старт-стоп циклических измерений
         public void SwitchMeas()
         {
-            if (CommMode.EthEnable) Tcp.SwitchMeas(CycleMeasStatus.Value ? 0 : 1);
+            var value = CycleMeasStatus.Value ? 0 : 1;
+            if (CommMode.EthEnable) Tcp.SwitchMeas(value);
+            else if (CommMode.RsEnable) rs.SwitchMeas(value);
         }
         #endregion
 
         #region Включитть-выключить HV 
         public void SwitchHv()
         {
-            if(CommMode.EthEnable) Tcp.SwitchHv(TelemetryHV.HvOn.Value ? 0 : 1);
-            else if(CommMode.RsEnable)rs.SwitchHv(TelemetryHV.HvOn.Value ? 0 : 1);
+            var value = TelemetryHV.HvOn.Value ? 0 : 1;
+            if (CommMode.EthEnable) Tcp.SwitchHv(value);
+            else if(CommMode.RsEnable)rs.SwitchHv(value);
         }
         #endregion
         #endregion

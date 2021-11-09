@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using HMI_Плотномер.AddClasses;
 using HMI_Плотномер.Models;
@@ -130,14 +131,36 @@ namespace HMI_Плотномер.ViewModels
 
         #endregion
 
+        #region Состояние загрузки из ДБ
+        bool _archivalTrendDownloading;
+        public bool ArchivalTrendDownloading { get => _archivalTrendDownloading; private set { Set(ref _archivalTrendDownloading, value); } }
+        #endregion
+
+        #region Состояние загрузки в текстовый файл
+        bool _archivalTrendUploading;
+        public bool ArchivalTrendUploading { get => _archivalTrendUploading; private set { Set(ref _archivalTrendUploading, value); } }
+        #endregion
 
         #endregion
 
         #region Вывести данные из БД
-        void ShowArchivalTrend()
-        {            
-            var list = SqlMethods.ReadFromSql<TimePoint>($"SELECT * FROM TimePoints WHERE time >= datetime('{DisplayDateStart.ToString("u")}') AND time <= datetime('{DisplayDateEnd.ToString("u")}');");
-            ArchivalDataPotnts = list;
+        async void ShowArchivalTrend()
+        {
+            try
+            {
+                ArchivalTrendDownloading = true;
+                await Task.Run(() =>
+                {
+                    var list = SqlMethods.ReadFromSql<TimePoint>($"SELECT * FROM TimePoints WHERE time >= datetime('{DisplayDateStart.ToString("u")}') AND time <= datetime('{DisplayDateEnd.ToString("u")}');");
+                    ArchivalDataPotnts = list;
+                    ArchivalTrendDownloading = false;
+                });
+                
+            }
+            catch (Exception)
+            {
+
+            }
         }
         #endregion
 
@@ -174,27 +197,32 @@ namespace HMI_Плотномер.ViewModels
         #endregion
 
         #region Запись в файл
-        void WriteArchivalTrendToText()
+        async void WriteArchivalTrendToText()
         {
+            if (ArchivalTrendUploading) return;
             try
             {
-                StringBuilder builder = new StringBuilder();
-                foreach (var item in ArchivalDataPotnts)
+                ArchivalTrendUploading = true;
+                await Task.Run(() =>
                 {
-                    builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000" + "\n"));
-                }
-                using (StreamWriter sw = new StreamWriter(LogPath, false, System.Text.Encoding.Default))
-                {                    
-                    sw.WriteLine(builder.ToString());
-                }
+                    StringBuilder builder = new StringBuilder();
+                    foreach (var item in ArchivalDataPotnts)
+                    {
+                        builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000" + "\n"));
+                    }
+                    using (StreamWriter sw = new StreamWriter(LogPath, false, System.Text.Encoding.Default))
+                    {
+                        sw.WriteLine(builder.ToString());
+                    }
+                });
+                ArchivalTrendUploading = false;
             }
             catch (Exception ex)
             {
                 
             }
         }
-        #endregion     
-        
+        #endregion            
 
 
     }
