@@ -35,7 +35,8 @@ namespace HMI_Плотномер.Views
                 .FirstOrDefault();
             if (user != null)
             {
-                vM.CurUser = user;                
+                vM.CurUser = user;
+                this.Close();
             }
             else
             {

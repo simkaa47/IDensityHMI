@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace HMI_Плотномер.AddClasses
@@ -8,7 +9,7 @@ namespace HMI_Плотномер.AddClasses
     {
         public long Id { get; set; }
         #region Логин пользователя
-        private string login;
+        private string login="login";
         /// <summary>
         /// Логин пользователя
         /// </summary>
@@ -45,6 +46,6 @@ namespace HMI_Плотномер.AddClasses
         #region Уровень доступа
         private string level = "Администратор";
         public string Level { get => level; set => Set(ref level, value); }
-        #endregion
+        #endregion                
     }
 }

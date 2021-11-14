@@ -40,7 +40,7 @@ namespace HMI_Плотномер.Models
 
         #region Поля       
 
-        MainModel model;
+        MainModel model;       
 
         #region Клиент
         TcpClient client;
@@ -126,7 +126,9 @@ namespace HMI_Плотномер.Models
                 GetCurMeas();
                 GetHVTelemetry();
                 GetTempTelemetry();
-               
+                GetSetiings();
+
+
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
@@ -154,7 +156,7 @@ namespace HMI_Плотномер.Models
                 {
                     StreamClear();
                     stream?.Write(buffer, 0, buffer.Length);
-                    Thread.Sleep(50);
+                    Thread.Sleep(100);
                 }
             }
             catch (Exception ex)
@@ -184,8 +186,10 @@ namespace HMI_Плотномер.Models
 
             } while (stream.DataAvailable);
             model.Connecting = true;
+            Thread.Sleep(100);
             return Encoding.ASCII.GetString(inBuf, 0, num);// Получаем строку из байт;            
         }
+
         #endregion
 
         #region Получить ответ в байтах
@@ -198,6 +202,7 @@ namespace HMI_Плотномер.Models
                 num = stream.Read(inBuf, 0, inBuf.Length);
 
             } while (stream.DataAvailable);
+            Thread.Sleep(100);
             model.Connecting = true;
             return num;
         }
@@ -263,6 +268,59 @@ namespace HMI_Плотномер.Models
         {
 
         }
+        #endregion
+
+        #region Получить данные настроек
+        void GetSetiings()
+        {
+            if(!model.SettingsReaded)GetMeasProcessData();// Получить данные процеса измерений
+            
+        }
+        #region Настройки измерительных процессов
+        void GetMeasProcessData()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,6"));
+            //Проверка корректности пришедшего пакета
+            if (str.Length < 50) return;// Проверка на длину
+            if (str.Substring(1, 4) != "FSRD") return;// Проверка на заголовок..
+            if (str[str.Length - 1] != '#') return;// Проверка на окончание
+            ushort temp = 0;
+            if (!ushort.TryParse(str[str.Length - 2].ToString(), out temp)) return;
+            model.CurMeasProcessNum.Value = temp;// Получаем номер текущего измерительного процесса
+            str = str.Remove(str.Length - 16, 16);// Обрезаем строку с конца         
+            str = str.Remove(0, 18);// Обрезаем начало строки
+            var numStr = str.Split(new char[] { ',', '#' });
+            if (numStr.Length != 68) return;
+            var measProceses = new MeasProcess[4];
+            for (int i = 0; i < 68; i += 17)
+            {
+                int index = i / 17;
+                var numUshort = numStr
+                     .Skip(i)
+                     .Take(16)
+                     .Where(s => ushort.TryParse(s, out temp))
+                     .Select(n => temp)
+                     .ToArray();
+                if (numUshort.Length != 16) return;
+                for (int j = 0; j < 3; j++)
+                {
+                    measProceses[index].Ranges[j].CalibCurveNum = numUshort[2 + j * 4];// Номер калибровочной кривой
+                    measProceses[index].Ranges[j].StandNum = numUshort[3 + j * 4];// Номер стандартизации ЕИ
+                    measProceses[index].Ranges[j].CounterNum = numUshort[4 + j * 4];// Счетчик
+                }
+                measProceses[index].BackStandNum = numUshort[13];
+                measProceses[index].MeasDuration = numUshort[14];
+                measProceses[index].MeasDeep = numUshort[15];
+                float tempFloat = 0;
+                if (!float.TryParse(numStr[i + 16].Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out tempFloat)) return;
+                measProceses[index].HalfLife = tempFloat;
+            }
+            model.MeasProcesses = measProceses;
+            model.SettingsReaded = true;
+
+        } 
+        #endregion
         #endregion
 
         #region Команды

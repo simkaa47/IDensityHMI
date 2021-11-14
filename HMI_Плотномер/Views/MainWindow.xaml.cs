@@ -24,7 +24,7 @@ namespace HMI_Плотномер
     /// </summary>
     public  partial class MainWindow : Window
     {        
-        internal MainWindow( )
+        public MainWindow()
         {            
             InitializeComponent();                        
         }

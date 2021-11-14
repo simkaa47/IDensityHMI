@@ -25,7 +25,7 @@ namespace HMI_Плотномер.ViewModels
 
         #region Текущий пользователь
         User _curUser;
-        public User CurUser { get => _curUser; set => Set(ref _curUser, value); }        
+        public User CurUser { get => _curUser; set => Set(ref _curUser, value); }
         #endregion
 
 
@@ -56,10 +56,113 @@ namespace HMI_Плотномер.ViewModels
         public RelayCommand ShowArchivalTrendCommand { get => _showArchivalTrendCommand ?? (_showArchivalTrendCommand = new RelayCommand(o => ShowArchivalTrend(), o => true)); }
         #endregion
 
+        #region Команда "Логаут"
+        RelayCommand _logoutCommand;
+        public RelayCommand LogoutCommand { get => _logoutCommand ?? (_logoutCommand = new RelayCommand(o => CurUser = null, o => true)); }
+        #endregion
+
         #region Команда "Записать архивный тренд в файл"
         RelayCommand _writeLogCommand;
         public RelayCommand WriteLogCommand { get => _writeLogCommand ?? (_writeLogCommand = new RelayCommand(o => WriteArchivalTrendToText(), o => true)); }
         #endregion
+
+        #region Команды настроек измерительных процессов
+        #region Команда "Записать номер калибровочной кривой в диапазоне"
+        RelayCommand _setCalibCurveDiapCommand;
+        public RelayCommand SetCalibCurveDiapCommand
+        {
+            get => _setCalibCurveDiapCommand ?? (_setCalibCurveDiapCommand = new RelayCommand(execPar => 
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.Ranges[SelectedDiapNum].CalibCurveNum = (ushort)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            }, 
+                canExecPar => true));
+            
+        }
+        #endregion
+        #region Команда "Записать номер стандартизации в диапазоне"
+        RelayCommand _setStandNumDiapCommand;
+        public RelayCommand SetStandNumDiapCommand
+        {
+            get => _setStandNumDiapCommand ?? (_setStandNumDiapCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.Ranges[SelectedDiapNum].StandNum = (ushort)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+
+        }
+        #endregion
+        #region Команда "Записать счетчик в диапазоне"
+        RelayCommand _setCounterDiapCommand;
+        public RelayCommand SetCounterDiapCommand
+        {
+            get => _setCounterDiapCommand ?? (_setCounterDiapCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.Ranges[SelectedDiapNum].CounterNum = (ushort)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+
+        }
+        #endregion
+        #region Команда "Записать номер стандартизации"
+        RelayCommand _setStandNumCommand;
+        public RelayCommand SetStandNumCommand
+        {
+            get => _setStandNumCommand ?? (_setStandNumCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.BackStandNum = (ushort)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+        }
+        #endregion
+        #region Команда "Записать время измерения одной точки"
+        RelayCommand _setMeasDurationCommand;
+        public RelayCommand SetMeasDurationCommand
+        {
+            get => _setMeasDurationCommand ?? (_setMeasDurationCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.MeasDuration = (ushort)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+        }
+        #endregion
+        #region Команда "Записать глубину усреднения"
+        RelayCommand _setMeasDeepCommand;
+        public RelayCommand SetMeasDeepCommand
+        {
+            get => _setMeasDeepCommand ?? (_setMeasDeepCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.MeasDeep = (ushort)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+        }
+        #endregion
+        #region Команда "Отправить данные периода-полураспада"
+        RelayCommand _setHalfLifeCommand;
+        public RelayCommand SetHalfLifeCommand { 
+            get => _setHalfLifeCommand ?? (_setHalfLifeCommand = new RelayCommand(execPar => 
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.HalfLife = (float)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            }, 
+                canExecPar => true)); }
+        #endregion
+
+        
+        #endregion
+
 
 
         #endregion
@@ -104,7 +207,7 @@ namespace HMI_Плотномер.ViewModels
         {
             get => _displayDateStart;
             set
-            {                
+            {
                 Set(ref _displayDateStart, value);
                 if (value >= DisplayDateEnd) DisplayDateEnd = value.AddMinutes(1);
                 if (value.AddDays(2) < DisplayDateEnd) DisplayDateEnd = value.AddDays(2);
@@ -117,7 +220,7 @@ namespace HMI_Плотномер.ViewModels
         {
             get => _displayDateEnd;
             set
-            {                
+            {
                 Set(ref _displayDateEnd, value);
                 if (value <= DisplayDateStart) DisplayDateStart = value.AddMinutes(-1);
                 if (value.AddDays(-2) > DisplayDateStart) DisplayDateStart = value.AddDays(-2);
@@ -141,6 +244,69 @@ namespace HMI_Плотномер.ViewModels
         public bool ArchivalTrendUploading { get => _archivalTrendUploading; private set { Set(ref _archivalTrendUploading, value); } }
         #endregion
 
+        #endregion
+
+        #region Данные перечислений
+        #region Названия измерительных процессов
+        public DataBaseCollection<EnumCustom> MeasProcessNames { get; } = new DataBaseCollection<EnumCustom>("MeasProcessNames", new EnumCustom());
+        #endregion;        
+
+        #region Названия единиц измерения
+        public DataBaseCollection<EnumCustom> UnitNames { get; } = new DataBaseCollection<EnumCustom>("UnitNames", new EnumCustom());
+        #endregion
+        #endregion
+
+        #region Выбранный номер измерительного процесса (не текущий!)
+        int _selectedMeasProcessNum;
+        public int SelectedMeasProcessNum
+        {
+            get => _selectedMeasProcessNum;
+            set 
+            {
+                if (value < mainModel.MeasProcesses.Length)
+                {
+                    Set(ref _selectedMeasProcessNum, value);
+                    SelectedMeasProcess = mainModel.MeasProcesses[value];
+                    SelectedDiap = SelectedMeasProcess.Ranges[SelectedDiapNum];
+                }
+                    
+
+            } 
+        }
+        #endregion
+
+        #region Выбранный измерительный процесс
+        MeasProcess _selectedMeasProcess;
+        public MeasProcess SelectedMeasProcess
+        {
+            get => _selectedMeasProcess ?? (_selectedMeasProcess = mainModel.MeasProcesses[0]);
+            set => Set(ref _selectedMeasProcess, value);            
+        }
+        #endregion
+
+        #region Выбранный номер диапазона
+        int _selectedDiapNum;
+        public int SelectedDiapNum
+        {
+            get => _selectedDiapNum;
+            set
+            {
+                if (value < SelectedMeasProcess.Ranges.Length)
+                {
+                    Set(ref _selectedDiapNum, value);
+                    SelectedDiap = SelectedMeasProcess.Ranges[value];
+                }
+            }
+        }
+        #endregion
+
+        #region Выбранный диапазон
+        public Diapasone _selectedDiap;
+        public Diapasone SelectedDiap
+        {
+            get => _selectedDiap ?? (_selectedDiap = SelectedMeasProcess.Ranges[SelectedDiapNum]);
+            set => Set(ref _selectedDiap, value);
+        }
         #endregion
 
         #region Вывести данные из БД

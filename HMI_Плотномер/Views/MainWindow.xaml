@@ -9,20 +9,26 @@
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:add="clr-namespace:HMI_Плотномер.AddClasses"
+        xmlns:addView="clr-namespace:HMI_Плотномер.Views.AddClasses"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <vm:VM/>
     </Window.DataContext>
     <!--#region Общие ресурсы -->
-    <Window.Resources>        
-        <!--#region КОнвертеры -->
+    <Window.Resources>
+        <add:MeasProcess x:Key="Mp"/>
+        <add:Diapasone x:Key="Diap"/>
+        <!--#region Конвертеры -->
         <conv:InterpolationConverter x:Key="InterpolationConverter"/>
         <conv:ColorIndicator x:Key="ColorToBool"/>
         <conv:GetStatusConveter x:Key="StatusFromNum"/>
         <conv:BoolToVisible x:Key="VisibleConverter"/>
         <conv:IsFilePathExist x:Key="FileExistConverter"/>
         <conv:UserTextConverter x:Key="UserToName"/>
+        <conv:UserLevelConverter x:Key="UserToVisibility"/>
+        
         <!--#endregion-->
         <!--#region Стили -->
         <Style TargetType="Border">
@@ -30,12 +36,35 @@
             <Setter Property="BorderBrush" Value="Black"/>
         </Style >
 
+        
+        <!--#endregion-->
+        <!--#region Перечисления -->
+        <!--#region Баудрейт -->
+        <col1:ArrayList x:Key="baudrates">
+            <sys1:String>2400</sys1:String>
+            <sys1:String>4800</sys1:String>
+            <sys1:String>9600</sys1:String>
+            <sys1:String>19200</sys1:String>
+            <sys1:String>38400</sys1:String>
+            <sys1:String>115200</sys1:String>
+        </col1:ArrayList>
+        <!--#endregion-->
+        <!--#region Паритет -->
+        <col1:ArrayList x:Key="parityes">
+            <sys1:String>None</sys1:String>
+            <sys1:String>Even</sys1:String>
+            <sys1:String>Odd</sys1:String>
+        </col1:ArrayList>
+        <!--#endregion-->
+        <!--#endregion-->
+
+        <!--#region Шаблоны -->
         <!--#region Шаблоны -->
         <ControlTemplate TargetType="ListBoxItem" x:Key="TextBoxParameter">
             <ListBoxItem>
                 <Grid>
                     <TextBlock Text="{TemplateBinding Tag}" HorizontalAlignment="Left"/>
-                    <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>                    
+                    <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>
                 </Grid>
             </ListBoxItem>
 
@@ -100,29 +129,9 @@
             </Grid>
         </ControlTemplate>
         <!--#endregion-->
-        <!--#endregion-->
-
-        <!--#endregion-->
-        <!--#region Баудрейт -->
-        <col1:ArrayList x:Key="baudrates">
-            <sys1:String>2400</sys1:String>
-            <sys1:String>4800</sys1:String>
-            <sys1:String>9600</sys1:String>
-            <sys1:String>19200</sys1:String>
-            <sys1:String>38400</sys1:String>
-            <sys1:String>115200</sys1:String>
-        </col1:ArrayList>
-        <!--#endregion-->
-        <!--#region Баудрейт -->
-        <col1:ArrayList x:Key="parityes">
-            <sys1:String>None</sys1:String>
-            <sys1:String>Even</sys1:String>
-            <sys1:String>Odd</sys1:String>
-        </col1:ArrayList>
-        <!--#endregion-->
-
+        <!--#region Шаблон для тренда -->
         <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
-            <oxy:Plot PlotMargins="30,0,0,30" Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">                
+            <oxy:Plot PlotMargins="30,0,0,30" Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
                 <oxy:Plot.Annotations >
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
@@ -150,6 +159,10 @@
 
             </oxy:Plot>
         </ControlTemplate>
+        <!--#endregion-->
+
+        
+        <!--#endregion-->
 
 
     </Window.Resources>
@@ -222,16 +235,24 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox Template="{StaticResource TextBoxPar }" 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.2*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--#region RTC -->
+                    <Viewbox  >
+                        <TextBox Template="{StaticResource TextBoxPar }" 
                              DataContext="{Binding mainModel.Rtc}"
                              VerticalContentAlignment="Center"
                              VerticalAlignment="Center"
                              HorizontalAlignment="Center"
-                             HorizontalContentAlignment="Center"
-                             
+                             HorizontalContentAlignment="Center"                            
                              ></TextBox>
+                    </Viewbox>
+                    <!--#endregion-->
 
-                    <Button Grid.Row="1"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Center">
+
+                    <Button Grid.Row="1" Margin="2"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Stretch">
                         <Button.ToolTip>Авторизация</Button.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="User" HorizontalAlignment="Left" Margin="5,1,10,1"/>
@@ -239,7 +260,12 @@
                             </TextBlock>
                         </StackPanel>
                     </Button>
-                    
+                    <!--#region Логаут -->
+                    <Button Grid.Column="1" Command="{Binding LogoutCommand}" Grid.Row="1" Margin="2">
+                        <fa:ImageAwesome Icon="Reply"/>
+                    </Button>
+                    <!--#endregion-->
+
                 </Grid>
             </Border>
             <!--#endregion-->
@@ -494,24 +520,9 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <!--#region Кнопка Вкл-выкл Hv -->
-                        <Button Margin="5" Command="{Binding SwitchHvCommand}" 
-                                Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
-                            <Button.Resources>
-                                <col1:ArrayList x:Key="hvStatus">
-                                    <sys1:String>ВКЛЮЧИТЬ HV</sys1:String>
-                                    <sys1:String>ВЫКЛЮЧИТЬ HV</sys1:String>
-                                </col1:ArrayList>
-                            </Button.Resources>
-                            <TextBlock Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource hvStatus}}"
-                                       IsEnabled="{Binding mainModel.Connecting}"
-                                       TextWrapping="Wrap"
-                                       ></TextBlock>
-                        </Button>
-                        <!--#endregion-->
+                        </Grid.RowDefinitions>                        
                         <!--#region Кнопка Вкл-выкл измерения -->
-                        <Button Grid.Column="1" Margin="5" Command="{Binding SwitchMeasCommand}" 
+                        <Button Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Command="{Binding SwitchMeasCommand}" 
                                 Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
                             <Button.Resources>
                                 <col1:ArrayList x:Key="measStatus">
@@ -606,6 +617,258 @@
 
                         </Grid>
                     </TabItem>
+                </TabControl>
+            </TabItem>
+            <!--#endregion-->
+            <!--#region Расширенные настройки -->
+            <TabItem Header="РАСШИРЕННЫЕ НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                <TabItem.Resources>
+                    <!--#region Общий стиль для DaraGrid -->
+                    <Style TargetType="DataGrid">
+                        <Setter Property="VerticalGridLinesBrush" Value="DarkGray"/>
+                        <Setter Property="GridLinesVisibility" Value="Vertical"/>
+                        <Setter Property="AlternatingRowBackground" Value="AliceBlue"/>
+                        <Setter Property="AutoGenerateColumns" Value="False"/>
+                    </Style>
+                    <!--#endregion-->
+                </TabItem.Resources>
+                <TabControl TabStripPlacement="Left">
+                    <!--#region Настройки измерительных процессов -->
+                    <TabItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ">
+                        <GroupBox>
+                            
+                            <!--#region Выбор измерительного процесса -->
+                            <GroupBox.Header>
+                                <DockPanel>
+                                    <TextBlock Text="Название измерительного процесса"></TextBlock>
+                                    <ComboBox Name="Selector" HorizontalAlignment="Right" ItemsSource="{Binding MeasProcessNames.Data}"
+                                              DisplayMemberPath="Name"
+                                              Margin="10,0"
+                                              SelectedIndex="{Binding SelectedMeasProcessNum}"  ></ComboBox>
+                                </DockPanel>
+                            </GroupBox.Header>
+                            <!--#endregion-->
+                            <!--#region Параметры -->                            
+                            <ListBox DataContext="{Binding SelectedMeasProcess}" HorizontalContentAlignment="Stretch">
+                                <!--#region Диапазоны -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <ListBoxItem.Resources>
+                                        <col1:ArrayList x:Key="Diapasons">
+                                            <sys1:String>Диапазон 0</sys1:String>
+                                            <sys1:String>Диапазон 1</sys1:String>
+                                            <sys1:String>Диапазон 2</sys1:String>                                            
+                                        </col1:ArrayList>
+                                    </ListBoxItem.Resources>
+                                    <GroupBox>
+                                        <!--#region Выбор диапазона -->
+                                        <GroupBox.Header>
+                                            <DockPanel>
+                                                <TextBlock Text="Номер диапазона"></TextBlock>
+                                                <ComboBox ItemsSource="{StaticResource Diapasons}" 
+                                                          SelectedIndex="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedDiapNum}"></ComboBox>
+                                            </DockPanel>
+                                        </GroupBox.Header>
+                                        
+                                        <!--#endregion-->
+                                        <!--#region Настройки диапазонов -->
+                                        <ListBox DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedDiap}">
+                                            
+                                            <!--#region Номер калибровочной кривой -->
+                                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                                <DockPanel>
+                                                    <TextBlock Text="Номер калибровочной кривой"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBox Width="50">
+                                                            <TextBox.Text>
+                                                                <Binding Source="{StaticResource Mp}" Path="Ranges[0].CalibCurveNum">
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"
+                                                                CommandParameter="{Binding Source={StaticResource Mp}, Path=Ranges[0].CalibCurveNum}">--></Button>
+                                                        <Border Width="50" HorizontalAlignment="Right">
+                                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding CalibCurveNum}"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </ListBoxItem>
+                                            <!--#endregion-->
+                                            <!--#region Номер стандартизации ЕИ -->
+                                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                                <DockPanel>
+                                                    <TextBlock Text="Номер стандартизации ЕИ"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBox Width="50">
+                                                            <TextBox.Text>
+                                                                <Binding Source="{StaticResource Mp}" Path="Ranges[0].StandNum">
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"
+                                                                CommandParameter="{Binding Source={StaticResource Mp}, Path=Ranges[0].StandNum}">--></Button>
+                                                        <Border Width="50" HorizontalAlignment="Right">
+                                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding StandNum}"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </ListBoxItem>
+                                            <!--#endregion-->
+                                            <!--#region Счетчик -->
+                                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                                <DockPanel>
+                                                    <TextBlock Text="Счетчик"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBox Width="50">
+                                                            <TextBox.Text>
+                                                                <Binding Source="{StaticResource Mp}" Path="Ranges[0].CounterNum">
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"
+                                                                CommandParameter="{Binding Source={StaticResource Mp}, Path=Ranges[0].CounterNum}">--></Button>
+                                                        <Border Width="50" HorizontalAlignment="Right">
+                                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding CounterNum}"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </ListBoxItem>
+                                            <!--#endregion-->
+                                        </ListBox>
+                                        <!--#endregion-->
+                                    </GroupBox>                                    
+                                </ListBoxItem>
+                                <!--#endregion--> 
+                                <!--#region Номер стандартизации -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="Номер стандартизации"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=BackStandNum}" Width="50" ></TextBox>
+                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumCommand}"
+                                                     CommandParameter="{Binding Source={StaticResource Mp}, Path=BackStandNum}">--></Button>
+                                            <Border Width="50" HorizontalAlignment="Right">
+                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding BackStandNum}"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Время измерения, x0.1 c -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="Время измерения, x0.1 c"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=MeasDuration}" Width="50" ></TextBox>
+                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDurationCommand}"
+                                                    CommandParameter="{Binding Source={StaticResource Mp}, Path=MeasDuration}">--></Button>
+                                            <Border Width="50" HorizontalAlignment="Right">
+                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding MeasDuration}"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Глубина усреднения, точек измерения -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="Глубина усреднения, точек измерения"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=MeasDeep}" Width="50" ></TextBox>
+                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDeepCommand}"
+                                                    CommandParameter="{Binding Source={StaticResource Mp}, Path=MeasDeep}">--></Button>
+                                            <Border Width="50" HorizontalAlignment="Right">
+                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding MeasDeep}"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Период полупаспада -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Период полураспада"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <TextBox Text="{Binding Source={StaticResource Mp}, Path=HalfLife}" Width="50" ></TextBox>
+                                                    <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetHalfLifeCommand}"
+                                                            CommandParameter="{Binding Source={StaticResource Mp}, Path=HalfLife}">--></Button>
+                                                    <Border Width="50" HorizontalAlignment="Right">
+                                                        <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding HalfLife}"/>
+                                                    </Border>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                            </ListBox>                                
+                            <!--#endregion-->
+                        </GroupBox>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Управление пользователями -->
+                    <TabItem Header="ПОЛЬЗОВАТЕЛИ">
+                        <DataGrid  ItemsSource="{Binding Users.Data}">
+                            <DataGrid.Resources>
+                                <col1:ArrayList x:Key="users" >
+                                    <sys1:String>Оператор</sys1:String>
+                                    <sys1:String>Сервис</sys1:String>
+                                    <sys1:String>Администратор</sys1:String>
+                                </col1:ArrayList>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
+                                <DataGridTextColumn Header="Имя" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Somename}"></DataGridTextColumn>
+                                <DataGridComboBoxColumn Header="Уровень доступа" ItemsSource="{StaticResource users}" SelectedItemBinding="{Binding Path=Level}" ></DataGridComboBoxColumn>
+                                <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <!--#endregion-->
+
+                    <!--#region Перечисления -->
+                    <TabItem Header="ПЕРЕЧИСЛЕНИЯ">
+                        <TabItem.Resources>
+                            <!--#region Общий шаблон для таблички -->
+                            <ControlTemplate x:Key="Enums">
+                                <GroupBox Header="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}">
+                                    <DataGrid ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"   >
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn  Header="Id" Binding="{Binding Id}" IsReadOnly="True"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+                                
+                            </ControlTemplate>
+                            <!--#endregion-->
+                        </TabItem.Resources>
+                        <WrapPanel>
+                            <!--#region Названия измерительных процессов -->
+                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding MeasProcessNames.Data}" Tag="Названия измерительных процессов"></DataGrid>                            
+                            <!--#endregion-->
+                            <!--#region Единицы измерения -->
+                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding UnitNames.Data}" Tag="Единицы измерения"></DataGrid>
+                            <!--#endregion-->
+
+                        </WrapPanel>
+                        
+                    </TabItem>
+                    <!--#endregion-->
                 </TabControl>
             </TabItem>
             <!--#endregion-->
