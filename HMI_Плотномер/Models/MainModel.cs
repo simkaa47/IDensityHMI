@@ -37,13 +37,13 @@ namespace HMI_Плотномер.Models
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
-        public bool Connecting { 
+        public bool Connecting {
             get => _connecting;
-            set 
+            set
             {
                 Set(ref _connecting, value);
                 if (!value) SettingsReaded = false;
-            }  }
+            } }
         #endregion
 
         #region Данные измерения
@@ -74,8 +74,25 @@ namespace HMI_Плотномер.Models
         public Parameter<ushort> CurMeasProcessNum { get; } = new Parameter<ushort>("Номер текущего измерительного процесса", "hold", 25);
         #endregion
 
+        #region Текущий процесс
+        MeasProcess _curMeasProcess = new MeasProcess();
+        public MeasProcess CurMeasProcess{ get => _curMeasProcess; set => Set(ref _curMeasProcess, value); }
+        #endregion
+
         #region Настройки измерительных процессов
-        public MeasProcess[] MeasProcesses { get; set; } = Enumerable.Range(0, 4).Select(z => new MeasProcess()).ToArray();
+        #region Количество измерительных процессов
+        /// <summary>
+        /// Количество измерительных процессов
+        /// </summary>
+        public static int measProcessNum = 4;
+        #endregion
+
+        
+
+        #region 
+
+        #endregion
+        public MeasProcess[] MeasProcesses { get; set; } = Enumerable.Range(0, measProcessNum).Select(z => new MeasProcess()).ToArray();
         #endregion
 
         #region Данные прочитаны
@@ -99,9 +116,8 @@ namespace HMI_Плотномер.Models
                 else if (CommMode.EthEnable) Tcp.GetData(this);
                 else Connecting = false;
                 if (CycleMeasStatus.Value && Connecting)
-                    UpdateDataEvent?.Invoke();
-                GetMeasProcessData();
-                Thread.Sleep(500);
+                    UpdateDataEvent?.Invoke();                
+                Thread.Sleep(100);
             }
         }
 
@@ -173,51 +189,18 @@ namespace HMI_Плотномер.Models
 
         #region Записать данные измерительных процессов
         public void SetMeasProcessSettings(MeasProcess process, int index)
-        { 
-        
-        }
-        
-        #endregion
-        public void GetMeasProcessData()
         {
-
-            var str = "*FSRD,6,meas_proc=0,0,0,4,0,1,0,4,1,2,20,20,20,0,10,10,345.000000,1,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,1345.000000,2,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,2345.000000,3,0,0,4,1,1,1,4,1,2,1,4,1,0,15,12,3345.000000,meas_prc_ndx=0#";
-            //Проверка корректности пришедшего пакета
-            if (str.Length < 50) return;// Проверка на длину
-            if (str.Substring(1, 4) != "FSRD") return;// Проверка на заголовок..
-            if (str[str.Length - 1] != '#') return;// Проверка на окончание
-            ushort temp = 0;
-            if (!ushort.TryParse(str[str.Length - 2].ToString(), out temp)) return;
-            CurMeasProcessNum.Value = temp;// Получаем номер текущего измерительного процесса
-            str = str.Remove(str.Length - 16, 16);// Обрезаем строку с конца         
-            str = str.Remove(0, 18);// Обрезаем начало строки
-            var numStr = str.Split(new char[] { ',', '#' });
-            if (numStr.Length != 68) return;
-            for (int i = 0; i < 68; i += 17)
-            {
-                int index = i / 17;
-                var numUshort = numStr
-                     .Skip(i)
-                     .Take(16)
-                     .Where(s => ushort.TryParse(s, out temp))
-                     .Select(n => temp)
-                     .ToArray();
-                if (numUshort.Length != 16) return;
-                for (int j = 0; j < 3; j++)
-                {
-                    MeasProcesses[index].Ranges[j].CalibCurveNum = numUshort[2 + j * 4];// Номер калибровочной кривой
-                    MeasProcesses[index].Ranges[j].StandNum = numUshort[3 + j * 4];// Номер стандартизации ЕИ
-                    MeasProcesses[index].Ranges[j].CounterNum = numUshort[4 + j * 4];// Счетчик
-                }
-                MeasProcesses[index].BackStandNum = numUshort[13];
-                MeasProcesses[index].MeasDuration = numUshort[14];
-                MeasProcesses[index].MeasDeep = numUshort[15];
-                float tempFloat = 0;
-                if (!float.TryParse(numStr[i + 16].Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out tempFloat)) return;
-                MeasProcesses[index].HalfLife = tempFloat;
-            }
-
+            if (CommMode.EthEnable) Tcp.SetMeasProcessSettings(process,index);
         }
+
+        #endregion
+
+        #region Сменить номер измерительного процесса
+        public void ChangeMeasProcess(int index)
+        {
+            if (CommMode.EthEnable) Tcp.ChangeMeasProcess(index);
+        }
+        #endregion
         #endregion
 
         #endregion

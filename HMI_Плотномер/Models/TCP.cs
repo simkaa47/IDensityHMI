@@ -100,12 +100,14 @@ namespace HMI_Плотномер.Models
         #region Дисконнект
         public void Disconnect()
         {
-            if (client != null && client.Connected)
+            if (client != null)
             {
-                model.Connecting = false;
+               
                 TcpEvent?.Invoke($"{IP}:{PortNum}: соединение завершено пользователем");
                 client.Close();
+                model.Connecting = client.Connected;
             }
+
         }
         #endregion
 
@@ -124,8 +126,8 @@ namespace HMI_Плотномер.Models
                 GetDeviceStatus();
                 GetCurDateTime();
                 GetCurMeas();
-                GetHVTelemetry();
-                GetTempTelemetry();
+                //GetHVTelemetry();
+                //GetTempTelemetry();                
                 GetSetiings();
 
 
@@ -219,6 +221,23 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+        #region Получить данные периферийных модулей
+        void GetPeriphTelemetry()
+        {
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,PPG"));
+            str = str.TrimEnd(new char[] { '#' }).Substring(5);
+            float temp = 0;
+            var nums = str.Split(new char[] { ',' })
+                .Where(str => float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out temp)).
+                Select(str => temp).
+                ToArray();
+            if (nums.Length == 12)
+            {
+               
+            }
+        }
+        #endregion
+
         #region Запрос текущего значения измерения
         void GetCurMeas()
         {
@@ -263,6 +282,8 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+
+
         #region Запрос статусов устройств
         void GetDeviceStatus()
         {
@@ -287,15 +308,14 @@ namespace HMI_Плотномер.Models
             if (str[str.Length - 1] != '#') return;// Проверка на окончание
             ushort temp = 0;
             if (!ushort.TryParse(str[str.Length - 2].ToString(), out temp)) return;
-            model.CurMeasProcessNum.Value = temp;// Получаем номер текущего измерительного процесса
+            model.CurMeasProcessNum.Value = temp;// Получаем номер текущего измерительного процесса           
             str = str.Remove(str.Length - 16, 16);// Обрезаем строку с конца         
             str = str.Remove(0, 18);// Обрезаем начало строки
             var numStr = str.Split(new char[] { ',', '#' });
-            if (numStr.Length != 68) return;
-            var measProceses = new MeasProcess[4];
-            for (int i = 0; i < 68; i += 17)
+            if (numStr.Length != 19 * MainModel.measProcessNum) return;            
+            for (int i = 0; i < 19*MainModel.measProcessNum; i += 19)
             {
-                int index = i / 17;
+                int index = i / 19;
                 var numUshort = numStr
                      .Skip(i)
                      .Take(16)
@@ -303,22 +323,28 @@ namespace HMI_Плотномер.Models
                      .Select(n => temp)
                      .ToArray();
                 if (numUshort.Length != 16) return;
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < MeasProcess.rangeNum; j++)
                 {
-                    measProceses[index].Ranges[j].CalibCurveNum = numUshort[2 + j * 4];// Номер калибровочной кривой
-                    measProceses[index].Ranges[j].StandNum = numUshort[3 + j * 4];// Номер стандартизации ЕИ
-                    measProceses[index].Ranges[j].CounterNum = numUshort[4 + j * 4];// Счетчик
+                    model.MeasProcesses[index].Ranges[j].CalibCurveNum = numUshort[2 + j * 4];// Номер калибровочной кривой
+                    model.MeasProcesses[index].Ranges[j].StandNum = numUshort[3 + j * 4];// Номер стандартизации ЕИ
+                    model.MeasProcesses[index].Ranges[j].CounterNum = numUshort[4 + j * 4];// Счетчик
                 }
-                measProceses[index].BackStandNum = numUshort[13];
-                measProceses[index].MeasDuration = numUshort[14];
-                measProceses[index].MeasDeep = numUshort[15];
+                model.MeasProcesses[index].BackStandNum = numUshort[13];
+                model.MeasProcesses[index].MeasDuration = numUshort[14];
+                model.MeasProcesses[index].MeasDeep = numUshort[15];
                 float tempFloat = 0;
-                if (!float.TryParse(numStr[i + 16].Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out tempFloat)) return;
-                measProceses[index].HalfLife = tempFloat;
+                var numsFloat = numStr.Skip(i+16)
+                    .Take(3)
+                    .Where(s => float.TryParse(s.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out tempFloat))
+                    .Select(n => tempFloat)
+                    .ToArray();
+                if (numsFloat.Length!=3) return;
+                model.MeasProcesses[index].HalfLife = numsFloat[0];
+                model.MeasProcesses[index].DensityLiquid = numsFloat[1];
+                model.MeasProcesses[index].DensitySolid = numsFloat[2];
             }
-            model.MeasProcesses = measProceses;
+            if (model.CurMeasProcessNum.Value < MainModel.measProcessNum) model.CurMeasProcess = model.MeasProcesses[model.CurMeasProcessNum.Value];
             model.SettingsReaded = true;
-
         } 
         #endregion
         #endregion
@@ -336,6 +362,35 @@ namespace HMI_Плотномер.Models
         {
             commands.Enqueue(new TcpWriteCommand(SendTlg, Encoding.ASCII.GetBytes($"CMND,AMM,{value.ToString()}")));
         }
+        #endregion
+
+        #region Записать данные измерений
+        public void SetMeasProcessSettings(MeasProcess process, int index)
+        {
+            string cmd = $"SETT,meas_proc={index},";
+            // Добавлям данные диапазонов
+            for (int i = 0; i < process.Ranges.Length; i++)
+            {
+                cmd = cmd + $"{i},";
+                cmd = cmd + $"{process.Ranges[i].CalibCurveNum},";// Номер калибровочной кривой
+                cmd = cmd + $"{process.Ranges[i].StandNum},";// Номер стандартизации
+                cmd = cmd + $"{process.Ranges[i].CounterNum},";// Счетчик
+            }
+            cmd = cmd + $"{process.BackStandNum},";
+            cmd = cmd + $"{process.MeasDuration},";
+            cmd = cmd + $"{process.MeasDeep},";
+            cmd = cmd + $"{process.HalfLife.ToString().Replace(",", ".")},";
+            cmd = cmd + $"{process.DensityLiquid.ToString().Replace(",", ".")},";
+            cmd = cmd + $"{process.DensitySolid.ToString().Replace(",", ".")},";            
+            commands.Enqueue(new TcpWriteCommand((buf)=> { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(cmd)));
+        }
+        #endregion
+
+        #region Изменить номер текущего процесса
+        public void ChangeMeasProcess(int index)
+        {
+            if(index>=0 && index<MainModel.measProcessNum)commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,meas_prc_ndx={index}")));
+        } 
         #endregion
         #endregion
 

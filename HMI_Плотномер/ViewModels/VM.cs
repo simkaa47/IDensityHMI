@@ -159,8 +159,37 @@ namespace HMI_Плотномер.ViewModels
             }, 
                 canExecPar => true)); }
         #endregion
+        #region Команда "Отправить данные плотности жидкости"
+        RelayCommand _setDensityLiqCommand;
+        public RelayCommand SetDensityLiqCommand
+        {
+            get => _setDensityLiqCommand ?? (_setDensityLiqCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.DensityLiquid = (float)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+        }
+        #endregion
+        #region Команда "Отправить данные плотности твердости"
+        RelayCommand _setDensitySolidCommand;
+        public RelayCommand SetDensitySolidCommand
+        {
+            get => _setDensitySolidCommand ?? (_setDensitySolidCommand = new RelayCommand(execPar =>
+            {
+                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
+                process.DensitySolid = (float)execPar;
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            },
+                canExecPar => true));
+        }
+        #endregion
+        #region Команда "Сменить номер измерительного процесса"
+        RelayCommand _changeMeasProcessCommand;
+        public RelayCommand ChangeMeasProcessCommand => _changeMeasProcessCommand ?? (_changeMeasProcessCommand = new RelayCommand(execPar => mainModel.ChangeMeasProcess((int)execPar), canExecPar => true));
+        #endregion
 
-        
         #endregion
 
 
@@ -359,6 +388,18 @@ namespace HMI_Плотномер.ViewModels
             }
             cell.PropertyChanged += (sender, e) => XmlMethods.EditParam<T>(cell, e.PropertyName);
             return cell;
+        }
+        #endregion
+
+        #region Время усреднения для пользователя(запись)
+        uint _avgTimeWrite = 1;
+        public uint AvgTimeWrite
+        {
+            get => _avgTimeWrite;
+            set 
+            {
+                if (value > 0) Set(ref _avgTimeWrite, value);
+            }
         }
         #endregion
 

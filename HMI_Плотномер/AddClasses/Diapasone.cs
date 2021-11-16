@@ -12,6 +12,8 @@ namespace HMI_Плотномер.AddClasses
 
         public string Error { get; }
 
+        
+
         #region Номер калибровочной кривой
         ushort _calibCurveNum;
         public ushort CalibCurveNum

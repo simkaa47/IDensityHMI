@@ -10,6 +10,7 @@
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:add="clr-namespace:HMI_Плотномер.AddClasses"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:addView="clr-namespace:HMI_Плотномер.Views.AddClasses"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -28,7 +29,9 @@
         <conv:IsFilePathExist x:Key="FileExistConverter"/>
         <conv:UserTextConverter x:Key="UserToName"/>
         <conv:UserLevelConverter x:Key="UserToVisibility"/>
-        
+        <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
+        <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
+
         <!--#endregion-->
         <!--#region Стили -->
         <Style TargetType="Border">
@@ -617,6 +620,49 @@
 
                         </Grid>
                     </TabItem>
+                    <TabItem Header="ОБЩИЕ НАСТРОЙКИ" >
+                        <ListBox HorizontalContentAlignment="Stretch">
+                            <ListBoxItem>
+                                <DockPanel>
+                                    <TextBlock Text="Выбор текущего измерительного процесса"></TextBlock>
+                                    <ComboBox Name="CurMeasSelector" ItemsSource="{Binding MeasProcessNames.Data}" 
+                                              DisplayMemberPath="Name" 
+                                              SelectedIndex="{Binding mainModel.CurMeasProcessNum.Value}"                                              
+                                              HorizontalAlignment="Right">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction Command="{Binding ChangeMeasProcessCommand}" CommandParameter="{Binding ElementName=CurMeasSelector, Path=SelectedIndex}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
+                                    
+                                </DockPanel>
+                            </ListBoxItem>
+                            <!--#region Время усреднения -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                <DockPanel>
+                                    <TextBlock Text="Время усреднения, сек"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <TextBox Text="{Binding AvgTimeWrite}" Width="50" ></TextBox>
+                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"
+                                                            CommandParameter="{Binding Source={StaticResource Mp}}">--></Button>
+                                        <Border Width="50" HorizontalAlignment="Right">
+                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource MultiplyNumsConverter}">
+                                                        <Binding Path="mainModel.CurMeasProcess.MeasDeep"/>
+                                                        <Binding Path="mainModel.CurMeasProcess.MeasDuration" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </Border>
+                                    </StackPanel>
+                                </DockPanel>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                        </ListBox>
+                    </TabItem>
                 </TabControl>
             </TabItem>
             <!--#endregion-->
@@ -814,6 +860,38 @@
                                             </DockPanel>
                                         </ListBoxItem>
                                         <!--#endregion-->
+                                <!--#region Плотность жидкости -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="Плотность жидкости"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=DensityLiquid}" Width="50" ></TextBox>
+                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensityLiqCommand}"
+                                                            CommandParameter="{Binding Source={StaticResource Mp}, Path=DensityLiquid}">--></Button>
+                                            <Border Width="50" HorizontalAlignment="Right">
+                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding DensityLiquid}"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Плотность твердости -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="Плотность жидкости"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=DensitySolid}" Width="50" ></TextBox>
+                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"
+                                                            CommandParameter="{Binding Source={StaticResource Mp}, Path=DensitySolid}">--></Button>
+                                            <Border Width="50" HorizontalAlignment="Right">
+                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding DensitySolid}"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
                             </ListBox>                                
                             <!--#endregion-->
                         </GroupBox>

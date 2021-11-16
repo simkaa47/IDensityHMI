@@ -12,8 +12,15 @@ namespace HMI_Плотномер.AddClasses
         public string this[string columnName] => errorsDict[columnName];
 
         public string Error { get; }
+        #region Количество диапазонов в процессе
+        /// <summary>
+        /// Количество диапазонов в процессе
+        /// </summary>
+        public static int rangeNum = 3;
+        #endregion
+
         #region Сведения о диапазонах
-        public Diapasone[] Ranges { get; set; } = Enumerable.Range(0, 3).Select(z => new Diapasone()).ToArray();
+        public Diapasone[] Ranges { get; set; } = Enumerable.Range(0, rangeNum).Select(z => new Diapasone()).ToArray();
         #endregion
 
         #region Номер фоновой стандартизации
@@ -74,6 +81,18 @@ namespace HMI_Плотномер.AddClasses
             set => Set(ref _halfLife, value); }
         #endregion
 
+        #region Плотность жидкости
+        float _densityLiquid;
+        public float DensityLiquid { get => _densityLiquid; set => Set(ref _densityLiquid, value); }
+        #endregion
+
+        #region Плотность твердости
+        float _densitySolid;
+        public float DensitySolid { get => _densitySolid; set => Set(ref _densitySolid, value); }
+        #endregion
+
+
+
         public object Clone()
         {
             return new MeasProcess
@@ -82,7 +101,9 @@ namespace HMI_Плотномер.AddClasses
                 BackStandNum = this.BackStandNum,
                 MeasDuration = this.MeasDuration,
                 MeasDeep = this.MeasDeep,
-                HalfLife = this.HalfLife
+                HalfLife = this.HalfLife,
+                DensityLiquid = this.DensityLiquid,
+                DensitySolid = this.DensitySolid
             };
         }
     }
