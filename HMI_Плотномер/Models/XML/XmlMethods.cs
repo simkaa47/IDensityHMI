@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Windows;
 using System.Xml;
 
 namespace HMI_Плотномер.Models.XML
@@ -10,13 +11,13 @@ namespace HMI_Плотномер.Models.XML
     /// Набор статических методов для чтеня, записи, удаления, редактирования данных в XML документе
     /// </summary>
     class XmlMethods
-    {
+    {        
         #region Событие
-        static public event Action<string> XmlErrorEvent;
+        static public event Action<string> XmlErrorEvent = (message)=> MessageBox.Show(message);
         #endregion
 
         #region Путь
-        readonly static string Path = "settings.xml";
+        public static string Path = "settings.xml";
         #endregion
 
         #region Метод чтения данных по дескриптору
@@ -26,14 +27,15 @@ namespace HMI_Плотномер.Models.XML
         /// <typeparam name="T"></typeparam>
         public static List<T>GetParam<T>()
         {
-            var xDoc = new XmlDocument();// создаем документ
-            xDoc.Load(Path);// загружаем данные
-            Type type = typeof(T);
-            var props = typeof(T).GetProperties();
             var paramList = new List<T>();
-            XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
             try
             {
+                var xDoc = new XmlDocument();// создаем документ
+                xDoc.Load(Path);// загружаем данные
+                Type type = typeof(T);
+                var props = typeof(T).GetProperties();
+                
+                XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
                 for (int i = 0; i < nodeList.Count; i++)
                 {
                     T cell = (T)Activator.CreateInstance(type);
@@ -70,15 +72,15 @@ namespace HMI_Плотномер.Models.XML
 
         #region Добавление записи
         public static void AddToXml<T>(T param)
-        {
-            var xDoc = new XmlDocument();// создаем документ
-            xDoc.Load(Path);// загружаем данные
-            XmlNode xNode = xDoc.DocumentElement.SelectSingleNode("params");
-            Type type = typeof(T);
-            XmlElement deviceElem = xDoc.CreateElement(type.Name);
-            var props = typeof(T).GetProperties();
+        {           
             try
             {
+                var xDoc = new XmlDocument();// создаем документ
+                xDoc.Load(Path);// загружаем данные
+                XmlNode xNode = xDoc.DocumentElement.SelectSingleNode("params");
+                Type type = typeof(T);
+                XmlElement deviceElem = xDoc.CreateElement(type.Name);
+                var props = typeof(T).GetProperties();
                 foreach (var prop in props)
                 {
                     XmlAttribute attr = xDoc.CreateAttribute(prop.Name);
@@ -100,13 +102,14 @@ namespace HMI_Плотномер.Models.XML
         #region Редактирование записи
         public static void EditParam<T>(T param, string changedProperty)
         {
-            var xDoc = new XmlDocument();
-            xDoc.Load(Path);
-            Type type = typeof(T);
-            var props = typeof(T).GetProperties();
-            XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
+           
             try
             {
+                var xDoc = new XmlDocument();
+                xDoc.Load(Path);
+                Type type = typeof(T);
+                var props = typeof(T).GetProperties();
+                XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
                 for (int i = 0; i < nodeList.Count; i++)
                 {
                     bool isEqual = true;

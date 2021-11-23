@@ -81,31 +81,17 @@
             </ListBoxItem>
 
         </ControlTemplate>
+
+        
+        
+        <!--#region Шаблоны для compobox -->
         <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar">
             <Grid>
                 <ComboBox Name="compobox" SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           ItemsSource="{TemplateBinding ItemsSource}"  Tag="{TemplateBinding Tag}">
                 </ComboBox>
-
                 <ContentControl Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}">
-                </ContentControl>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger SourceName="compobox" Property="SelectedItem" Value="{x:Null}">
-                    <Setter TargetName="compobox" Property="Text" Value="{Binding ElementName=compobox, Path=Tag}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <!--#region Шаблоны для compobox -->
-        <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar1">
-            <Grid>
-                <ComboBox Name="compobox" SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ItemsSource}"  Tag="{TemplateBinding Tag}" DropDownOpened="ComboBox_DropDownOpened">
-                </ComboBox>
-
-                <ContentControl Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}">
+                                Height="{TemplateBinding Height}" VerticalAlignment="Bottom">
                 </ContentControl>
             </Grid>
             <ControlTemplate.Triggers>
@@ -163,6 +149,37 @@
             </oxy:Plot>
         </ControlTemplate>
         <!--#endregion-->
+        <ControlTemplate x:Key="Parameter">
+            <DockPanel>
+                <TextBlock Text="{Binding Description}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBox Width="50">
+                        <TextBox.Text>
+                            <Binding Path="WriteValue">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right" Content="-->"
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Command}"/>
+                    <Border Width="50" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="Black">
+                        <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding Value}"/>
+                    </Border>
+                </StackPanel>
+                <DockPanel.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
+                            <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
+                            <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>
+                        </StackPanel>
+                    </ToolTip>
+                </DockPanel.ToolTip>
+            </DockPanel>
+            
+        </ControlTemplate>
 
         
         <!--#endregion-->
@@ -243,14 +260,8 @@
                         <ColumnDefinition Width="0.2*"/>
                     </Grid.ColumnDefinitions>
                     <!--#region RTC -->
-                    <Viewbox  >
-                        <TextBox Template="{StaticResource TextBoxPar }" 
-                             DataContext="{Binding mainModel.Rtc}"
-                             VerticalContentAlignment="Center"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Center"
-                             HorizontalContentAlignment="Center"                            
-                             ></TextBox>
+                    <Viewbox Grid.ColumnSpan="2"  >
+                        <TextBlock Text="{Binding mainModel.Rtc.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"/>
                     </Viewbox>
                     <!--#endregion-->
 
@@ -550,7 +561,7 @@
             <!--#region Вкладка настроек -->
             <TabItem Header="НАСТРОЙКИ">
                 <TabControl TabStripPlacement="Left">
-                    <TabItem Header="НАСТРОЙКИ СВЯЗИ">
+                    <TabItem Header="КОММУНИКАЦИЯ">
                         <Grid>
                             <ListBox HorizontalContentAlignment="Stretch" >
                                 <!--#region Способ связи с платой -->
@@ -570,9 +581,8 @@
                                         <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <Grid>
                                                 <TextBlock Text="Имя COM порта" HorizontalAlignment="Left"></TextBlock>
-                                                <ComboBox   Width="80" Template="{StaticResource CompoboxPar1}" Tag="{Binding mainModel.rs.ComName}"  SelectedItem="{Binding mainModel.rs.ComName}"  DropDownOpened="ComboBox_DropDownOpened"  HorizontalAlignment="Right">
+                                                <ComboBox   Width="80" Template="{StaticResource CompoboxPar}" Tag="{Binding mainModel.rs.ComName}" ItemsSource="{Binding ComPorts}" SelectedItem="{Binding mainModel.rs.ComName}"  HorizontalAlignment="Right"/>
 
-                                                </ComboBox>
                                             </Grid>
                                         </ListBoxItem>
                                         <!--#endregion-->
@@ -603,7 +613,6 @@
                                         </ListBoxItem>
                                         <!--#endregion-->
                                     </ListBox>
-
                                     <!--#endregion-->
                                 </GroupBox>
                                 <!--#endregion-->
@@ -615,12 +624,60 @@
                                     </ListBox>
                                 </GroupBox>
                                 <!--#endregion-->
+                                <!--#region Настройки последовательного порта плотномера -->
+                                <GroupBox Header="Настройки последовательного порта плотномера">
+                                    <ListBox HorizontalContentAlignment="Stretch">
+                                        <!--#region Баудрейт -->
+                                        <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}" >
+                                            <ListBoxItem.Resources>
+                                                <col1:ArrayList x:Key="PortSpeeds">
+                                                    <sys1:Int32>2400</sys1:Int32>
+                                                    <sys1:Int32>4800</sys1:Int32>
+                                                    <sys1:Int32>9600</sys1:Int32>
+                                                    <sys1:Int32>19200</sys1:Int32>
+                                                    <sys1:Int32>38400</sys1:Int32>
+                                                    <sys1:Int32>115200</sys1:Int32>
+                                                </col1:ArrayList>
+                                            </ListBoxItem.Resources>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Description}"/>
+                                                <ComboBox Name="SelectBaudrate"   Width="80" ItemsSource="{StaticResource PortSpeeds}" SelectedItem="{Binding Value}"  HorizontalAlignment="Right">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="DropDownClosed">
+                                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeBaudrateCommand}"
+                                                                                   CommandParameter="{Binding ElementName=SelectBaudrate, Path=SelectedItem}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ComboBox>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <ListBoxItem DataContext="{Binding mainModel.PortSelectMode}" >
+                                            <ListBoxItem.Resources>
+                                                <col1:ArrayList x:Key="PortModes">
+                                                    <sys1:String>RS485</sys1:String>
+                                                    <sys1:String>RS232</sys1:String>
+                                                </col1:ArrayList>
+                                            </ListBoxItem.Resources>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Description}"/>
+                                                <ComboBox Name="RsModeSelector"  Width="80" ItemsSource="{StaticResource PortModes}" SelectedIndex="{Binding Value}"  HorizontalAlignment="Right">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="SelectionChanged">
+                                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeSerialSelectCommand}"
+                                                                                   CommandParameter="{Binding ElementName=RsModeSelector, Path=SelectedIndex}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ComboBox>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                    </ListBox>
+                                </GroupBox>
+                                <!--#endregion-->
                             </ListBox>
-
-
                         </Grid>
                     </TabItem>
-                    <TabItem Header="ОБЩИЕ НАСТРОЙКИ" >
+                    <TabItem Header="ИЗМЕРЕНИЕ" >
                         <ListBox HorizontalContentAlignment="Stretch">
                             <ListBoxItem>
                                 <DockPanel>
@@ -634,8 +691,7 @@
                                                 <i:InvokeCommandAction Command="{Binding ChangeMeasProcessCommand}" CommandParameter="{Binding ElementName=CurMeasSelector, Path=SelectedIndex}"/>
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
-                                    </ComboBox>
-                                    
+                                    </ComboBox>                                    
                                 </DockPanel>
                             </ListBoxItem>
                             <!--#region Время усреднения -->
@@ -645,14 +701,14 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBox Text="{Binding AvgTimeWrite}" Width="50" ></TextBox>
                                         <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"
-                                                            CommandParameter="{Binding Source={StaticResource Mp}}">--></Button>
+                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeUserAvgTime}"
+                                                            CommandParameter="{Binding AvgTimeWrite}">--></Button>
                                         <Border Width="50" HorizontalAlignment="Right">
                                             <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left">
                                                 <TextBlock.Text>
                                                     <MultiBinding Converter="{StaticResource MultiplyNumsConverter}">
-                                                        <Binding Path="mainModel.CurMeasProcess.MeasDeep"/>
-                                                        <Binding Path="mainModel.CurMeasProcess.MeasDuration" />
+                                                        <Binding Path="mainModel.CurMeasProcess.MeasDeep.Value"/>
+                                                        <Binding Path="mainModel.CurMeasProcess.MeasDuration.Value" />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -662,6 +718,43 @@
                             </ListBoxItem>
                             <!--#endregion-->
                         </ListBox>
+                    </TabItem>
+                    <TabItem Header="ДАТА И ВРЕМЯ">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ListBox HorizontalContentAlignment="Stretch">
+                                <!--#region Реадктирование rtc -->
+                                <ListBoxItem>
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding mainModel.Rtc.Description}"></TextBlock>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <wpftool:DateTimePicker Name="Dt" Value="{Binding mainModel.Rtc.WriteValue}" Margin="1,0,1,0"></wpftool:DateTimePicker>
+                                            <Button Command="{Binding SetRtcCommand}" Width="50" Margin="1,0,1,0">--></Button>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Синхронизация с временем ПК -->
+                                <ListBoxItem>
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding CurPcDateTime.Description}"></TextBlock>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock Margin="1,0,1,0"  Width="{Binding ElementName=Dt, Path=ActualWidth}" 
+                                                       Text="{Binding CurPcDateTime.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
+                                                       HorizontalAlignment="Center"></TextBlock>
+                                            <Button Command="{Binding SyncRtcCommand}" Width="50" Margin="1,0,1,0">--></Button>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->                                
+                            </ListBox>
+                            
+                                
+                        </Grid>
+                       
                     </TabItem>
                 </TabControl>
             </TabItem>
@@ -695,7 +788,7 @@
                             </GroupBox.Header>
                             <!--#endregion-->
                             <!--#region Параметры -->                            
-                            <ListBox DataContext="{Binding SelectedMeasProcess}" HorizontalContentAlignment="Stretch">
+                            <ListBox HorizontalContentAlignment="Stretch">
                                 <!--#region Диапазоны -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <ListBoxItem.Resources>
@@ -711,84 +804,26 @@
                                             <DockPanel>
                                                 <TextBlock Text="Номер диапазона"></TextBlock>
                                                 <ComboBox ItemsSource="{StaticResource Diapasons}" 
-                                                          SelectedIndex="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedDiapNum}"></ComboBox>
+                                                          SelectedIndex="{Binding  SelectedDiapNum}"></ComboBox>
                                             </DockPanel>
                                         </GroupBox.Header>
                                         
                                         <!--#endregion-->
                                         <!--#region Настройки диапазонов -->
-                                        <ListBox DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedDiap}">
-                                            
+                                        <ListBox>                                            
                                             <!--#region Номер калибровочной кривой -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <DockPanel>
-                                                    <TextBlock Text="Номер калибровочной кривой"/>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <TextBox Width="50">
-                                                            <TextBox.Text>
-                                                                <Binding Source="{StaticResource Mp}" Path="Ranges[0].CalibCurveNum">
-                                                                    <Binding.ValidationRules>
-                                                                        <DataErrorValidationRule />
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"
-                                                                CommandParameter="{Binding Source={StaticResource Mp}, Path=Ranges[0].CalibCurveNum}">--></Button>
-                                                        <Border Width="50" HorizontalAlignment="Right">
-                                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding CalibCurveNum}"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                </DockPanel>
-                                            </ListBoxItem>
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CalibCurveNum}">
+                                                <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"/>
+                                            </ListBoxItem>                                           
                                             <!--#endregion-->
                                             <!--#region Номер стандартизации ЕИ -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <DockPanel>
-                                                    <TextBlock Text="Номер стандартизации ЕИ"/>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <TextBox Width="50">
-                                                            <TextBox.Text>
-                                                                <Binding Source="{StaticResource Mp}" Path="Ranges[0].StandNum">
-                                                                    <Binding.ValidationRules>
-                                                                        <DataErrorValidationRule />
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"
-                                                                CommandParameter="{Binding Source={StaticResource Mp}, Path=Ranges[0].StandNum}">--></Button>
-                                                        <Border Width="50" HorizontalAlignment="Right">
-                                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding StandNum}"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                </DockPanel>
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.StandNum}">
+                                                <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"/>
                                             </ListBoxItem>
                                             <!--#endregion-->
                                             <!--#region Счетчик -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <DockPanel>
-                                                    <TextBlock Text="Счетчик"/>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <TextBox Width="50">
-                                                            <TextBox.Text>
-                                                                <Binding Source="{StaticResource Mp}" Path="Ranges[0].CounterNum">
-                                                                    <Binding.ValidationRules>
-                                                                        <DataErrorValidationRule />
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"
-                                                                CommandParameter="{Binding Source={StaticResource Mp}, Path=Ranges[0].CounterNum}">--></Button>
-                                                        <Border Width="50" HorizontalAlignment="Right">
-                                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding CounterNum}"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                </DockPanel>
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CounterNum}">
+                                                <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"/>
                                             </ListBoxItem>
                                             <!--#endregion-->
                                         </ListBox>
@@ -797,99 +832,33 @@
                                 </ListBoxItem>
                                 <!--#endregion--> 
                                 <!--#region Номер стандартизации -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Номер стандартизации"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=BackStandNum}" Width="50" ></TextBox>
-                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumCommand}"
-                                                     CommandParameter="{Binding Source={StaticResource Mp}, Path=BackStandNum}">--></Button>
-                                            <Border Width="50" HorizontalAlignment="Right">
-                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding BackStandNum}"/>
-                                            </Border>
-                                        </StackPanel>
-                                    </DockPanel>
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.BackStandNum}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumCommand}"/>
                                 </ListBoxItem>
                                 <!--#endregion-->
                                 <!--#region Время измерения, x0.1 c -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Время измерения, x0.1 c"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=MeasDuration}" Width="50" ></TextBox>
-                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDurationCommand}"
-                                                    CommandParameter="{Binding Source={StaticResource Mp}, Path=MeasDuration}">--></Button>
-                                            <Border Width="50" HorizontalAlignment="Right">
-                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding MeasDuration}"/>
-                                            </Border>
-                                        </StackPanel>
-                                    </DockPanel>
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.MeasDuration}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDurationCommand}"/>
                                 </ListBoxItem>
                                 <!--#endregion-->
                                 <!--#region Глубина усреднения, точек измерения -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Глубина усреднения, точек измерения"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=MeasDeep}" Width="50" ></TextBox>
-                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDeepCommand}"
-                                                    CommandParameter="{Binding Source={StaticResource Mp}, Path=MeasDeep}">--></Button>
-                                            <Border Width="50" HorizontalAlignment="Right">
-                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding MeasDeep}"/>
-                                            </Border>
-                                        </StackPanel>
-                                    </DockPanel>
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.MeasDeep}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDeepCommand}"/>
                                 </ListBoxItem>
                                 <!--#endregion-->
                                 <!--#region Период полупаспада -->
-                                        <ListBoxItem HorizontalContentAlignment="Stretch">
-                                            <DockPanel>
-                                                <TextBlock Text="Период полураспада"/>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                    <TextBox Text="{Binding Source={StaticResource Mp}, Path=HalfLife}" Width="50" ></TextBox>
-                                                    <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetHalfLifeCommand}"
-                                                            CommandParameter="{Binding Source={StaticResource Mp}, Path=HalfLife}">--></Button>
-                                                    <Border Width="50" HorizontalAlignment="Right">
-                                                        <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding HalfLife}"/>
-                                                    </Border>
-                                                </StackPanel>
-                                            </DockPanel>
-                                        </ListBoxItem>
-                                        <!--#endregion-->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.HalfLife}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetHalfLifeCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
                                 <!--#region Плотность жидкости -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Плотность жидкости"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=DensityLiquid}" Width="50" ></TextBox>
-                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensityLiqCommand}"
-                                                            CommandParameter="{Binding Source={StaticResource Mp}, Path=DensityLiquid}">--></Button>
-                                            <Border Width="50" HorizontalAlignment="Right">
-                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding DensityLiquid}"/>
-                                            </Border>
-                                        </StackPanel>
-                                    </DockPanel>
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.DensityLiquid}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensityLiqCommand}"/>
                                 </ListBoxItem>
                                 <!--#endregion-->
                                 <!--#region Плотность твердости -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Плотность жидкости"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBox Text="{Binding Source={StaticResource Mp}, Path=DensitySolid}" Width="50" ></TextBox>
-                                            <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
-                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"
-                                                            CommandParameter="{Binding Source={StaticResource Mp}, Path=DensitySolid}">--></Button>
-                                            <Border Width="50" HorizontalAlignment="Right">
-                                                <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding DensitySolid}"/>
-                                            </Border>
-                                        </StackPanel>
-                                    </DockPanel>
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.DensitySolid}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"/>
                                 </ListBoxItem>
                                 <!--#endregion-->
                             </ListBox>                                

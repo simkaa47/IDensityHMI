@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,7 +13,7 @@ using HMI_Плотномер.Models;
 using HMI_Плотномер.Models.SQL;
 using HMI_Плотномер.Models.XML;
 using HMI_Плотномер.ViewModels.Commands;
-using OxyPlot.Axes;
+using System.Timers;
 
 namespace HMI_Плотномер.ViewModels
 {
@@ -74,7 +75,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setCalibCurveDiapCommand ?? (_setCalibCurveDiapCommand = new RelayCommand(execPar => 
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.Ranges[SelectedDiapNum].CalibCurveNum = (ushort)execPar;
+                process.Ranges[SelectedDiapNum].CalibCurveNum.Value = process.Ranges[SelectedDiapNum].CalibCurveNum.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             }, 
                 canExecPar => true));
@@ -88,7 +89,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setStandNumDiapCommand ?? (_setStandNumDiapCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.Ranges[SelectedDiapNum].StandNum = (ushort)execPar;
+                process.Ranges[SelectedDiapNum].StandNum.Value = process.Ranges[SelectedDiapNum].StandNum.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -102,7 +103,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setCounterDiapCommand ?? (_setCounterDiapCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.Ranges[SelectedDiapNum].CounterNum = (ushort)execPar;
+                process.Ranges[SelectedDiapNum].CounterNum.Value = process.Ranges[SelectedDiapNum].CounterNum.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -116,7 +117,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setStandNumCommand ?? (_setStandNumCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.BackStandNum = (ushort)execPar;
+                process.BackStandNum.Value = process.BackStandNum.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -129,7 +130,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setMeasDurationCommand ?? (_setMeasDurationCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.MeasDuration = (ushort)execPar;
+                process.MeasDuration.Value = process.MeasDuration.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -142,7 +143,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setMeasDeepCommand ?? (_setMeasDeepCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.MeasDeep = (ushort)execPar;
+                process.MeasDeep.Value = process.MeasDeep.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -154,7 +155,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setHalfLifeCommand ?? (_setHalfLifeCommand = new RelayCommand(execPar => 
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.HalfLife = (float)execPar;
+                process.HalfLife.Value = process.HalfLife.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             }, 
                 canExecPar => true)); }
@@ -166,7 +167,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setDensityLiqCommand ?? (_setDensityLiqCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.DensityLiquid = (float)execPar;
+                process.DensityLiquid.Value = process.DensityLiquid.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -179,7 +180,7 @@ namespace HMI_Плотномер.ViewModels
             get => _setDensitySolidCommand ?? (_setDensitySolidCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.DensitySolid = (float)execPar;
+                process.DensitySolid.Value = process.DensitySolid.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             },
                 canExecPar => true));
@@ -187,12 +188,54 @@ namespace HMI_Плотномер.ViewModels
         #endregion
         #region Команда "Сменить номер измерительного процесса"
         RelayCommand _changeMeasProcessCommand;
-        public RelayCommand ChangeMeasProcessCommand => _changeMeasProcessCommand ?? (_changeMeasProcessCommand = new RelayCommand(execPar => mainModel.ChangeMeasProcess((int)execPar), canExecPar => true));
+        public RelayCommand ChangeMeasProcessCommand => _changeMeasProcessCommand ?? (_changeMeasProcessCommand = new RelayCommand(execPar => mainModel.ChangeMeasProcess((int)execPar), canExecPar => canExecPar != null));
         #endregion
 
         #endregion
 
+        #region Команды измерения даты-времени
+        #region установить RTC пользователя
+        RelayCommand _setRtcCommand;
+        public RelayCommand SetRtcCommand => _setRtcCommand ?? (_setRtcCommand = new RelayCommand(execPar =>
+        {
+            mainModel.SetRtc(mainModel.Rtc.WriteValue);
+        }, canExecPar => true));
+        #endregion
+        #region Синхронизировать c временем ПК
+        RelayCommand _syncRtcCommand;
+        public RelayCommand SyncRtcCommand => _syncRtcCommand ?? (_syncRtcCommand = new RelayCommand(execPar =>
+        {
+            mainModel.SetRtc(DateTime.Now);
+        }, canExecPar => true));
+        #endregion
+        #endregion
 
+        #region Команды настроек измерительного порта
+        #region Сменить режим порта 
+        RelayCommand _changeSerialSelectCommand;
+        public RelayCommand ChangeSerialSelectCommand => _changeSerialSelectCommand ?? (_changeSerialSelectCommand = new RelayCommand(o => mainModel.ChangeSerialSelect((int)o), o => o != null));
+        #endregion
+
+        #region Сменить баудрейт 
+        RelayCommand _changeBaudrateCommand;
+        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((int)o), o =>o != null));
+        #endregion
+        #endregion
+
+        #region Команда изменения времени усреднения для пользователя
+        RelayCommand _changeUserAvgTime;
+        public RelayCommand ChangeUserAvgTime => _changeUserAvgTime ?? (_changeUserAvgTime = new RelayCommand(o => 
+        {
+            if (mainModel.CurMeasProcess.MeasDuration.Value > 0)
+            {
+                MeasProcess process = mainModel.CurMeasProcess.Clone() as MeasProcess;
+                process.MeasDeep.Value = (ushort)(((uint)o)*10/ mainModel.CurMeasProcess.MeasDuration.Value);
+                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
+            }
+        
+        }, o => true));
+
+        #endregion
 
         #endregion
         public MainModel mainModel { get; } = new MainModel();
@@ -202,7 +245,22 @@ namespace HMI_Плотномер.ViewModels
         {
             mainModel.ModelProcess();
             mainModel.UpdateDataEvent += AddDataToCollection;
+            timer.Elapsed += (s, e) => CurPcDateTime.Value = DateTime.Now;
+            timer.Start();
         }
+        #endregion
+
+        #region Текущая дата-время компьютера
+        public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        
+        #endregion
+
+        #region таймер
+        System.Timers.Timer timer = new System.Timers.Timer(1000); 
+        #endregion
+
+        #region Cписок доступных Com портов        
+        public string[] ComPorts { get => SerialPort.GetPortNames(); }
         #endregion
 
         #region Данные для текущего тренда
@@ -430,6 +488,8 @@ namespace HMI_Плотномер.ViewModels
             }
         }
         #endregion            
+
+        
 
 
     }

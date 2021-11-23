@@ -6,12 +6,8 @@ using System.Text;
 
 namespace HMI_Плотномер.AddClasses
 {
-    class MeasProcess : PropertyChangedBase, IDataErrorInfo, ICloneable
-    {
-        Dictionary<string, string> errorsDict = new Dictionary<string, string>();
-        public string this[string columnName] => errorsDict[columnName];
-
-        public string Error { get; }
+    class MeasProcess : ICloneable
+    {  
         #region Количество диапазонов в процессе
         /// <summary>
         /// Количество диапазонов в процессе
@@ -24,86 +20,49 @@ namespace HMI_Плотномер.AddClasses
         #endregion
 
         #region Номер фоновой стандартизации
-        ushort _backStandNum;
-        public ushort BackStandNum
-        {
-            get => _backStandNum;
-            set
-            {
-                if (value < 0 || value > 3) errorsDict["BackStandNum"] = "Номер стандартизации должен быть от 0 до 3!";
-                else
-                {
-                    if (Set(ref _backStandNum, value)) errorsDict["BackStandNum"] = null;
-
-                }
-            }
-        }
+        public Parameter<ushort> BackStandNum { get; set; } = new Parameter<ushort>("BackStandNum", "Номер фоновой стандартизации", 0, 3, 0, "");
         #endregion
 
         #region Длительность измерения одной точки
-        ushort _measDuration;
-        public ushort MeasDuration
-        {
-            get => _measDuration;
-            set
-            {
-                if (value < 1) errorsDict["MeasDuration"] = "Длительность измерения должна быть больше 0!";
-                else
-                {
-                    if (Set(ref _measDuration, value)) errorsDict["MeasDuration"] = null;
+        public Parameter<ushort> MeasDuration { get; set; } = new Parameter<ushort>("MeasDuration", "Длительность измерения одной точки, *0.1 c.", 0, ushort.MaxValue, 0, "");
 
-                }
-            }            
-        }
         #endregion
 
-        #region Глубина усреднения
-        ushort _measDeep;
-        public ushort MeasDeep
-        {
-            get => _measDeep;
-            set
-            {
-                if (value < 1) errorsDict["MeasDeep"] = "Глубина измерения должна быть больше 0!";
-                else
-                {
-                    if (Set(ref _measDeep, value)) errorsDict["MeasDeep"] = null;
-
-                }
-            }
-        }
+        #region Глубина усреднения        
+        public Parameter<ushort> MeasDeep { get; set; } = new Parameter<ushort>("MeasDeep", "Глубина усреднения, точек", 1, ushort.MaxValue, 0, "");        
         #endregion
 
         #region Период полупаспада
-        float _halfLife;
-        public float HalfLife { 
-            get => _halfLife; 
-            set => Set(ref _halfLife, value); }
+        public Parameter<float> HalfLife { get; set; } = new Parameter<float>("HalfLife", "Период полураспада", 0, float.PositiveInfinity, 0, "");
+
         #endregion
 
-        #region Плотность жидкости
-        float _densityLiquid;
-        public float DensityLiquid { get => _densityLiquid; set => Set(ref _densityLiquid, value); }
+        #region Плотность жидкости        
+        public Parameter<float> DensityLiquid { get; set; } = new Parameter<float>("DensityLiquid", "Плотность жидкости", 0, float.PositiveInfinity, 0, "");
         #endregion
 
-        #region Плотность твердости
-        float _densitySolid;
-        public float DensitySolid { get => _densitySolid; set => Set(ref _densitySolid, value); }
+        #region Плотность твердости        
+        public Parameter<float> DensitySolid { get; set; } = new Parameter<float>("DensitySolid", "Плотность твердости", 0, float.PositiveInfinity, 0, "");        
         #endregion
 
-
+        #region Номер регистра Modbus, где находится структура данных измерений
+        /// <summary>
+        /// Номер регистра Modbus, где находится структура данных измерений
+        /// </summary>
+        public const int ModbRegNum = 27; 
+        #endregion
 
         public object Clone()
         {
             return new MeasProcess
             {
                 Ranges = this.Ranges.Select(r => (Diapasone)r.Clone()).ToArray(),
-                BackStandNum = this.BackStandNum,
-                MeasDuration = this.MeasDuration,
-                MeasDeep = this.MeasDeep,
-                HalfLife = this.HalfLife,
-                DensityLiquid = this.DensityLiquid,
-                DensitySolid = this.DensitySolid
+                BackStandNum = this.BackStandNum.Clone() as Parameter<ushort>,
+                MeasDuration = this.MeasDuration.Clone() as Parameter<ushort>,
+                MeasDeep = this.MeasDeep.Clone() as Parameter<ushort>,
+                HalfLife = this.HalfLife.Clone() as Parameter<float>,
+                DensityLiquid = this.DensityLiquid.Clone() as Parameter<float>,
+                DensitySolid = this.DensitySolid.Clone() as Parameter<float>
             };
         }
     }

@@ -34,17 +34,9 @@ namespace HMI_Плотномер
             var vm = this.DataContext as VM;
             Password password = new Password(vm);
             password.Show();            
-        }       
+        }    
 
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
-        {
-            var compobox = sender as ComboBox;
-            if (compobox != null)
-            {
-                var arr = SerialPort.GetPortNames();
-                compobox.ItemsSource = arr;
-            }            
-        }
+        
         private void FileDialogOpen(TextBlock tb)
         {
             OpenFileDialog fileDialog = new OpenFileDialog()
@@ -68,7 +60,7 @@ namespace HMI_Плотномер
         {
             FileDialogOpen(LogPath);
         }
-
+        Button 
         
     }
 }

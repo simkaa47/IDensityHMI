@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<body>
+  <params>
+    <RS485 MbAddr="1" ComName="COM2" BaudRate="38400" Par="None" />
+    <TCP IP="192.168.1.33" PortNum="49050" />
+    <CommMode RsEnable="True" EthEnable="False" HartEnable="False" />
+    <GraphSettings PlotTime="4" PlotLowLimit="10" PlotHighLimit="15" />
+    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" />
+  </params>
+</body>

@@ -16,7 +16,7 @@ namespace HMI_Плотномер.Views.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var process = value as MeasProcess;
-            if (process != null) return process.MeasDeep * 0.1 * process.MeasDuration;
+            if (process != null) return process.MeasDeep.Value * 0.1 * process.MeasDuration.Value;
             return 0;
         }
 

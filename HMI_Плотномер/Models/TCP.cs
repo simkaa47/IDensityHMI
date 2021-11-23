@@ -294,7 +294,11 @@ namespace HMI_Плотномер.Models
         #region Получить данные настроек
         void GetSetiings()
         {
-            if(!model.SettingsReaded)GetMeasProcessData();// Получить данные процеса измерений
+            if (!model.SettingsReaded)
+            {
+                GetMeasProcessData();// Получить данные процеса измерений
+                GetSettings7();
+            } 
             
         }
         #region Настройки измерительных процессов
@@ -302,16 +306,13 @@ namespace HMI_Плотномер.Models
         {
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,6"));
-            //Проверка корректности пришедшего пакета
-            if (str.Length < 50) return;// Проверка на длину
-            if (str.Substring(1, 4) != "FSRD") return;// Проверка на заголовок..
-            if (str[str.Length - 1] != '#') return;// Проверка на окончание
+            if (!CheckFsrdPacket(str)) return;//Проверка пакета
             ushort temp = 0;
-            if (!ushort.TryParse(str[str.Length - 2].ToString(), out temp)) return;
+            var strParts = str.Split(",meas_prc_ndx=");
+            if (strParts.Length != 2) return;
+            if (!ushort.TryParse(strParts[1].Replace("#",""), out temp)) return;
             model.CurMeasProcessNum.Value = temp;// Получаем номер текущего измерительного процесса           
-            str = str.Remove(str.Length - 16, 16);// Обрезаем строку с конца         
-            str = str.Remove(0, 18);// Обрезаем начало строки
-            var numStr = str.Split(new char[] { ',', '#' });
+            var numStr = strParts[0].Replace("*FSRD,6,meas_proc=", "").Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
             if (numStr.Length != 19 * MainModel.measProcessNum) return;            
             for (int i = 0; i < 19*MainModel.measProcessNum; i += 19)
             {
@@ -325,13 +326,13 @@ namespace HMI_Плотномер.Models
                 if (numUshort.Length != 16) return;
                 for (int j = 0; j < MeasProcess.rangeNum; j++)
                 {
-                    model.MeasProcesses[index].Ranges[j].CalibCurveNum = numUshort[2 + j * 4];// Номер калибровочной кривой
-                    model.MeasProcesses[index].Ranges[j].StandNum = numUshort[3 + j * 4];// Номер стандартизации ЕИ
-                    model.MeasProcesses[index].Ranges[j].CounterNum = numUshort[4 + j * 4];// Счетчик
+                    model.MeasProcesses[index].Ranges[j].CalibCurveNum.Value = numUshort[2 + j * 4];// Номер калибровочной кривой
+                    model.MeasProcesses[index].Ranges[j].StandNum.Value = numUshort[3 + j * 4];// Номер стандартизации ЕИ
+                    model.MeasProcesses[index].Ranges[j].CounterNum.Value = numUshort[4 + j * 4];// Счетчик
                 }
-                model.MeasProcesses[index].BackStandNum = numUshort[13];
-                model.MeasProcesses[index].MeasDuration = numUshort[14];
-                model.MeasProcesses[index].MeasDeep = numUshort[15];
+                model.MeasProcesses[index].BackStandNum.Value = numUshort[13];
+                model.MeasProcesses[index].MeasDuration.Value = numUshort[14];
+                model.MeasProcesses[index].MeasDeep.Value = numUshort[15];
                 float tempFloat = 0;
                 var numsFloat = numStr.Skip(i+16)
                     .Take(3)
@@ -339,14 +340,61 @@ namespace HMI_Плотномер.Models
                     .Select(n => tempFloat)
                     .ToArray();
                 if (numsFloat.Length!=3) return;
-                model.MeasProcesses[index].HalfLife = numsFloat[0];
-                model.MeasProcesses[index].DensityLiquid = numsFloat[1];
-                model.MeasProcesses[index].DensitySolid = numsFloat[2];
+                model.MeasProcesses[index].HalfLife.Value = numsFloat[0];
+                model.MeasProcesses[index].DensityLiquid.Value = numsFloat[1];
+                model.MeasProcesses[index].DensitySolid.Value = numsFloat[2];
             }
             if (model.CurMeasProcessNum.Value < MainModel.measProcessNum) model.CurMeasProcess = model.MeasProcesses[model.CurMeasProcessNum.Value];
             model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки № 7
+        void GetSettings7()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7"));
+            var sepStr = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
+            float floatTemp = 0;
+            if (!GetNumber("serial_baudrate", out floatTemp)) return;
+            model.PortBaudrate.Value = (int)floatTemp;
+            if (!GetNumber("serial_select", out floatTemp)) return;
+            model.PortSelectMode.Value = (ushort)floatTemp;
+            // локальная функция
+            bool GetNumber(string id, out float num)
+            {
+                float temp = 0;
+                var sepStr = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
+                var nums = sepStr.Where(str => str.Contains(id))
+                    .FirstOrDefault().Split("=", StringSplitOptions.RemoveEmptyEntries)
+                    .Where(str => float.TryParse(str.Replace(",", "."), out temp))
+                    .Select(str => temp);
+                if (nums == null)
+                {
+                    num = 0;
+                    return false;
+                } 
+                num = nums.FirstOrDefault();
+                return true;
+            }
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Проверка корректности пакета FSRD
+        /// <summary>
+        /// Проверка корректности пакета FSRD
+        /// </summary>
+        bool CheckFsrdPacket(string str)
+        {
+            //Проверка корректности пришедшего пакета
+            if (str.Length < 50) return false; ;// Проверка на длину
+            if (str.Substring(1, 4) != "FSRD") return false; ;// Проверка на заголовок..
+            if (str[str.Length - 1] != '#') return false; ;// Проверка на окончание
+            return true;
         } 
         #endregion
+
         #endregion
 
         #region Команды
@@ -372,16 +420,16 @@ namespace HMI_Плотномер.Models
             for (int i = 0; i < process.Ranges.Length; i++)
             {
                 cmd = cmd + $"{i},";
-                cmd = cmd + $"{process.Ranges[i].CalibCurveNum},";// Номер калибровочной кривой
-                cmd = cmd + $"{process.Ranges[i].StandNum},";// Номер стандартизации
-                cmd = cmd + $"{process.Ranges[i].CounterNum},";// Счетчик
+                cmd = cmd + $"{process.Ranges[i].CalibCurveNum.Value},";// Номер калибровочной кривой
+                cmd = cmd + $"{process.Ranges[i].StandNum.Value},";// Номер стандартизации
+                cmd = cmd + $"{process.Ranges[i].CounterNum.Value},";// Счетчик
             }
-            cmd = cmd + $"{process.BackStandNum},";
-            cmd = cmd + $"{process.MeasDuration},";
-            cmd = cmd + $"{process.MeasDeep},";
-            cmd = cmd + $"{process.HalfLife.ToString().Replace(",", ".")},";
-            cmd = cmd + $"{process.DensityLiquid.ToString().Replace(",", ".")},";
-            cmd = cmd + $"{process.DensitySolid.ToString().Replace(",", ".")},";            
+            cmd = cmd + $"{process.BackStandNum.Value},";
+            cmd = cmd + $"{process.MeasDuration.Value},";
+            cmd = cmd + $"{process.MeasDeep.Value},";
+            cmd = cmd + $"{process.HalfLife.Value.ToString().Replace(",", ".")},";
+            cmd = cmd + $"{process.DensityLiquid.Value.ToString().Replace(",", ".")},";
+            cmd = cmd + $"{process.DensitySolid.Value.ToString().Replace(",", ".")},";            
             commands.Enqueue(new TcpWriteCommand((buf)=> { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(cmd)));
         }
         #endregion
@@ -389,9 +437,32 @@ namespace HMI_Плотномер.Models
         #region Изменить номер текущего процесса
         public void ChangeMeasProcess(int index)
         {
-            if(index>=0 && index<MainModel.measProcessNum)commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,meas_prc_ndx={index}")));
-        } 
+            if(index>=0 && index<MainModel.measProcessNum)commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,meas_prc_ndx={index}#")));
+        }
         #endregion
+
+        #region Изменить режим работы последовательного порта
+        public void ChangeSerialSelect(ushort value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,serial_select={value}#")));
+        }
+        #endregion
+
+        #region Изменить скорость последовательного порта
+        public void ChangeBaudrate(int value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,serial_baudrate={value}#")));
+        }
+        #endregion
+
+        #region Установить RTC
+        public void SetRtc(DateTime dt)
+        {
+            var str = $"SETT,rtc_set={dt.Day},{dt.Month},{dt.Year%100},{dt.Hour},{dt.Minute},{dt.Second}#";
+            commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
         #endregion
 
         #region Очистка буфера

@@ -6,10 +6,31 @@ namespace HMI_Плотномер.AddClasses
 {
     class HvTelemetry
     {
-        public Parameter<ushort> VoltageSV { get; } = new Parameter<ushort>("Уставка напряжения, 8000-40000, в еденицах по 50mV", "read", 4);
-        public Parameter<float> VoltageCurIn { get; } = new Parameter<float>("Входное напряжение, 0-65535 mV", "read", 5);
-        public Parameter<ushort> VoltageCurOut { get; } = new Parameter<ushort>("Выходное напряжение, 8000-40000, в еденицах по 50mV", "read", 6);
-        public Parameter<ushort> Current { get; } = new Parameter<ushort>("Ток, 0-65535 mA", "read", 7);
-        public Parameter<bool> HvOn { get; } = new Parameter<bool>("Статус высокого напряжения", "read", 7);
+        #region Входное напряжение, вольт
+        #region Уставка напряжения
+        public Parameter<ushort> VoltageSV { get; } = new Parameter<ushort>("VoltageSvHv", "Уставка напряжения, вольт", 400, 2000, 4, "read");        
+        #endregion 
+        #endregion
+        #region Входное напряжение, вольт
+        public Parameter<float> VoltageCurIn { get; } = new Parameter<float>("VoltageCurIn", "Входное напряжение, вольт", 0, float.PositiveInfinity, 5, "read")
+        {           
+            OnlyRead = true           
+        };
+        #endregion
+        #region Выходное напряжение, вольт
+        public Parameter<ushort> VoltageCurOut { get; } = new Parameter<ushort>("VoltageCurOut", "Выходное напряжение, вольт", 0, ushort.MaxValue, 6, "read")
+        {           
+            OnlyRead = true
+        };
+        #endregion
+        #region Ток, ампер
+        public Parameter<ushort> Current { get; } = new Parameter<ushort>("Current", "Ток, ампер", 0, ushort.MaxValue, 7, "read")
+        {            
+            OnlyRead = true,           
+        };
+        #endregion
+        #region Статус высокого напряжения
+        public Parameter<bool> HvOn { get; } = new Parameter<bool>("HvOn", "Статус высокого напряжения", false, true, 0, "");        
+        #endregion
     }
 }
