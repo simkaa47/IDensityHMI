@@ -35,7 +35,7 @@ namespace HMI_Плотномер.Models
         #region Название COM порта
         string _comName="COM1";
         public string ComName { get => _comName; set => Set(ref _comName, value); }
-        #endregion
+        #endregion        
 
         #region Баудрейт
         int _baudrate = 115200;
@@ -67,22 +67,26 @@ namespace HMI_Плотномер.Models
         /// <summary>
         /// Массив Holding регистров
         /// </summary>
-        ushort[] holdRegs = new ushort[40];
+        ushort[] holdRegs = new ushort[100];
         #endregion
         #region Массив Reading регистров
         /// <summary>
         /// Массив Reading регистров
         /// </summary>
-        ushort[] readRegs = new ushort[80];
+        ushort[] readRegs = new ushort[100];
         #endregion
         #endregion
 
-        #region Стэк для хранения команд, которые надо выполнить
-        Stack<DoSomeClass> commands = new Stack<DoSomeClass>();
+        #region Номер процесса для выбора
+        public Parameter<int> SelectMeasNum = new Parameter<int>("SelectMeasNum", "Номер процесса для выбора", 0, MainModel.measProcessNum - 1, 26, "hold");        
+        #endregion
 
-        class DoSomeClass
+        #region Очередь для хранения команд, которые надо выполнить
+        Queue<Command> commands = new Queue<Command>();
+
+        class Command
         {
-            public DoSomeClass(Action<int,int> act, int p1,int p2)
+            public Command(Action<int,int> act, int p1,int p2)
             {
                 f = act;
                 par1 = p1;
@@ -103,19 +107,20 @@ namespace HMI_Плотномер.Models
                 if ((client == null) || (!client.Connected)) PortInit();
                 else
                 {
-                    commands.Push(new DoSomeClass(RecognizePacket, 0, 0));
                     // Прочитать данные Reading регистров
-                    for (int i = 0; i < 5; i++) commands.Push(new DoSomeClass(ReadInputRegs, i * 15, 15));
+                    for (int i = 0; i < 5; i++)ReadInputRegs( i * 15, 15);
                     // Прочитать данные Holding регистров
-                    for (int i = 0; i < 2; i++) commands.Push(new DoSomeClass(ReadHoldRegs, i * 15, 15));
+                    for (int i = 0; i < 2; i++)ReadHoldRegs(i * 15, 15);
+                    RecognizePacket();
+                    ReadSettings();// Чтение настроек, если надо
 
                     while (commands.Count > 0)
                     {
-                        var command = commands.Pop();
+                        var command = commands.Dequeue();
                         command.f.Invoke(command.par1, command.par2);
-                        model.Connecting = true;
-                        Thread.Sleep(20);
+                                              
                     }
+                    model.Connecting = true;
                 }
             }
             catch (Exception ex)
@@ -129,11 +134,10 @@ namespace HMI_Плотномер.Models
 
         #region Инициализаця порта
         void PortInit()
-        {
-            var hjh = SerialPort.GetPortNames();
-            client = new ModbusClient("COM2");
+        {           
+            client = new ModbusClient(ComName);
             client.ConnectionTimeout = 500;
-            client.Baudrate = 115200;
+            client.Baudrate = BaudRate;
             client.UnitIdentifier = MbAddr;
             client.Parity = System.IO.Ports.Parity.None;
             client.Connect();            
@@ -145,6 +149,7 @@ namespace HMI_Плотномер.Models
         {
             var arr = client?.ReadInputRegisters(offset, size);
             Array.Copy(arr.Select(num => (ushort)num).ToArray(), 0, readRegs, offset, size);
+            //Thread.Sleep(20);
         }
         #endregion
 
@@ -153,11 +158,20 @@ namespace HMI_Плотномер.Models
         {
             var arr = client?.ReadHoldingRegisters(offset, size);
             Array.Copy(arr.Select(num => (ushort)num).ToArray(), 0, holdRegs, offset, size);
+            //Thread.Sleep(20);
+        }
+        #endregion
+
+        #region Записть в регистры
+        void WriteRegs(int offset, int size)
+        {
+            client.WriteMultipleRegisters(offset, holdRegs.Skip(offset).Take(size).Select(u16 => (int)u16).ToArray());
+            Thread.Sleep(20);
         } 
         #endregion
 
         #region Функция распознавания данных из  регистров
-        void RecognizePacket(int p1, int p2)
+        void RecognizePacket()
         {
             GetRtc();
             GetCurMeas();
@@ -203,6 +217,45 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+        #region Получить int32 из 2х регистров
+        int GetInt32FromUshorts(ushort[] regs, int regNum)
+        {
+            try
+            {
+                ushort[] arr = new ushort[] { regs[regNum], regs[regNum + 1] };
+                return BitConverter.ToInt32(arr.SelectMany(num => BitConverter.GetBytes(num)).ToArray(), 0);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+           
+           
+        }
+        #endregion
+
+        #region Получить 2 регистра из float
+        void GetUshortsFromFloat(ushort[] destination, int destinationIndex, float source)
+        {
+            var bytes = BitConverter.GetBytes(source);
+            for (int i = 0; i < 2; i++)
+            {
+                destination[i + destinationIndex] = BitConverter.ToUInt16(bytes, i * 2);
+            }  
+        }
+        #endregion
+
+        #region Получить 2 регистра из int32
+        void GetUshortsFromInt32(ushort[] destination, int destinationIndex, int source)
+        {
+            var bytes = BitConverter.GetBytes(source);
+            for (int i = 0; i < 2; i++)
+            {
+                destination[i + destinationIndex] = BitConverter.ToUInt16(bytes, i * 2);
+            }
+        }
+        #endregion
+
         #region Получить данные телеметрии HV
         void GetHVTelemetry()
         {
@@ -221,18 +274,159 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+        #region Чтение настроек
+        void ReadSettings()
+        {
+            if (!model.SettingsReaded)
+            {
+                // Прочитать данные измерительных процессов
+                GetMeasProcessData();
+                GetSerialSettings();
+            }
+        }
+        #region Данные измерительных настроек
+        void GetMeasProcessData()
+        {
+            model.SettingsReaded = false;
+            // Читаем данные процессов
+            for (int i = 0; i < MainModel.measProcessNum; i++)
+            {
+                client.WriteSingleRegister(SelectMeasNum.RegNum, i);
+                for (int j = 0; j < 2; j++)
+                {
+                    ReadHoldRegs(j * 10 + MeasProcess.ModbRegNum, 10);
+                }
+                for (int j = 0; j < 3; j++)
+                {
+                    model.MeasProcesses[i].Ranges[j].CalibCurveNum.Value = holdRegs[MeasProcess.ModbRegNum + j * 3];
+                    model.MeasProcesses[i].Ranges[j].StandNum.Value = holdRegs[MeasProcess.ModbRegNum + j * 3 + 1];
+                    model.MeasProcesses[i].Ranges[j].CounterNum.Value = holdRegs[MeasProcess.ModbRegNum + j * 3 + 2];
+                }
+                model.MeasProcesses[i].BackStandNum.Value = holdRegs[MeasProcess.ModbRegNum + 9];
+                model.MeasProcesses[i].MeasDuration.Value = holdRegs[MeasProcess.ModbRegNum + 10];
+                model.MeasProcesses[i].MeasDeep.Value = holdRegs[MeasProcess.ModbRegNum + 11];
+                model.MeasProcesses[i].HalfLife.Value = GetFloatFromUshorts(holdRegs, MeasProcess.ModbRegNum + 12);
+                model.MeasProcesses[i].DensityLiquid.Value = GetFloatFromUshorts(holdRegs, MeasProcess.ModbRegNum + 14);
+                model.MeasProcesses[i].DensitySolid.Value = GetFloatFromUshorts(holdRegs, MeasProcess.ModbRegNum + 16);
+            }
+            //Текущий номер измерений
+            model.CurMeasProcessNum.Value = SelectRegs(model.CurMeasProcessNum.RegType)[model.CurMeasProcessNum.RegNum];
+            if (model.CurMeasProcessNum.Value < MainModel.measProcessNum) model.CurMeasProcess = model.MeasProcesses[model.CurMeasProcessNum.Value];
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки порта
+        void GetSerialSettings()
+        {
+            model.SettingsReaded = false;
+            // Чтение баудрейта
+            ReadHoldRegs(model.PortBaudrate.RegNum, 2);
+            model.PortBaudrate.Value = GetInt32FromUshorts(holdRegs, model.PortBaudrate.RegNum);
+            // Чтение режима работы
+            ReadHoldRegs(model.PortSelectMode.RegNum, 1);
+            model.PortBaudrate.Value = holdRegs[model.PortSelectMode.RegNum];
+            model.SettingsReaded = true;
+        }        
+        #endregion
+        #endregion
+
         #region Команды
         #region Включить-выключить HV
         public void SwitchHv(int value)
         {
-            commands.Push(new DoSomeClass((offset, value) => client.WriteSingleRegister(offset, value), (int)Holds.SwitchHv, value));
+            commands.Enqueue(new Command((offset, value) => client.WriteSingleRegister(offset, value), (int)Holds.SwitchHv, value));
         }
         #endregion
 
         #region Включить-выключить измерения
         public void SwitchMeas(int value)
         {
-            commands.Push(new DoSomeClass((offset, value) => client.WriteSingleRegister(offset, value), (int)Holds.SwitchMeas, value));
+            commands.Enqueue(new Command((offset, value) => client.WriteSingleRegister(offset, value), (int)Holds.SwitchMeas, value));
+        }
+        #endregion
+
+        #region Записать данные измерительного процеса
+        public void SetMeasProcessSettings(MeasProcess process, int index)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                model.SettingsReaded = false;
+                //Записываем регистр для записи
+                client.WriteSingleRegister(SelectMeasNum.RegNum, index);
+                //Записываем данные процесса измерений
+                for (int i = 0; i < 3; i++)// Данные диапазонов
+                {
+                    holdRegs[MeasProcess.ModbRegNum + i * 3] = process.Ranges[i].CalibCurveNum.Value;
+                    holdRegs[MeasProcess.ModbRegNum + i * 3 + 1] = process.Ranges[i].StandNum.Value;
+                    holdRegs[MeasProcess.ModbRegNum + i * 3 + 2] = process.Ranges[i].CounterNum.Value;
+                }
+                holdRegs[MeasProcess.ModbRegNum + 9] = process.BackStandNum.Value;
+                holdRegs[MeasProcess.ModbRegNum + 10] = process.MeasDuration.Value;
+                holdRegs[MeasProcess.ModbRegNum + 11] = process.MeasDeep.Value;
+                GetUshortsFromFloat(holdRegs, MeasProcess.ModbRegNum + 12, process.HalfLife.Value);
+                GetUshortsFromFloat(holdRegs, MeasProcess.ModbRegNum + 14, process.DensityLiquid.Value);
+                GetUshortsFromFloat(holdRegs, MeasProcess.ModbRegNum + 16, process.DensitySolid.Value);
+                for (int i = 0; i < 2; i++)
+                {
+                    WriteRegs(MeasProcess.ModbRegNum + i * 9, 9);
+                }
+            }, 0, 0));
+            
+        }
+        #endregion
+
+        #region Смена номера измерительного процесса
+        public void ChangeMeasProcess(int index)
+        {
+            commands.Enqueue(new Command((p1, p2) => 
+            {
+                model.SettingsReaded = false;
+                client?.WriteSingleRegister(model.CurMeasProcessNum.RegNum, index);
+            }, 0, 0));            
+        }
+        #endregion
+
+        #region Команды настроек последовательного порта
+        #region Записать бадрейт
+        public void ChangeBaudrate(int value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+              model.SettingsReaded = false;
+                GetUshortsFromInt32(holdRegs, model.PortBaudrate.RegNum, value);
+                WriteRegs(model.PortBaudrate.RegNum, 2);
+            }, 0, 0));
+        }
+        #endregion
+
+        #region Изменить режим работы последовательного порта
+        public void ChangeSerialSelect(ushort value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                model.SettingsReaded = false;
+                client?.WriteSingleRegister(model.PortSelectMode.RegNum, value);
+            }, 0, 0));
+        }
+        #endregion
+        #endregion
+
+        #region Установка даты-времени
+        public void SetRtc(DateTime dt)
+        {            
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                if (model.Rtc.RegNum >= holdRegs.Length - 6) return;
+                int i = model.Rtc.RegNum;
+                holdRegs[i] = (ushort)(dt.Year % 100);
+                holdRegs[i + 1] = (ushort)(dt.Month);
+                holdRegs[i + 2] = (ushort)(dt.Day);
+                holdRegs[i + 3] = (ushort)(dt.Hour);
+                holdRegs[i + 4] = (ushort)(dt.Minute);
+                holdRegs[i + 5] = (ushort)(dt.Second);
+                WriteRegs(i, 6); 
+            }, 0, 0));
         }
         #endregion
 

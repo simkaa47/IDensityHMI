@@ -162,7 +162,7 @@ namespace HMI_Плотномер.Models.SQL
             var props = type.GetProperties();
             if (ContainStringArr(props, "Id") && ContainStringArr(props, e.PropertyName) && type == sender.GetType())
             {
-                int index = (int)type.GetProperty("Id").GetValue((T)sender);
+                var index = (long)type.GetProperty("Id").GetValue((T)sender);
                 var propValue = type.GetProperty(e.PropertyName).GetValue((T)sender);
                 UpdateSql("Id", index, e.PropertyName, propValue);
             }
@@ -194,8 +194,8 @@ namespace HMI_Плотномер.Models.SQL
                 ObservableCollection<T> collection = sender as ObservableCollection<T>;
                 if (collection != null && collection.Count >= 1 && ContainStringArr(props, "Id"))
                 {
-                    int index = 0;
-                    if(collection.Count>1)index = (int)type.GetProperty("Id").GetValue(collection[collection.Count - 2]) + 1;
+                    long index = 0;
+                    if(collection.Count>1)index = (long)type.GetProperty("Id").GetValue(collection[collection.Count - 2]) + 1;
                     type.GetProperty("Id").SetValue((T)e.NewItems[0], index);
                     InsertToTable((T)e.NewItems[0]);
                     (e.NewItems[0] as T).PropertyChanged += EditCellSql;
@@ -207,7 +207,7 @@ namespace HMI_Плотномер.Models.SQL
                 {
                     foreach (var deleteItem in e.OldItems)
                     {
-                        var index = (int)type.GetProperty("Id").GetValue((T)deleteItem);
+                        var index = (long)type.GetProperty("Id").GetValue((T)deleteItem);
                         DeleteFromSql("Id", index);
                     }
                 }

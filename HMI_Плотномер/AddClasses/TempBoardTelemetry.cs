@@ -6,7 +6,18 @@ namespace HMI_Плотномер.AddClasses
 {
     class TempBoardTelemetry
     {
-        public Parameter<float> TempInternal { get; } = new Parameter<float>("Температура с внешнего датчика, С", "read", 8);
-        public Parameter<float> TempExternal { get; } = new Parameter<float>("Температура с внутреннего датчика, С", "read", 9);
+        #region Температура с внешнего датчика, С
+        public Parameter<float> TempInternal { get; } = new Parameter<float>("TempInternal", "Температура с внешнего датчика, С", 0, float.PositiveInfinity, 8, "read")
+        {           
+            OnlyRead = true
+        };
+        #endregion
+
+        #region Температура с внутреннего датчика, С
+        public Parameter<float> TempExternal { get; } = new Parameter<float>("TempExternal", "Температура с внутреннего датчика, С", 0, float.PositiveInfinity, 9, "read")
+        {           
+            OnlyRead = true
+        };    
+        #endregion
     }
 }

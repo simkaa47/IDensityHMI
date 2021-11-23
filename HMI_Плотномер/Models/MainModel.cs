@@ -3,10 +3,12 @@ using HMI_Плотномер.Models.XML;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HMI_Плотномер.Models
 {
@@ -27,7 +29,7 @@ namespace HMI_Плотномер.Models
         #endregion
 
         #region RTC контроллера платы
-        public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Часы реального времени", "hold", 19);
+        public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");        
         #endregion
 
         #region Статус соединения с платой
@@ -35,23 +37,27 @@ namespace HMI_Плотномер.Models
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
-        public bool Connecting { get => _connecting; set => Set(ref _connecting, value); }
+        public bool Connecting {
+            get => _connecting;
+            set
+            {
+                Set(ref _connecting, value);
+                if (!value) SettingsReaded = false;
+            } }
         #endregion
 
         #region Данные измерения
         #region ФВ усредненное по диапазонам мгновенное
-        public Parameter<float> PhysValueCur { get; } = new Parameter<float>("ФВ усредненное по диапазонам мгновенное", "read", 0);
+        public Parameter<float> PhysValueCur { get; } = new Parameter<float>("PhysValueCur", "ФВ усредненное по диапазонам мгновенное", 0, float.PositiveInfinity, 0, "read");
+
         #endregion
 
-        #region ФВ усредненное по диапазонам мгновенное
-        public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("ФВ усредненное по диапазонам усредненное", "read", 2);
+        #region ФВ усредненное по диапазонам усредненное
+        public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");        
         #endregion
 
         #region Статус циклических измерений
-        public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("Статус циклических измерений", "hold", 1);
-        #endregion
-
-
+        public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("CycleMeasStatus", "Статус циклических измерений", false, true, 1, "hold");        
         #endregion
 
         #region Данные тлеметрии HV
@@ -62,25 +68,67 @@ namespace HMI_Плотномер.Models
         public TempBoardTelemetry TempTelemetry { get; } = new TempBoardTelemetry();
         #endregion
 
+        #region Номер текущкго измерительного процесса
+        public Parameter<ushort> CurMeasProcessNum { get; } = new Parameter<ushort>("CurMeasProcessNum", "Номер текущего измерительного процесса", 0, (ushort)MainModel.measProcessNum, 25, "hold");        
+        #endregion
+        
+        #endregion
+
+        #region Настройки измерительных процессов
+        #region Количество измерительных процессов
+        /// <summary>
+        /// Количество измерительных процессов
+        /// </summary>
+        public static int measProcessNum = 4;
+        #endregion
+
+        #region Текущий процесс
+        MeasProcess _curMeasProcess = new MeasProcess();
+        public MeasProcess CurMeasProcess { get => _curMeasProcess; set => Set(ref _curMeasProcess, value); }
+        #endregion
+
+        #region Настройки измерительных процессов
+        public MeasProcess[] MeasProcesses { get; set; } = Enumerable.Range(0, measProcessNum).Select(z => new MeasProcess()).ToArray();
+        #endregion
+
+        #region 
+
+        #endregion
+
+        #endregion
+
+        #region Параметры полседовательного порта платы
+        #region Баудрейт
+        public Parameter<int> PortBaudrate { get; } = new Parameter<int>("PortBaudrate", "Скорость передачи данных", 1200, 115200, 48, "hold");
+        #endregion
+
+        #region Режим работы последовательного порта
+        public Parameter<ushort> PortSelectMode { get; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");        
+        #endregion
+        #endregion
+
+        #region Данные прочитаны
+        public bool SettingsReaded { get; set; }
+        #endregion
+
         public RS485 rs { get; private set; }
         public TCP Tcp { get; private set; }
 
         public async void ModelProcess()
         {
             await Task.Run(() => MainProcess());
-
         }
 
         void MainProcess()
-        {            
+        {
             while (true)
             {
-                if (CommMode.RsEnable) rs.GetData(this);
-                else if (CommMode.EthEnable) Tcp.GetData(this);
-                else Connecting = false;               
+                if (CommMode.RsEnable) rs?.GetData(this);
+                else if (CommMode.EthEnable) Tcp?.GetData(this);
+                else Connecting = false;
                 if (CycleMeasStatus.Value && Connecting)
-                UpdateDataEvent?.Invoke();
-                Thread.Sleep(500);
+                    UpdateDataEvent?.Invoke();                
+                Thread.Sleep(100);
             }
         }
 
@@ -96,7 +144,7 @@ namespace HMI_Плотномер.Models
                 {
                     PhysValueAvg.Value = 0;
                     PhysValueCur.Value = 0;
-                    UpdateDataEvent?.Invoke();                    
+                    UpdateDataEvent?.Invoke();
                 }
             };
         }
@@ -114,13 +162,24 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
-       
-
         #region Команды
-        #region Старт-стоп циклических измерений
-        public void SwitchMeas()
+        #region Старт-стоп циклических измерений        
+        public async void SwitchMeas()
         {
             var value = CycleMeasStatus.Value ? 0 : 1;
+            if (value > 0 && !TelemetryHV.HvOn.Value)
+            {
+
+                SwitchHv();
+                await Task.Run(() =>
+                {
+                    while (Connecting && !TelemetryHV.HvOn.Value)
+                    {
+                        Thread.Sleep(100);
+                    }
+                });
+            }
+
             if (CommMode.EthEnable) Tcp.SwitchMeas(value);
             else if (CommMode.RsEnable) rs.SwitchMeas(value);
         }
@@ -131,10 +190,65 @@ namespace HMI_Плотномер.Models
         {
             var value = TelemetryHV.HvOn.Value ? 0 : 1;
             if (CommMode.EthEnable) Tcp.SwitchHv(value);
-            else if(CommMode.RsEnable)rs.SwitchHv(value);
+            else if (CommMode.RsEnable) rs.SwitchHv(value);
+        }
+        #endregion
+
+        #region Настройки измерительных процессов
+
+        #region Записать данные измерительных процессов
+        public void SetMeasProcessSettings(MeasProcess process, int index)
+        {
+            if (CommMode.EthEnable) Tcp.SetMeasProcessSettings(process,index);
+            else if((CommMode.RsEnable))rs.SetMeasProcessSettings(process, index);
+        }
+
+        #endregion
+
+        #region Сменить номер измерительного процесса
+        public void ChangeMeasProcess(int index)
+        {
+            if (CommMode.EthEnable) Tcp.ChangeMeasProcess(index);
+            else if (CommMode.RsEnable) rs.ChangeMeasProcess(index);
         }
         #endregion
         #endregion
+
+        #region Команды настроек последовательного порта
+        #region Записать бадрейт
+        public void ChangeBaudrate(int value)
+        {            
+            if (PortBaudrate.Value!= PortBaudrate.WriteValue)
+            {
+                if (CommMode.EthEnable) Tcp.ChangeBaudrate(value);
+                else if ((CommMode.RsEnable)) rs.ChangeBaudrate(value);
+            }
+        }
+        #endregion
+
+        #region Изменить режим работы последовательного порта
+        public void ChangeSerialSelect(int value)
+        {
+            ushort temp = (ushort)(value > 0 ? 1 : 0);
+            if (CommMode.EthEnable) Tcp.ChangeSerialSelect(temp);
+            else if ((CommMode.RsEnable)) rs.ChangeSerialSelect(temp);
+            
+        }
+        #endregion
+        #endregion
+
+        #region Установить дату-время
+        public void SetRtc(DateTime dt)
+        {
+            if (CommMode.EthEnable) Tcp.SetRtc(dt);
+            else if (CommMode.RsEnable) rs.SetRtc(dt);
+        }
+
+        #endregion
+
+
+        #endregion
+
 
     }
 }

@@ -23,31 +23,20 @@ namespace HMI_Плотномер
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public  partial class MainWindow : Window
-    {
-        VM vm;
-        internal MainWindow(VM vM )
+    {        
+        public MainWindow()
         {            
-            InitializeComponent();
-            this.vm = vM;
-            this.DataContext = vM;            
+            InitializeComponent();                        
         }
 
         private void Logout_click(object sender, RoutedEventArgs e)
         {
+            var vm = this.DataContext as VM;
             Password password = new Password(vm);
-            password.Show();
-            this.Close();
-        }       
+            password.Show();            
+        }    
 
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
-        {
-            var compobox = sender as ComboBox;
-            if (compobox != null)
-            {
-                var arr = SerialPort.GetPortNames();
-                compobox.ItemsSource = arr;
-            }            
-        }
+        
         private void FileDialogOpen(TextBlock tb)
         {
             OpenFileDialog fileDialog = new OpenFileDialog()
@@ -71,5 +60,7 @@ namespace HMI_Плотномер
         {
             FileDialogOpen(LogPath);
         }
+        Button 
+        
     }
 }

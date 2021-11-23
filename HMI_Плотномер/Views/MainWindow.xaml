@@ -9,16 +9,29 @@
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:add="clr-namespace:HMI_Плотномер.AddClasses"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+        xmlns:addView="clr-namespace:HMI_Плотномер.Views.AddClasses"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:VM/>
+    </Window.DataContext>
     <!--#region Общие ресурсы -->
     <Window.Resources>
-        <!--#region КОнвертеры -->
+        <add:MeasProcess x:Key="Mp"/>
+        <add:Diapasone x:Key="Diap"/>
+        <!--#region Конвертеры -->
         <conv:InterpolationConverter x:Key="InterpolationConverter"/>
         <conv:ColorIndicator x:Key="ColorToBool"/>
         <conv:GetStatusConveter x:Key="StatusFromNum"/>
         <conv:BoolToVisible x:Key="VisibleConverter"/>
         <conv:IsFilePathExist x:Key="FileExistConverter"/>
+        <conv:UserTextConverter x:Key="UserToName"/>
+        <conv:UserLevelConverter x:Key="UserToVisibility"/>
+        <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
+        <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
+
         <!--#endregion-->
         <!--#region Стили -->
         <Style TargetType="Border">
@@ -26,12 +39,35 @@
             <Setter Property="BorderBrush" Value="Black"/>
         </Style >
 
+        
+        <!--#endregion-->
+        <!--#region Перечисления -->
+        <!--#region Баудрейт -->
+        <col1:ArrayList x:Key="baudrates">
+            <sys1:String>2400</sys1:String>
+            <sys1:String>4800</sys1:String>
+            <sys1:String>9600</sys1:String>
+            <sys1:String>19200</sys1:String>
+            <sys1:String>38400</sys1:String>
+            <sys1:String>115200</sys1:String>
+        </col1:ArrayList>
+        <!--#endregion-->
+        <!--#region Паритет -->
+        <col1:ArrayList x:Key="parityes">
+            <sys1:String>None</sys1:String>
+            <sys1:String>Even</sys1:String>
+            <sys1:String>Odd</sys1:String>
+        </col1:ArrayList>
+        <!--#endregion-->
+        <!--#endregion-->
+
+        <!--#region Шаблоны -->
         <!--#region Шаблоны -->
         <ControlTemplate TargetType="ListBoxItem" x:Key="TextBoxParameter">
             <ListBoxItem>
                 <Grid>
                     <TextBlock Text="{TemplateBinding Tag}" HorizontalAlignment="Left"/>
-                    <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>                    
+                    <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>
                 </Grid>
             </ListBoxItem>
 
@@ -45,31 +81,17 @@
             </ListBoxItem>
 
         </ControlTemplate>
+
+        
+        
+        <!--#region Шаблоны для compobox -->
         <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar">
             <Grid>
                 <ComboBox Name="compobox" SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           ItemsSource="{TemplateBinding ItemsSource}"  Tag="{TemplateBinding Tag}">
                 </ComboBox>
-
                 <ContentControl Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}">
-                </ContentControl>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger SourceName="compobox" Property="SelectedItem" Value="{x:Null}">
-                    <Setter TargetName="compobox" Property="Text" Value="{Binding ElementName=compobox, Path=Tag}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <!--#region Шаблоны для compobox -->
-        <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar1">
-            <Grid>
-                <ComboBox Name="compobox" SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ItemsSource}"  Tag="{TemplateBinding Tag}" DropDownOpened="ComboBox_DropDownOpened">
-                </ComboBox>
-
-                <ContentControl Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}">
+                                Height="{TemplateBinding Height}" VerticalAlignment="Bottom">
                 </ContentControl>
             </Grid>
             <ControlTemplate.Triggers>
@@ -96,29 +118,9 @@
             </Grid>
         </ControlTemplate>
         <!--#endregion-->
-        <!--#endregion-->
-
-        <!--#endregion-->
-        <!--#region Баудрейт -->
-        <col1:ArrayList x:Key="baudrates">
-            <sys1:String>2400</sys1:String>
-            <sys1:String>4800</sys1:String>
-            <sys1:String>9600</sys1:String>
-            <sys1:String>19200</sys1:String>
-            <sys1:String>38400</sys1:String>
-            <sys1:String>115200</sys1:String>
-        </col1:ArrayList>
-        <!--#endregion-->
-        <!--#region Баудрейт -->
-        <col1:ArrayList x:Key="parityes">
-            <sys1:String>None</sys1:String>
-            <sys1:String>Even</sys1:String>
-            <sys1:String>Odd</sys1:String>
-        </col1:ArrayList>
-        <!--#endregion-->
-
+        <!--#region Шаблон для тренда -->
         <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
-            <oxy:Plot PlotMargins="30,0,0,30" Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">                
+            <oxy:Plot PlotMargins="30,0,0,30" Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
                 <oxy:Plot.Annotations >
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
@@ -146,6 +148,41 @@
 
             </oxy:Plot>
         </ControlTemplate>
+        <!--#endregion-->
+        <ControlTemplate x:Key="Parameter">
+            <DockPanel>
+                <TextBlock Text="{Binding Description}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBox Width="50">
+                        <TextBox.Text>
+                            <Binding Path="WriteValue">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right" Content="-->"
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Command}"/>
+                    <Border Width="50" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="Black">
+                        <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding Value}"/>
+                    </Border>
+                </StackPanel>
+                <DockPanel.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
+                            <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
+                            <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>
+                        </StackPanel>
+                    </ToolTip>
+                </DockPanel.ToolTip>
+            </DockPanel>
+            
+        </ControlTemplate>
+
+        
+        <!--#endregion-->
 
 
     </Window.Resources>
@@ -218,23 +255,31 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox Template="{StaticResource TextBoxPar }" 
-                             DataContext="{Binding mainModel.Rtc}"
-                             VerticalContentAlignment="Center"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Center"
-                             HorizontalContentAlignment="Center"
-                             
-                             ></TextBox>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.2*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--#region RTC -->
+                    <Viewbox Grid.ColumnSpan="2"  >
+                        <TextBlock Text="{Binding mainModel.Rtc.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"/>
+                    </Viewbox>
+                    <!--#endregion-->
 
 
-                    <Button Grid.Row="1"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Center">
+                    <Button Grid.Row="1" Margin="2"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Stretch">
                         <Button.ToolTip>Авторизация</Button.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="User" HorizontalAlignment="Left" Margin="5,1,10,1"/>
-                            <TextBlock Text="{Binding CurUserName}" VerticalAlignment="Center"  HorizontalAlignment="Stretch"></TextBlock>
+                            <TextBlock Text="{Binding CurUser, Converter={StaticResource UserToName} }" VerticalAlignment="Center"  HorizontalAlignment="Stretch">                                
+                            </TextBlock>
                         </StackPanel>
                     </Button>
+                    <!--#region Логаут -->
+                    <Button Grid.Column="1" Command="{Binding LogoutCommand}" Grid.Row="1" Margin="2">
+                        <fa:ImageAwesome Icon="Reply"/>
+                    </Button>
+                    <!--#endregion-->
+
                 </Grid>
             </Border>
             <!--#endregion-->
@@ -347,7 +392,7 @@
                                             Format="Custom" 
                                             FormatString="G"
                                             TimeFormat="Custom"
-                                            TimeFormatString="hh:mm:ss"></wpftool:DateTimePicker>
+                                            TimeFormatString="HH:mm:ss"></wpftool:DateTimePicker>
                                     </Grid>
                                 </Border>
                                 <!--#endregion-->
@@ -363,7 +408,7 @@
                                             Format="Custom" 
                                             FormatString="G"
                                             TimeFormat="Custom"
-                                            TimeFormatString="hh:mm:ss"></wpftool:DateTimePicker>
+                                            TimeFormatString="HH:mm:ss"></wpftool:DateTimePicker>
                                     </Grid>
                                 </Border>
                                 <!--#endregion-->
@@ -489,24 +534,9 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <!--#region Кнопка Вкл-выкл Hv -->
-                        <Button Margin="5" Command="{Binding SwitchHvCommand}" 
-                                Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
-                            <Button.Resources>
-                                <col1:ArrayList x:Key="hvStatus">
-                                    <sys1:String>ВКЛЮЧИТЬ HV</sys1:String>
-                                    <sys1:String>ВЫКЛЮЧИТЬ HV</sys1:String>
-                                </col1:ArrayList>
-                            </Button.Resources>
-                            <TextBlock Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource hvStatus}}"
-                                       IsEnabled="{Binding mainModel.Connecting}"
-                                       TextWrapping="Wrap"
-                                       ></TextBlock>
-                        </Button>
-                        <!--#endregion-->
+                        </Grid.RowDefinitions>                        
                         <!--#region Кнопка Вкл-выкл измерения -->
-                        <Button Grid.Column="1" Margin="5" Command="{Binding SwitchMeasCommand}" 
+                        <Button Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Command="{Binding SwitchMeasCommand}" 
                                 Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
                             <Button.Resources>
                                 <col1:ArrayList x:Key="measStatus">
@@ -531,7 +561,7 @@
             <!--#region Вкладка настроек -->
             <TabItem Header="НАСТРОЙКИ">
                 <TabControl TabStripPlacement="Left">
-                    <TabItem Header="НАСТРОЙКИ СВЯЗИ">
+                    <TabItem Header="КОММУНИКАЦИЯ">
                         <Grid>
                             <ListBox HorizontalContentAlignment="Stretch" >
                                 <!--#region Способ связи с платой -->
@@ -551,9 +581,8 @@
                                         <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <Grid>
                                                 <TextBlock Text="Имя COM порта" HorizontalAlignment="Left"></TextBlock>
-                                                <ComboBox   Width="80" Template="{StaticResource CompoboxPar1}" Tag="{Binding mainModel.rs.ComName}"  SelectedItem="{Binding mainModel.rs.ComName}"  DropDownOpened="ComboBox_DropDownOpened"  HorizontalAlignment="Right">
+                                                <ComboBox   Width="80" Template="{StaticResource CompoboxPar}" Tag="{Binding mainModel.rs.ComName}" ItemsSource="{Binding ComPorts}" SelectedItem="{Binding mainModel.rs.ComName}"  HorizontalAlignment="Right"/>
 
-                                                </ComboBox>
                                             </Grid>
                                         </ListBoxItem>
                                         <!--#endregion-->
@@ -584,7 +613,6 @@
                                         </ListBoxItem>
                                         <!--#endregion-->
                                     </ListBox>
-
                                     <!--#endregion-->
                                 </GroupBox>
                                 <!--#endregion-->
@@ -596,11 +624,298 @@
                                     </ListBox>
                                 </GroupBox>
                                 <!--#endregion-->
+                                <!--#region Настройки последовательного порта плотномера -->
+                                <GroupBox Header="Настройки последовательного порта плотномера">
+                                    <ListBox HorizontalContentAlignment="Stretch">
+                                        <!--#region Баудрейт -->
+                                        <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}" >
+                                            <ListBoxItem.Resources>
+                                                <col1:ArrayList x:Key="PortSpeeds">
+                                                    <sys1:Int32>2400</sys1:Int32>
+                                                    <sys1:Int32>4800</sys1:Int32>
+                                                    <sys1:Int32>9600</sys1:Int32>
+                                                    <sys1:Int32>19200</sys1:Int32>
+                                                    <sys1:Int32>38400</sys1:Int32>
+                                                    <sys1:Int32>115200</sys1:Int32>
+                                                </col1:ArrayList>
+                                            </ListBoxItem.Resources>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Description}"/>
+                                                <ComboBox Name="SelectBaudrate"   Width="80" ItemsSource="{StaticResource PortSpeeds}" SelectedItem="{Binding Value}"  HorizontalAlignment="Right">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="DropDownClosed">
+                                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeBaudrateCommand}"
+                                                                                   CommandParameter="{Binding ElementName=SelectBaudrate, Path=SelectedItem}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ComboBox>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <ListBoxItem DataContext="{Binding mainModel.PortSelectMode}" >
+                                            <ListBoxItem.Resources>
+                                                <col1:ArrayList x:Key="PortModes">
+                                                    <sys1:String>RS485</sys1:String>
+                                                    <sys1:String>RS232</sys1:String>
+                                                </col1:ArrayList>
+                                            </ListBoxItem.Resources>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Description}"/>
+                                                <ComboBox Name="RsModeSelector"  Width="80" ItemsSource="{StaticResource PortModes}" SelectedIndex="{Binding Value}"  HorizontalAlignment="Right">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="SelectionChanged">
+                                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeSerialSelectCommand}"
+                                                                                   CommandParameter="{Binding ElementName=RsModeSelector, Path=SelectedIndex}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ComboBox>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                    </ListBox>
+                                </GroupBox>
+                                <!--#endregion-->
                             </ListBox>
-
-
                         </Grid>
                     </TabItem>
+                    <TabItem Header="ИЗМЕРЕНИЕ" >
+                        <ListBox HorizontalContentAlignment="Stretch">
+                            <ListBoxItem>
+                                <DockPanel>
+                                    <TextBlock Text="Выбор текущего измерительного процесса"></TextBlock>
+                                    <ComboBox Name="CurMeasSelector" ItemsSource="{Binding MeasProcessNames.Data}" 
+                                              DisplayMemberPath="Name" 
+                                              SelectedIndex="{Binding mainModel.CurMeasProcessNum.Value}"                                              
+                                              HorizontalAlignment="Right">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction Command="{Binding ChangeMeasProcessCommand}" CommandParameter="{Binding ElementName=CurMeasSelector, Path=SelectedIndex}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>                                    
+                                </DockPanel>
+                            </ListBoxItem>
+                            <!--#region Время усреднения -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                <DockPanel>
+                                    <TextBlock Text="Время усреднения, сек"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <TextBox Text="{Binding AvgTimeWrite}" Width="50" ></TextBox>
+                                        <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right"
+                                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeUserAvgTime}"
+                                                            CommandParameter="{Binding AvgTimeWrite}">--></Button>
+                                        <Border Width="50" HorizontalAlignment="Right">
+                                            <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource MultiplyNumsConverter}">
+                                                        <Binding Path="mainModel.CurMeasProcess.MeasDeep.Value"/>
+                                                        <Binding Path="mainModel.CurMeasProcess.MeasDuration.Value" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </Border>
+                                    </StackPanel>
+                                </DockPanel>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="ДАТА И ВРЕМЯ">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ListBox HorizontalContentAlignment="Stretch">
+                                <!--#region Реадктирование rtc -->
+                                <ListBoxItem>
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding mainModel.Rtc.Description}"></TextBlock>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <wpftool:DateTimePicker Name="Dt" Value="{Binding mainModel.Rtc.WriteValue}" Margin="1,0,1,0"></wpftool:DateTimePicker>
+                                            <Button Command="{Binding SetRtcCommand}" Width="50" Margin="1,0,1,0">--></Button>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Синхронизация с временем ПК -->
+                                <ListBoxItem>
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding CurPcDateTime.Description}"></TextBlock>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock Margin="1,0,1,0"  Width="{Binding ElementName=Dt, Path=ActualWidth}" 
+                                                       Text="{Binding CurPcDateTime.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
+                                                       HorizontalAlignment="Center"></TextBlock>
+                                            <Button Command="{Binding SyncRtcCommand}" Width="50" Margin="1,0,1,0">--></Button>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->                                
+                            </ListBox>
+                            
+                                
+                        </Grid>
+                       
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <!--#endregion-->
+            <!--#region Расширенные настройки -->
+            <TabItem Header="РАСШИРЕННЫЕ НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                <TabItem.Resources>
+                    <!--#region Общий стиль для DaraGrid -->
+                    <Style TargetType="DataGrid">
+                        <Setter Property="VerticalGridLinesBrush" Value="DarkGray"/>
+                        <Setter Property="GridLinesVisibility" Value="Vertical"/>
+                        <Setter Property="AlternatingRowBackground" Value="AliceBlue"/>
+                        <Setter Property="AutoGenerateColumns" Value="False"/>
+                    </Style>
+                    <!--#endregion-->
+                </TabItem.Resources>
+                <TabControl TabStripPlacement="Left">
+                    <!--#region Настройки измерительных процессов -->
+                    <TabItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ">
+                        <GroupBox>
+                            
+                            <!--#region Выбор измерительного процесса -->
+                            <GroupBox.Header>
+                                <DockPanel>
+                                    <TextBlock Text="Название измерительного процесса"></TextBlock>
+                                    <ComboBox Name="Selector" HorizontalAlignment="Right" ItemsSource="{Binding MeasProcessNames.Data}"
+                                              DisplayMemberPath="Name"
+                                              Margin="10,0"
+                                              SelectedIndex="{Binding SelectedMeasProcessNum}"  ></ComboBox>
+                                </DockPanel>
+                            </GroupBox.Header>
+                            <!--#endregion-->
+                            <!--#region Параметры -->                            
+                            <ListBox HorizontalContentAlignment="Stretch">
+                                <!--#region Диапазоны -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <ListBoxItem.Resources>
+                                        <col1:ArrayList x:Key="Diapasons">
+                                            <sys1:String>Диапазон 0</sys1:String>
+                                            <sys1:String>Диапазон 1</sys1:String>
+                                            <sys1:String>Диапазон 2</sys1:String>                                            
+                                        </col1:ArrayList>
+                                    </ListBoxItem.Resources>
+                                    <GroupBox>
+                                        <!--#region Выбор диапазона -->
+                                        <GroupBox.Header>
+                                            <DockPanel>
+                                                <TextBlock Text="Номер диапазона"></TextBlock>
+                                                <ComboBox ItemsSource="{StaticResource Diapasons}" 
+                                                          SelectedIndex="{Binding  SelectedDiapNum}"></ComboBox>
+                                            </DockPanel>
+                                        </GroupBox.Header>
+                                        
+                                        <!--#endregion-->
+                                        <!--#region Настройки диапазонов -->
+                                        <ListBox>                                            
+                                            <!--#region Номер калибровочной кривой -->
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CalibCurveNum}">
+                                                <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"/>
+                                            </ListBoxItem>                                           
+                                            <!--#endregion-->
+                                            <!--#region Номер стандартизации ЕИ -->
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.StandNum}">
+                                                <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"/>
+                                            </ListBoxItem>
+                                            <!--#endregion-->
+                                            <!--#region Счетчик -->
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CounterNum}">
+                                                <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"/>
+                                            </ListBoxItem>
+                                            <!--#endregion-->
+                                        </ListBox>
+                                        <!--#endregion-->
+                                    </GroupBox>                                    
+                                </ListBoxItem>
+                                <!--#endregion--> 
+                                <!--#region Номер стандартизации -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.BackStandNum}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Время измерения, x0.1 c -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.MeasDuration}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDurationCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Глубина усреднения, точек измерения -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.MeasDeep}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDeepCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Период полупаспада -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.HalfLife}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetHalfLifeCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Плотность жидкости -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.DensityLiquid}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensityLiqCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Плотность твердости -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.DensitySolid}">
+                                    <Button Template="{StaticResource Parameter}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                            </ListBox>                                
+                            <!--#endregion-->
+                        </GroupBox>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Управление пользователями -->
+                    <TabItem Header="ПОЛЬЗОВАТЕЛИ">
+                        <DataGrid  ItemsSource="{Binding Users.Data}">
+                            <DataGrid.Resources>
+                                <col1:ArrayList x:Key="users" >
+                                    <sys1:String>Оператор</sys1:String>
+                                    <sys1:String>Сервис</sys1:String>
+                                    <sys1:String>Администратор</sys1:String>
+                                </col1:ArrayList>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
+                                <DataGridTextColumn Header="Имя" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Somename}"></DataGridTextColumn>
+                                <DataGridComboBoxColumn Header="Уровень доступа" ItemsSource="{StaticResource users}" SelectedItemBinding="{Binding Path=Level}" ></DataGridComboBoxColumn>
+                                <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <!--#endregion-->
+
+                    <!--#region Перечисления -->
+                    <TabItem Header="ПЕРЕЧИСЛЕНИЯ">
+                        <TabItem.Resources>
+                            <!--#region Общий шаблон для таблички -->
+                            <ControlTemplate x:Key="Enums">
+                                <GroupBox Header="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}">
+                                    <DataGrid ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"   >
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn  Header="Id" Binding="{Binding Id}" IsReadOnly="True"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+                                
+                            </ControlTemplate>
+                            <!--#endregion-->
+                        </TabItem.Resources>
+                        <WrapPanel>
+                            <!--#region Названия измерительных процессов -->
+                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding MeasProcessNames.Data}" Tag="Названия измерительных процессов"></DataGrid>                            
+                            <!--#endregion-->
+                            <!--#region Единицы измерения -->
+                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding UnitNames.Data}" Tag="Единицы измерения"></DataGrid>
+                            <!--#endregion-->
+
+                        </WrapPanel>
+                        
+                    </TabItem>
+                    <!--#endregion-->
                 </TabControl>
             </TabItem>
             <!--#endregion-->
