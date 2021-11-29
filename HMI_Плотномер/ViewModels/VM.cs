@@ -37,6 +37,11 @@ namespace HMI_Плотномер.ViewModels
 
         #region Команды
 
+        #region Обновить список доступных Com портов
+        RelayCommand _updateComPortListCommand;
+        public RelayCommand UpdateComPortListCommand => _updateComPortListCommand ?? (_updateComPortListCommand = new RelayCommand(o => ComPorts=SerialPort.GetPortNames(), o => true));
+        #endregion
+
         #region Команда "Закрыть приложение"
         RelayCommand _closeAppCommand;
         public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o => Application.Current.Shutdown(), o => true));
@@ -237,6 +242,11 @@ namespace HMI_Плотномер.ViewModels
 
         #endregion
 
+        #region Команда "Установить напряжение HV"
+        RelayCommand _setHvCommand;
+        public RelayCommand SetHvCommand => _setHvCommand ?? (_setHvCommand = new RelayCommand(obj =>mainModel.SetHv(mainModel.TelemetryHV.VoltageSV.WriteValue), obj => true));
+        #endregion
+
         #endregion
         public MainModel mainModel { get; } = new MainModel();
 
@@ -256,11 +266,12 @@ namespace HMI_Плотномер.ViewModels
         #endregion
 
         #region таймер
-        System.Timers.Timer timer = new System.Timers.Timer(1000); 
+        System.Timers.Timer timer = new System.Timers.Timer(1000);
         #endregion
 
-        #region Cписок доступных Com портов        
-        public string[] ComPorts { get => SerialPort.GetPortNames(); }
+        #region Cписок доступных Com портов 
+        string[] _comPorts;
+        public string[] ComPorts { get => _comPorts ?? (_comPorts = SerialPort.GetPortNames()); set => Set(ref _comPorts, value); }
         #endregion
 
         #region Данные для текущего тренда

@@ -287,7 +287,14 @@ namespace HMI_Плотномер.Models
         #region Запрос статусов устройств
         void GetDeviceStatus()
         {
-
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DSR"));
+            ushort temp = 0;
+            var strNums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => ushort.TryParse(s, NumberStyles.HexNumber,null, out temp)).Select(s => temp).ToArray();
+            if (strNums.Length != 4) return;
+            model.CommStates.Value = strNums[0];            
+            model.AnalogStateGroup1.Value = strNums[2];
+            model.AnalogStateGroup2.Value = strNums[3];
+            model.GetDeviceData();            
         }
         #endregion
 
@@ -460,6 +467,14 @@ namespace HMI_Плотномер.Models
         {
             var str = $"SETT,rtc_set={dt.Day},{dt.Month},{dt.Year%100},{dt.Hour},{dt.Minute},{dt.Second}#";
             commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
+        #region Уставка HV
+        public void SetHv(ushort value)
+        {
+            var str = $"SETT,hv_target={value*20}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using HMI_Плотномер.AddClasses;
 using HMI_Плотномер.Models.XML;
+using IDensity.AddClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +30,7 @@ namespace HMI_Плотномер.Models
         #endregion
 
         #region RTC контроллера платы
-        public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");        
+        public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");
         #endregion
 
         #region Статус соединения с платой
@@ -53,15 +54,19 @@ namespace HMI_Плотномер.Models
         #endregion
 
         #region ФВ усредненное по диапазонам усредненное
-        public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");        
+        public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");
         #endregion
 
         #region Статус циклических измерений
-        public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("CycleMeasStatus", "Статус циклических измерений", false, true, 1, "hold");        
+        public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("CycleMeasStatus", "Статус циклических измерений", false, true, 1, "hold");
         #endregion
 
         #region Данные тлеметрии HV
         public HvTelemetry TelemetryHV { get; } = new HvTelemetry();
+        #endregion
+
+        #region Данные телеметрии аналоговых модулей
+        public AnalogData[] AnalogTelemetryes { get; } = Enumerable.Range(0, 4).Select(z => new AnalogData((byte)z)).ToArray();
         #endregion
 
         #region Данные телеметрии платы питания(темпратуры)
@@ -69,10 +74,48 @@ namespace HMI_Плотномер.Models
         #endregion
 
         #region Номер текущкго измерительного процесса
-        public Parameter<ushort> CurMeasProcessNum { get; } = new Parameter<ushort>("CurMeasProcessNum", "Номер текущего измерительного процесса", 0, (ushort)MainModel.measProcessNum, 25, "hold");        
+        public Parameter<ushort> CurMeasProcessNum { get; } = new Parameter<ushort>("CurMeasProcessNum", "Номер текущего измерительного процесса", 0, (ushort)MainModel.measProcessNum, 25, "hold");
         #endregion
-        
+
+        #region Статус связи с платой АЦП
+        public Parameter<bool> AdcBoardCommState { get; } = new Parameter<bool>("AdcBoardCommState", "Статус связи с платой АЦП", false, true, 0, "");
         #endregion
+
+        #region Переменные связи
+        public Parameter<ushort> CommStates { get; } = new Parameter<ushort>("CommStates", "Переменные связи", ushort.MinValue, ushort.MaxValue, 63, "read")
+        {
+            OnlyRead = true
+        };
+        #endregion
+
+        #region Битовые переменные состояния аналоговых модулей
+        public Parameter<ushort> AnalogStateGroup1 { get; } = new Parameter<ushort>("AnalogStateGroup1", "Состояние аналоговых модулей группы 1", 0, ushort.MaxValue, 65, "hold")
+        {
+            OnlyRead = true
+        };
+        public Parameter<ushort> AnalogStateGroup2 { get; } = new Parameter<ushort>("AnalogStateGroup2", "Состояние аналоговых модулей группы 2", 0, ushort.MaxValue, 66, "hold")
+        {
+            OnlyRead = true
+        };
+        #endregion
+
+        #endregion
+
+        #region Настройки аналоговых модулей
+        AnalogGroup[] _analogGroups;
+        public AnalogGroup[] AnalogGroups
+        {
+            get
+            {
+                if (_analogGroups == null)
+                {
+                    _analogGroups = Enumerable.Range(0, 2).Select(z => new AnalogGroup(z)).ToArray();
+
+                }
+                return _analogGroups;
+            }
+        }
+        #endregion       
 
         #region Настройки измерительных процессов
         #region Количество измерительных процессов
@@ -89,11 +132,7 @@ namespace HMI_Плотномер.Models
 
         #region Настройки измерительных процессов
         public MeasProcess[] MeasProcesses { get; set; } = Enumerable.Range(0, measProcessNum).Select(z => new MeasProcess()).ToArray();
-        #endregion
-
-        #region 
-
-        #endregion
+        #endregion      
 
         #endregion
 
@@ -226,6 +265,23 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+        #region Парсинг битовых значений устройств
+        public void GetDeviceData()
+        {
+            AdcBoardCommState.Value = (CommStates.Value & 1) == 0;
+            TempTelemetry.TempBoardCommState.Value = (CommStates.Value & 2) == 0;
+            TelemetryHV.HvCommState.Value = (CommStates.Value & 4) == 0;
+            AnalogTelemetryes[0].CommStateDac.Value = (AnalogStateGroup1.Value & 1) == 1;
+            AnalogTelemetryes[1].CommStateDac.Value = (AnalogStateGroup1.Value & 2) == 1;
+            AnalogTelemetryes[0].PwrState.Value = (AnalogStateGroup1.Value & 4) == 1;
+            AnalogTelemetryes[1].PwrState.Value = (AnalogStateGroup1.Value & 8) == 1;
+            AnalogTelemetryes[2].CommStateDac.Value = (AnalogStateGroup2.Value & 1) == 1;
+            AnalogTelemetryes[3].CommStateDac.Value = (AnalogStateGroup2.Value & 2) == 1;
+            AnalogTelemetryes[2].PwrState.Value = (AnalogStateGroup2.Value & 4) == 1;
+            AnalogTelemetryes[3].PwrState.Value = (AnalogStateGroup2.Value & 8) == 1;
+        }
+        #endregion
+
         #region Изменить режим работы последовательного порта
         public void ChangeSerialSelect(int value)
         {
@@ -244,6 +300,14 @@ namespace HMI_Плотномер.Models
             else if (CommMode.RsEnable) rs.SetRtc(dt);
         }
 
+        #endregion
+
+        #region Установить напряжение HV
+        public void SetHv(ushort value)
+        {
+            if (CommMode.EthEnable) Tcp.SetHv(value);
+            else if (CommMode.RsEnable) rs.SetHv(value);
+        }
         #endregion
 
 

@@ -60,7 +60,7 @@ namespace HMI_Плотномер
         {
             FileDialogOpen(LogPath);
         }
-        Button 
+       
         
     }
 }

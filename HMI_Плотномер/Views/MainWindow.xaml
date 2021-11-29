@@ -10,10 +10,10 @@
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:add="clr-namespace:HMI_Плотномер.AddClasses"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
-        xmlns:addView="clr-namespace:HMI_Плотномер.Views.AddClasses"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Background="DarkSlateGray">
     <Window.DataContext>
         <vm:VM/>
     </Window.DataContext>
@@ -33,13 +33,82 @@
         <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
 
         <!--#endregion-->
+        <!--#region Стиль для GroupBox -->
+        <Style TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignGroupBox}">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+        <!--#endregion-->
+        <!--#region RadioButton -->
+        <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignAccentRadioButton}"/>
+        <!--#endregion-->
+        <!--#region Compobox -->
+        <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+            <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+            <Setter Property="Background" Value="DarkSlateGray"/>
+        </Style>
+        <!--#endregion-->
         <!--#region Стили -->
+        <Style TargetType="ListBoxItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+        <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignAccentCheckBox}"/>
+        <!--#region Стили для TextBlock -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <!--#region Стили для TextBlock -->
+        <Style TargetType="TextBox">            
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <!--#endregion-->
+        <!--#region Стиль для Border  -->
         <Style TargetType="Border">
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderBrush" Value="White"/>
         </Style >
+        <!--#endregion-->
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="DarkSlateGray"/>            
+        </Style>
+        <!--#region Стиль для вкладок -->
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Border Name="Border" MinWidth="300" BorderBrush="White"   BorderThickness="0,0,1,1" >
+                            <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,0,0,0">
+                                <Image Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" Stretch="None" />
+                                <Label Name="L2" FontSize="20"  Content="{TemplateBinding Header}" HorizontalAlignment="Left" VerticalAlignment="Center" ></Label>
+                            </DockPanel>
+                        </Border>
 
-        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="L2" Property="Foreground" Value="Aqua"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="L2" Property="Foreground" Value="Aqua"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--#endregion-->
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Tahoma"  />
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+
         <!--#endregion-->
         <!--#region Перечисления -->
         <!--#region Баудрейт -->
@@ -66,7 +135,7 @@
         <ControlTemplate TargetType="ListBoxItem" x:Key="TextBoxParameter">
             <ListBoxItem>
                 <Grid>
-                    <TextBlock Text="{TemplateBinding Tag}" HorizontalAlignment="Left"/>
+                    <TextBlock  Text="{TemplateBinding Tag}" HorizontalAlignment="Left"/>
                     <TextBox    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="100" HorizontalContentAlignment="Center"/>
                 </Grid>
             </ListBoxItem>
@@ -82,7 +151,17 @@
 
         </ControlTemplate>
 
-        
+        <ControlTemplate x:Key="BitIndicator">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock TextWrapping="Wrap"  Foreground="WhiteSmoke" FontSize="14" FontWeight="Bold" Text="{Binding Description}"></TextBlock>
+                <Ellipse Grid.Column="1" x:Name="yy" Stroke="Aqua" Fill="{Binding Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFFF0000}" Height="Auto" Width="{Binding ElementName=yy, Path=ActualHeight}"  HorizontalAlignment="Right"></Ellipse>
+            </Grid>
+            
+        </ControlTemplate>
         
         <!--#region Шаблоны для compobox -->
         <ControlTemplate TargetType="ComboBox" x:Key="CompoboxPar">
@@ -120,19 +199,37 @@
         <!--#endregion-->
         <!--#region Шаблон для тренда -->
         <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
-            <oxy:Plot PlotMargins="30,0,0,30" Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot"  PlotAreaBackground="LightGray">
+            
+            <oxy:Plot PlotMargins="30,0,0,30" 
+                      PlotType="XY" 
+                      PlotAreaBorderThickness="0" 
+                      TextColor="WhiteSmoke"                       
+                      x:Name="plot" 
+                      IsLegendVisible="True"
+                      Background="DarkSlateGray"   
+                      PlotAreaBackground="DarkGray">                
                 <oxy:Plot.Annotations >
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
                     <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
                 </oxy:Plot.Annotations>
                 <oxy:Plot.Axes>
-                    <oxy:LinearAxis    Title ="Значение"   Position ="Left" AbsoluteMinimum="0"  AbsoluteMaximum ="70000" ></oxy:LinearAxis>
-                    <oxy:DateTimeAxis Title="Время" ></oxy:DateTimeAxis>
+                    <oxy:LinearAxis  
+                        TextColor="WhiteSmoke" 
+                        FontWeight="Bold" 
+                        FontSize="14"
+                        MajorGridlineColor="WhiteSmoke"
+                        MajorGridlineStyle="Dot"
+                        Position ="Left" />
+                    <oxy:DateTimeAxis FontWeight="Bold"
+                                      MajorGridlineColor="WhiteSmoke"
+                                      MajorGridlineStyle="Dot"
+                                      FontSize="14"/>
                 </oxy:Plot.Axes>
                 <oxy:ThreeColorLineSeries  LineStyle="Dash"
                                            Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
                                            ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
-                                           DataFieldX="time" DataFieldY="y1" 
+                                           DataFieldX="time" DataFieldY="y1"
+                                           Title="Усредненное значение"
                                            Color="Black" ColorHi="Red" 
                                            ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
                                            LimitLo="{Binding TrendSettings.PlotLowLimit}"                                             
@@ -141,7 +238,8 @@
                                            Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
                                            ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
                                            DataFieldX="time" DataFieldY="y2" 
-                                           Color="Green" 
+                                           Color="Green"
+                                           Title="Мгновенное значение"
                                            ColorHi="Green"
                                            ColorLo="Green"
                                            LineStyleHi="Dash"/>
@@ -149,25 +247,30 @@
             </oxy:Plot>
         </ControlTemplate>
         <!--#endregion-->
+        <!--#region Шаблон параметра  -->
         <ControlTemplate x:Key="Parameter">
             <DockPanel>
-                <TextBlock Text="{Binding Description}"/>
+                <TextBlock Text="{Binding Description}" FontWeight="Bold"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBox Width="50">
+                    <TextBox x:Name="Write" Width="80" Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}">
                         <TextBox.Text>
-                            <Binding Path="WriteValue">
+                            <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <DataErrorValidationRule />
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <Button Width="50" Margin="5,0,5,0" HorizontalAlignment="Right" Content="-->"
-                                                        Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Command}"/>
-                    <Border Width="50" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="Black">
-                        <TextBlock Margin="1,0,1,0" IsEnabled="False" HorizontalAlignment="Left" Text="{Binding Value}"/>
+                    <Button x:Name="Cmd"  Width="50" Margin="5,0,5,0" HorizontalAlignment="Right" Content="-->"
+                            Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Command}"
+                            Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}">
+                    </Button>
+                    <Border Width="80" HorizontalAlignment="Right" BorderThickness="1"  >
+                        <TextBlock Margin="1,0,1,0" IsEnabled="False" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Value}"
+                                    />
                     </Border>
                 </StackPanel>
+
                 <DockPanel.ToolTip>
                     <ToolTip>
                         <StackPanel>
@@ -178,13 +281,9 @@
                     </ToolTip>
                 </DockPanel.ToolTip>
             </DockPanel>
-            
         </ControlTemplate>
-
-        
         <!--#endregion-->
-
-
+        <!--#endregion-->
     </Window.Resources>
     <!--#endregion-->
     <!--#region Страницы -->
@@ -292,7 +391,7 @@
         </Grid>
         <!--#endregion-->
         <!--#region Вкладки -->
-        <TabControl Grid.Row="1" TabStripPlacement="Bottom" >
+        <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка управление -->
             <TabItem Header="УПРАВЛЕНИЕ">
                 <Grid>
@@ -324,18 +423,15 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <DockPanel Grid.Column="0" >
-                                    <CheckBox x:Name="VisibleLine1" IsChecked="True" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="VisibleLine1" IsChecked="True"  VerticalAlignment="Center"></CheckBox>
                                     <TextBlock Text="Усредненная физическая величина" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
                                 </DockPanel>
                                 <DockPanel Grid.Column="1">
                                     <CheckBox x:Name="VisibleLine2" VerticalAlignment="Center"></CheckBox>
                                     <TextBlock Text="Мгновенная физическая величина" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
                                 </DockPanel>
-
                                 <oxy:Plot Grid.Row="2" Grid.ColumnSpan="4" Tag="{Binding PlotCollection}" Template="{StaticResource Trend}"></oxy:Plot>
                             </Grid>
-
-
                             <!--#endregion-->
                         </TabItem>
                         <!--#endregion-->
@@ -474,38 +570,7 @@
                     <!--#endregion-->
 
                     <!--#region Индикация узлов -->
-                    <StackPanel Grid.Row="1">
-                        <!--#region Индикация модуля HV -->
-                        <GroupBox Grid.Row="1" Header="Индикация модуля HV">
-                            <ListBox  DataContext="{Binding mainModel.TelemetryHV}">
-                                <!--#region Уставка напряжения -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <Grid>
-                                        <TextBlock Text="Уставка напряжения, В" HorizontalAlignment="Left"></TextBlock>
-                                        <TextBlock Text="{Binding VoltageSV.Value}" HorizontalAlignment="Right" ></TextBlock>
-                                    </Grid>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Входное напряжение -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <Grid>
-                                        <TextBlock Text="Входное напряжение, В" HorizontalAlignment="Left"></TextBlock>
-                                        <TextBlock Text="{Binding VoltageCurIn.Value}" HorizontalAlignment="Right" ></TextBlock>
-                                    </Grid>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Выходное напряжение -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <Grid>
-                                        <TextBlock Text="Выходное напряжение, В" HorizontalAlignment="Left"></TextBlock>
-                                        <TextBlock Text="{Binding VoltageCurOut.Value}" HorizontalAlignment="Right" ></TextBlock>
-                                    </Grid>
-                                </ListBoxItem>
-                                <!--#endregion-->
-
-                            </ListBox>
-                        </GroupBox>
-                        <!--#endregion-->
+                    <StackPanel Grid.Row="1">                        
                         <!--#region Индикация иодуля температуры -->
                         <GroupBox Header="Индикация модуля температуры">
                             <ListBox DataContext="{Binding mainModel.TempTelemetry}">
@@ -537,14 +602,14 @@
                         </Grid.RowDefinitions>                        
                         <!--#region Кнопка Вкл-выкл измерения -->
                         <Button Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Command="{Binding SwitchMeasCommand}" 
-                                Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFF0FFFF}">
+                                Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}">
                             <Button.Resources>
                                 <col1:ArrayList x:Key="measStatus">
                                     <sys1:String>ВКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
                                     <sys1:String>ВЫКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
                                 </col1:ArrayList>
                             </Button.Resources>
-                            <TextBlock Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatus}}"
+                            <TextBlock  Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatus}}"
                                        IsEnabled="{Binding mainModel.Connecting}"
                                        TextWrapping="Wrap"
                                        ></TextBlock>
@@ -553,8 +618,6 @@
 
                     </Grid>
                     <!--#endregion-->
-
-
                 </Grid>
             </TabItem>
             <!--#endregion-->
@@ -581,7 +644,13 @@
                                         <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <Grid>
                                                 <TextBlock Text="Имя COM порта" HorizontalAlignment="Left"></TextBlock>
-                                                <ComboBox   Width="80" Template="{StaticResource CompoboxPar}" Tag="{Binding mainModel.rs.ComName}" ItemsSource="{Binding ComPorts}" SelectedItem="{Binding mainModel.rs.ComName}"  HorizontalAlignment="Right"/>
+                                                <ComboBox Width="80" HorizontalAlignment="Right" ItemsSource="{Binding ComPorts}" SelectedItem="{Binding mainModel.rs.ComName}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="DropDownOpened">
+                                                            <i:InvokeCommandAction Command="{Binding UpdateComPortListCommand}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ComboBox>
 
                                             </Grid>
                                         </ListBoxItem>
@@ -631,12 +700,12 @@
                                         <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}" >
                                             <ListBoxItem.Resources>
                                                 <col1:ArrayList x:Key="PortSpeeds">
-                                                    <sys1:Int32>2400</sys1:Int32>
-                                                    <sys1:Int32>4800</sys1:Int32>
-                                                    <sys1:Int32>9600</sys1:Int32>
-                                                    <sys1:Int32>19200</sys1:Int32>
-                                                    <sys1:Int32>38400</sys1:Int32>
-                                                    <sys1:Int32>115200</sys1:Int32>
+                                                    <sys1:String>2400</sys1:String>
+                                                    <sys1:String>4800</sys1:String>
+                                                    <sys1:String>9600</sys1:String>
+                                                    <sys1:String>19200</sys1:String>
+                                                    <sys1:String>38400</sys1:String>
+                                                    <sys1:String>115200</sys1:String>
                                                 </col1:ArrayList>
                                             </ListBoxItem.Resources>
                                             <DockPanel>
@@ -866,6 +935,43 @@
                         </GroupBox>
                     </TabItem>
                     <!--#endregion-->
+                    <!--#region Настройки платы HV -->
+                    <TabItem Header="ПЛАТА HV">
+                        <ListBox HorizontalContentAlignment="Stretch">
+                            <!--#region Уставка напряжения -->
+                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.VoltageSV}">
+                                <Button Template="{StaticResource Parameter}"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SetHvCommand}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Входное напряжение -->
+                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}">
+                                <Button Template="{StaticResource Parameter}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Выходное напряжение -->
+                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.VoltageCurOut}">
+                                <Button Template="{StaticResource Parameter}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Индикатор связи -->
+                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.HvCommState}">
+                                <UserControl Template="{StaticResource BitIndicator}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                        </ListBox>
+                    </TabItem>
+                    <!--#endregion-->
+                    <TabItem Header="АНАЛОГОВЫЕ МОДУЛИ">
+                        <TabControl TabStripPlacement="Bottom">
+                            <TabItem Header="АНАЛОГОВЫЕ ВХОДЫ">
+                                <ListBox>
+                                    
+                                </ListBox>
+                            </TabItem>
+                            <TabItem Header="АНАЛОГОВЫЕ ВЫХОДЫ"></TabItem>
+                        </TabControl>
+                    </TabItem>
                     <!--#region Управление пользователями -->
                     <TabItem Header="ПОЛЬЗОВАТЕЛИ">
                         <DataGrid  ItemsSource="{Binding Users.Data}">
@@ -886,7 +992,6 @@
                         </DataGrid>
                     </TabItem>
                     <!--#endregion-->
-
                     <!--#region Перечисления -->
                     <TabItem Header="ПЕРЕЧИСЛЕНИЯ">
                         <TabItem.Resources>
@@ -917,6 +1022,13 @@
                     </TabItem>
                     <!--#endregion-->
                 </TabControl>
+            </TabItem>
+            <!--#endregion-->
+            <!--#region События -->
+            <TabItem Header="СОБЫТИЯ">
+                <ListBox>
+
+                </ListBox>
             </TabItem>
             <!--#endregion-->
         </TabControl>

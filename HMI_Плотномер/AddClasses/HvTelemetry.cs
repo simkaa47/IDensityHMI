@@ -30,7 +30,10 @@ namespace HMI_Плотномер.AddClasses
         };
         #endregion
         #region Статус высокого напряжения
-        public Parameter<bool> HvOn { get; } = new Parameter<bool>("HvOn", "Статус высокого напряжения", false, true, 0, "");        
+        public Parameter<bool> HvOn { get; } = new Parameter<bool>("HvOn", "Статус высокого напряжения", false, true, 0, "");
+        #endregion
+        #region Статус связи с платой HV
+        public Parameter<bool> HvCommState { get; } = new Parameter<bool>("HvCommState", "Статус связи с платой HV", false, true, 0, "");
         #endregion
     }
 }

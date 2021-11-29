@@ -147,7 +147,7 @@ namespace HMI_Плотномер.Models
         #region Чтение input регистров
         void ReadInputRegs(int offset, int size)
         {
-            var arr = client?.ReadInputRegisters(offset, size);
+            var arr = client.ReadInputRegisters(offset, size);
             Array.Copy(arr.Select(num => (ushort)num).ToArray(), 0, readRegs, offset, size);
             //Thread.Sleep(20);
         }
@@ -177,7 +177,18 @@ namespace HMI_Плотномер.Models
             GetCurMeas();
             GetHVTelemetry();
             GetTempTelemetry();
+            GetDeviceStatus();
         }
+        #endregion
+
+        #region Статусы устройств
+        void GetDeviceStatus()
+        {
+            model.CommStates.Value = SelectRegs(model.CommStates.RegType)[model.CommStates.RegNum];
+            model.AnalogStateGroup1.Value = SelectRegs(model.AnalogStateGroup1.RegType)[model.AnalogStateGroup1.RegNum]; 
+            model.AnalogStateGroup2.Value = SelectRegs(model.AnalogStateGroup2.RegType)[model.AnalogStateGroup2.RegNum];
+            model.GetDeviceData();
+        } 
         #endregion
 
         #region Функция чтения времени-даты
@@ -428,6 +439,13 @@ namespace HMI_Плотномер.Models
                 WriteRegs(i, 6); 
             }, 0, 0));
         }
+        #endregion
+
+        #region Уставка HV
+        public void SetHv(ushort value)
+        {
+
+        } 
         #endregion
 
         #endregion
