@@ -1,4 +1,4 @@
-﻿using HMI_Плотномер.AddClasses;
+﻿using IDensity.AddClasses;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HMI_Плотномер.Models
+namespace IDensity.Models
 {
     class TCP : PropertyChangedBase
     {
@@ -40,7 +40,9 @@ namespace HMI_Плотномер.Models
 
         #region Поля       
 
-        MainModel model;       
+        MainModel model;
+
+        int indexAm = 0;
 
         #region Клиент
         TcpClient client;
@@ -109,12 +111,11 @@ namespace HMI_Плотномер.Models
             }
 
         }
-        #endregion
+        #endregion        
 
         #region основной метод для получения данных из tcp соединения
         public void GetData(MainModel model)
         {
-
             try
             {
                 this.model = model;
@@ -126,18 +127,16 @@ namespace HMI_Плотномер.Models
                 GetDeviceStatus();
                 GetCurDateTime();
                 GetCurMeas();
+                GetPeriphTelemetry();
+                //GetAmTelemetry();
                 //GetHVTelemetry();
                 //GetTempTelemetry();                
                 GetSetiings();
-
-
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
                     command.Action?.Invoke(command.Parameter);
                 }
-
-
 
             }
             catch (Exception ex)
@@ -147,7 +146,29 @@ namespace HMI_Плотномер.Models
                 Disconnect();
             }
         }
-        #endregion        
+        #endregion
+
+        #region Получить данные телеметрии
+        void GetAmTelemetry()
+        {
+            var numGroup = indexAm / 2;
+            var numModule = indexAm % 2;
+            var bytes = AskResponseBytes(Encoding.ASCII.GetBytes($"CMND,AMT,{numGroup},{numModule}"));
+            if (bytes != 11) return;
+            if (numModule == 0)// Если телеметрия аналогового выхода
+            {
+                model.AnalogGroups[numGroup].AO.VoltageTest.Value = (ushort)(inBuf[3] + inBuf[4] * 256);
+                model.AnalogGroups[numGroup].AO.AdcValue.Value = (ushort)(inBuf[5] + inBuf[6] * 256);
+                model.AnalogGroups[numGroup].AO.VoltageDac.Value = (ushort)(inBuf[7] + inBuf[9] * 256);
+            }
+            else// Если телеметрия аналогового входа
+            {
+                model.AnalogGroups[numGroup].AI.AdcValue.Value = (ushort)(inBuf[5] + inBuf[6] * 256);
+            }
+            indexAm = indexAm++ <= 3 ? indexAm : 0;
+
+        }
+        #endregion
 
         #region Отправить телеграмму без требования ответа без ожидания
         void SendTlg(byte[] buffer)
@@ -233,7 +254,10 @@ namespace HMI_Плотномер.Models
                 ToArray();
             if (nums.Length == 12)
             {
-               
+                model.TempTelemetry.TempInternal.Value = nums[0]/10;
+                model.TelemetryHV.VoltageCurIn.Value = nums[1];
+                model.TelemetryHV.VoltageCurOut.Value = (ushort)nums[2];
+                model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
             }
         }
         #endregion
@@ -282,8 +306,6 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
-
-
         #region Запрос статусов устройств
         void GetDeviceStatus()
         {
@@ -292,8 +314,8 @@ namespace HMI_Плотномер.Models
             var strNums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => ushort.TryParse(s, NumberStyles.HexNumber,null, out temp)).Select(s => temp).ToArray();
             if (strNums.Length != 4) return;
             model.CommStates.Value = strNums[0];            
-            model.AnalogStateGroup1.Value = strNums[2];
-            model.AnalogStateGroup2.Value = strNums[3];
+            model.AnalogStateGroups[0].Value = strNums[2];
+            model.AnalogStateGroups[1].Value = strNums[3];
             model.GetDeviceData();            
         }
         #endregion
@@ -361,32 +383,58 @@ namespace HMI_Плотномер.Models
         {
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7"));
-            var sepStr = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
-            float floatTemp = 0;
-            if (!GetNumber("serial_baudrate", out floatTemp)) return;
-            model.PortBaudrate.Value = (int)floatTemp;
-            if (!GetNumber("serial_select", out floatTemp)) return;
-            model.PortSelectMode.Value = (ushort)floatTemp;
-            // локальная функция
-            bool GetNumber(string id, out float num)
+            var list = GetNumber("serial_baudrate", 1,1);
+            if (list==null) return;
+            model.PortBaudrate.Value = (int)list[0][0];
+            list = GetNumber("hv_target", 1, 1);
+            if (list == null) return;
+            model.TelemetryHV.VoltageSV.Value = (ushort)(list[0][0]*0.05);
+            list = GetNumber("serial_select", 1,1);
+            if (list==null) return;
+            model.PortSelectMode.Value = (ushort)list[0][0];
+            list = GetNumber("am_out_sett", 7, 2);
+            if (list == null) return;
+            for (int i = 0; i < 2; i++)
             {
+                model.AnalogGroups[i].AO.Activity.Value = (ushort)list[i][1];
+                model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];
+                model.AnalogGroups[i].AO.DacEiNdx.Value = (ushort)list[i][3];
+                model.AnalogGroups[i].AO.DacVarNdx.Value = (ushort)list[i][4];
+                model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][5];
+                model.AnalogGroups[i].AO.DacHighLimit.Value = list[i][6];
+
+            }
+            // локальная функция
+            List<List<float>> GetNumber(string id, int parNum, int count)
+            {
+                var strTemp = str;
                 float temp = 0;
-                var sepStr = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
-                var nums = sepStr.Where(str => str.Contains(id))
-                    .FirstOrDefault().Split("=", StringSplitOptions.RemoveEmptyEntries)
-                    .Where(str => float.TryParse(str.Replace(",", "."), out temp))
-                    .Select(str => temp);
-                if (nums == null)
+                List<List<float>> list = new List<List<float>>();
+                for (int i = 0; i < count; i++)
                 {
-                    num = 0;
-                    return false;
-                } 
-                num = nums.FirstOrDefault();
-                return true;
+                    int index = strTemp.LastIndexOf(id);
+                    if (index == 0)
+                    {
+                        return null;
+                    }
+                    var sepStrs = strTemp.Substring(index, strTemp.Length - index).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Take(parNum);
+                    var nums = sepStrs.SelectMany(s => s.Split("=", StringSplitOptions.RemoveEmptyEntries))
+                        .Where(str => float.TryParse(str.Replace(".", ","), out temp))
+                        .Select(str => temp).ToList();
+                    if (nums == null || nums.Count != parNum)
+                    {
+                        return null;
+                    }
+                    list.Insert(0, nums);
+                    strTemp = strTemp.Remove(index, strTemp.Length - index);
+                }
+                return list;
             }
             model.SettingsReaded = true;
         }
         #endregion
+
+
 
         #region Проверка корректности пакета FSRD
         /// <summary>
@@ -474,10 +522,33 @@ namespace HMI_Плотномер.Models
         public void SetHv(ushort value)
         {
             var str = $"SETT,hv_target={value*20}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf);model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
+        #region Управление питанием аналоговых модулей
+        public void SwitchAm(int groupNum, int moduleNum, bool value)
+        {
+            var str = $"CMND,AMP,{groupNum},{moduleNum},{(value ? 1 : 0)}";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
+        #region Отправить значение тестовой величины
+        public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
+        {
+            var str = $"CMND,AMV,{groupNum},{moduleNum},{value}";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false;}, Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
+        #region Отправить настройки аналоговых выходов
+        public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
+        {
+            var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.DacEiNdx.Value},{value.DacVarNdx.Value},{value.DacLowLimit.Value.ToString().Replace(",",".")},{value.DacHighLimit.Value.ToString().Replace(",", ".")}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; } , Encoding.ASCII.GetBytes(str)));
+        } 
+        #endregion
         #endregion
 
         #region Очистка буфера

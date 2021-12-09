@@ -13,11 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using HMI_Плотномер.ViewModels;
-using HMI_Плотномер.Views;
+using IDensity.ViewModels;
+using IDensity.Views;
 using Microsoft.Win32;
 
-namespace HMI_Плотномер
+namespace IDensity
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

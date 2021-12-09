@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:conv="clr-namespace:IDensity.Views.Converters">
+    <conv:NotEqualConverter x:Key="NotEqual"/>
+    <conv:InterpolationConverter x:Key="InterpolationConverter"/>
+    <conv:ColorIndicator x:Key="ColorToBool"/>
+    <conv:GetStatusConveter x:Key="StatusFromNum"/>
+    <conv:BoolToVisible x:Key="VisibleConverter"/>
+    <conv:IsFilePathExist x:Key="FileExistConverter"/>
+    <conv:UserTextConverter x:Key="UserToName"/>
+    <conv:UserLevelConverter x:Key="UserToVisibility"/>
+    <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
+    <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
+
+</ResourceDictionary>

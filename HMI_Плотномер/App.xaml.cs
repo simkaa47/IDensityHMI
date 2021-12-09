@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace HMI_Плотномер
+namespace IDensity
 {
     /// <summary>
     /// Interaction logic for App.xaml

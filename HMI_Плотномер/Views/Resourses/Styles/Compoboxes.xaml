@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Styles">
+    <!--#region Compobox -->
+    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}" x:Key="CompoBoxCommon">
+        <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+        <Setter Property="Background" Value="DarkSlateGray"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    <!--#endregion-->
+    <Style TargetType="ComboBox" BasedOn="{StaticResource CompoBoxCommon}" /> 
+</ResourceDictionary>

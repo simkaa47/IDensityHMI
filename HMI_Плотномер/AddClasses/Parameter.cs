@@ -1,12 +1,14 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using IDensity.Models;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace HMI_Плотномер.AddClasses
+namespace IDensity.AddClasses
 {
     /// <summary>
     /// Хранит информацию о том или ином параметре: адрес Modbus, описание
@@ -33,6 +35,9 @@ namespace HMI_Плотномер.AddClasses
 
         public string Error { get; }
 
+        bool _validationOk = true;
+        public bool ValidationOk { get => _validationOk; set => Set(ref _validationOk, value);  } 
+
         #region Идетификатор параметра
         public string Id { get; } 
         #endregion
@@ -47,6 +52,7 @@ namespace HMI_Плотномер.AddClasses
             timer = new Timer(5000);
             timer.Elapsed += OnTimerElapsed;
             GetFromSql();
+            AddToParamList();
             PropertyChanged += (o, e) => OnSqlPropertyChanged(e.PropertyName);
         }
         #region Описание
@@ -81,11 +87,17 @@ namespace HMI_Плотномер.AddClasses
                     isChanged = true;
                     RestartTimer();
                 }
-                if (value.CompareTo(MinValue) < 0 || value.CompareTo(MaxValue) > 0) errorsDict["WriteValue"] = $"Значение параметра записи \"{Description}\" больше максимального или меньше минимального предела!";
+                if (value.CompareTo(MinValue) < 0 || value.CompareTo(MaxValue) > 0)
+                {
+                    errorsDict["WriteValue"] = $"Значение параметра записи \"{Description}\" больше максимального или меньше минимального предела!";
+                    ValidationOk = false;                    
+                } 
                 else
                 {
-                    if (Set(ref _writeValue, value)) errorsDict["WriteValue"] = null;
+                    errorsDict["WriteValue"] = null;
+                    ValidationOk = true;
                 }
+                Set(ref _writeValue, value);
             }
         }
         #endregion
@@ -137,6 +149,15 @@ namespace HMI_Плотномер.AddClasses
             isChanged = false;
         }
         #endregion
+        #region Добавить в глобальный лист параметров
+        void AddToParamList()
+        {
+            if (ParamList.ParameterList == null) return;
+            if (!ParamList.ParameterList.Where(p => p is Parameter<T>)
+                .Any(p => (p as Parameter<T>).Description == this.Description)) ParamList.ParameterList.Add(this);
+        }
+        #endregion
+
         #region  Функция, вызываемая при изменении свойства
         /// <summary>
         /// Функция, вызываемая при изменении свойства

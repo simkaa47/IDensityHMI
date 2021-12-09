@@ -5,10 +5,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
-using HMI_Плотномер.AddClasses;
+using IDensity.AddClasses;
 using Microsoft.Data.Sqlite;
 
-namespace HMI_Плотномер.Models.SQL
+namespace IDensity.Models.SQL
 {
     /// <summary>
     /// Коллекция, синхронизирующаяся с базой данных

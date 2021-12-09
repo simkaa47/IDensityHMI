@@ -1,0 +1,63 @@
+﻿<local:CommandExtention x:Class="IDensity.Views.Resourses.UserControls.Parameter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:IDensity.Views.Converters"
+             xmlns:local="clr-namespace:IDensity.Views.Resourses.UserControls"
+             mc:Ignorable="d">
+    <local:CommandExtention.Resources>
+        <conv:ToStringFormatConverter x:Key="StringFormatConverter"/>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
+    </local:CommandExtention.Resources>
+    <DockPanel>
+        <TextBlock Text="{Binding Description}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBox x:Name="Write" Width="80" VerticalContentAlignment="Center"
+                     Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}"  
+                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
+                        <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                        <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="StringFormat"/>                        
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>            
+            <Button Width="50"
+                    Content="-->"                    
+                    Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}"
+                    Command="{Binding RelativeSource={RelativeSource AncestorType=local:Parameter}, Path=Command}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:Parameter}, Path=CommanDParameter}"
+                    IsEnabled="{Binding ValidationOk}"
+                    Margin="5,0,5,0"/>
+            <Border Width="80" BorderThickness="1" >
+                <TextBlock Width="80"
+                           VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource StringFormatConverter}" 
+                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
+                            <Binding Path="Value" TargetNullValue="" />
+                            <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="StringFormat"/>
+                        </MultiBinding>
+                    </TextBlock.Text>                   
+                </TextBlock>
+            </Border>
+        </StackPanel>
+        <DockPanel.ToolTip>
+            <ToolTip Placement="MousePoint">
+                <StackPanel>
+                    <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
+                    <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
+                    <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>
+                </StackPanel>
+            </ToolTip>
+        </DockPanel.ToolTip>
+    </DockPanel>
+</local:CommandExtention>

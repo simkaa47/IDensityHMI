@@ -8,14 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using HMI_Плотномер.AddClasses;
-using HMI_Плотномер.Models;
-using HMI_Плотномер.Models.SQL;
-using HMI_Плотномер.Models.XML;
-using HMI_Плотномер.ViewModels.Commands;
+using IDensity.AddClasses;
+using IDensity.Models;
+using IDensity.Models.SQL;
+using IDensity.Models.XML;
+using IDensity.ViewModels.Commands;
 using System.Timers;
 
-namespace HMI_Плотномер.ViewModels
+namespace IDensity.ViewModels
 {
     /// <summary>
     /// Общая ViewModel для окна
@@ -274,6 +274,14 @@ namespace HMI_Плотномер.ViewModels
         public string[] ComPorts { get => _comPorts ?? (_comPorts = SerialPort.GetPortNames()); set => Set(ref _comPorts, value); }
         #endregion
 
+        #region Аналоговые входы
+        public List<AnalogInput> AnalogInputs  => mainModel.AnalogGroups.Select(g => g.AI).ToList();
+        #endregion
+
+        #region Аналоговые выходы
+        public List<AnalogOutput> AnalogOutputs => mainModel.AnalogGroups.Select(g => g.AO).ToList();
+        #endregion
+
         #region Данные для текущего тренда
         #region Алгоритм интерполяции
         int _interpolIndex = 3;
@@ -351,6 +359,10 @@ namespace HMI_Плотномер.ViewModels
 
         #region Названия единиц измерения
         public DataBaseCollection<EnumCustom> UnitNames { get; } = new DataBaseCollection<EnumCustom>("UnitNames", new EnumCustom());
+        #endregion
+
+        #region Названия переменных для аналогового выхода
+        public DataBaseCollection<EnumCustom> TypeAnalogOutVars { get; } = new DataBaseCollection<EnumCustom>("TypeAnalogOutVars", new EnumCustom());
         #endregion
         #endregion
 

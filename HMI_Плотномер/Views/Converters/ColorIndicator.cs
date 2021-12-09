@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace HMI_Плотномер.Views.Converters
+namespace IDensity.Views.Converters
 {
     public class ColorIndicator : IValueConverter
     {

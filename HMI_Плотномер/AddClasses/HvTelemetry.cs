@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HMI_Плотномер.AddClasses
+namespace IDensity.AddClasses
 {
     class HvTelemetry
     {
         #region Входное напряжение, вольт
         #region Уставка напряжения
-        public Parameter<ushort> VoltageSV { get; } = new Parameter<ushort>("VoltageSvHv", "Уставка напряжения, вольт", 400, 2000, 4, "read");        
+        public Parameter<ushort> VoltageSV { get; } = new Parameter<ushort>("VoltageSvHv", "Уставка напряжения, вольт", 400, 2000, 67, "hold");        
         #endregion 
         #endregion
         #region Входное напряжение, вольт

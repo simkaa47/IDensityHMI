@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:oxy="http://oxyplot.org/wpf">
+    <!--#region Шаблон для тренда -->
+    <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
+
+        <oxy:Plot PlotMargins="30,0,0,30" 
+                      PlotType="XY" 
+                      PlotAreaBorderThickness="0" 
+                      TextColor="WhiteSmoke"                       
+                      x:Name="plot" 
+                      IsLegendVisible="True"
+                      Background="DarkSlateGray"   
+                      PlotAreaBackground="DarkGray">
+            <oxy:Plot.Annotations >
+                <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotLowLimit}" Color="Blue"  StrokeThickness="1"   />
+                <oxy:LineAnnotation Type="Horizontal" Y="{Binding TrendSettings.PlotHighLimit}" Color="Red"   StrokeThickness="1"  />
+            </oxy:Plot.Annotations>
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis  
+                        TextColor="WhiteSmoke" 
+                        FontWeight="Bold" 
+                        FontSize="14"
+                        MajorGridlineColor="WhiteSmoke"
+                        MajorGridlineStyle="Dot"
+                        Position ="Left" />
+                <oxy:DateTimeAxis FontWeight="Bold"
+                                      MajorGridlineColor="WhiteSmoke"
+                                      MajorGridlineStyle="Dot"
+                                      FontSize="14"/>
+            </oxy:Plot.Axes>
+            <oxy:ThreeColorLineSeries  LineStyle="Dash"
+                                           Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
+                                           ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
+                                           DataFieldX="time" DataFieldY="y1"
+                                           Title="Усредненное значение"
+                                           Color="Black" ColorHi="Red" 
+                                           ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
+                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"                                             
+                                           LineStyleHi="Dash"/>
+            <oxy:ThreeColorLineSeries LineStyle="Automatic" 
+                                           Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
+                                           ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
+                                           DataFieldX="time" DataFieldY="y2" 
+                                           Color="Green"
+                                           Title="Мгновенное значение"
+                                           ColorHi="Green"
+                                           ColorLo="Green"
+                                           LineStyleHi="Dash"/>
+
+        </oxy:Plot>
+    </ControlTemplate>
+    <!--#endregion-->
+
+</ResourceDictionary>

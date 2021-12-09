@@ -1,6 +1,5 @@
-﻿using HMI_Плотномер.AddClasses;
-using HMI_Плотномер.Models.XML;
-using IDensity.AddClasses;
+﻿using IDensity.AddClasses;
+using IDensity.Models.XML;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace HMI_Плотномер.Models
+namespace IDensity.Models
 {
     class MainModel : PropertyChangedBase
     {
@@ -19,6 +18,8 @@ namespace HMI_Плотномер.Models
         {
             Init();// Инициализация параметров
         }
+       
+
         #region События
         #region Обновились данные
         public event Action UpdateDataEvent;
@@ -63,11 +64,7 @@ namespace HMI_Плотномер.Models
 
         #region Данные тлеметрии HV
         public HvTelemetry TelemetryHV { get; } = new HvTelemetry();
-        #endregion
-
-        #region Данные телеметрии аналоговых модулей
-        public AnalogData[] AnalogTelemetryes { get; } = Enumerable.Range(0, 4).Select(z => new AnalogData((byte)z)).ToArray();
-        #endregion
+        #endregion        
 
         #region Данные телеметрии платы питания(темпратуры)
         public TempBoardTelemetry TempTelemetry { get; } = new TempBoardTelemetry();
@@ -89,16 +86,17 @@ namespace HMI_Плотномер.Models
         #endregion
 
         #region Битовые переменные состояния аналоговых модулей
-        public Parameter<ushort> AnalogStateGroup1 { get; } = new Parameter<ushort>("AnalogStateGroup1", "Состояние аналоговых модулей группы 1", 0, ushort.MaxValue, 65, "hold")
+        public Parameter<ushort>[] AnalogStateGroups { get; } = new Parameter<ushort>[]
         {
-            OnlyRead = true
-        };
-        public Parameter<ushort> AnalogStateGroup2 { get; } = new Parameter<ushort>("AnalogStateGroup2", "Состояние аналоговых модулей группы 2", 0, ushort.MaxValue, 66, "hold")
-        {
-            OnlyRead = true
-        };
+            new Parameter<ushort>("AnalogStateGroup1", "Состояние аналоговых модулей группы 1", 0, ushort.MaxValue, 65, "read"),
+            new Parameter<ushort>("AnalogStateGroup2", "Состояние аналоговых модулей группы 2", 0, ushort.MaxValue, 66, "read")
+         };
         #endregion
 
+        #endregion
+
+        #region Настройки платы АЦП
+        public AdcParameters AdcBoard { get; } = new AdcParameters();
         #endregion
 
         #region Настройки аналоговых модулей
@@ -109,7 +107,16 @@ namespace HMI_Плотномер.Models
             {
                 if (_analogGroups == null)
                 {
-                    _analogGroups = Enumerable.Range(0, 2).Select(z => new AnalogGroup(z)).ToArray();
+                    _analogGroups = Enumerable.Range(0, 2).
+                        Select(z => 
+                        { 
+                            var gr = new AnalogGroup(z);
+                            gr.AI.SwitchPwrEvent += SwitchAm;
+                            gr.AO.SwitchPwrEvent += SwitchAm;
+                            gr.AO.SetTestValueCallEvent += SetTestValueAm;
+                            gr.AO.ChangeSettCallEvent += ChangeDacAct;
+                            return gr;
+                        }).ToArray();
 
                 }
                 return _analogGroups;
@@ -142,9 +149,9 @@ namespace HMI_Плотномер.Models
         #endregion
 
         #region Режим работы последовательного порта
-        public Parameter<ushort> PortSelectMode { get; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");        
+        public Parameter<ushort> PortSelectMode { get; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");
         #endregion
-        #endregion
+#endregion
 
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
@@ -198,6 +205,22 @@ namespace HMI_Плотномер.Models
             }
             cell.PropertyChanged += (sender, e) => XmlMethods.EditParam<T>(cell, e.PropertyName);
             return cell;
+        }
+        #endregion
+
+        #region Парсинг битовых значений устройств
+        public void GetDeviceData()
+        {
+            AdcBoard.CommState.Value = (CommStates.Value & 1) == 0;
+            TempTelemetry.TempBoardCommState.Value = (CommStates.Value & 2) == 0;
+            TelemetryHV.HvCommState.Value = (CommStates.Value & 4) == 0;            
+            for (int i = 0; i < 2; i++)
+            {
+                AnalogGroups[i].AO.PwrState.Value = (AnalogStateGroups[i].Value & 1) != 1;
+                AnalogGroups[i].AI.PwrState.Value = (AnalogStateGroups[i].Value & 2) != 2;
+                AnalogGroups[i].AO.CommState.Value = (AnalogStateGroups[i].Value & 4) != 4;
+                AnalogGroups[i].AI.CommState.Value = (AnalogStateGroups[i].Value & 8) != 8;
+            }            
         }
         #endregion
 
@@ -263,24 +286,7 @@ namespace HMI_Плотномер.Models
                 else if ((CommMode.RsEnable)) rs.ChangeBaudrate(value);
             }
         }
-        #endregion
-
-        #region Парсинг битовых значений устройств
-        public void GetDeviceData()
-        {
-            AdcBoardCommState.Value = (CommStates.Value & 1) == 0;
-            TempTelemetry.TempBoardCommState.Value = (CommStates.Value & 2) == 0;
-            TelemetryHV.HvCommState.Value = (CommStates.Value & 4) == 0;
-            AnalogTelemetryes[0].CommStateDac.Value = (AnalogStateGroup1.Value & 1) == 1;
-            AnalogTelemetryes[1].CommStateDac.Value = (AnalogStateGroup1.Value & 2) == 1;
-            AnalogTelemetryes[0].PwrState.Value = (AnalogStateGroup1.Value & 4) == 1;
-            AnalogTelemetryes[1].PwrState.Value = (AnalogStateGroup1.Value & 8) == 1;
-            AnalogTelemetryes[2].CommStateDac.Value = (AnalogStateGroup2.Value & 1) == 1;
-            AnalogTelemetryes[3].CommStateDac.Value = (AnalogStateGroup2.Value & 2) == 1;
-            AnalogTelemetryes[2].PwrState.Value = (AnalogStateGroup2.Value & 4) == 1;
-            AnalogTelemetryes[3].PwrState.Value = (AnalogStateGroup2.Value & 8) == 1;
-        }
-        #endregion
+        #endregion       
 
         #region Изменить режим работы последовательного порта
         public void ChangeSerialSelect(int value)
@@ -310,6 +316,29 @@ namespace HMI_Плотномер.Models
         }
         #endregion
 
+        #region Управление питанием аналоговых модулей
+        void SwitchAm(int groupNum, int moduleNum, bool value)
+        {
+            if (CommMode.EthEnable) Tcp.SwitchAm(groupNum, moduleNum, value);
+            else if (CommMode.RsEnable) rs.SwitchAm(groupNum, moduleNum, value);
+        }
+        #endregion
+
+        #region Отправить значение тестовой величины
+        void SetTestValueAm(int groupNum, int moduleNum, ushort value)
+        {
+            if (CommMode.EthEnable) Tcp.SetTestValueAm(groupNum, moduleNum, value);
+            else if (CommMode.RsEnable) rs.SetTestValueAm(groupNum, moduleNum, value);
+        }
+        #endregion
+
+        #region Команда "Изменить активность аналогового выхода"
+        void ChangeDacAct(int groupNum, int moduleNum, AnalogOutput value)
+        {
+            if (CommMode.EthEnable) Tcp.SendAnalogOutSwttings(groupNum, moduleNum, value);
+            else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
+        } 
+        #endregion
 
         #endregion
 

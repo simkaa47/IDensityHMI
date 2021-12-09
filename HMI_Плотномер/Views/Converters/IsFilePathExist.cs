@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Data;
 
-namespace HMI_Плотномер.Views.Converters
+namespace IDensity.Views.Converters
 {
     class IsFilePathExist : IValueConverter
     {

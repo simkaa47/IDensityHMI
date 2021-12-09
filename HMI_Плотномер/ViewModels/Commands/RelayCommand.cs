@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HMI_Плотномер.ViewModels.Commands
+namespace IDensity.ViewModels.Commands
 {
     class RelayCommand : Command
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 
-namespace HMI_Плотномер.Models.XML
+namespace IDensity.Models.XML
 {
     /// <summary>
     /// Набор статических методов для чтеня, записи, удаления, редактирования данных в XML документе

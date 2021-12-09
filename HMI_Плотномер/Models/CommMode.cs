@@ -1,9 +1,9 @@
-﻿using HMI_Плотномер.AddClasses;
+﻿using IDensity.AddClasses;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HMI_Плотномер.Models
+namespace IDensity.Models
 {
     /// <summary>
     /// Класс, хранящий в себе настройки связи с платой плотномера

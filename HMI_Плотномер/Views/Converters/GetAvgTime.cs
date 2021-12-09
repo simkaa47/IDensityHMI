@@ -1,11 +1,11 @@
-﻿using HMI_Плотномер.AddClasses;
+﻿using IDensity.AddClasses;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Windows.Data;
 
-namespace HMI_Плотномер.Views.Converters
+namespace IDensity.Views.Converters
 {
     /// <summary>
     /// Позволяет получить текущее время усреднения, умножая длительность на количество точек измерения

@@ -1,4 +1,4 @@
-﻿using HMI_Плотномер.ViewModels;
+﻿using IDensity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace HMI_Плотномер.Views
+namespace IDensity.Views
 {
     /// <summary>
     /// Логика взаимодействия для Password.xaml

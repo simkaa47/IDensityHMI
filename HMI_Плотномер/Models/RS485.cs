@@ -5,22 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using EasyModbus;
-using HMI_Плотномер.AddClasses;
+using IDensity.AddClasses;
 
-namespace HMI_Плотномер.Models
+namespace IDensity.Models
 {
     /// <summary>
     /// Представляет набор свойств и методов, необходимых для связи с платой по RS485 (Modbus RTU)
     /// </summary>
     class RS485: PropertyChangedBase
     {
+
+
         #region Перечисления номеров holding регистров, представляющих команды
         enum Holds
         { 
-            SwitchMeas = 1,
-            SwitchHv = 4
+            SwitchMeas = 1,// включение измерения
+            SwitchHv = 4,   // включение hv
+            SwitchPwrAm  = 7,    // стартовый номер регистра управления питанием аналоговых модулей
+            TestValueDac = 12,  // тестовая величина для отправки на ЦАП
+            SendTestValue = 13, // отправка тестового значения на ЦАП
+            DacSett=51 // начальный номер регистров, отвечающих за настройки ЦАП
         }
         #endregion
+
+        
 
         #region Свойства
         #region Адрес в сети Modbus
@@ -77,9 +85,11 @@ namespace HMI_Плотномер.Models
         #endregion
         #endregion
 
+        
+
         #region Номер процесса для выбора
-        public Parameter<int> SelectMeasNum = new Parameter<int>("SelectMeasNum", "Номер процесса для выбора", 0, MainModel.measProcessNum - 1, 26, "hold");        
-        #endregion
+        public Parameter<int> SelectMeasNum = new Parameter<int>("SelectMeasNum", "Номер процесса для выбора", 0, MainModel.measProcessNum - 1, 26, "hold");
+        #endregion        
 
         #region Очередь для хранения команд, которые надо выполнить
         Queue<Command> commands = new Queue<Command>();
@@ -185,10 +195,25 @@ namespace HMI_Плотномер.Models
         void GetDeviceStatus()
         {
             model.CommStates.Value = SelectRegs(model.CommStates.RegType)[model.CommStates.RegNum];
-            model.AnalogStateGroup1.Value = SelectRegs(model.AnalogStateGroup1.RegType)[model.AnalogStateGroup1.RegNum]; 
-            model.AnalogStateGroup2.Value = SelectRegs(model.AnalogStateGroup2.RegType)[model.AnalogStateGroup2.RegNum];
+            foreach (var group in model.AnalogStateGroups) group.Value = SelectRegs(group.RegType)[group.RegNum];
+            foreach (var group in model.AnalogStateGroups)group.Value = SelectRegs(group.RegType)[group.RegNum];           
             model.GetDeviceData();
-        } 
+        }
+        #endregion
+
+        #region Телемерия аналоговых модулей
+        void GetAmTelemetry()
+        {
+            var startNumReg = 11;
+            // Аналоговые выходы
+            for (int i = 0; i < 2; i++)
+            {
+                model.AnalogGroups[i].AO.VoltageTest.Value = readRegs[startNumReg + i * 2];
+                model.AnalogGroups[i].AO.AdcValue.Value = readRegs[startNumReg + 4 + i * 2];
+                model.AnalogGroups[i].AO.VoltageDac.Value = readRegs[startNumReg + 8 + i * 2];
+                model.AnalogGroups[i].AI.AdcValue.Value = readRegs[startNumReg + 5 + i * 2];
+            }
+        }
         #endregion
 
         #region Функция чтения времени-даты
@@ -269,8 +294,7 @@ namespace HMI_Плотномер.Models
 
         #region Получить данные телеметрии HV
         void GetHVTelemetry()
-        {
-            model.TelemetryHV.VoltageSV.Value = (ushort)(SelectRegs(model.TelemetryHV.VoltageSV.RegType)[model.TelemetryHV.VoltageSV.RegNum]/20);
+        {            
             model.TelemetryHV.VoltageCurIn.Value = ((float)SelectRegs(model.TelemetryHV.VoltageCurIn.RegType)[model.TelemetryHV.VoltageCurIn.RegNum]) / 1000;
             model.TelemetryHV.VoltageCurOut.Value = (ushort)(SelectRegs(model.TelemetryHV.VoltageCurOut.RegType)[model.TelemetryHV.VoltageCurOut.RegNum] / 20);
             model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
@@ -290,9 +314,12 @@ namespace HMI_Плотномер.Models
         {
             if (!model.SettingsReaded)
             {
-                // Прочитать данные измерительных процессов
+                // Читаем данные Holding регистров
+                for (int i = 0; i < 3; i++) ReadHoldRegs(30 + i * 15, 15);
                 GetMeasProcessData();
                 GetSerialSettings();
+                GetHvTarget();
+                GetAnalogOutSettings();
             }
         }
         #region Данные измерительных настроек
@@ -331,14 +358,38 @@ namespace HMI_Плотномер.Models
         void GetSerialSettings()
         {
             model.SettingsReaded = false;
-            // Чтение баудрейта
-            ReadHoldRegs(model.PortBaudrate.RegNum, 2);
+            // Чтение баудрейта            
             model.PortBaudrate.Value = GetInt32FromUshorts(holdRegs, model.PortBaudrate.RegNum);
-            // Чтение режима работы
-            ReadHoldRegs(model.PortSelectMode.RegNum, 1);
-            model.PortBaudrate.Value = holdRegs[model.PortSelectMode.RegNum];
+            // Чтение режима работы           
+            
             model.SettingsReaded = true;
-        }        
+        }
+        #endregion        
+
+        #region Уставка HV
+        void GetHvTarget()
+        {
+            model.SettingsReaded = false;
+            model.TelemetryHV.VoltageSV.Value = (ushort)(holdRegs[model.TelemetryHV.VoltageSV.RegNum] / 20);
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки аналоговых выходов
+        void GetAnalogOutSettings()
+        {
+            model.SettingsReaded = false;
+            for (int i = 0; i < 2; i++)
+            {
+                model.AnalogGroups[i].AO.Activity.Value = holdRegs[(int)Holds.DacSett + i];
+                model.AnalogGroups[i].AO.DacType.Value = holdRegs[(int)Holds.DacSett + i + 2];
+                model.AnalogGroups[i].AO.DacEiNdx.Value = holdRegs[(int)Holds.DacSett + i + 4];
+                model.AnalogGroups[i].AO.DacVarNdx.Value = holdRegs[(int)Holds.DacSett + i + 6];
+                model.AnalogGroups[i].AO.DacLowLimit.Value = GetFloatFromUshorts(holdRegs, (int)Holds.DacSett + i * 2 + 8);
+                model.AnalogGroups[i].AO.DacHighLimit.Value = GetFloatFromUshorts(holdRegs, (int)Holds.DacSett + i * 2 + 12);
+            }
+            model.SettingsReaded = true;
+        }
         #endregion
         #endregion
 
@@ -444,7 +495,51 @@ namespace HMI_Плотномер.Models
         #region Уставка HV
         public void SetHv(ushort value)
         {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client?.WriteSingleRegister(model.TelemetryHV.VoltageSV.RegNum, value*20);
+                model.SettingsReaded = false;
+            }, 0, 0));
+        }
+        #endregion
 
+        #region Управление питанием аналоговых модулей
+        public void SwitchAm(int groupNum, int moduleNum, bool value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client?.WriteSingleRegister((int)Holds.SwitchPwrAm + groupNum * 2 + moduleNum, value ? 1 : 0);
+            }, 0, 0));
+        }
+        #endregion
+
+        #region Отправить значение тестовой величины AM
+        public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client?.WriteSingleRegister((int)Holds.TestValueDac, value);
+                client?.WriteSingleRegister((int)Holds.SendTestValue, groupNum * 2 + moduleNum + 1);
+            }, 0, 0));
+        }
+        #endregion
+
+        #region Отправить настройки аналоговых выходов
+        public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                holdRegs[(int)Holds.DacSett + groupNum] = value.Activity.Value;// Активнсть
+                holdRegs[(int)Holds.DacSett + groupNum + 2] = value.DacType.Value;// Тип
+                holdRegs[(int)Holds.DacSett + groupNum + 4] = value.DacEiNdx.Value;// Номер ЕИ
+                holdRegs[(int)Holds.DacSett + groupNum + 6] = value.DacVarNdx.Value;// Номер переменной
+                GetUshortsFromFloat(holdRegs, (int)Holds.DacSett + groupNum * 2 + 8, value.DacLowLimit.Value); // нижний предел
+                GetUshortsFromFloat(holdRegs, (int)Holds.DacSett + groupNum * 2 + 12, value.DacHighLimit.Value); // верхний предел
+                for (int i = 0; i < 2; i++) WriteRegs((int)Holds.DacSett + i * 8, 8);
+                model.SettingsReaded = false;
+
+            }, 0, 0));          
+            
         } 
         #endregion
 

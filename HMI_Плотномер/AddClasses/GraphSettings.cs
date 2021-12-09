@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HMI_Плотномер.AddClasses
+namespace IDensity.AddClasses
 {
     class GraphSettings:PropertyChangedBase
     {

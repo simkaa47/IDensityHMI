@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Data;
 
-namespace HMI_Плотномер.Views.Converters
+namespace IDensity.Views.Converters
 {
     public class InterpolationConverter:IValueConverter
     {

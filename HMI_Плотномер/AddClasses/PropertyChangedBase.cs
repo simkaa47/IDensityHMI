@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace HMI_Плотномер.AddClasses
+namespace IDensity.AddClasses
 {
     abstract class PropertyChangedBase : INotifyPropertyChanged
     {

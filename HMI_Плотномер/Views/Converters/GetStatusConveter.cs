@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace HMI_Плотномер.Views.Converters
+namespace IDensity.Views.Converters
 {
     class GetStatusConveter : IValueConverter
     {
@@ -14,7 +14,9 @@ namespace HMI_Плотномер.Views.Converters
         {
             try
             {
+               
                 var arrStr = parameter as ArrayList;
+                if (arrStr == null) return "КОЛЛЕКЦИЯ ПУСТА";
                 var condition = (bool)value;
              return condition ? arrStr[1] : arrStr[0];
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace HMI_Плотномер.Models.SQL
+namespace IDensity.Models.SQL
 {
     /// <summary>
     /// Представляет собой набор статических методов для записи классов в таблицу
