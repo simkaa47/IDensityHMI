@@ -81,10 +81,11 @@ namespace IDensity.Models.SQL
                 case "int64":
                     return "INTEGER NOT NULL default 0";
                 case "datetime": return "TEXT";
-                case "string": return "nvarchar(40) NOT NULL";
+                case "string": return "TEXT";
                 case "double": return "float NOT NULL";
                 case "single":
                 case "float": return "real NOT NULL";
+                case "boolean": return "INTEGER";
                 default:
                     throw new Exception($"Для типа {propertyType.Name} не определен соответствующий SQL  тип!");
             }
@@ -167,7 +168,7 @@ namespace IDensity.Models.SQL
         {
             switch (type.Name.ToLower())
             {
-                case "boolean": return par.ToLower() == "true";
+                case "boolean": return par.ToLower() == "1";
                 case "int32": return int.Parse(par);
                 case "byte": return byte.Parse(par);
                 case "datetime": return DateTime.Parse(par);

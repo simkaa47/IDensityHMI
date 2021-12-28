@@ -39,13 +39,8 @@ namespace IDensity.Models
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
-        public bool Connecting {
-            get => _connecting;
-            set
-            {
-                Set(ref _connecting, value);
-                if (!value) SettingsReaded = false;
-            } }
+        public Parameter<bool> Connecting { get; } = new Parameter<bool>("ConnectBoard", "Статус соединения с платой", false, true, 0, "");
+        
         #endregion
 
         #region Данные измерения
@@ -171,8 +166,8 @@ namespace IDensity.Models
             {
                 if (CommMode.RsEnable) rs?.GetData(this);
                 else if (CommMode.EthEnable) Tcp?.GetData(this);
-                else Connecting = false;
-                if (CycleMeasStatus.Value && Connecting)
+                else Connecting.Value = false;
+                if (CycleMeasStatus.Value && Connecting.Value)
                     UpdateDataEvent?.Invoke();                
                 Thread.Sleep(100);
             }
@@ -193,6 +188,8 @@ namespace IDensity.Models
                     UpdateDataEvent?.Invoke();
                 }
             };
+            Connecting.PropertyChanged += (obj, args) => SettingsReaded = false;
+           
         }
 
         T ClassInit<T>() where T : PropertyChangedBase
@@ -235,7 +232,7 @@ namespace IDensity.Models
                 SwitchHv();
                 await Task.Run(() =>
                 {
-                    while (Connecting && !TelemetryHV.HvOn.Value)
+                    while (Connecting.Value && !TelemetryHV.HvOn.Value)
                     {
                         Thread.Sleep(100);
                     }

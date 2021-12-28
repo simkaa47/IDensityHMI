@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class AnalogData
+    abstract class AnalogData
     {
         public AnalogData(int groupNum)
         {

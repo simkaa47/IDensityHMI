@@ -14,6 +14,7 @@ using IDensity.Models.SQL;
 using IDensity.Models.XML;
 using IDensity.ViewModels.Commands;
 using System.Timers;
+using IDensity.AddClasses.EventHistory;
 
 namespace IDensity.ViewModels
 {
@@ -247,6 +248,13 @@ namespace IDensity.ViewModels
         public RelayCommand SetHvCommand => _setHvCommand ?? (_setHvCommand = new RelayCommand(obj =>mainModel.SetHv(mainModel.TelemetryHV.VoltageSV.WriteValue), obj => true));
         #endregion
 
+        #region Команды вывода и фильтрации событий
+        private RelayCommand _showEventsCommand;
+
+        public RelayCommand ShowEventsCommand => _showEventsCommand ?? (_showEventsCommand = new RelayCommand(exec => AddHistoryItemsFromDb(), canExex => true));
+
+        #endregion
+
         #endregion
         public MainModel mainModel { get; } = new MainModel();
 
@@ -257,6 +265,9 @@ namespace IDensity.ViewModels
             mainModel.UpdateDataEvent += AddDataToCollection;
             timer.Elapsed += (s, e) => CurPcDateTime.Value = DateTime.Now;
             timer.Start();
+            Events = new Events(mainModel);
+            GetEventHistory();
+            Events.EventExecute += AddHistoryItem;
         }
         #endregion
 
@@ -510,9 +521,123 @@ namespace IDensity.ViewModels
                 
             }
         }
-        #endregion            
+        #endregion
 
-        
+        #region События
+        #region Фильтрация событий
+        #region Начальная точка
+        private DateTime _startPointHistoryEvent = DateTime.Today;
+
+        public DateTime StartPointHistoryEvent
+        {
+            get { return _startPointHistoryEvent; }
+            set { Set(ref _startPointHistoryEvent, value); }
+        }
+        #endregion
+
+        #region Конечная точка
+        private DateTime _endPointHistoryEvent = DateTime.Now;
+
+        public DateTime EndPointHistoryEvent
+        {
+            get { return _endPointHistoryEvent; }
+            set { Set(ref _endPointHistoryEvent, value); }
+        }
+        #endregion
+
+        #endregion
+
+        #region Класс событий
+        public Events Events { get; }
+        #endregion
+
+        #region История событий
+        /// <summary>
+        /// Коллекция истории событий
+        /// </summary>
+        public ObservableCollection<HistoryEventItem> HistoryEventItems { get; private set; } = new ObservableCollection<HistoryEventItem>();
+        #endregion
+        #region Флаг загрузки данных событий из БД
+        private bool _historyItemDownloading;
+        /// <summary>
+        /// Флаг загрузки данных событий из БД
+        /// </summary>
+        public bool HistoryItemDownloading
+        {
+            get { return _historyItemDownloading; }
+            set { Set(ref _historyItemDownloading, value); }
+        }
+
+        #endregion
+        #region Метод загрузки событий из базы данных
+        async void AddHistoryItemsFromDb()
+        {
+            HistoryItemDownloading = true;
+            await Task.Run(() => GetEventHistory());
+            HistoryItemDownloading = false;
+        }
+        void GetEventHistory()
+        {
+            try
+            {
+                var list = SqlMethods.ReadFromSql<HistoryEventItemDb>($"SELECT * FROM HistoryEventItemDbs WHERE EventTime >= datetime('{StartPointHistoryEvent.ToString("u")}') AND EventTime <= datetime('{EndPointHistoryEvent.ToString("u")}');");
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    HistoryEventItems.Clear();
+                    for (int i = 0; i < list.Count; i++)
+                        HistoryEventItems.Add(new HistoryEventItem()
+                        {
+                            UserName = list[i].UserName,
+                            EventTime = list[i].EventTime,
+                            Activity = list[i].Activity,
+                            Event = Events.EventDevices.Where(dev => dev.Id == list[i].Id).FirstOrDefault()
+                        });
+                });                        
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        #endregion
+
+
+        #region Метод загрузки события в базу данных и коллекцию
+        void AddHistoryItem(EventDevice device)
+        {            
+            App.Current.Dispatcher.Invoke(()=> 
+            {
+                var time = DateTime.Now;
+                var name = CurUser == null ? "Пользователь не авторизован" : $"{CurUser.Somename} {CurUser.Name}";
+                HistoryEventItems.Add(new HistoryEventItem()
+                {
+                    Event = device,
+                    EventTime = time,
+                    UserName = name,
+                    Activity = device.IsActive
+                }); ;
+                try
+                {
+                    SqlMethods.WritetoDb<HistoryEventItemDb>(new HistoryEventItemDb
+                    {
+                        EventTime = time,
+                        Id = device.Id,
+                        Activity = device.IsActive,
+                        UserName = name
+                    });
+                }
+                catch (Exception)
+                {
+                    
+                }
+            });
+        }
+        #endregion
+
+
+        #endregion
+
+
 
 
     }

@@ -9,7 +9,7 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:add="clr-namespace:IDensity.AddClasses"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
+        xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"       
         mc:Ignorable="d"        
         Title="MainWindow" Height="450" Width="800"
         Background="DarkSlateGray">
@@ -48,7 +48,7 @@
             </Border>
             <!--#endregion-->
             <!--#region Индикатор связи с платой -->
-            <Border Background="{Binding mainModel.Connecting, Converter={StaticResource ColorToBool}}"  Grid.Column="2" Margin="5">
+            <Border Background="{Binding mainModel.Connecting.Value, Converter={StaticResource ColorToBool}}"  Grid.Column="2" Margin="5">
                 <TextBlock Text="Связь с платой" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </Border>
             <!--#endregion-->
@@ -208,36 +208,17 @@
                                 <fa:ImageAwesome Grid.Row="2" Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"    Grid.ColumnSpan="6" Height="30"   Icon="Refresh" />
                                 <!--#endregion-->
                                 <!--#region Стартовая точка тренда -->
-                                <Border Grid.ColumnSpan="2" Margin="2">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Стартовая точка тренда" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
-                                        <wpftool:DateTimePicker Grid.Column="1" Value="{Binding DisplayDateStart}" 
-                                            Format="Custom" 
-                                            FormatString="G"
-                                            TimeFormat="Custom"
-                                            TimeFormatString="HH:mm:ss"></wpftool:DateTimePicker>
-                                    </Grid>
-                                </Border>
+                                <uc:DateTimeParameter Grid.ColumnSpan="2"
+                                                      Description="Стартовая точка тренда"
+                                                      DateTimeWidth="180"
+                                                      DateTime="{Binding DisplayDateStart}"/>                               
                                 <!--#endregion-->
                                 <!--#region Конечная точка тренда -->
-                                <Border Grid.Column="2" Grid.ColumnSpan="2" Margin="2">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Конечная точка тренда" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
-                                        <wpftool:DateTimePicker Grid.Column="1" Value="{Binding DisplayDateEnd}" 
-                                            Format="Custom" 
-                                            FormatString="G"
-                                            TimeFormat="Custom"
-                                            TimeFormatString="HH:mm:ss"></wpftool:DateTimePicker>
-                                    </Grid>
-                                </Border>
+                                <uc:DateTimeParameter Grid.Column="2"
+                                                      Grid.ColumnSpan="2"
+                                                      Description="Конечная точка тренда"
+                                                      DateTimeWidth="180"
+                                                      DateTime="{Binding DisplayDateEnd}"/>
                                 <!--#endregion-->
                                 <!--#region Кнопка "Показать тренд" -->
                                 <Button Grid.Column="4" Margin="2" Command="{Binding ShowArchivalTrendCommand}">
@@ -955,6 +936,60 @@
                             </DockPanel>                        
                     </TabItem>
                     <!--#endregion-->
+                    <!--#region События -->
+                    <TabItem Header="СОБЫТИЯ">
+                        <DataGrid ItemsSource="{Binding Events.EventDevices}" 
+                                  AutoGenerateColumns="False" 
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <!--#region ID -->
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/>
+                                <!--#endregion-->
+                                <DataGridTextColumn Header="Номер" Binding="{Binding Num, StringFormat=d4}"></DataGridTextColumn>
+                                <!--#region Заголовок -->
+                                <DataGridTextColumn Header="Заголовок" Binding="{Binding Title}"/>
+                                <!--#endregion-->
+                                <!--#region Описание события -->
+                                <DataGridTextColumn Header="Описание события" Binding="{Binding Description}" />
+                                <!--#endregion-->
+                                <!--#region Активный фон -->
+                                <DataGridTemplateColumn Width="120">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="Активный фон"
+                                                   TextWrapping="Wrap"/>
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <wpftool:ColorPicker SelectedColor="{Binding ActiveColor, UpdateSourceTrigger=LostFocus}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region Неактивный фон -->
+                                <DataGridTemplateColumn Width="120">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="Неактивный фон"
+                                                   TextWrapping="Wrap"/>
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <wpftool:ColorPicker SelectedColor="{Binding NotActiveColor, UpdateSourceTrigger=LostFocus}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Тип" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{StaticResource EventTypes}" SelectedIndex="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridCheckBoxColumn Binding="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!--#endregion-->
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <!--#endregion-->
                     <!--#region Управление пользователями -->
                     <TabItem Header="ПОЛЬЗОВАТЕЛИ">
                         <DataGrid  ItemsSource="{Binding Users.Data}">                            
@@ -1019,10 +1054,79 @@
             <!--#endregion-->
             <!--#region События -->
             <TabItem Header="СОБЫТИЯ">
-                <ListBox>
-
-                </ListBox>
+                <TabControl TabStripPlacement="Top">
+                    <TabItem Header="ВСЕ СОБЫТИЯ">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.05*"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <!--#region Панель фильтров -->
+                            <Grid Grid.Row="0">
+                                <UniformGrid Columns="5">
+                                    <uc:DateTimeParameter Description="Начальная точка событий"
+                                              DateTimeWidth="200"
+                                              Margin="2"
+                                              DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <uc:DateTimeParameter Description="Конечная точка событий"
+                                              DateTimeWidth="200"
+                                              Margin="2"
+                                              DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <Button Margin="2"
+                                            Command="{Binding ShowEventsCommand}"
+                                            Content="Показать"/>
+                                    <Border Margin="2" Style="{StaticResource BorderLight}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="0.1*"/>                                                
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox HorizontalContentAlignment="Left"
+                                                     VerticalContentAlignment="Center"/>
+                                            <fa:ImageAwesome Grid.Column="1" Icon="Search" Width="20" Foreground="AliceBlue"/>
+                                        </Grid>
+                                    </Border>
+                                </UniformGrid>
+                                
+                            </Grid>                            
+                            <!--#endregion-->
+                            <!--#region Таблица всех событий -->
+                            <DataGrid Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding HistoryEventItems}" CanUserAddRows="False" CanUserDeleteRows="False">
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}"/>
+                                </DataGrid.RowStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Время возникновения ошибки" Binding="{Binding EventTime, StringFormat=F}"/>
+                                    <DataGridTextColumn Header="Пользователь" Binding="{Binding UserName}"/>
+                                    <DataGridTextColumn Header="Код события" Binding="{Binding Event.Num, StringFormat=d4}"/>
+                                    <DataGridTextColumn Header="Сообщение" Binding="{Binding Event.Title}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--#endregion-->
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="ОШИБКИ">
+                        <ListView ItemsSource="{Binding Events.EventDevices}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Background" Value="{Binding ActiveBrush}"/>
+                                    <Setter Property="Visibility" Value="{Binding IsActive, Converter={StaticResource VisibleConverter}}"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Номер" DisplayMemberBinding="{Binding Num, StringFormat=d4}"/>
+                                    <GridViewColumn Header="Сообщение" DisplayMemberBinding="{Binding Title}"/>
+                                    <GridViewColumn Header="Время" DisplayMemberBinding="{Binding LastExecDate}"/>
+                                    
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </TabItem>
+                </TabControl>
+                
             </TabItem>
+            
             <!--#endregion-->
         </TabControl>
         <Grid.RowDefinitions>
