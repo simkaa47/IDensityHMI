@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Styles">
+    <Style TargetType="DataGridRow" x:Key="EventRowStyle">
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <TextBlock Text="{Binding Event.Description}"/>
+            </Setter.Value>            
+        </Setter>
+        <Setter Property="ToolTip.Placement" Value="Mouse"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Activity}" Value="True">
+                <Setter Property="Background" Value="{Binding Event.ActiveBrush}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Activity}" Value="False">
+                <Setter Property="Background" Value="{Binding Event.NonActiveBrush}"/>                
+            </DataTrigger>
+        </Style.Triggers>
+        
+    </Style>
+</ResourceDictionary>

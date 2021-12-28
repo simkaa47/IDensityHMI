@@ -130,14 +130,14 @@ namespace IDensity.Models
                         command.f.Invoke(command.par1, command.par2);
                                               
                     }
-                    model.Connecting = true;
+                    model.Connecting.Value = true;
                 }
             }
             catch (Exception ex)
             {
                 commands.Clear();
                 client.Disconnect();
-                model.Connecting = false;
+                model.Connecting.Value = false;
             }
         }
         #endregion

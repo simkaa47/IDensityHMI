@@ -92,7 +92,7 @@ namespace IDensity.Models
             TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
             client.Connect(IP, PortNum);
 
-            model.Connecting = client.Connected;
+            model.Connecting.Value = client.Connected;
             TcpEvent?.Invoke(($"Произведено подключение к {IP}:{PortNum}"));
             stream = client.GetStream();
 
@@ -107,7 +107,7 @@ namespace IDensity.Models
                
                 TcpEvent?.Invoke($"{IP}:{PortNum}: соединение завершено пользователем");
                 client.Close();
-                model.Connecting = client.Connected;
+                model.Connecting.Value = client.Connected;
             }
 
         }
@@ -208,7 +208,7 @@ namespace IDensity.Models
                 num = stream.Read(inBuf, 0, inBuf.Length);
 
             } while (stream.DataAvailable);
-            model.Connecting = true;
+            model.Connecting.Value = true;
             Thread.Sleep(100);
             return Encoding.ASCII.GetString(inBuf, 0, num);// Получаем строку из байт;            
         }
@@ -226,7 +226,7 @@ namespace IDensity.Models
 
             } while (stream.DataAvailable);
             Thread.Sleep(100);
-            model.Connecting = true;
+            model.Connecting.Value = true;
             return num;
         }
         #endregion
