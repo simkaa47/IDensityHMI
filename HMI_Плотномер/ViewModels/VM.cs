@@ -15,6 +15,8 @@ using IDensity.Models.XML;
 using IDensity.ViewModels.Commands;
 using System.Timers;
 using IDensity.AddClasses.EventHistory;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace IDensity.ViewModels
 {
@@ -268,7 +270,12 @@ namespace IDensity.ViewModels
             Events = new Events(mainModel);
             GetEventHistory();
             Events.EventExecute += AddHistoryItem;
+            _selectedEventItems.Filter += OnEventsFiltered;
+            _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
+            
         }
+
+        
         #endregion
 
         #region Текущая дата-время компьютера
@@ -545,6 +552,40 @@ namespace IDensity.ViewModels
         }
         #endregion
 
+        private readonly CollectionViewSource _selectedEventItems = new CollectionViewSource();
+        public ICollectionView SelectedEventItems => _selectedEventItems.View;
+
+        private string _eventFilterText;
+        /// <summary>
+        /// Текст фильтра событий
+        /// </summary>
+        public string EventFilterText
+        {
+            get { return _eventFilterText; }
+            set 
+            {
+                if (!Set(ref _eventFilterText, value)) return;
+                _selectedEventItems.View.Refresh();
+            }
+        }
+
+        private void OnEventsFiltered(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is HistoryEventItem eventItem))
+            {
+                e.Accepted = false;
+                return;
+            }
+            var text = EventFilterText;
+            if (string.IsNullOrWhiteSpace(text)) return;
+            if (eventItem.Event.Id.Contains(text)) return;
+            if (eventItem.Event.Num.ToString().Contains(text)) return;
+            if (eventItem.Event.Description.Contains(text)) return;
+            if (eventItem.Event.Title.Contains(text)) return;
+            if (eventItem.UserName.Contains(text)) return;
+            if (eventItem.EventTime.ToString().Contains(text)) return;
+            e.Accepted = false;
+        }
         #endregion
 
         #region Класс событий
@@ -555,7 +596,17 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Коллекция истории событий
         /// </summary>
-        public ObservableCollection<HistoryEventItem> HistoryEventItems { get; private set; } = new ObservableCollection<HistoryEventItem>();
+        private ObservableCollection<HistoryEventItem> _historyEventItems;
+        public ObservableCollection<HistoryEventItem> HistoryEventItems
+        {
+            get => _historyEventItems;
+            private set
+            {
+                if (!Set(ref _historyEventItems, value)) return;
+                _selectedEventItems.Source = value; 
+                OnPropertyChanged(nameof(SelectedEventItems));
+            }
+        } 
         #endregion
         #region Флаг загрузки данных событий из БД
         private bool _historyItemDownloading;
@@ -583,7 +634,7 @@ namespace IDensity.ViewModels
                 var list = SqlMethods.ReadFromSql<HistoryEventItemDb>($"SELECT * FROM HistoryEventItemDbs WHERE EventTime >= datetime('{StartPointHistoryEvent.ToString("u")}') AND EventTime <= datetime('{EndPointHistoryEvent.ToString("u")}');");
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    HistoryEventItems.Clear();
+                    HistoryEventItems = new ObservableCollection<HistoryEventItem>();
                     for (int i = 0; i < list.Count; i++)
                         HistoryEventItems.Add(new HistoryEventItem()
                         {
@@ -636,9 +687,5 @@ namespace IDensity.ViewModels
 
 
         #endregion
-
-
-
-
     }
 }

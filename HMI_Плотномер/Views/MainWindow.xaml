@@ -1057,6 +1057,9 @@
                 <TabControl TabStripPlacement="Top">
                     <TabItem Header="ВСЕ СОБЫТИЯ">
                         <Grid>
+                            <Grid.Resources>
+                                <CollectionViewSource x:Key="EventsCollection" Source="{Binding HistoryEventItems}"/>
+                            </Grid.Resources>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.05*"/>
                                 <RowDefinition/>
@@ -1082,7 +1085,8 @@
                                                 <ColumnDefinition Width="0.1*"/>                                                
                                             </Grid.ColumnDefinitions>
                                             <TextBox HorizontalContentAlignment="Left"
-                                                     VerticalContentAlignment="Center"/>
+                                                     VerticalContentAlignment="Center"
+                                                     Text="{Binding EventFilterText, UpdateSourceTrigger=PropertyChanged}"/>
                                             <fa:ImageAwesome Grid.Column="1" Icon="Search" Width="20" Foreground="AliceBlue"/>
                                         </Grid>
                                     </Border>
@@ -1091,7 +1095,7 @@
                             </Grid>                            
                             <!--#endregion-->
                             <!--#region Таблица всех событий -->
-                            <DataGrid Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding HistoryEventItems}" CanUserAddRows="False" CanUserDeleteRows="False">
+                            <DataGrid Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding SelectedEventItems}" CanUserAddRows="False" CanUserDeleteRows="False">
                                 <DataGrid.RowStyle>
                                     <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}"/>
                                 </DataGrid.RowStyle>
