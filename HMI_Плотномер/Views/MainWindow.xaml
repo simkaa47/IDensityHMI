@@ -210,15 +210,17 @@
                                 <!--#region Стартовая точка тренда -->
                                 <uc:DateTimeParameter Grid.ColumnSpan="2"
                                                       Description="Стартовая точка тренда"
+                                                      PopupOpenedCommand="{Binding SelectDatesCommand}"
                                                       DateTimeWidth="180"
-                                                      DateTime="{Binding DisplayDateStart}"/>                               
+                                                      DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>                               
                                 <!--#endregion-->
                                 <!--#region Конечная точка тренда -->
                                 <uc:DateTimeParameter Grid.Column="2"
                                                       Grid.ColumnSpan="2"
+                                                      PopupOpenedCommand="{Binding SelectDatesCommand}"
                                                       Description="Конечная точка тренда"
                                                       DateTimeWidth="180"
-                                                      DateTime="{Binding DisplayDateEnd}"/>
+                                                      DateTime="{Binding DisplayDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 <!--#endregion-->
                                 <!--#region Кнопка "Показать тренд" -->
                                 <Button Grid.Column="4" Margin="2" Command="{Binding ShowArchivalTrendCommand}">
@@ -320,6 +322,7 @@
                         <!--#endregion-->
                     </Grid>
                     <!--#endregion-->
+                    
                 </Grid>
             </TabItem>
             <!--#endregion-->
@@ -603,6 +606,68 @@
                                 <!--#endregion-->
                             </ListBox>                                
                             <!--#endregion-->
+                        </GroupBox>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Стандартизация -->
+                    <TabItem Header="СТАНДАРТИЗАЦИЯ">
+                        <GroupBox>
+                            <!--#region Выбор набора станд-ии -->
+                            <GroupBox.Header>
+                                <DockPanel>
+                                    <TextBlock Text="Номер набора стандартизации"/>
+                                    <ComboBox ItemsSource="{Binding StandNames.Data}"
+                                              HorizontalAlignment="Right"
+                                              SelectedIndex="{Binding StandSelNum}"
+                                              DisplayMemberPath="Name"/>
+                                </DockPanel>
+                            </GroupBox.Header>
+                            <!--#endregion-->
+                            <ListBox>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Duration}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Type}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Value}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[0]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[1]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[2]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[3]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[4]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[5]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[6]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[7]}" HorizontalContentAlignment="Stretch">
+                                    <uc:Parameter/>
+                                </ListBoxItem>
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock  Text="{Binding SelectedStandData.Date.Description}"
+                                                    Style="{StaticResource Common}"/>
+                                        <TextBlock  Text="{Binding SelectedStandData.Date.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
+                                                    HorizontalAlignment="Right"                                                    
+                                                    Style="{StaticResource Common}"/>
+                                    </DockPanel>
+                                </ListBoxItem>
+
+                            </ListBox>
                         </GroupBox>
                     </TabItem>
                     <!--#endregion-->
@@ -1030,6 +1095,7 @@
                             <!--#region Тип переменной для аналогового выхода -->
                             <DataGrid Template="{StaticResource Enums}" DataContext="{Binding TypeAnalogOutVars.Data}" Tag="Тип переменной для аналогового выхода"></DataGrid>
                             <!--#endregion-->
+                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding StandNames.Data}" Tag="Названия стандартизаций"></DataGrid>
                         </WrapPanel>
                         
                     </TabItem>
@@ -1061,7 +1127,7 @@
                                 <CollectionViewSource x:Key="EventsCollection" Source="{Binding HistoryEventItems}"/>
                             </Grid.Resources>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="0.05*"/>
+                                <RowDefinition Height="40"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <!--#region Панель фильтров -->
@@ -1072,12 +1138,25 @@
                                               Margin="2"
                                               DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <uc:DateTimeParameter Description="Конечная точка событий"
-                                              DateTimeWidth="200"
+                                              DateTimeWidth="200"                                              
                                               Margin="2"
                                               DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <Button Margin="2"
+                                            VerticalContentAlignment="Center"
                                             Command="{Binding ShowEventsCommand}"
-                                            Content="Показать"/>
+                                           >
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:ImageAwesome Width="20" 
+                                                                 Icon="Refresh" 
+                                                                 Foreground="AliceBlue" 
+                                                                 Spin="{Binding HistoryItemDownloading}" 
+                                                                 Visibility="{Binding HistoryItemDownloading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                <TextBlock Text="Показать" VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
                                     <Border Margin="2" Style="{StaticResource BorderLight}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -1089,18 +1168,29 @@
                                                      Text="{Binding EventFilterText, UpdateSourceTrigger=PropertyChanged}"/>
                                             <fa:ImageAwesome Grid.Column="1" Icon="Search" Width="20" Foreground="AliceBlue"/>
                                         </Grid>
-                                    </Border>
+                                    </Border>                                    
                                 </UniformGrid>
                                 
                             </Grid>                            
                             <!--#endregion-->
                             <!--#region Таблица всех событий -->
-                            <DataGrid Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding SelectedEventItems}" CanUserAddRows="False" CanUserDeleteRows="False">
+                            <DataGrid Grid.Row="1" 
+                                      IsReadOnly="True" 
+                                      AutoGenerateColumns="False" 
+                                      ItemsSource="{Binding SelectedEventItems}" 
+                                      VirtualizingPanel.VirtualizationMode="Recycling"
+                                      CanUserAddRows="False" 
+                                      CanUserDeleteRows="False">
+                                <DataGrid.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel/>
+                                    </ItemsPanelTemplate>
+                                </DataGrid.ItemsPanel>
                                 <DataGrid.RowStyle>
                                     <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}"/>
                                 </DataGrid.RowStyle>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Время возникновения ошибки" Binding="{Binding EventTime, StringFormat=F}"/>
+                                    <DataGridTextColumn Header="Время возникновения ошибки" Binding="{Binding EventTime, StringFormat=F,ConverterCulture=ru-RU}"/>
                                     <DataGridTextColumn Header="Пользователь" Binding="{Binding UserName}"/>
                                     <DataGridTextColumn Header="Код события" Binding="{Binding Event.Num, StringFormat=d4}"/>
                                     <DataGridTextColumn Header="Сообщение" Binding="{Binding Event.Title}"/>

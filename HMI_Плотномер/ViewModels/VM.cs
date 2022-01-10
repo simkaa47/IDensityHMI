@@ -17,6 +17,8 @@ using System.Timers;
 using IDensity.AddClasses.EventHistory;
 using System.Windows.Data;
 using System.ComponentModel;
+using System.Windows.Controls;
+using IDensity.AddClasses.Standartisation;
 
 namespace IDensity.ViewModels
 {
@@ -272,7 +274,7 @@ namespace IDensity.ViewModels
             Events.EventExecute += AddHistoryItem;
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
-            
+            GetMeasDates();
         }
 
         
@@ -356,6 +358,14 @@ namespace IDensity.ViewModels
         public string LogPath { get => _logPath; set => Set(ref _logPath, value); }
         #endregion
 
+        #region Список дат, когда происходили измерения
+        List<BlackOutData> MeasDates { get; set; } = new List<BlackOutData>();
+        void GetMeasDates()
+        { 
+            MeasDates = SqlMethods.ReadFromSql<BlackOutData>($"SELECT DISTINCT date(time) FROM TimePoints;");
+        }
+        #endregion
+
         #endregion
 
         #region Состояние загрузки из ДБ
@@ -382,6 +392,39 @@ namespace IDensity.ViewModels
         #region Названия переменных для аналогового выхода
         public DataBaseCollection<EnumCustom> TypeAnalogOutVars { get; } = new DataBaseCollection<EnumCustom>("TypeAnalogOutVars", new EnumCustom());
         #endregion
+
+        #region Названия стандартизаций
+        public DataBaseCollection<EnumCustom> StandNames { get; } = new DataBaseCollection<EnumCustom>("StandNames", new EnumCustom());
+        #endregion
+        #endregion
+
+        #region Стандартизация
+        #region Выбранный диапазон
+        private StandData _selectedStandData;
+
+        public StandData SelectedStandData
+        {
+            get { return _selectedStandData ?? (_selectedStandData = mainModel.StandSettings[0]); }
+            set { Set(ref _selectedStandData, value); }
+        }
+        #endregion
+
+        #region Номер стандартизации
+        private int _standSelNum;
+        public int StandSelNum
+        {
+            get { return _standSelNum; }
+            set 
+            {
+                if (Set(ref _standSelNum, value) && value < MainModel.CountStand)
+                {
+                    SelectedStandData = mainModel.StandSettings[value];
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Выбранный номер измерительного процесса (не текущий!)
@@ -652,6 +695,7 @@ namespace IDensity.ViewModels
         }
         #endregion
 
+        
 
         #region Метод загрузки события в базу данных и коллекцию
         void AddHistoryItem(EventDevice device)
@@ -684,6 +728,36 @@ namespace IDensity.ViewModels
             });
         }
         #endregion
+
+
+        void UpadateDates(object obj)
+        {
+            if (!(obj is Calendar calendar)) return;
+            DateTime startDate = new DateTime(calendar.DisplayDate.Year,calendar.DisplayDate.Month,1);
+            var enabledDates = MeasDates.Where(ms => ms.Time >= startDate && ms.Time <= startDate.AddMonths(1)).Select(ms=>ms.Time);
+            calendar.DisplayDateStart = startDate;
+            calendar.DisplayDateEnd = startDate.AddMonths(1);
+            var tempDate = startDate;
+            calendar.BlackoutDates.Clear();
+            while (tempDate<= calendar.DisplayDateEnd)
+            {
+                if (tempDate != calendar.SelectedDate && !enabledDates.Any(dt=>dt==tempDate))
+                    calendar.BlackoutDates.Add(new CalendarDateRange(tempDate));
+                tempDate = tempDate.AddDays(1);
+            }
+            
+            
+            
+            
+        }
+        private RelayCommand _selectDatesCommand;
+
+        public RelayCommand SelectDatesCommand
+        {
+            get { return _selectDatesCommand ?? (_selectDatesCommand = new RelayCommand(obj => UpadateDates(obj), obj => true)); }
+            
+        }
+
 
 
         #endregion

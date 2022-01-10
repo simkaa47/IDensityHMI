@@ -87,8 +87,7 @@ namespace IDensity.Models
         {
             commands?.Clear();
             client = new TcpClient();
-            client.ReceiveTimeout = 1000;
-            client.SendTimeout = 1000;
+            client.ReceiveTimeout = 2000;
             TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
             client.Connect(IP, PortNum);
 
@@ -326,6 +325,7 @@ namespace IDensity.Models
             if (!model.SettingsReaded)
             {
                 GetMeasProcessData();// Получить данные процеса измерений
+                GetStdSettings();
                 GetSettings7();
             } 
             
@@ -431,6 +431,42 @@ namespace IDensity.Models
                 return list;
             }
             model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки стандартизации
+        void GetStdSettings()
+        {
+            for (ushort i = 0; i < 12; i++)
+            {
+                if (!GetStdSelection(i))break;
+            }
+        }
+
+        bool GetStdSelection(ushort num)
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,ASR,{num}"));
+            if (str.Length < 10 || str.Substring(0, 4) != "*ASR" || str[str.Length - 1] != '#') return false;
+            var parts = str.Substring(4).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 13) return false;
+            ushort tempUshort = 0;
+            model.StandSettings[num].Duration.Value = ushort.TryParse(parts[1], out tempUshort) ? tempUshort : model.StandSettings[num].Duration.Value;
+            model.StandSettings[num].Type.Value = ushort.TryParse(parts[2], out tempUshort) ? tempUshort : model.StandSettings[num].Type.Value;
+            float tempFloat = 0;
+            model.StandSettings[num].Value.Value = float.TryParse(parts[3], out tempFloat) ? tempFloat : model.StandSettings[num].Value.Value;
+            for (int i = 0; i < 8; i++)
+            {
+                model.StandSettings[num].Results[i].Value = float.TryParse(parts[3 + i], out tempFloat) ? tempFloat : model.StandSettings[num].Results[i].Value;
+            }
+            var dateParts = parts[12].Split(":").Where(s => ushort.TryParse(s, out tempUshort)).Select(s => tempUshort).ToArray();
+            if (dateParts.Length != 3) return false;
+            dateParts[0] = (ushort)(2000 + dateParts[0]);
+            dateParts[1] = dateParts[1] > 0 && dateParts[1] <= 12 ? dateParts[1] : (ushort)1;
+            dateParts[2] = dateParts[2] > 0 && dateParts[2] <= 31 ? dateParts[2] : (ushort)1;
+            model.StandSettings[num].Date.Value = new DateTime(dateParts[0], dateParts[1], dateParts[2]);
+            model.SettingsReaded = true;
+            return true;
         }
         #endregion
 

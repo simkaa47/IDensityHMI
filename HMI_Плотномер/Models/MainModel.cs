@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.AddClasses.Standartisation;
 using IDensity.Models.XML;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,17 @@ namespace IDensity.Models
 {
     class MainModel : PropertyChangedBase
     {
+        #region Количество наборов стандартизаций
+        /// <summary>
+        /// Количество стандартизаций
+        /// </summary>
+        public static readonly int CountStand = 12; 
+        #endregion
         public MainModel()
         {
             Init();// Инициализация параметров
         }
-       
+
 
         #region События
         #region Обновились данные
@@ -34,13 +41,12 @@ namespace IDensity.Models
         public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");
         #endregion
 
-        #region Статус соединения с платой
-        bool _connecting;
+        #region Статус соединения с платой       
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
         public Parameter<bool> Connecting { get; } = new Parameter<bool>("ConnectBoard", "Статус соединения с платой", false, true, 0, "");
-        
+
         #endregion
 
         #region Данные измерения
@@ -103,8 +109,8 @@ namespace IDensity.Models
                 if (_analogGroups == null)
                 {
                     _analogGroups = Enumerable.Range(0, 2).
-                        Select(z => 
-                        { 
+                        Select(z =>
+                        {
                             var gr = new AnalogGroup(z);
                             gr.AI.SwitchPwrEvent += SwitchAm;
                             gr.AO.SwitchPwrEvent += SwitchAm;
@@ -134,8 +140,13 @@ namespace IDensity.Models
 
         #region Настройки измерительных процессов
         public MeasProcess[] MeasProcesses { get; set; } = Enumerable.Range(0, measProcessNum).Select(z => new MeasProcess()).ToArray();
-        #endregion      
+        #endregion
 
+        #endregion
+
+        #region Данные стандартизаций
+
+        public StandData[] StandSettings { get; } = Enumerable.Range(0, 12).Select(i => new StandData()).ToArray();
         #endregion
 
         #region Параметры полседовательного порта платы

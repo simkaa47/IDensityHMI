@@ -74,7 +74,7 @@ namespace IDensity.ViewModels
             {
                 if ((obj as Parameter<bool>) != null && args.PropertyName == nameof(Parameter<bool>.Value))
                 {
-                    EventBoardCommErr.IsActive = (obj as Parameter<bool>).Value;
+                    EventBoardCommErr.IsActive = !(obj as Parameter<bool>).Value;
                 }
             };          
 

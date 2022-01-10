@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDensity.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -54,7 +55,19 @@ namespace IDensity.Views.Resourses.UserControls
             DependencyProperty.Register("DateTime", typeof(DateTime), typeof(DateTimeParameter), new PropertyMetadata(default(DateTime)));
         #endregion
 
-        
+
+
+
+        internal RelayCommand PopupOpenedCommand
+        {
+            get { return (RelayCommand)GetValue(PopupOpenedCommandProperty); }
+            set { SetValue(PopupOpenedCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupOpenedCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupOpenedCommandProperty =
+            DependencyProperty.Register("PopupOpenedCommand", typeof(RelayCommand), typeof(DateTimeParameter), new PropertyMetadata(null));
+
 
         public DateTimeParameter()
         {
