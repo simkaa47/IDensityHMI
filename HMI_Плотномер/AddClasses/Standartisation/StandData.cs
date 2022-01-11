@@ -1,12 +1,16 @@
-﻿using System;
+﻿using IDensity.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace IDensity.AddClasses.Standartisation
 {
-    class StandData: ICloneable
-    {        
+    class StandData : ICloneable
+    {
+        #region Номер набора стандартизации
+        public static Parameter<ushort> NumSelection { get; } = new Parameter<ushort>("NumStdSelection", "Номер набора стандартизации", 0, (ushort)MainModel.CountStand, 14, "hold");
+        #endregion
         #region Длительность стандартизации
         /// <summary>
         /// Длительность стандартизации

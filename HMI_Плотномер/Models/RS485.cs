@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using EasyModbus;
 using IDensity.AddClasses;
+using IDensity.AddClasses.Standartisation;
 
 namespace IDensity.Models
 {
@@ -26,9 +27,7 @@ namespace IDensity.Models
             SendTestValue = 13, // отправка тестового значения на ЦАП
             DacSett=51 // начальный номер регистров, отвечающих за настройки ЦАП
         }
-        #endregion
-
-        
+        #endregion        
 
         #region Свойства
         #region Адрес в сети Modbus
@@ -83,9 +82,7 @@ namespace IDensity.Models
         /// </summary>
         ushort[] readRegs = new ushort[100];
         #endregion
-        #endregion
-
-        
+        #endregion        
 
         #region Номер процесса для выбора
         public Parameter<int> SelectMeasNum = new Parameter<int>("SelectMeasNum", "Номер процесса для выбора", 0, MainModel.measProcessNum - 1, 26, "hold");
@@ -320,6 +317,7 @@ namespace IDensity.Models
                 GetSerialSettings();
                 GetHvTarget();
                 GetAnalogOutSettings();
+                GetAllStandSettings();
             }
         }
         #region Данные измерительных настроек
@@ -391,6 +389,44 @@ namespace IDensity.Models
             model.SettingsReaded = true;
         }
         #endregion
+
+        #region Настройки стандартизации
+        /// <summary>
+        /// Получить данные всех наборов стандартизаций
+        /// </summary>
+        void GetAllStandSettings()
+        {
+            for (ushort i = 0; i < MainModel.CountStand; i++)
+            {
+                GetStandSetiings(i);
+            }
+        }
+        void GetStandSetiings(ushort num)
+        {
+            model.SettingsReaded = false;
+            client.WriteSingleRegister(StandData.NumSelection.RegNum, num);
+            for (int i = 0; i < 2; i++)
+            {
+                ReadHoldRegs(model.StandSettings[0].Duration.RegNum + i * 12, 12);
+            }
+            model.StandSettings[num].Duration.Value = holdRegs[model.StandSettings[0].Duration.RegNum];
+            model.StandSettings[num].Type.Value = holdRegs[model.StandSettings[0].Type.RegNum];
+            model.StandSettings[num].Value.Value = GetFloatFromUshorts(holdRegs, model.StandSettings[0].Value.RegNum);
+            for (int j = 0; j < 8; j++)
+            {
+                model.StandSettings[num].Results[j].Value = GetFloatFromUshorts(holdRegs, model.StandSettings[num].Results[j].RegNum + j * 2);
+            }
+            var year = holdRegs[model.StandSettings[0].Date.RegNum] + 2000;
+            var month = (int)holdRegs[model.StandSettings[0].Date.RegNum + 1];
+            month = month > 0 && month <= 12 ? month : 1;
+            var day = (int)holdRegs[model.StandSettings[0].Date.RegNum + 2];
+            day = day > 0 && day <= 31 ? day : 1;
+            model.StandSettings[num].Date.Value = new DateTime(year, month, day);
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+
         #endregion
 
         #region Команды
