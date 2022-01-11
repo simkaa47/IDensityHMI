@@ -203,6 +203,59 @@ namespace IDensity.ViewModels
 
         #endregion
 
+        #region Команды записи  настроек стандартизации
+        #region Команда "Записать длительность стандартизации"
+        RelayCommand _setStdDurationCommand;
+        /// <summary>
+        /// Команда "Записать длительность стандартизации"
+        /// </summary>
+        public RelayCommand SetStdDurationCommand => _setStdDurationCommand ?? (_setStdDurationCommand = new RelayCommand(execPar =>
+        {
+            StandData stand = SelectedStandData.Clone() as StandData;
+            stand.Duration.Value = SelectedStandData.Duration.WriteValue;
+            mainModel.WriteStdSettings((ushort)SelectedMeasProcessNum, stand);
+        }, canExecPar => true));
+        #endregion
+        #region Команда "Записать тип стандартизации"
+        RelayCommand _setStdTypeCommand;
+        /// <summary>
+        /// Команда "Записать тип стандартизации"
+        /// </summary>
+        public RelayCommand SetStdTypeCommand => _setStdTypeCommand ?? (_setStdTypeCommand = new RelayCommand(execPar =>
+        {
+            StandData stand = SelectedStandData.Clone() as StandData;
+            stand.Type.Value = SelectedStandData.Type.WriteValue;
+            mainModel.WriteStdSettings((ushort)SelectedMeasProcessNum, stand);
+        }, canExecPar => true));
+        #endregion
+        #region Команда "Записать физ. величину стандартизации"
+        RelayCommand _setStdValueCommand;
+        /// <summary>
+        /// Команда "Записать физ. величину стандартизации"
+        /// </summary>
+        public RelayCommand SetStdValueCommand => _setStdValueCommand ?? (_setStdValueCommand = new RelayCommand(execPar =>
+        {
+            StandData stand = SelectedStandData.Clone() as StandData;
+            stand.Value.Value = SelectedStandData.Value.WriteValue;
+            mainModel.WriteStdSettings((ushort)SelectedMeasProcessNum, stand);
+        }, canExecPar => true));
+        #endregion
+        #region Команда "Записать результат стандартизации"
+        RelayCommand _setStdResultCommand;
+        /// <summary>
+        /// Команда "Записать результат стандартизации"
+        /// </summary>
+        public RelayCommand SetStdResultCommand => _setStdResultCommand ?? (_setStdResultCommand = new RelayCommand(execPar =>
+        {
+            int index = 0;
+            if (execPar != null) int.TryParse(execPar.ToString(), out index);
+            StandData stand = SelectedStandData.Clone() as StandData;
+            stand.Results[index].Value = SelectedStandData.Results[index].WriteValue;
+            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
+        }, canExecPar => true));
+        #endregion
+        #endregion
+
         #region Команды измерения даты-времени
         #region установить RTC пользователя
         RelayCommand _setRtcCommand;

@@ -624,39 +624,55 @@
                             </GroupBox.Header>
                             <!--#endregion-->
                             <ListBox>
+                                <!--#region Длительность стандартизации -->
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Duration}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdDurationCommand}"/>
                                 </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Тип -->
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Type}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdTypeCommand}"/>
                                 </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Физ. величина -->
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Value}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdValueCommand}"/>
                                 </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Результаты -->
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[0]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="0"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[1]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="1"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[2]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="2"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[3]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="3"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[4]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="4"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[5]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="5"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[6]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="6"/>
                                 </ListBoxItem>
                                 <ListBoxItem DataContext="{Binding SelectedStandData.Results[7]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                                  CommanDParameter="7"/>
                                 </ListBoxItem>
+                                <!--#endregion-->
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <DockPanel>
                                         <TextBlock  Text="{Binding SelectedStandData.Date.Description}"

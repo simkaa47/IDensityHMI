@@ -345,7 +345,14 @@ namespace IDensity.Models
         {
             if (CommMode.EthEnable) Tcp.SendAnalogOutSwttings(groupNum, moduleNum, value);
             else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
-        } 
+        }
+        #endregion
+
+        #region Команда "Записать настройки стандартизации"
+        public void WriteStdSettings(ushort index, StandData stand)
+        {
+            if (CommMode.EthEnable) Tcp.WriteStdSettings(index, stand);
+        }
         #endregion
 
         #endregion

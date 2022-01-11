@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.AddClasses.Standartisation;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -382,7 +383,7 @@ namespace IDensity.Models
         void GetSettings7()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7#"));
             var list = GetNumber("serial_baudrate", 1,1);
             if (list==null) return;
             model.PortBaudrate.Value = (int)list[0][0];
@@ -446,7 +447,7 @@ namespace IDensity.Models
         bool GetStdSelection(ushort num)
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,ASR,{num}"));
+            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,ASR,{num}#"));
             if (str.Length < 10 || str.Substring(0, 4) != "*ASR" || str[str.Length - 1] != '#') return false;
             var parts = str.Substring(4).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length != 13) return false;
@@ -454,10 +455,10 @@ namespace IDensity.Models
             model.StandSettings[num].Duration.Value = ushort.TryParse(parts[1], out tempUshort) ? tempUshort : model.StandSettings[num].Duration.Value;
             model.StandSettings[num].Type.Value = ushort.TryParse(parts[2], out tempUshort) ? tempUshort : model.StandSettings[num].Type.Value;
             float tempFloat = 0;
-            model.StandSettings[num].Value.Value = float.TryParse(parts[3], out tempFloat) ? tempFloat : model.StandSettings[num].Value.Value;
+            model.StandSettings[num].Value.Value = float.TryParse(parts[3].Replace(".",","), out tempFloat) ? tempFloat : model.StandSettings[num].Value.Value;
             for (int i = 0; i < 8; i++)
             {
-                model.StandSettings[num].Results[i].Value = float.TryParse(parts[3 + i], out tempFloat) ? tempFloat : model.StandSettings[num].Results[i].Value;
+                model.StandSettings[num].Results[i].Value = float.TryParse(parts[4 + i].Replace(".", ","), out tempFloat) ? tempFloat : model.StandSettings[num].Results[i].Value;
             }
             var dateParts = parts[12].Split(":").Where(s => ushort.TryParse(s, out tempUshort)).Select(s => tempUshort).ToArray();
             if (dateParts.Length != 3) return false;
@@ -583,7 +584,19 @@ namespace IDensity.Models
         {
             var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.DacEiNdx.Value},{value.DacVarNdx.Value},{value.DacLowLimit.Value.ToString().Replace(",",".")},{value.DacHighLimit.Value.ToString().Replace(",", ".")}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; } , Encoding.ASCII.GetBytes(str)));
-        } 
+        }
+        #endregion
+
+        #region Записать настройки набора стандартизации
+        public void WriteStdSettings(ushort index, StandData stand)
+        {
+            var str = $"SETT,std={index},{stand.Duration.Value},{stand.Type.Value},{stand.Value.Value.ToString().Replace(",",".")}";
+            for (int i = 0; i < 8 ; i++)
+            {
+                str = str + $",{stand.Results[i].Value.ToString().Replace(",", ".")}";
+            }
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetStdSelection(index); }, Encoding.ASCII.GetBytes(str+"#")));
+        }
         #endregion
         #endregion
 
