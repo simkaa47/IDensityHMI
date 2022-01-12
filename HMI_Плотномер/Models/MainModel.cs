@@ -287,12 +287,9 @@ namespace IDensity.Models
         #region Команды настроек последовательного порта
         #region Записать бадрейт
         public void ChangeBaudrate(int value)
-        {            
-            if (PortBaudrate.Value!= PortBaudrate.WriteValue)
-            {
-                if (CommMode.EthEnable) Tcp.ChangeBaudrate(value);
-                else if ((CommMode.RsEnable)) rs.ChangeBaudrate(value);
-            }
+        {
+            if (CommMode.EthEnable) Tcp.ChangeBaudrate(value);
+            else if ((CommMode.RsEnable)) rs.ChangeBaudrate(value);
         }
         #endregion       
 
@@ -352,11 +349,11 @@ namespace IDensity.Models
         public void WriteStdSettings(ushort index, StandData stand)
         {
             if (CommMode.EthEnable) Tcp.WriteStdSettings(index, stand);
+            else if (CommMode.RsEnable) rs.WriteStdSettings(index, stand);
         }
         #endregion
 
         #endregion
-
 
     }
 }

@@ -787,9 +787,8 @@ namespace IDensity.ViewModels
         {
             if (!(obj is Calendar calendar)) return;
             DateTime startDate = new DateTime(calendar.DisplayDate.Year,calendar.DisplayDate.Month,1);
-            var enabledDates = MeasDates.Where(ms => ms.Time >= startDate && ms.Time <= startDate.AddMonths(1)).Select(ms=>ms.Time);
-            calendar.DisplayDateStart = startDate;
-            calendar.DisplayDateEnd = startDate.AddMonths(1);
+            var enabledDates = MeasDates.Where(ms => ms.Time >= startDate && ms.Time <= startDate.AddMonths(1)).Select(ms=>ms.Time);            
+            calendar.DisplayDateEnd = startDate.AddMonths(1);            
             var tempDate = startDate;
             calendar.BlackoutDates.Clear();
             while (tempDate<= calendar.DisplayDateEnd)
@@ -797,11 +796,7 @@ namespace IDensity.ViewModels
                 if (tempDate != calendar.SelectedDate && !enabledDates.Any(dt=>dt==tempDate))
                     calendar.BlackoutDates.Add(new CalendarDateRange(tempDate));
                 tempDate = tempDate.AddDays(1);
-            }
-            
-            
-            
-            
+            }  
         }
         private RelayCommand _selectDatesCommand;
 

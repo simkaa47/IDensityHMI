@@ -576,7 +576,30 @@ namespace IDensity.Models
 
             }, 0, 0));          
             
-        } 
+        }
+        #endregion
+
+        #region Записать настройки набора стандартизации
+        public void WriteStdSettings(ushort index, StandData stand)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client.WriteSingleRegister(StandData.NumSelection.RegNum, index);
+                holdRegs[model.StandSettings[0].Duration.RegNum] = stand.Duration.Value;
+                holdRegs[model.StandSettings[0].Type.RegNum] = stand.Type.Value;
+                GetUshortsFromFloat(holdRegs, model.StandSettings[0].Value.RegNum, stand.Value.Value);
+                for (int i = 0; i < 8; i++)
+                {
+                    GetUshortsFromFloat(holdRegs, model.StandSettings[0].Results[i].RegNum+i*2, stand.Results[i].Value);
+                }
+                // Записываем регисры
+                for (int i = 0; i < 2; i++)
+                {
+                    WriteRegs(model.StandSettings[0].Duration.RegNum + i * 12, 12);
+                }
+                GetStandSetiings(index);
+            }, 0, 0));
+        }
         #endregion
 
         #endregion
