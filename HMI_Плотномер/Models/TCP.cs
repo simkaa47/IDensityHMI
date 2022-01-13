@@ -107,6 +107,7 @@ namespace IDensity.Models
                
                 TcpEvent?.Invoke($"{IP}:{PortNum}: соединение завершено пользователем");
                 client.Close();
+                client.Dispose();
                 model.Connecting.Value = client.Connected;
             }
 
@@ -144,6 +145,7 @@ namespace IDensity.Models
                 TcpEvent?.Invoke(ex.Message);
                 commands?.Clear();
                 Disconnect();
+                Thread.Sleep(1000);
             }
         }
         #endregion
