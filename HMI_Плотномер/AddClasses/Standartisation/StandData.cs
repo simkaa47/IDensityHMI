@@ -8,6 +8,9 @@ namespace IDensity.AddClasses.Standartisation
 {
     class StandData : ICloneable
     {
+        #region Номер регистра, отвечающего за команду стандартизации
+        public static readonly int StandCommandRegNum = 15;
+        #endregion
         #region Номер набора стандартизации
         public static Parameter<ushort> NumSelection { get; } = new Parameter<ushort>("NumStdSelection", "Номер набора стандартизации", 0, (ushort)MainModel.CountStand, 14, "hold");
         #endregion

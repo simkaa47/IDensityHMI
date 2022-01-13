@@ -602,9 +602,33 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Команда "Произвести стандартизацию"
+        /// <summary>
+        /// Произвести стандартизацию
+        /// </summary>
+        /// <param name="index">Номер набора стандартизации</param>
+        public void MakeStand(int index)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client.WriteSingleRegister(StandData.NumSelection.RegNum, index);
+                client.WriteSingleRegister(StandData.StandCommandRegNum, index);
+            }, 0, 0));
+            
+        }
+        #endregion
+
+        #region Команда принудиельного запроса набора стандартизации после стандартизации
+        public void GetStdSelection(ushort index)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                GetStandSetiings(index);
+            }, 0, 0));
+        }
         #endregion
 
 
-
+        #endregion
     }
 }

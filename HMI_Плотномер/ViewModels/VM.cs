@@ -203,6 +203,8 @@ namespace IDensity.ViewModels
 
         #endregion
 
+        #region Команды стандартизации
+
         #region Команды записи  настроек стандартизации
         #region Команда "Записать длительность стандартизации"
         RelayCommand _setStdDurationCommand;
@@ -213,7 +215,7 @@ namespace IDensity.ViewModels
         {
             StandData stand = SelectedStandData.Clone() as StandData;
             stand.Duration.Value = SelectedStandData.Duration.WriteValue;
-            mainModel.WriteStdSettings((ushort)SelectedMeasProcessNum, stand);
+            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
         }, canExecPar => true));
         #endregion
         #region Команда "Записать тип стандартизации"
@@ -225,7 +227,7 @@ namespace IDensity.ViewModels
         {
             StandData stand = SelectedStandData.Clone() as StandData;
             stand.Type.Value = SelectedStandData.Type.WriteValue;
-            mainModel.WriteStdSettings((ushort)SelectedMeasProcessNum, stand);
+            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
         }, canExecPar => true));
         #endregion
         #region Команда "Записать физ. величину стандартизации"
@@ -237,7 +239,7 @@ namespace IDensity.ViewModels
         {
             StandData stand = SelectedStandData.Clone() as StandData;
             stand.Value.Value = SelectedStandData.Value.WriteValue;
-            mainModel.WriteStdSettings((ushort)SelectedMeasProcessNum, stand);
+            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
         }, canExecPar => true));
         #endregion
         #region Команда "Записать результат стандартизации"
@@ -255,6 +257,32 @@ namespace IDensity.ViewModels
         }, canExecPar => true));
         #endregion
         #endregion
+
+        #region Произвести стандартизацию
+        RelayCommand _makeStandCommand;
+        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(execPar => MakeStand(), canExecPar => mainModel.Connecting.Value));
+        void MakeStand()
+        {
+            if (!IsStandartisation)
+            {
+                ushort index = (ushort)StandSelNum;
+                mainModel.MakeStand(index);
+                standTimer = new System.Timers.Timer(mainModel.StandSettings[index].Duration.Value * 100 + 1000);
+                standTimer.Start();
+                IsStandartisation = true;
+                standTimer.Elapsed += (s, e) =>
+                {
+                    mainModel.GetStdSelection(index);
+                    IsStandartisation = false;
+                    standTimer.Stop();
+                    standTimer?.Dispose();
+                }; 
+            }
+        }
+        #endregion
+        #endregion
+
+
 
         #region Команды измерения даты-времени
         #region установить RTC пользователя
@@ -476,6 +504,26 @@ namespace IDensity.ViewModels
             }
         }
 
+        #endregion
+
+        #region Флаг стандартизации
+        private bool _isStandartisation;
+        /// <summary>
+        /// Производится стандартизация
+        /// </summary>
+        public bool IsStandartisation
+        {
+            get { return _isStandartisation; }
+            set { Set(ref _isStandartisation, value); }
+        }
+
+        #endregion
+
+        #region Таймер стандартизации
+        /// <summary>
+        /// Таймер стандартизации
+        /// </summary>
+        System.Timers.Timer standTimer;
         #endregion
 
         #endregion

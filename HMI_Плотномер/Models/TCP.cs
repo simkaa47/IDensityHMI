@@ -471,8 +471,6 @@ namespace IDensity.Models
         }
         #endregion
 
-
-
         #region Проверка корректности пакета FSRD
         /// <summary>
         /// Проверка корректности пакета FSRD
@@ -595,9 +593,29 @@ namespace IDensity.Models
             {
                 str = str + $",{stand.Results[i].Value.ToString().Replace(",", ".")}";
             }
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetStdSelection(index); }, Encoding.ASCII.GetBytes(str+"#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetStdSelection(index); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
+
+        #region Команда "Произвести стандартизацию"
+        /// <summary>
+        /// Произвести стандартизацию
+        /// </summary>
+        /// <param name="index">Номер набора стандартизации</param>
+        public void MakeStand(int index)
+        {
+            var str = $"CMND,ASM,index";
+            commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+        }
+        #endregion
+
+        #region Команда принудиельного запроса набора стандартизации после стандартизации
+        public void GetStdSel(ushort index)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => GetStdSelection(index) , null));
+        }
+        #endregion
+
         #endregion
 
         #region Очистка буфера

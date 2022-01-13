@@ -402,7 +402,7 @@
                                         <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}">
                                             <uc:CompoboxParameter CompoboxWidth="80"
                                                                   ItemSource="{StaticResource PortSpeeds}"
-                                                                  SelectedItem="{Binding WriteValue}"
+                                                                  SelectedItem="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged}"
                                                                   Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeBaudrateCommand}"
                                                                   CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem}"/>
                                         </ListBoxItem>
@@ -673,6 +673,7 @@
                                                   CommanDParameter="7"/>
                                 </ListBoxItem>
                                 <!--#endregion-->
+                                <!--#region Время последней стандартизации -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <DockPanel>
                                         <TextBlock  Text="{Binding SelectedStandData.Date.Description}"
@@ -681,6 +682,19 @@
                                                     HorizontalAlignment="Right"                                                    
                                                     Style="{StaticResource Common}"/>
                                     </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="Управление стандартизацией" Style="{StaticResource Common}" />
+                                        <Button Width="200" Height="Auto"
+                                                Command="{Binding MakeStandCommand}"
+                                                HorizontalContentAlignment="Center"
+                                                HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding IsStandartisation, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource StandStates}}"
+                                                       TextWrapping="Wrap"/>
+                                        </Button>
+                                    </DockPanel>                                    
                                 </ListBoxItem>
 
                             </ListBox>

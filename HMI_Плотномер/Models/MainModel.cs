@@ -157,7 +157,7 @@ namespace IDensity.Models
         #region Режим работы последовательного порта
         public Parameter<ushort> PortSelectMode { get; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");
         #endregion
-#endregion
+        #endregion
 
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
@@ -353,6 +353,25 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Команда "Произвести стандартизацию"
+        /// <summary>
+        /// Произвести стандартизацию
+        /// </summary>
+        /// <param name="index">Номер набора стандартизации</param>
+        public void MakeStand(int index)
+        {
+            if (CommMode.EthEnable) Tcp.MakeStand(index);
+            else if (CommMode.RsEnable) rs.MakeStand(index);
+        }
+        #endregion
+
+        #region Команда принудиельного запроса набора стандартизации после стандартизации
+        public void GetStdSelection(ushort index)
+        {
+            if (CommMode.EthEnable) Tcp.GetStdSel(index);
+            else if (CommMode.RsEnable) rs.GetStdSelection(index);
+        }
+        #endregion
         #endregion
 
     }
