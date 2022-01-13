@@ -798,7 +798,7 @@
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
                                             <!--#endregion-->
-                                            <!--#region ЦАП -->
+                                            <!--#region АЦП -->
                                             <DataGridTextColumn Header="Напряжение АЦП, мВ" Binding="{Binding AdcValue.Value}" IsReadOnly="True"/>
                                             <!--#endregion-->
                                             <!--#region Тип протокола -->
@@ -810,7 +810,25 @@
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
                                             <!--#endregion-->
-                                        </DataGrid.Columns>
+                                        <!--#region Активность -->
+                                        <DataGridTemplateColumn Width="120">
+                                            <DataGridTemplateColumn.Header>
+                                                <TextBlock Text="Активность АЦП" TextWrapping="Wrap"/>
+                                            </DataGridTemplateColumn.Header>
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="add:AnalogInput">
+                                                    <ComboBox ItemsSource="{StaticResource On/Off}" SelectedIndex="{Binding Activity.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="DropDownClosed">
+                                                                <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </ComboBox>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                    </DataGrid.Columns>
                                     </DataGrid>
                                 </GroupBox>
                                 <!--#endregion-->

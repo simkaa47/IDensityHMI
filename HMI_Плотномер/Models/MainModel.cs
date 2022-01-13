@@ -113,6 +113,7 @@ namespace IDensity.Models
                         {
                             var gr = new AnalogGroup(z);
                             gr.AI.SwitchPwrEvent += SwitchAm;
+                            gr.AI.ChangeSettCallEvent += ChangeAdcAct;
                             gr.AO.SwitchPwrEvent += SwitchAm;
                             gr.AO.SetTestValueCallEvent += SetTestValueAm;
                             gr.AO.ChangeSettCallEvent += ChangeDacAct;
@@ -342,6 +343,14 @@ namespace IDensity.Models
         {
             if (CommMode.EthEnable) Tcp.SendAnalogOutSwttings(groupNum, moduleNum, value);
             else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
+        }
+        #endregion
+
+        #region Команда "Изменить активность аналогового входа"
+        void ChangeAdcAct(int groupNum, int moduleNum, AnalogInput value)
+        {
+            if (CommMode.EthEnable) Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);
+            //else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
         }
         #endregion
 

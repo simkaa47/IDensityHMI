@@ -416,10 +416,10 @@ namespace IDensity.Models
             {
                 model.StandSettings[num].Results[j].Value = GetFloatFromUshorts(holdRegs, model.StandSettings[num].Results[j].RegNum + j * 2);
             }
-            var year = holdRegs[model.StandSettings[0].Date.RegNum] + 2000;
+            var year = holdRegs[model.StandSettings[0].Date.RegNum+2] + 2000;
             var month = (int)holdRegs[model.StandSettings[0].Date.RegNum + 1];
             month = month > 0 && month <= 12 ? month : 1;
-            var day = (int)holdRegs[model.StandSettings[0].Date.RegNum + 2];
+            var day = (int)holdRegs[model.StandSettings[0].Date.RegNum];
             day = day > 0 && day <= 31 ? day : 1;
             model.StandSettings[num].Date.Value = new DateTime(year, month, day);
             model.SettingsReaded = true;

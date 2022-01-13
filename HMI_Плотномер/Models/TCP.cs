@@ -407,6 +407,10 @@ namespace IDensity.Models
                 model.AnalogGroups[i].AO.DacHighLimit.Value = list[i][6];
 
             }
+            list = GetNumber("am_in_sett", 2, 2);
+            if (list == null) return;
+            model.AnalogGroups[0].AI.Activity.Value = (ushort)list[0][1];
+            model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1];
             // локальная функция
             List<List<float>> GetNumber(string id, int parNum, int count)
             {
@@ -464,10 +468,10 @@ namespace IDensity.Models
             }
             var dateParts = parts[12].Split(":").Where(s => ushort.TryParse(s, out tempUshort)).Select(s => tempUshort).ToArray();
             if (dateParts.Length != 3) return false;
-            dateParts[0] = (ushort)(2000 + dateParts[0]);
+            dateParts[2] = (ushort)(2000 + dateParts[2]);
             dateParts[1] = dateParts[1] > 0 && dateParts[1] <= 12 ? dateParts[1] : (ushort)1;
-            dateParts[2] = dateParts[2] > 0 && dateParts[2] <= 31 ? dateParts[2] : (ushort)1;
-            model.StandSettings[num].Date.Value = new DateTime(dateParts[0], dateParts[1], dateParts[2]);
+            dateParts[0] = dateParts[0] > 0 && dateParts[0] <= 31 ? dateParts[0] : (ushort)1;
+            model.StandSettings[num].Date.Value = new DateTime(dateParts[2], dateParts[1], dateParts[0]);
             model.SettingsReaded = true;
             return true;
         }
@@ -587,6 +591,14 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Отправить настройки аналоговых входов
+        public void SendAnalogInSwttings(int groupNum, int moduleNum, AnalogInput value)
+        {
+            var str = $"SETT,am_in_sett={groupNum},{value.Activity.Value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
         #region Записать настройки набора стандартизации
         public void WriteStdSettings(ushort index, StandData stand)
         {
@@ -606,7 +618,7 @@ namespace IDensity.Models
         /// <param name="index">Номер набора стандартизации</param>
         public void MakeStand(int index)
         {
-            var str = $"CMND,ASM,index";
+            var str = $"CMND,ASM,{index}";
             commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
