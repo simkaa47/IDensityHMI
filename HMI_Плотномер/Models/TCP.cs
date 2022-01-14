@@ -329,7 +329,10 @@ namespace IDensity.Models
             {
                 GetMeasProcessData();// Получить данные процеса измерений
                 GetStdSettings();
+                GetSettings2();
+                GetCalibrCoeffs();
                 GetSettings7();
+
             } 
             
         }
@@ -377,6 +380,71 @@ namespace IDensity.Models
                 model.MeasProcesses[index].DensitySolid.Value = numsFloat[2];
             }
             if (model.CurMeasProcessNum.Value < MainModel.measProcessNum) model.CurMeasProcess = model.MeasProcesses[model.CurMeasProcessNum.Value];
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки № 2
+        void GetSettings2()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,2#"));
+            var list = GetNumber("adc_proc_cntr", 3, MainModel.CountCounters);
+            if (list == null) return;
+            for (int i = 0; i < MainModel.CountCounters; i++)
+            {
+                model.CountDiapasones[i].Num.Value = (ushort)list[i][0];
+                model.CountDiapasones[i].Start.Value = (ushort)list[i][1];
+                model.CountDiapasones[i].Finish.Value = (ushort)list[i][2];
+            }
+            // локальная функция
+            List<List<float>> GetNumber(string id, int parNum, int count)
+            {
+                var strTemp = str;
+                float temp = 0;
+                List<List<float>> list = new List<List<float>>();
+                for (int i = 0; i < count; i++)
+                {
+                    int index = strTemp.LastIndexOf(id);
+                    if (index == 0)
+                    {
+                        return null;
+                    }
+                    var sepStrs = strTemp.Substring(index, strTemp.Length - index).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Take(parNum);
+                    var nums = sepStrs.SelectMany(s => s.Split("=", StringSplitOptions.RemoveEmptyEntries))
+                        .Where(str => float.TryParse(str.Replace(".", ","), out temp))
+                        .Select(str => temp).ToList();
+                    if (nums == null || nums.Count != parNum)
+                    {
+                        return null;
+                    }
+                    list.Insert(0, nums);
+                    strTemp = strTemp.Remove(index, strTemp.Length - index);
+                }
+                return list;
+            }
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настроки № 3
+        void GetCalibrCoeffs()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,3#"));
+            if (str.Length < 20 || str.Substring(0, 7) != "*FSRD,3" || str[str.Length - 1] != '#') return;
+            float temp = 0;
+            var nums = str.Substring(7).Split(new char[] { ',','=', '#' },StringSplitOptions.RemoveEmptyEntries).Where(s => float.TryParse(s.Replace(".",","), out temp)).Select(s => temp).ToList();
+            for (int i = 0; i < 8; i++)
+            {
+                model.CalibrDatas[i].Num.Value = (ushort)nums[i * 8];
+                model.CalibrDatas[i].MeasUnitNum.Value = (ushort)nums[i * 8+1];
+                for (int j = 0; j < 6; j++)
+                {
+                    model.CalibrDatas[i].MeasUnitNum.Value = (ushort)nums[i * 8 + 2+j];
+                }
+            }
+            if (nums.Count != 64) return;
             model.SettingsReaded = true;
         }
         #endregion
@@ -494,6 +562,8 @@ namespace IDensity.Models
         #endregion
 
         #region Команды
+
+
         #region Включить-выключить HV
         public void SwitchHv(int value)
         {
@@ -627,6 +697,14 @@ namespace IDensity.Models
         public void GetStdSel(ushort index)
         {
             commands.Enqueue(new TcpWriteCommand((buf) => GetStdSelection(index) , null));
+        }
+        #endregion
+
+        #region Команда "Записать настройки счечиков"
+        public void WriteCounterSettings(CountDiapasone diapasone)
+        {
+            var str = $"SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
 

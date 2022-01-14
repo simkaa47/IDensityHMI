@@ -25,6 +25,7 @@ namespace IDensity.Models
             SwitchPwrAm  = 7,    // стартовый номер регистра управления питанием аналоговых модулей
             TestValueDac = 12,  // тестовая величина для отправки на ЦАП
             SendTestValue = 13, // отправка тестового значения на ЦАП
+            AdcSett = 45, // начальный номер регистров, отвечающих за настройки АЦП
             DacSett=51 // начальный номер регистров, отвечающих за настройки ЦАП
         }
         #endregion        
@@ -318,6 +319,8 @@ namespace IDensity.Models
                 GetHvTarget();
                 GetAnalogOutSettings();
                 GetAllStandSettings();
+                GetAnalogInSettings();
+                GetCounterSettingsAll();
             }
         }
         #region Данные измерительных настроек
@@ -390,6 +393,18 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Настройки аналоговых выходов
+        void GetAnalogInSettings()
+        {
+            model.SettingsReaded = false;
+            for (int i = 0; i < 2; i++)
+            {
+                model.AnalogGroups[i].AI.Activity.Value = holdRegs[(int)Holds.AdcSett + i];                
+            }
+            model.SettingsReaded = true;
+        }
+        #endregion
+
         #region Настройки стандартизации
         /// <summary>
         /// Получить данные всех наборов стандартизаций
@@ -424,6 +439,31 @@ namespace IDensity.Models
             model.StandSettings[num].Date.Value = new DateTime(year, month, day);
             model.SettingsReaded = true;
         }
+        #endregion
+
+        #region Настройки счетчиков
+        void GetCounterSettingsAll()
+        {
+            for (ushort i = 0; i < MainModel.CountCounters; i++)
+            {
+                GetCounterSettings(i);
+            }
+        }
+        void GetCounterSettings(ushort num)
+        {
+            model.SettingsReaded = false;
+            client.WriteSingleRegister(model.CountDiapasones[0].Num.RegNum, num);
+            ReadHoldRegs(model.CountDiapasones[0].Start.RegNum, 2);
+            if (num < MainModel.CountCounters)
+            {
+                model.CountDiapasones[num].Num.Value = num;
+                model.CountDiapasones[num].Start.Value = holdRegs[model.CountDiapasones[0].Start.RegNum];
+                model.CountDiapasones[num].Finish.Value = holdRegs[model.CountDiapasones[0].Finish.RegNum];
+            }
+            model.SettingsReaded = true;
+        }
+
+
         #endregion
 
 
@@ -579,6 +619,18 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Отправить настройки аналоговых входов
+        public void SendAnalogInSwttings(int groupNum, int moduleNum, AnalogInput value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                holdRegs[(int)Holds.AdcSett + groupNum] = value.Activity.Value;// Активнсть
+                WriteRegs((int)Holds.AdcSett + groupNum, 1);
+
+            }, 0, 0));
+        }
+        #endregion
+
         #region Записать настройки набора стандартизации
         public void WriteStdSettings(ushort index, StandData stand)
         {
@@ -628,7 +680,19 @@ namespace IDensity.Models
         }
         #endregion
 
-
+        #region Команда "Записать настройки счечиков"
+        public void WriteCounterSettings(CountDiapasone diapasone)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client.WriteSingleRegister(diapasone.Num.RegNum,diapasone.Num.Value);
+                holdRegs[diapasone.Start.RegNum] = diapasone.Start.Value;
+                holdRegs[diapasone.Finish.RegNum] = diapasone.Finish.Value;
+                WriteRegs(diapasone.Start.RegNum, 2);
+                GetCounterSettings(diapasone.Num.Value);
+            }, 0, 0));
+        }
+        #endregion
         #endregion
     }
 }

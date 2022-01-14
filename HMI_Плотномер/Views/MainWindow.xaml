@@ -402,7 +402,7 @@
                                         <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}">
                                             <uc:CompoboxParameter CompoboxWidth="80"
                                                                   ItemSource="{StaticResource PortSpeeds}"
-                                                                  SelectedItem="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged}"
+                                                                  SelectedItem="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                                   Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeBaudrateCommand}"
                                                                   CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem}"/>
                                         </ListBoxItem>
@@ -607,6 +607,129 @@
                             </ListBox>                                
                             <!--#endregion-->
                         </GroupBox>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Настройки счетчиков -->
+                    <TabItem Header="СЧЕТЧИКИ">
+                        <DataGrid ItemsSource="{Binding mainModel.CountDiapasones}"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <!--#region № -->
+                                <DataGridTextColumn  IsReadOnly="True" Header="№" Binding="{Binding Num.Value}"/>
+                                <!--#endregion-->
+                                <!--#region Начальный номер -->
+                                <DataGridTemplateColumn Header="Начальный номер">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Start.WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeCounterDiapStartCommand}"
+                                                        CommandParameter="{Binding Num.Value}">--></Button>
+                                                <TextBlock Text="{Binding Start.Value}"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region Конечный номер -->
+                                <DataGridTemplateColumn Header="Конечный номер">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Finish.WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeCounterDiapFinishCommand}"
+                                                        CommandParameter="{Binding Num.Value}">--></Button>
+                                                <TextBlock Text="{Binding Finish.Value}"
+                                                           Width="50"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Калибровочные криые -->
+                    <TabItem Header="КАЛИБРОВОЧНЫЕ КРИВЫЕ">
+                        <DataGrid ItemsSource="{Binding mainModel.CalibrDatas}">
+                            <DataGrid.Columns>
+                                <!--#region № -->
+                                <DataGridTextColumn Header="№" Binding="{Binding Num.Value}"/>
+                                <!--#endregion-->
+                                <!--#region Единица измерения -->
+                                <DataGridTemplateColumn Header="Единица измерения">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.UnitNames.Data}"
+                                                      DisplayMemberPath="Name"
+                                                      SelectedIndex="{Binding MeasUnitNum.Value, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <DataGridTemplateColumn Header="Коэффициент 0">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Coeffs[0].WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeCalibrMeasUnit}"
+                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=DataContext}">--></Button>
+                                                <TextBlock Text="{Binding Coeffs[0].Value}"
+                                                           Width="50"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Стандартизация -->

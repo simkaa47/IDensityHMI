@@ -19,7 +19,21 @@ namespace IDensity.Models
         /// <summary>
         /// Количество стандартизаций
         /// </summary>
-        public static readonly int CountStand = 12; 
+        public static readonly int CountStand = 12;
+        #endregion
+
+        #region Количество счетчиков
+        /// <summary>
+        /// Количество счетчиков
+        /// </summary>
+        public static readonly int CountCounters = 8;
+        #endregion
+
+        #region Количетво калибровочных кривых
+        /// <summary>
+        /// Количетво калибровочных кривых
+        /// </summary>
+        public static int CalibCurveNum = 8;
         #endregion
         public MainModel()
         {
@@ -148,6 +162,14 @@ namespace IDensity.Models
         #region Данные стандартизаций
 
         public StandData[] StandSettings { get; } = Enumerable.Range(0, 12).Select(i => new StandData()).ToArray();
+        #endregion
+
+        #region Данные счетчиков        
+        public CountDiapasone[] CountDiapasones { get; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
+        #endregion
+
+        #region Данные калибровочных кривых
+        public CalibrData[] CalibrDatas { get; } = Enumerable.Range(0, CalibCurveNum).Select(i => new CalibrData()).ToArray();
         #endregion
 
         #region Параметры полседовательного порта платы
@@ -350,7 +372,7 @@ namespace IDensity.Models
         void ChangeAdcAct(int groupNum, int moduleNum, AnalogInput value)
         {
             if (CommMode.EthEnable) Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);
-            //else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
+            else if (CommMode.RsEnable) rs.SendAnalogInSwttings(groupNum, moduleNum, value);
         }
         #endregion
 
@@ -379,6 +401,17 @@ namespace IDensity.Models
         {
             if (CommMode.EthEnable) Tcp.GetStdSel(index);
             else if (CommMode.RsEnable) rs.GetStdSelection(index);
+        }
+        #endregion
+
+        #region Команда "Записать настройки счечиков"
+        public void WriteCounterSettings(CountDiapasone diapasone)
+        {
+            if (diapasone.Num.Value < MainModel.CountStand)
+            {
+                if (CommMode.EthEnable) Tcp.WriteCounterSettings(diapasone);
+                else if (CommMode.RsEnable) rs.WriteCounterSettings(diapasone);
+            }
         }
         #endregion
         #endregion

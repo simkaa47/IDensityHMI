@@ -44,7 +44,7 @@ namespace IDensity.ViewModels
 
         #region Обновить список доступных Com портов
         RelayCommand _updateComPortListCommand;
-        public RelayCommand UpdateComPortListCommand => _updateComPortListCommand ?? (_updateComPortListCommand = new RelayCommand(o => ComPorts=SerialPort.GetPortNames(), o => true));
+        public RelayCommand UpdateComPortListCommand => _updateComPortListCommand ?? (_updateComPortListCommand = new RelayCommand(o => ComPorts = SerialPort.GetPortNames(), o => true));
         #endregion
 
         #region Команда "Закрыть приложение"
@@ -82,14 +82,14 @@ namespace IDensity.ViewModels
         RelayCommand _setCalibCurveDiapCommand;
         public RelayCommand SetCalibCurveDiapCommand
         {
-            get => _setCalibCurveDiapCommand ?? (_setCalibCurveDiapCommand = new RelayCommand(execPar => 
+            get => _setCalibCurveDiapCommand ?? (_setCalibCurveDiapCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
                 process.Ranges[SelectedDiapNum].CalibCurveNum.Value = process.Ranges[SelectedDiapNum].CalibCurveNum.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            }, 
+            },
                 canExecPar => true));
-            
+
         }
         #endregion
         #region Команда "Записать номер стандартизации в диапазоне"
@@ -161,13 +161,13 @@ namespace IDensity.ViewModels
         #endregion
         #region Команда "Отправить данные периода-полураспада"
         RelayCommand _setHalfLifeCommand;
-        public RelayCommand SetHalfLifeCommand { 
-            get => _setHalfLifeCommand ?? (_setHalfLifeCommand = new RelayCommand(execPar => 
+        public RelayCommand SetHalfLifeCommand {
+            get => _setHalfLifeCommand ?? (_setHalfLifeCommand = new RelayCommand(execPar =>
             {
                 MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
                 process.HalfLife.Value = process.HalfLife.WriteValue;
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            }, 
+            },
                 canExecPar => true)); }
         #endregion
         #region Команда "Отправить данные плотности жидкости"
@@ -276,10 +276,73 @@ namespace IDensity.ViewModels
                     IsStandartisation = false;
                     standTimer.Stop();
                     standTimer?.Dispose();
-                }; 
+                };
             }
         }
         #endregion
+        #endregion
+
+        #region Команды настроек счетчиков
+
+        #region Записать стартовую точку
+        RelayCommand _changeCounterDiapStartCommand;
+        public RelayCommand ChangeCounterDiapStartCommand
+        {
+            get
+            {
+                if (_changeCounterDiapStartCommand == null)
+                {
+                    _changeCounterDiapStartCommand = new RelayCommand(execPar =>
+                    {
+                        if (execPar == null) return;
+                        ushort index = 0;
+                        if (ushort.TryParse(execPar.ToString(), out index) && index < MainModel.CountCounters)
+                        {
+                            var diap = mainModel.CountDiapasones[index].Clone() as CountDiapasone;
+                            diap.Start.Value = mainModel.CountDiapasones[index].Start.WriteValue;
+                            mainModel.WriteCounterSettings(diap);
+                        }
+                    },
+                    canExec => mainModel.Connecting.Value);
+                }
+                return _changeCounterDiapStartCommand;
+            }
+        }
+        #endregion
+
+        #region Записать конечную точку
+        RelayCommand _changeCounterDiapFinishCommand;
+        public RelayCommand ChangeCounterDiapFinishCommand
+        {
+            get
+            {
+                if (_changeCounterDiapFinishCommand == null)
+                {
+                    _changeCounterDiapFinishCommand = new RelayCommand(execPar =>
+                    {
+                        if (execPar == null) return;
+                        ushort index = 0;
+                        if (ushort.TryParse(execPar.ToString(), out index) && index < MainModel.CountCounters)
+                        {
+                            var diap = mainModel.CountDiapasones[index].Clone() as CountDiapasone;
+                            diap.Finish.Value = mainModel.CountDiapasones[index].Finish.WriteValue;
+                            mainModel.WriteCounterSettings(diap);
+                        }
+                    },
+                    canExec => mainModel.Connecting.Value);
+                }
+                return _changeCounterDiapFinishCommand;
+            }
+        }
+        #endregion
+        #endregion
+
+        #region Команды настроек данных калибровки
+        RelayCommand _changeCalibrMeasUnit;
+        public RelayCommand ChangeCalibrMeasUnit => _changeCalibrMeasUnit ?? (_changeCalibrMeasUnit = new RelayCommand(execPar =>
+             {
+                 if (execPar == null || !(execPar is CalibrData)) return;
+             }, canExec => mainModel.Connecting.Value));
         #endregion
 
 
