@@ -435,16 +435,17 @@ namespace IDensity.Models
             if (str.Length < 20 || str.Substring(0, 7) != "*FSRD,3" || str[str.Length - 1] != '#') return;
             float temp = 0;
             var nums = str.Substring(7).Split(new char[] { ',','=', '#' },StringSplitOptions.RemoveEmptyEntries).Where(s => float.TryParse(s.Replace(".",","), out temp)).Select(s => temp).ToList();
-            for (int i = 0; i < 8; i++)
+            if (nums.Count != 64) return;
+            for (int i = 0; i < MainModel.CalibCurveNum; i++)
             {
                 model.CalibrDatas[i].Num.Value = (ushort)nums[i * 8];
                 model.CalibrDatas[i].MeasUnitNum.Value = (ushort)nums[i * 8+1];
                 for (int j = 0; j < 6; j++)
                 {
-                    model.CalibrDatas[i].MeasUnitNum.Value = (ushort)nums[i * 8 + 2+j];
+                    model.CalibrDatas[i].Coeffs[j].Value = nums[i * 8 + 2+j];
                 }
             }
-            if (nums.Count != 64) return;
+            
             model.SettingsReaded = true;
         }
         #endregion
@@ -705,6 +706,15 @@ namespace IDensity.Models
         {
             var str = $"SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str + "#")));
+        }
+        #endregion
+
+        #region Команда "Записать данные калибровочных кривых"
+        public void SetCalibrData(CalibrData calibrData)
+        {
+            var str = $"SETT,adc_calib_coeff={calibrData.Num.Value},{calibrData.MeasUnitNum.Value}";
+            for (int i = 0; i < MainModel.CalibCurveNum; i++) str = str + $",{calibrData.Coeffs[i].Value.ToString().Replace(",",".")}";           
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetCalibrCoeffs(); }, Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
 

@@ -335,17 +335,7 @@ namespace IDensity.ViewModels
             }
         }
         #endregion
-        #endregion
-
-        #region Команды настроек данных калибровки
-        RelayCommand _changeCalibrMeasUnit;
-        public RelayCommand ChangeCalibrMeasUnit => _changeCalibrMeasUnit ?? (_changeCalibrMeasUnit = new RelayCommand(execPar =>
-             {
-                 if (execPar == null || !(execPar is CalibrData)) return;
-             }, canExec => mainModel.Connecting.Value));
-        #endregion
-
-
+        #endregion 
 
         #region Команды измерения даты-времени
         #region установить RTC пользователя

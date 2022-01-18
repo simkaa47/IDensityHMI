@@ -688,28 +688,35 @@
                         <DataGrid ItemsSource="{Binding mainModel.CalibrDatas}">
                             <DataGrid.Columns>
                                 <!--#region № -->
-                                <DataGridTextColumn Header="№" Binding="{Binding Num.Value}"/>
+                                <DataGridTextColumn Header="№" IsReadOnly="True"  Binding="{Binding Num.Value}"/>
                                 <!--#endregion-->
-                                <!--#region Единица измерения -->
+                                <!--#region Единица измерения -->                                
                                 <DataGridTemplateColumn Header="Единица измерения">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.UnitNames.Data}"
                                                       DisplayMemberPath="Name"
-                                                      SelectedIndex="{Binding MeasUnitNum.Value, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                                                      SelectedIndex="{Binding MeasUnitNum.WriteValue, UpdateSourceTrigger=LostFocus}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="DropDownClosed">
+                                                        <i:InvokeCommandAction Command="{Binding SetMeasUnitCommand}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!--#endregion-->
+                                <!--#region К-т 0 -->
                                 <DataGridTemplateColumn Header="Коэффициент 0">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate DataType="">
                                             <DockPanel>
                                                 <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
                                                     <TextBox.Text>
-                                                        <Binding Path="Coeffs[0].WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                                        <Binding Path="Coeffs[0].WriteValue" UpdateSourceTrigger="LostFocus" StringFormat="{}{0:#.##}">
                                                             <Binding.ValidationRules>
                                                                 <DataErrorValidationRule />
                                                             </Binding.ValidationRules>
@@ -717,9 +724,40 @@
                                                     </TextBox.Text>
                                                 </TextBox>
                                                 <Button Margin="5,0,5,0"
-                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeCalibrMeasUnit}"
-                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=DataContext}">--></Button>
+                                                        Command="{Binding SetCoeffCommand}"
+                                                        CommandParameter="0"
+                                                        >--></Button>
                                                 <TextBlock Text="{Binding Coeffs[0].Value}"
+                                                           Width="50"                                                           
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region К-т 1 -->
+                                <DataGridTemplateColumn Header="Коэффициент 1">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="">
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Coeffs[1].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetCoeffCommand}"
+                                                        CommandParameter="1"
+                                                        >--></Button>
+                                                <TextBlock Text="{Binding Coeffs[1].Value}"
                                                            Width="50"
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
@@ -728,6 +766,127 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region К-т 2 -->
+                                <DataGridTemplateColumn Header="Коэффициент 2">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="">
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Coeffs[2].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetCoeffCommand}"
+                                                        CommandParameter="2"
+                                                        >--></Button>
+                                                <TextBlock Text="{Binding Coeffs[2].Value}"
+                                                           Width="50"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region К-т 3 -->
+                                <DataGridTemplateColumn Header="Коэффициент 3">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="">
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Coeffs[3].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetCoeffCommand}"
+                                                        CommandParameter="3"
+                                                        >--></Button>
+                                                <TextBlock Text="{Binding Coeffs[3].Value}"
+                                                           Width="50"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region К-т 4 -->
+                                <DataGridTemplateColumn Header="Коэффициент 4">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="">
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Coeffs[4].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetCoeffCommand}"
+                                                        CommandParameter="4"
+                                                        >--></Button>
+                                                <TextBlock Text="{Binding Coeffs[4].Value}"
+                                                           Width="50"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region К-т 5 -->
+                                <DataGridTemplateColumn Header="Коэффициент 5">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="">
+                                            <DockPanel>
+                                                <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                    <TextBox.Text>
+                                                        <Binding Path="Coeffs[5].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                            <Binding.ValidationRules>
+                                                                <DataErrorValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                                <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetCoeffCommand}"
+                                                        CommandParameter="5"
+                                                        >--></Button>
+                                                <TextBlock Text="{Binding Coeffs[5].Value}"
+                                                           Width="50"
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>

@@ -33,11 +33,12 @@ namespace IDensity.Models
         /// <summary>
         /// Количетво калибровочных кривых
         /// </summary>
-        public static int CalibCurveNum = 8;
+        public static int CalibCurveNum = 6;
         #endregion
         public MainModel()
         {
             Init();// Инициализация параметров
+            CalibrDataDescribe();
         }
 
 
@@ -168,8 +169,15 @@ namespace IDensity.Models
         public CountDiapasone[] CountDiapasones { get; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
         #endregion
 
-        #region Данные калибровочных кривых
+        #region Данные калибровочных кривых        
         public CalibrData[] CalibrDatas { get; } = Enumerable.Range(0, CalibCurveNum).Select(i => new CalibrData()).ToArray();
+        void CalibrDataDescribe()
+        {
+            foreach (var calibr in CalibrDatas)
+            {
+                calibr.SetSettingsCommandEvent += SetCalibrData;
+            }
+        }
         #endregion
 
         #region Параметры полседовательного порта платы
@@ -412,6 +420,14 @@ namespace IDensity.Models
                 if (CommMode.EthEnable) Tcp.WriteCounterSettings(diapasone);
                 else if (CommMode.RsEnable) rs.WriteCounterSettings(diapasone);
             }
+        }
+        #endregion
+
+        #region Команда "Записать данные калибровочных кривых"
+        void SetCalibrData(CalibrData calibrData)
+        {
+            if (CommMode.EthEnable) Tcp.SetCalibrData(calibrData);
+            //else if (CommMode.RsEnable) rs.WriteCounterSettings(diapasone);
         }
         #endregion
         #endregion
