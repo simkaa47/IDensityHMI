@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Standartisation;
 using IDensity.Models.XML;
 using System;
@@ -39,6 +40,7 @@ namespace IDensity.Models
         {
             Init();// Инициализация параметров
             CalibrDataDescribe();
+            AdcSettingsEventDescribe();            
         }
 
 
@@ -72,6 +74,14 @@ namespace IDensity.Models
 
         #region ФВ усредненное по диапазонам усредненное
         public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");
+        #endregion
+
+        #region Концентрация мгновенная
+        public Parameter<float> ContetrationValueCur { get; } = new Parameter<float>("ContetrationValueCur", "Мгновенное значение концентрации", 0, float.PositiveInfinity, 27, "read");
+        #endregion
+
+        #region Концентрация усредненная
+        public Parameter<float> ContetrationValueAvg { get; } = new Parameter<float>("ContetrationValueAvg", "Усреднненное значение концентрации", 0, float.PositiveInfinity, 29, "read");
         #endregion
 
         #region Статус циклических измерений
@@ -109,8 +119,11 @@ namespace IDensity.Models
          };
         #endregion
 
+
+
         #endregion
 
+        #region Настройки в плате
         #region Настройки платы АЦП
         public AdcParameters AdcBoard { get; } = new AdcParameters();
         #endregion
@@ -182,7 +195,7 @@ namespace IDensity.Models
 
         #region Параметры полседовательного порта платы
         #region Баудрейт
-        public Parameter<int> PortBaudrate { get; } = new Parameter<int>("PortBaudrate", "Скорость передачи данных", 1200, 115200, 48, "hold");
+        public Parameter<uint> PortBaudrate { get; } = new Parameter<uint>("PortBaudrate", "Скорость передачи данных", 1200, 115200, 48, "hold");
         #endregion
 
         #region Режим работы последовательного порта
@@ -190,8 +203,68 @@ namespace IDensity.Models
         #endregion
         #endregion
 
+        #region Настройки платы АЦП
+
+        #region Адрес UDP приемника        
+        private string _udpAddrString = "0.0.0.0";
+        /// <summary>
+        /// Адрес UDP приемника
+        /// </summary>
+        public string UdpAddrString
+        {
+            get { return _udpAddrString; }
+            set
+            {
+                if (CheckIp(value))
+                {
+                    Set(ref _udpAddrString, value);
+                }
+            }
+        }
+
+        #region Метод проверки корректности ip
+        /// <summary>
+        /// Проверка корректности ip
+        /// </summary>
+        /// <param name="ip">Проверяемая строка</param>
+        /// <returns>true, если ip корректно</returns>
+        public static bool CheckIp(string ip)
+        {
+            var arrStr = ip.Split(".");
+            int temp = 0;
+            if (arrStr.Length != 4) return false;
+            foreach (var item in arrStr)
+            {
+                if (!int.TryParse(item, out temp)) return false;
+                if ((temp < 0) || (temp > 255)) return false;
+            }
+            return true;
+        }
+        #endregion
+        #endregion
+
+        #region Настройки платы АЦП
+        public AdcBoardSettings AdcBoardSettings { get; } = new AdcBoardSettings();
+        #region Подписка на события класса AdcBoardSettings
+        /// <summary>
+        /// Подписка на события класса AdcBoardSettings
+        /// </summary>
+        void AdcSettingsEventDescribe()
+        {
+            AdcBoardSettings.SettingsChangedEvent += SetAdcBoardSettings;
+            AdcBoardSettings.StartStopAdcBoardEvent += SwitchAdcBoard;
+            AdcBoardSettings.StartStopAdcBoardEvent += StartStopAdcData;
+        }
+        #endregion
+        #endregion
+
+
+        #endregion
+
+
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
+        #endregion 
         #endregion
 
         public RS485 rs { get; private set; }
@@ -226,6 +299,8 @@ namespace IDensity.Models
                 if (args.PropertyName == "Value")
                 {
                     PhysValueAvg.Value = 0;
+                    ContetrationValueAvg.Value = 0;
+                    ContetrationValueCur.Value = 0;
                     PhysValueCur.Value = 0;
                     UpdateDataEvent?.Invoke();
                 }
@@ -317,7 +392,7 @@ namespace IDensity.Models
 
         #region Команды настроек последовательного порта
         #region Записать бадрейт
-        public void ChangeBaudrate(int value)
+        public void ChangeBaudrate(uint value)
         {
             if (CommMode.EthEnable) Tcp.ChangeBaudrate(value);
             else if ((CommMode.RsEnable)) rs.ChangeBaudrate(value);
@@ -427,7 +502,40 @@ namespace IDensity.Models
         void SetCalibrData(CalibrData calibrData)
         {
             if (CommMode.EthEnable) Tcp.SetCalibrData(calibrData);
-            //else if (CommMode.RsEnable) rs.WriteCounterSettings(diapasone);
+            else if (CommMode.RsEnable) rs.SetCalibrData(calibrData);
+        }
+        #endregion
+
+        #region Команда "Поменять UDP адрес источника"
+        public void SetUdpAddr(byte[] addr)
+        {
+           if (CommMode.EthEnable) Tcp.SetUdpAddr(addr);
+           else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+        }
+
+        #endregion
+
+        #region Команды изменения настроек платы АЦП
+        public void SetAdcBoardSettings(AdcBoardSettings settings)
+        {
+            if (CommMode.EthEnable) Tcp.SetAdcBoardSettings(settings);
+            //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+        }
+        #endregion
+
+        #region Команда "Запуск-останов платы АЦП"
+        public void SwitchAdcBoard(ushort value)
+        {
+            if (CommMode.EthEnable) Tcp.SwitchAdcBoard(value);
+            //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+        }
+        #endregion
+
+        #region Команда "Запуск/останов выдачи данных АЦП "
+        public void StartStopAdcData(ushort value)
+        {
+            if (CommMode.EthEnable) Tcp.StartStopAdcData(value);
+            //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
         }
         #endregion
         #endregion

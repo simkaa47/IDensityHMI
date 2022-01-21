@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Standartisation;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace IDensity.Models
             get => _ip;
             set
             {
-                if (CheckIp(value)) Set(ref _ip, value);
+                if (MainModel.CheckIp(value)) Set(ref _ip, value);
             }
         }
         #endregion
@@ -61,27 +62,7 @@ namespace IDensity.Models
         #endregion
 
         Queue<TcpWriteCommand> commands = new Queue<TcpWriteCommand>();
-        #endregion
-
-        #region Метод проверки корректности ip
-        /// <summary>
-        /// Проверка корректности ip
-        /// </summary>
-        /// <param name="ip">Проверяемая строка</param>
-        /// <returns>true, если ip корректно</returns>
-        bool CheckIp(string ip)
-        {
-            var arrStr = ip.Split(".");
-            int temp = 0;
-            if (arrStr.Length != 4) return false;
-            foreach (var item in arrStr)
-            {
-                if (!int.TryParse(item, out temp)) return false;
-                if ((temp < 0) || (temp > 255)) return false;
-            }
-            return true;
-        }
-        #endregion
+        #endregion        
 
         #region Соединение
         void Connect()
@@ -137,6 +118,7 @@ namespace IDensity.Models
                 {
                     var command = commands.Dequeue();
                     command.Action?.Invoke(command.Parameter);
+                    Thread.Sleep(100);
                 }
 
             }
@@ -205,13 +187,16 @@ namespace IDensity.Models
             StreamClear();
             stream.Write(buffer, 0, buffer.Length);
             int num = 0;
+            int offset = 0;
             do
             {
-                num = stream.Read(inBuf, 0, inBuf.Length);
+                num = stream.Read(inBuf, offset, inBuf.Length);
+                Thread.Sleep(100);
+                offset += num;
 
             } while (stream.DataAvailable);
             model.Connecting.Value = true;
-            Thread.Sleep(100);
+           
             return Encoding.ASCII.GetString(inBuf, 0, num);// Получаем строку из байт;            
         }
 
@@ -274,11 +259,18 @@ namespace IDensity.Models
                 .Where(str => float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out temp)).
                 Select(str => temp).
                 ToArray();
-            if (nums.Length == 9)
+            if (nums.Length == 11)
             {
-                model.PhysValueCur.Value = nums[6];
-                model.PhysValueAvg.Value = nums[7];
                 model.CycleMeasStatus.Value = nums[8] > 0 ? true : false;
+
+                if (model.CycleMeasStatus.Value)
+                {
+                    model.PhysValueCur.Value = nums[6];
+                    model.PhysValueAvg.Value = nums[7];
+                    model.ContetrationValueAvg.Value = nums[9];
+                    model.ContetrationValueCur.Value = nums[10];
+                }              
+            
             }
         }
         #endregion
@@ -332,6 +324,7 @@ namespace IDensity.Models
                 GetSettings2();
                 GetCalibrCoeffs();
                 GetSettings7();
+                GetSettings1();
 
             } 
             
@@ -384,6 +377,53 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Настройки №1
+        void GetSettings1()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,1#"));
+            var list = GetNumber("adc_mode", 1, 1);
+            if (list == null) return;
+            model.AdcBoardSettings.AdcMode.Value = (ushort)list[0][0];
+            list = GetNumber("adc_sync_mode", 1, 1);
+            if (list == null) return;
+            model.AdcBoardSettings.AdcSyncMode.Value = (ushort)list[0][0];
+            list = GetNumber("adc_sync_level", 1, 1);
+            if (list == null) return;
+            model.AdcBoardSettings.AdcSyncMode.Value = (ushort)list[0][0];
+            list = GetNumber("timer_max", 1, 1);
+            if (list == null) return;
+            model.AdcBoardSettings.TimerMax.Value = (ushort)list[0][0];
+            // локальная функция
+            List<List<float>> GetNumber(string id, int parNum, int count)
+            {
+                var strTemp = str;
+                float temp = 0;
+                List<List<float>> list = new List<List<float>>();
+                for (int i = 0; i < count; i++)
+                {
+                    int index = strTemp.LastIndexOf(id);
+                    if (index < 1)
+                    {
+                        return null;
+                    }
+                    var sepStrs = strTemp.Substring(index, strTemp.Length - index).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Take(parNum);
+                    var nums = sepStrs.SelectMany(s => s.Split("=", StringSplitOptions.RemoveEmptyEntries))
+                        .Where(str => float.TryParse(str.Replace(".", ","), out temp))
+                        .Select(str => temp).ToList();
+                    if (nums == null || nums.Count != parNum)
+                    {
+                        return null;
+                    }
+                    list.Insert(0, nums);
+                    strTemp = strTemp.Remove(index, strTemp.Length - index);
+                }
+                return list;
+            }
+            model.SettingsReaded = true;
+        }
+        #endregion
+
         #region Настройки № 2
         void GetSettings2()
         {
@@ -397,6 +437,9 @@ namespace IDensity.Models
                 model.CountDiapasones[i].Start.Value = (ushort)list[i][1];
                 model.CountDiapasones[i].Finish.Value = (ushort)list[i][2];
             }
+            list = GetNumber("adc_proc_mode", 1, 1);
+            if (list == null) return;
+            model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
             // локальная функция
             List<List<float>> GetNumber(string id, int parNum, int count)
             {
@@ -406,7 +449,7 @@ namespace IDensity.Models
                 for (int i = 0; i < count; i++)
                 {
                     int index = strTemp.LastIndexOf(id);
-                    if (index == 0)
+                    if (index < 1)
                     {
                         return null;
                     }
@@ -457,7 +500,7 @@ namespace IDensity.Models
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7#"));
             var list = GetNumber("serial_baudrate", 1,1);
             if (list==null) return;
-            model.PortBaudrate.Value = (int)list[0][0];
+            model.PortBaudrate.Value = (uint)list[0][0];
             list = GetNumber("hv_target", 1, 1);
             if (list == null) return;
             model.TelemetryHV.VoltageSV.Value = (ushort)(list[0][0]*0.05);
@@ -480,6 +523,14 @@ namespace IDensity.Models
             if (list == null) return;
             model.AnalogGroups[0].AI.Activity.Value = (ushort)list[0][1];
             model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1];
+            list = GetNumber("udp_dst_addr", 4, 1);
+            if (list == null) return;
+            var ip = "";
+            foreach (var num in list[0])
+            {
+                ip = ip + num + ".";
+            }
+            model.UdpAddrString = ip.Remove(ip.Length - 1,1);
             // локальная функция
             List<List<float>> GetNumber(string id, int parNum, int count)
             {
@@ -489,7 +540,7 @@ namespace IDensity.Models
                 for (int i = 0; i < count; i++)
                 {
                     int index = strTemp.LastIndexOf(id);
-                    if (index == 0)
+                    if (index < 1)
                     {
                         return null;
                     }
@@ -616,7 +667,7 @@ namespace IDensity.Models
         #endregion
 
         #region Изменить скорость последовательного порта
-        public void ChangeBaudrate(int value)
+        public void ChangeBaudrate(uint value)
         {
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,serial_baudrate={value}#")));
         }
@@ -718,6 +769,49 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Команда "Поменять UDP адрес источника"
+        public void SetUdpAddr(byte[] addr)
+        {
+            if (addr.Length != 4) return;
+            var str = $"SETT,udp_dst_addr=";
+            for (int i = 0; i < 4; i++) str = str + $"{addr[i]},";
+            str.Remove(str.Length - 1, 1);
+
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str + "#")));
+        }
+
+        #endregion
+
+        #region Команды изменения настроек платы АЦП
+        public void SetAdcBoardSettings(AdcBoardSettings settings)
+        {
+            SwitchAdcBoard(0);            
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_mode={settings.AdcMode.Value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_mode={settings.AdcSyncMode.Value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_level={settings.AdcSyncLevel.Value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,timer_max={settings.TimerMax.Value}#")));
+            SwitchAdcBoard(1);
+            commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
+        }
+        #endregion
+
+        #region Команда "Запуск-останов платы АЦП"
+        public void SwitchAdcBoard(ushort value)
+        {
+            var str = $"CMND,ADC,{value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+        }
+        #endregion
+
+        #region Команда "Запуск/останов выдачи данных АЦП "
+        public void StartStopAdcData(ushort value)
+        {
+            var str = $"CMND,DAT,{value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+        }
+        #endregion
+
         #endregion
 
         #region Очистка буфера
@@ -729,6 +823,8 @@ namespace IDensity.Models
             }
         }
         #endregion
+
+        
 
 
     }

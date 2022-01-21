@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="Views/Resourses/Templates/BitIndicator.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/TextBoxTemplates.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/DaTeTimePicker.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Templates/NumericDisplay.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/DataGridRows.xaml"/>
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>

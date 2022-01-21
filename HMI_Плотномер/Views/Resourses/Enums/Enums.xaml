@@ -83,4 +83,17 @@
         <sys1:String>ПРОИЗВЕСТИ СТАНДАРТИЗАЦИЮ</sys1:String>
         <sys1:String>ПРОИЗВОДИТСЯ СТАНДАРТИЗАЦИЯ</sys1:String>
     </col1:ArrayList>
+    <col1:ArrayList x:Key="AdcModes">
+        <sys1:String>Режим осциллографа</sys1:String>
+        <sys1:String>Режим измерения максимальных амплитуд</sys1:String>
+    </col1:ArrayList>
+    <col1:ArrayList x:Key="AdcSyncModes">
+        <sys1:String>Ждущая</sys1:String>
+        <sys1:String>Автоматическая</sys1:String>
+    </col1:ArrayList>
+    <col1:ArrayList x:Key="AdcProcModes">
+        <sys1:String>Без обработки</sys1:String>
+        <sys1:String>Полный спектр</sys1:String>
+        <sys1:String>Счетчики</sys1:String>
+    </col1:ArrayList>
 </ResourceDictionary>

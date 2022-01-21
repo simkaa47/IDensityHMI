@@ -55,6 +55,13 @@ namespace IDensity.AddClasses
             AddToParamList();
             PropertyChanged += (o, e) => OnSqlPropertyChanged(e.PropertyName);
         }
+        #region Упрощенный конструктор
+        public Parameter()
+        {
+
+        } 
+        #endregion
+
         #region Описание
         string _description = "";
         public string Description{ get => _description; set => Set(ref _description, value); }       
@@ -130,8 +137,7 @@ namespace IDensity.AddClasses
         public object Clone()
         {
             return this.MemberwiseClone();
-        }
-        
+        }        
 
 
         #region Таймер

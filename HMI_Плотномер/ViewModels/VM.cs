@@ -362,7 +362,7 @@ namespace IDensity.ViewModels
 
         #region Сменить баудрейт 
         RelayCommand _changeBaudrateCommand;
-        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((int)o), o =>o != null));
+        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)o), o =>o != null));
         #endregion
         #endregion
 
@@ -390,6 +390,18 @@ namespace IDensity.ViewModels
         private RelayCommand _showEventsCommand;
 
         public RelayCommand ShowEventsCommand => _showEventsCommand ?? (_showEventsCommand = new RelayCommand(exec => AddHistoryItemsFromDb(), canExex => true));
+
+        #endregion
+
+        #region Команда "Установить настроку IP приемника UDP даных
+        RelayCommand _setUpsAddrCommand;
+        public RelayCommand SetUpsAddrCommand => _setUpsAddrCommand ?? (_setUpsAddrCommand = new RelayCommand(execPar => 
+        {
+            byte num = 0;
+            var nums = (mainModel.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
+            if (nums.Length == 4) mainModel.SetUdpAddr(nums);
+        }, 
+            canExecPar => mainModel.Connecting.Value));
 
         #endregion
 

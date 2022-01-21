@@ -276,23 +276,32 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>                            
                         </Grid.RowDefinitions>
-                        <Border Margin="5">
-                            <DockPanel>
-                                <Label DockPanel.Dock="Top" Content="Усредненное значение"/>
-                                <TextBlock  Grid.Column="1" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                            Text="{Binding mainModel.PhysValueAvg.Value, StringFormat={}{0:F1}}"></TextBlock>
-                            </DockPanel>
-                        </Border>
-                        <Border Grid.Column="1" Margin="5">
-                            <DockPanel>
-                                <Label DockPanel.Dock="Top" Content="Мгновенное значение"/>
-                                <TextBlock  Grid.Column="1" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                            Text="{Binding mainModel.PhysValueCur.Value, StringFormat={}{0:F1}}"></TextBlock>
-                            </DockPanel>
-                        </Border>
+                        <!--#region Мгновенное значение ФВ -->
+                        <UserControl Margin="5"                                    
+                                     Template="{StaticResource NumericDisplay}"                                     
+                                     DataContext="{Binding mainModel.PhysValueCur}"/>
+                        <!--#endregion-->
+                        <!--#region Усредненное значение ФВ -->
+                        <UserControl Margin="5"
+                                     Grid.Column="1"
+                                     Template="{StaticResource NumericDisplay}"                                     
+                                     DataContext="{Binding mainModel.PhysValueAvg}"/>
+                        <!--#endregion-->
+                        <!--#region Мгновенное значение концетрации -->
+                        <UserControl Grid.Row="1"
+                                     Margin="5"
+                                     Template="{StaticResource NumericDisplay}"                                     
+                                     DataContext="{Binding mainModel.ContetrationValueCur}"/>
+                        <!--#endregion-->
+                        <!--#region Усредненное значение концетрации -->
+                        <UserControl Grid.Row="1"
+                                     Margin="5"
+                                     Grid.Column="1"
+                                     Template="{StaticResource NumericDisplay}"                                     
+                                     DataContext="{Binding mainModel.ContetrationValueAvg}"/>
+                        <!--#endregion-->
                     </Grid>
                     <!--#endregion-->                    
 
@@ -1044,9 +1053,107 @@
                     <!--#region Плата АЦП -->
                     <TabItem Header="ПЛАТА АЦП">
                         <ListBox>
+                            <!--#region Индикатор связи -->
                             <ListBoxItem HorizontalContentAlignment="Stretch">
                                 <UserControl Template="{StaticResource BitIndicator}" DataContext="{Binding mainModel.AdcBoard.CommState}"/>
                             </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region IP адрес udp приемника -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                <DockPanel>
+                                    <TextBlock Text="IP адрес приемника данных по UDP"
+                                               VerticalAlignment="Center"
+                                               Style="{StaticResource Common}"/>
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+                                        <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                                 MinWidth="100"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"/>
+                                        <Button Width="50"
+                                                Margin="5,0,5,0"
+                                                Command="{Binding SetUpsAddrCommand}"
+                                                Content="-->"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Режим работы АЦП -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcMode}">
+                                <uc:CompoboxParameter ItemSource="{StaticResource AdcModes}"
+                                                      Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                      CompoboxWidth="220"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcModeChangeCommand}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Режим синхронизации  -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcSyncMode}">
+                                <uc:CompoboxParameter ItemSource="{StaticResource AdcSyncModes}"
+                                                      Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                      CompoboxWidth="220"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcSyncModeChangeCommand}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Режим обработки при регистрировании максимальных амплитуд  -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcProcMode}">
+                                <uc:CompoboxParameter ItemSource="{StaticResource AdcProcModes}"
+                                                      Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                      CompoboxWidth="220"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcProcModeChangeCommand}"/>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Уровень синхронизации -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch" 
+                                         DataContext="{Binding mainModel.AdcBoardSettings.AdcSyncLevel}">
+                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcSyncLevelChangeCommand}"/>
+
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Таймнр выдачи данных -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch" 
+                                         DataContext="{Binding mainModel.AdcBoardSettings.TimerMax}">
+                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetTimerMaxChangeCommand}"/>
+
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Запуск/останов платы АЦП -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Margin="5,0,5,0"
+                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcCommand}"
+                                            CommandParameter="1"
+                                            Content="Включить плату АЦП"/>
+                                    <Button Margin="5,0,5,0"
+                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcCommand}"
+                                            CommandParameter="0"
+                                            Grid.Column="1"
+                                            Content="Выключить плату АЦП"/>
+                                </Grid>
+                            </ListBoxItem>
+                            <!--#endregion-->
+                            <!--#region Запуск/останов выдачи данных АЦП  -->
+                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Margin="5,0,5,0"
+                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcDataCommand}"
+                                            CommandParameter="1"
+                                            Content="Старт выдачи данных АЦП"/>
+                                    <Button Margin="5,0,5,0"
+                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcDataCommand}"
+                                            CommandParameter="0"
+                                            Grid.Column="1"
+                                            Content="Стоп выдачи данных АЦП"/>
+                                </Grid>
+                            </ListBoxItem>
+                            <!--#endregion-->
                         </ListBox>                        
                     </TabItem>
                     <!--#endregion-->

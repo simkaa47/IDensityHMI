@@ -26,7 +26,8 @@ namespace IDensity.Models
             TestValueDac = 12,  // тестовая величина для отправки на ЦАП
             SendTestValue = 13, // отправка тестового значения на ЦАП
             AdcSett = 45, // начальный номер регистров, отвечающих за настройки АЦП
-            DacSett=51 // начальный номер регистров, отвечающих за настройки ЦАП
+            DacSett=51, // начальный номер регистров, отвечающих за настройки ЦАП
+            UdpAddr = 109 // начальный номер регистров, отвечающих за IP адрес UDP приемника
         }
         #endregion        
 
@@ -75,7 +76,7 @@ namespace IDensity.Models
         /// <summary>
         /// Массив Holding регистров
         /// </summary>
-        ushort[] holdRegs = new ushort[100];
+        ushort[] holdRegs = new ushort[200];
         #endregion
         #region Массив Reading регистров
         /// <summary>
@@ -183,6 +184,7 @@ namespace IDensity.Models
         {
             GetRtc();
             GetCurMeas();
+            GetAmTelemetry();
             GetHVTelemetry();
             GetTempTelemetry();
             GetDeviceStatus();
@@ -230,10 +232,16 @@ namespace IDensity.Models
 
         #region Получить данные текущих измерений
         void GetCurMeas()
-        {                     
-            model.PhysValueCur.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueCur.RegType), model.PhysValueCur.RegNum);
-            model.PhysValueAvg.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueAvg.RegType), model.PhysValueAvg.RegNum);
+        {
             model.CycleMeasStatus.Value = SelectRegs(model.CycleMeasStatus.RegType)[model.CycleMeasStatus.RegNum] == 0 ? false : true;
+            if (model.CycleMeasStatus.Value)
+            {
+                model.PhysValueCur.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueCur.RegType), model.PhysValueCur.RegNum);
+                model.PhysValueAvg.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueAvg.RegType), model.PhysValueAvg.RegNum);
+                model.ContetrationValueCur.Value = GetFloatFromUshorts(SelectRegs(model.ContetrationValueCur.RegType), model.ContetrationValueCur.RegNum);
+                model.ContetrationValueAvg.Value = GetFloatFromUshorts(SelectRegs(model.ContetrationValueAvg.RegType), model.ContetrationValueAvg.RegNum);
+            }            
+            
         }
         
         ushort[] SelectRegs(string reg)
@@ -252,12 +260,12 @@ namespace IDensity.Models
         #endregion
 
         #region Получить int32 из 2х регистров
-        int GetInt32FromUshorts(ushort[] regs, int regNum)
+        uint GetUInt32FromUshorts(ushort[] regs, int regNum)
         {
             try
             {
                 ushort[] arr = new ushort[] { regs[regNum], regs[regNum + 1] };
-                return BitConverter.ToInt32(arr.SelectMany(num => BitConverter.GetBytes(num)).ToArray(), 0);
+                return BitConverter.ToUInt32(arr.SelectMany(num => BitConverter.GetBytes(num)).ToArray(), 0);
             }
             catch (Exception)
             {
@@ -280,7 +288,7 @@ namespace IDensity.Models
         #endregion
 
         #region Получить 2 регистра из int32
-        void GetUshortsFromInt32(ushort[] destination, int destinationIndex, int source)
+        void GetUshortsFromUInt32(ushort[] destination, int destinationIndex, uint source)
         {
             var bytes = BitConverter.GetBytes(source);
             for (int i = 0; i < 2; i++)
@@ -321,6 +329,8 @@ namespace IDensity.Models
                 GetAllStandSettings();
                 GetAnalogInSettings();
                 GetCounterSettingsAll();
+                GetCalibrDataAll();
+                GetUdpAddr();
             }
         }
         #region Данные измерительных настроек
@@ -360,7 +370,7 @@ namespace IDensity.Models
         {
             model.SettingsReaded = false;
             // Чтение баудрейта            
-            model.PortBaudrate.Value = GetInt32FromUshorts(holdRegs, model.PortBaudrate.RegNum);
+            model.PortBaudrate.Value = GetUInt32FromUshorts(holdRegs, model.PortBaudrate.RegNum);
             // Чтение режима работы           
             
             model.SettingsReaded = true;
@@ -466,6 +476,52 @@ namespace IDensity.Models
 
         #endregion
 
+        #region UDP адрес приемника
+        void GetUdpAddr()
+        {
+            model.SettingsReaded = false;
+            ReadHoldRegs((int)Holds.UdpAddr, 2);
+            var ip = GetUInt32FromUshorts(holdRegs, (int)Holds.UdpAddr);
+            string ipString = "";
+            for (int i = 0; i < 4; i++)
+            {
+                ipString += ((byte)(ip >> (i * 8))).ToString()+".";
+            }
+            model.UdpAddrString = ipString.Remove(ipString.Length - 1, 1);
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки калибровочных кривых
+        /// <summary>
+        /// Получить данные всех калибровочных кривых
+        /// </summary>
+        void GetCalibrDataAll()
+        {
+            for (ushort i = 0; i < MainModel.CalibCurveNum; i++)
+            {
+                GetCalibrData(i);
+            }
+        }
+        /// <summary>
+        /// Получить данные калибровочной кривой по индексу
+        /// </summary>
+        /// <param name="index"></param>
+        void GetCalibrData(ushort index)
+        {
+            model.SettingsReaded = false;
+            client.WriteSingleRegister(model.CalibrDatas[index].Num.RegNum, index);
+            ReadHoldRegs(model.CalibrDatas[index].MeasUnitNum.RegNum, 14);
+            model.CalibrDatas[index].Num.Value = index;
+            model.CalibrDatas[index].MeasUnitNum.Value = holdRegs[model.CalibrDatas[index].MeasUnitNum.RegNum];
+            for (int i = 0; i < 6; i++)
+            {
+                model.CalibrDatas[index].Coeffs[i].Value = GetFloatFromUshorts(holdRegs, model.CalibrDatas[index].Coeffs[i].RegNum);                    
+            }
+            model.SettingsReaded = true;
+        }
+        #endregion
+
 
         #endregion
 
@@ -527,12 +583,12 @@ namespace IDensity.Models
 
         #region Команды настроек последовательного порта
         #region Записать бадрейт
-        public void ChangeBaudrate(int value)
+        public void ChangeBaudrate(uint value)
         {
             commands.Enqueue(new Command((p1, p2) =>
             {
               model.SettingsReaded = false;
-                GetUshortsFromInt32(holdRegs, model.PortBaudrate.RegNum, value);
+                GetUshortsFromUInt32(holdRegs, model.PortBaudrate.RegNum, value);
                 WriteRegs(model.PortBaudrate.RegNum, 2);
             }, 0, 0));
         }
@@ -692,6 +748,46 @@ namespace IDensity.Models
                 GetCounterSettings(diapasone.Num.Value);
             }, 0, 0));
         }
+        #endregion
+
+        #region Команда "Записать данные калибровочных кривых"
+        public void SetCalibrData(CalibrData calibrData)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                if (calibrData.Num.Value<MainModel.CalibCurveNum)
+                {
+                    client.WriteSingleRegister(calibrData.Num.RegNum, calibrData.Num.Value);
+                    holdRegs[calibrData.MeasUnitNum.RegNum] = calibrData.MeasUnitNum.Value;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        GetUshortsFromFloat(holdRegs, calibrData.Coeffs[i].RegNum, calibrData.Coeffs[i].Value);
+                    }
+                    WriteRegs(calibrData.MeasUnitNum.RegNum, 14);
+                    GetCalibrData(calibrData.Num.Value);
+                }
+                
+            }, 0, 0));
+        }
+        #endregion
+
+        #region Команда "Поменять UDP адрес источника"
+        public void SetUdpAddr(byte[] addr)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                uint ip = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    ip += (uint)(addr[i] << (i * 8));
+                }
+                GetUshortsFromUInt32(holdRegs, (int)Holds.UdpAddr,ip);
+                WriteRegs((int)Holds.UdpAddr, 2);
+                GetUdpAddr();
+
+            }, 0, 0));
+        }
+
         #endregion
         #endregion
     }
