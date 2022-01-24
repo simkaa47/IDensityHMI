@@ -1051,7 +1051,7 @@
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Плата АЦП -->
-                    <TabItem Header="ПЛАТА АЦП">
+                    <TabItem Header="ПЛАТА АЦП" >                        
                         <ListBox>
                             <!--#region Индикатор связи -->
                             <ListBoxItem HorizontalContentAlignment="Stretch">
@@ -1124,11 +1124,11 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Button Margin="5,0,5,0"
-                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcCommand}"
+                                            Command="{Binding StartAdcCommand}"
                                             CommandParameter="1"
                                             Content="Включить плату АЦП"/>
                                     <Button Margin="5,0,5,0"
-                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcCommand}"
+                                            Command="{Binding StartAdcCommand}"
                                             CommandParameter="0"
                                             Grid.Column="1"
                                             Content="Выключить плату АЦП"/>
@@ -1143,11 +1143,11 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Button Margin="5,0,5,0"
-                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcDataCommand}"
+                                            Command="{Binding StartAdcDataCommand}"
                                             CommandParameter="1"
                                             Content="Старт выдачи данных АЦП"/>
                                     <Button Margin="5,0,5,0"
-                                            Command="{Binding mainModel.AdcBoardSettings.StartAdcDataCommand}"
+                                            Command="{Binding StartAdcDataCommand}"
                                             CommandParameter="0"
                                             Grid.Column="1"
                                             Content="Стоп выдачи данных АЦП"/>

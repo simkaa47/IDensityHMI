@@ -251,9 +251,7 @@ namespace IDensity.Models
         /// </summary>
         void AdcSettingsEventDescribe()
         {
-            AdcBoardSettings.SettingsChangedEvent += SetAdcBoardSettings;
-            AdcBoardSettings.StartStopAdcBoardEvent += SwitchAdcBoard;
-            AdcBoardSettings.StartStopAdcBoardEvent += StartStopAdcData;
+            AdcBoardSettings.SettingsChangedEvent += SetAdcBoardSettings;            
         }
         #endregion
         #endregion

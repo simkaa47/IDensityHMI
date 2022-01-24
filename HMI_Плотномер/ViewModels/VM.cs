@@ -49,7 +49,11 @@ namespace IDensity.ViewModels
 
         #region Команда "Закрыть приложение"
         RelayCommand _closeAppCommand;
-        public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o => Application.Current.Shutdown(), o => true));
+        public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o => 
+        {
+            Udp?.Stop();
+            Application.Current.Shutdown(); 
+        }, o => true));
         #endregion
 
         #region Команда вкл-выкл напряжение
@@ -403,6 +407,28 @@ namespace IDensity.ViewModels
         }, 
             canExecPar => mainModel.Connecting.Value));
 
+        #endregion        
+
+        #region Запуск-останов платы АЦП
+        RelayCommand _startAdcCommand;
+        public RelayCommand StartAdcCommand => _startAdcCommand ?? (_startAdcCommand = new RelayCommand(execPar =>
+        {
+            ushort num = 0;
+            if (execPar != null && ushort.TryParse(execPar.ToString(), out num))
+            {
+                mainModel.SwitchAdcBoard(num);
+                if (num != 0 && Udp == null) Udp = new UDP();
+            }
+        }, canEcecPar => true));
+        #endregion
+
+        #region Запуск/останов выдачи данных АЦП 
+        RelayCommand _startAdcDataCommand;
+        public RelayCommand StartAdcDataCommand => _startAdcDataCommand ?? (_startAdcDataCommand = new RelayCommand(execPar =>
+        {
+            ushort num = 0;
+            if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) mainModel.StartStopAdcData(num);
+        }, canEcecPar => true));
         #endregion
 
         #endregion
@@ -423,8 +449,10 @@ namespace IDensity.ViewModels
             GetMeasDates();
         }
 
-        
+
         #endregion
+
+        UDP Udp { get; set; }
 
         #region Текущая дата-время компьютера
         public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");

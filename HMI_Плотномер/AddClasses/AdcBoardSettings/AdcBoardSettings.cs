@@ -73,36 +73,13 @@ namespace IDensity.AddClasses.AdcBoardSettings
         }, p => true));
         #endregion
 
-        #region Запуск-останов платы АЦП
-        RelayCommand _startAdcCommand;
-        public RelayCommand StartAdcCommand => _startAdcCommand ?? (_startAdcCommand = new RelayCommand(execPar => 
-        {
-            ushort num=0;
-            if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) StartStopAdcBoardEvent?.Invoke(num);
-        }, canEcecPar => true));
-        #endregion
-
-        #region Запуск/останов выдачи данных АЦП 
-        RelayCommand _startAdcDataCommand;
-        public RelayCommand StartAdcDataCommand => _startAdcDataCommand ?? (_startAdcDataCommand = new RelayCommand(execPar =>
-        {
-            ushort num = 0;
-            if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) StartStopAdcGetDataEvent?.Invoke(num);
-        }, canEcecPar => true));
-        #endregion
+        
         #endregion
 
         #region Событие изменения настроек АЦП
         public event Action<AdcBoardSettings> SettingsChangedEvent;
         #endregion
-
-        #region Событие команды "Старт - стоп платы АЦП"
-        public event Action<ushort> StartStopAdcBoardEvent;
-        #endregion
-
-        #region Событие команды "Запуск/останов выдачи данных АЦП "
-        public event Action<ushort> StartStopAdcGetDataEvent;
-        #endregion
+        
 
         public object Clone()
         {
