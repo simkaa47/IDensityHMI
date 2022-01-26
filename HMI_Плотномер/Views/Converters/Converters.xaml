@@ -11,5 +11,6 @@
     <conv:UserLevelConverter x:Key="UserToVisibility"/>
     <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
     <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
+    <conv:EqualityToVisibilityConverter x:Key="VisibleIfEqual"/>
 
 </ResourceDictionary>

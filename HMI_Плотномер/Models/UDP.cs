@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace IDensity.Models
 {
@@ -18,12 +19,18 @@ namespace IDensity.Models
         int localPort = 49051;
         #endregion
 
-        #region Событие
+        #region Событие ошибки UDP
         public event Action<string> UdpErrorEvent;
         #endregion
 
-        Queue<List<ushort>> OscillModeTrendQueue { get; set; } = new Queue<List<ushort>>();
-        List<ushort> CurOscillList = new List<ushort>();
+        #region Событие "Готовы данные для тренда в режиме осциллографа"
+        public event Action<List<Point>> UpdateOscillEvent;
+        #endregion
+        #region Событие "Готовы данные в режиме макс амплитуд"
+        public event Action<List<Point>> UpdateAmplitudesEvent;
+        #endregion
+        int index = 0;
+        List<Point> CurOscillList = new List<Point>();
 
         #region Конструктор
         public UDP()
@@ -66,23 +73,51 @@ namespace IDensity.Models
 
         
 
-        void ParseData(byte[] data)
+        void ParseData(byte[] data) 
         {
             if (data.Length < 10 || data[data.Length-1]!=35) return;
+            byte num = 0;
+            var list = Encoding.ASCII.GetString(data, 0, 10).Split(",", StringSplitOptions.RemoveEmptyEntries).Where(s => byte.TryParse(s, out num)).Select(s => num).ToList();
+            if (list.Count != 2) return;
+            int count = list[0];// общее количество пакетов
+            int packetNum = list[1];// номер пакета в серии
             string header = Encoding.ASCII.GetString(data, 0, 5);
             switch (header)
             {
                 case "*AOLV":
-                    byte num = 0;
-                    var list = Encoding.ASCII.GetString(data, 0, 10).Split(",", StringSplitOptions.RemoveEmptyEntries).Where(s => byte.TryParse(s, out num)).Select(s => num).ToList();
-                    if (list.Count != 2) return;
-                    if (list[0] == 0) CurOscillList = new List<ushort>();
-                    for (int i = 11; i < data.Length; i+=2)
-                    {
-                        CurOscillList.Add((ushort)(data[i] * 256 + data[i - 1]));
-                    }
+                    AddToCollection(2, data.Length);
+                    // если посдледний пакет, то можно соообщить о том что он собран
+                    if (packetNum >= count) UpdateOscillEvent?.Invoke(CurOscillList);
+                    break;
+                case "*AML1":
+                case "*AML2":
+                    AddToCollection(2, packetNum == count ? data.Length : data.Length - 10);
+                    if (packetNum >= count) UpdateAmplitudesEvent?.Invoke(CurOscillList);
+                    break;
+                case "*AML3":
+                    AddToCollection(4, data.Length );
+                    if (packetNum >= count) UpdateAmplitudesEvent?.Invoke(CurOscillList);
                     break;
                 default: break;
+            }
+            // локальная функция прохода по массиву
+            void AddToCollection(int byteInBum, int bytesAvialable)
+            {
+                if (packetNum == 1) 
+                {
+                    CurOscillList = new List<Point>();
+                    index = 0;
+                }                
+                for (int i = 10 + byteInBum-1; i < bytesAvialable; i += byteInBum)
+                {
+                    int temp = 0;
+                    for (int j = i; j > i-byteInBum; j--)
+                    {
+                        temp += (data[j] << ((j-i+byteInBum-1) * 8));
+                    }
+                    CurOscillList.Add(new Point(index, temp));
+                    index++;
+                }                
             }
 
         }

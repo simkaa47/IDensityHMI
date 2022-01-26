@@ -153,6 +153,7 @@ namespace IDensity.AddClasses
         {
             timer.Stop();
             isChanged = false;
+            WriteValue = Value;
         }
         #endregion
         #region Добавить в глобальный лист параметров

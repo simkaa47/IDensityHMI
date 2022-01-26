@@ -390,7 +390,7 @@ namespace IDensity.Models
             model.AdcBoardSettings.AdcSyncMode.Value = (ushort)list[0][0];
             list = GetNumber("adc_sync_level", 1, 1);
             if (list == null) return;
-            model.AdcBoardSettings.AdcSyncMode.Value = (ushort)list[0][0];
+            model.AdcBoardSettings.AdcSyncLevel.Value = (ushort)list[0][0];
             list = GetNumber("timer_max", 1, 1);
             if (list == null) return;
             model.AdcBoardSettings.TimerMax.Value = (ushort)list[0][0];
@@ -531,6 +531,9 @@ namespace IDensity.Models
                 ip = ip + num + ".";
             }
             model.UdpAddrString = ip.Remove(ip.Length - 1,1);
+            list = GetNumber("preamp_gain", 1, 1);
+            if (list == null) return;
+            model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];
             // локальная функция
             List<List<float>> GetNumber(string id, int parNum, int count)
             {
@@ -787,9 +790,11 @@ namespace IDensity.Models
         {
             SwitchAdcBoard(0);            
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_mode={settings.AdcMode.Value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_proc_mode={settings.AdcProcMode.Value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_mode={settings.AdcSyncMode.Value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_level={settings.AdcSyncLevel.Value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,timer_max={settings.TimerMax.Value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,preamp_gain={settings.PreampGain.Value}#")));
             SwitchAdcBoard(1);
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
@@ -808,6 +813,14 @@ namespace IDensity.Models
         public void StartStopAdcData(ushort value)
         {
             var str = $"CMND,DAT,{value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+        }
+        #endregion
+
+        #region Команда "Произвести еденичное измеренине"
+        public void MakeSingleMeasure(ushort time)
+        {
+            var str = $"CMND,AMS,{time*10}#";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion

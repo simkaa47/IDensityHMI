@@ -417,7 +417,13 @@ namespace IDensity.ViewModels
             if (execPar != null && ushort.TryParse(execPar.ToString(), out num))
             {
                 mainModel.SwitchAdcBoard(num);
-                if (num != 0 && Udp == null) Udp = new UDP();
+                if (num != 0 && Udp == null) {
+                    Udp = new UDP();
+                    Udp.UpdateOscillEvent += UpdateAdcTrend;
+                    Udp.UpdateAmplitudesEvent += UpdateMaxAmpsData;
+                }
+                
+
             }
         }, canEcecPar => true));
         #endregion
@@ -429,6 +435,13 @@ namespace IDensity.ViewModels
             ushort num = 0;
             if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) mainModel.StartStopAdcData(num);
         }, canEcecPar => true));
+        #endregion
+
+        #region Произвести единичное измерение"
+        private RelayCommand _makeSingleMeasCommand;
+
+        public RelayCommand MakeSingleMeasCommand => _makeSingleMeasCommand ?? (_makeSingleMeasCommand = new RelayCommand(execObj => mainModel.MakeSingleMeasure(SingleMeasTime), canExecObj => true));
+
         #endregion
 
         #endregion
@@ -447,12 +460,24 @@ namespace IDensity.ViewModels
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
+            
         }
 
 
         #endregion
 
         UDP Udp { get; set; }
+
+        #region Время еденичного измерения
+        private ushort _singleMeasTime = 30;
+
+        public ushort SingleMeasTime
+        {
+            get { return _singleMeasTime; }
+            set { Set(ref _singleMeasTime, value); }
+        }
+
+        #endregion
 
         #region Текущая дата-время компьютера
         public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");
@@ -739,6 +764,52 @@ namespace IDensity.ViewModels
         }
         #endregion
 
+        #region Данные UDP
+        DateTime lastUpdateTime = DateTime.Now;
+        #region Данные тренда
+        IEnumerable<Point> _adcDataTrend;
+        public IEnumerable<Point> AdcDataTrend
+        {
+            get => _adcDataTrend;
+            set
+            {
+                Set(ref _adcDataTrend, value);
+
+            }
+        }
+        void UpdateAdcTrend(List<Point> list)
+        {
+            if (lastUpdateTime.AddMilliseconds(500) < DateTime.Now)
+            {
+                AdcDataTrend = list;
+                lastUpdateTime = DateTime.Now;
+            }
+
+        }
+        #endregion
+
+        #region Данные гистограммы в режиме максимальных амплитуд
+        IEnumerable<Point> _maxAmplitudesData;
+        /// <summary>
+        /// Данные гистограммы в режиме максимальных амплитуд
+        /// </summary>
+        public IEnumerable<Point> MaxAmplitudesData
+        {
+            get => _maxAmplitudesData;
+            set => Set(ref _maxAmplitudesData, value);
+        }
+        void UpdateMaxAmpsData(List<Point> list)
+        {
+            if (lastUpdateTime.AddMilliseconds(500) < DateTime.Now)
+            {
+                MaxAmplitudesData = list;
+                lastUpdateTime = DateTime.Now;
+            }
+        }
+        #endregion
+        #endregion
+
+
         #region Запись в файл
         async void WriteArchivalTrendToText()
         {
@@ -950,5 +1021,6 @@ namespace IDensity.ViewModels
 
 
         #endregion
+
     }
 }

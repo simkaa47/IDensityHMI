@@ -96,4 +96,8 @@
         <sys1:String>Полный спектр</sys1:String>
         <sys1:String>Счетчики</sys1:String>
     </col1:ArrayList>
+    <col1:ArrayList x:Key="SingleMeasures">
+        <sys1:String>ПРОИЗВЕСТИ ИЗМЕРЕНИЕ</sys1:String>
+        <sys1:String>ПРОИЗВОДИТСЯ ИЗМЕРЕНИЕ</sys1:String>        
+    </col1:ArrayList>
 </ResourceDictionary>

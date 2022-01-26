@@ -27,6 +27,10 @@ namespace IDensity.AddClasses.AdcBoardSettings
         public Parameter<ushort> TimerMax { get; set; } = new Parameter<ushort>("AdcTimerMax", "Таймер выдачи данных, мс", 0, 65535, 115, "hold");
         #endregion
 
+        #region Коэффициент платы предусиления
+        public Parameter<ushort> PreampGain { get; set; } = new Parameter<ushort>("PreampGain", "Коэффицент предусиления", 0, 255, 116, "hold");
+        #endregion
+
         #region Команды
         #region Записать режим измерения АЦП
         RelayCommand _setAdcModeChange;
@@ -56,8 +60,8 @@ namespace IDensity.AddClasses.AdcBoardSettings
         #endregion
 
         #region Записать Режим обработки при регистрировании максимальных амплитуд
-        public RelayCommand _setAdcProcModeChangeCommand;
-        RelayCommand SetAdcProcModeChangeCommand => _setAdcProcModeChangeCommand ?? (_setAdcProcModeChangeCommand = new RelayCommand(p => {
+        RelayCommand _setAdcProcModeChangeCommand;
+        public RelayCommand SetAdcProcModeChangeCommand => _setAdcProcModeChangeCommand ?? (_setAdcProcModeChangeCommand = new RelayCommand(p => {
             var settings = this.Clone() as AdcBoardSettings;
             settings.AdcProcMode.Value = this.AdcProcMode.WriteValue;
             SettingsChangedEvent?.Invoke(settings);
@@ -73,7 +77,18 @@ namespace IDensity.AddClasses.AdcBoardSettings
         }, p => true));
         #endregion
 
-        
+        #region Записать К-т предусиления
+        RelayCommand _setPreampGainChangeCommand;
+        public RelayCommand SetPreampGainChangeCommand => _setPreampGainChangeCommand ?? (_setPreampGainChangeCommand = new RelayCommand(p => {
+            var settings = this.Clone() as AdcBoardSettings;
+            settings.PreampGain.Value = this.PreampGain.WriteValue;
+            SettingsChangedEvent?.Invoke(settings);
+        }, p => true));
+        #endregion
+
+
+
+
         #endregion
 
         #region Событие изменения настроек АЦП
@@ -89,7 +104,8 @@ namespace IDensity.AddClasses.AdcBoardSettings
                 AdcProcMode = this.AdcProcMode.Clone() as Parameter<ushort>,
                 AdcSyncLevel = this.AdcSyncLevel.Clone() as Parameter<ushort>,
                 AdcSyncMode = this.AdcSyncMode.Clone() as Parameter<ushort>,
-                TimerMax = this.TimerMax.Clone() as Parameter<ushort>
+                TimerMax = this.TimerMax.Clone() as Parameter<ushort>,
+                PreampGain = this.PreampGain.Clone() as Parameter<ushort>
             };
         }
     }

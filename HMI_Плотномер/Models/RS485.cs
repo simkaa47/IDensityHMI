@@ -21,6 +21,8 @@ namespace IDensity.Models
         enum Holds
         { 
             SwitchMeas = 1,// включение измерения
+            SingleMeasDuration = 2,// длительность ед. измерения
+            SingleMeasStart = 3, // старт ед. измерения
             SwitchHv = 4,   // включение hv
             SwitchPwrAm  = 7,    // стартовый номер регистра управления питанием аналоговых модулей
             TestValueDac = 12,  // тестовая величина для отправки на ЦАП
@@ -789,6 +791,17 @@ namespace IDensity.Models
         }
 
         #endregion
-        #endregion
+
+        #region Команда "Произвести еденичное измеренине"
+        public void MakeSingleMeasure(ushort time)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client.WriteSingleRegister((int)Holds.SingleMeasDuration, time);
+                client.WriteSingleRegister((int)Holds.SingleMeasStart, 1);
+            }, 0, 0));
+        }
+            #endregion
+            #endregion
     }
 }

@@ -536,6 +536,14 @@ namespace IDensity.Models
             //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
         }
         #endregion
+
+        #region Команда "Произвести еденичное измеренине"
+        public void MakeSingleMeasure(ushort time)
+        {
+            if (CommMode.EthEnable) Tcp.MakeSingleMeasure(time);
+            else if (CommMode.RsEnable) rs.MakeSingleMeasure(time);
+        }   
+        #endregion
         #endregion
 
     }

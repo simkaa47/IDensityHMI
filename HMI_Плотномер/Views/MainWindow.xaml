@@ -900,6 +900,40 @@
                         </DataGrid>
                     </TabItem>
                     <!--#endregion-->
+                    <TabItem Header="КАЛИБРОВКА">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="300"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <GroupBox Header="Единичное измерение">
+                                <ListBox>
+                                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                                        <DockPanel>
+                                            <TextBlock Text="Время еденичного измерения, секунд"
+                                                       Style="{StaticResource Common}"/>
+                                            <TextBox Width="80"
+                                                     Text="{Binding SingleMeasTime}"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalContentAlignment="Center"
+                                                     HorizontalContentAlignment="Center"/>
+                                        </DockPanel>
+                                    </ListBoxItem>
+                                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                                        <DockPanel>
+                                            <TextBlock Text="Управление еденичным измерением"
+                                                   Style="{StaticResource Common}"/>
+                                            <Button Width="200"
+                                                    HorizontalAlignment="Right"
+                                                    Command="{Binding MakeSingleMeasCommand}"/>
+                                        </DockPanel>                                        
+                                    </ListBoxItem>
+                                </ListBox>
+                            </GroupBox>
+
+                        </Grid>
+                        
+                    </TabItem>
                     <!--#region Стандартизация -->
                     <TabItem Header="СТАНДАРТИЗАЦИЯ">
                         <GroupBox>
@@ -1051,110 +1085,171 @@
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Плата АЦП -->
-                    <TabItem Header="ПЛАТА АЦП" >                        
-                        <ListBox>
-                            <!--#region Индикатор связи -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                <UserControl Template="{StaticResource BitIndicator}" DataContext="{Binding mainModel.AdcBoard.CommState}"/>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region IP адрес udp приемника -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                <DockPanel>
-                                    <TextBlock Text="IP адрес приемника данных по UDP"
+                    <TabItem Header="ПЛАТА АЦП" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ListBox>
+                                <!--#region Индикатор связи -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <UserControl Template="{StaticResource BitIndicator}" DataContext="{Binding mainModel.AdcBoard.CommState}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region IP адрес udp приемника -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <DockPanel>
+                                        <TextBlock Text="IP адрес приемника данных по UDP"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource Common}"/>
-                                    <StackPanel Orientation="Horizontal"
+                                        <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Right">
-                                        <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                            <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
                                                  MinWidth="100"
                                                  HorizontalContentAlignment="Center"
                                                  VerticalContentAlignment="Center"/>
-                                        <Button Width="50"
+                                            <Button Width="50"
                                                 Margin="5,0,5,0"
                                                 Command="{Binding SetUpsAddrCommand}"
                                                 Content="-->"/>
-                                    </StackPanel>
-                                </DockPanel>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Режим работы АЦП -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcMode}">
-                                <uc:CompoboxParameter ItemSource="{StaticResource AdcModes}"
+                                        </StackPanel>
+                                    </DockPanel>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Режим работы АЦП -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcMode}">
+                                    <uc:CompoboxParameter ItemSource="{StaticResource AdcModes}"
                                                       Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                       CompoboxWidth="220"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcModeChangeCommand}"/>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Режим синхронизации  -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcSyncMode}">
-                                <uc:CompoboxParameter ItemSource="{StaticResource AdcSyncModes}"
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Режим синхронизации  -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcSyncMode}">
+                                    <uc:CompoboxParameter ItemSource="{StaticResource AdcSyncModes}"
                                                       Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                       CompoboxWidth="220"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcSyncModeChangeCommand}"/>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Режим обработки при регистрировании максимальных амплитуд  -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcProcMode}">
-                                <uc:CompoboxParameter ItemSource="{StaticResource AdcProcModes}"
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Режим обработки при регистрировании максимальных амплитуд  -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcProcMode}">
+                                    <uc:CompoboxParameter ItemSource="{StaticResource AdcProcModes}"
                                                       Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                       CompoboxWidth="220"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcProcModeChangeCommand}"/>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Уровень синхронизации -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch" 
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Уровень синхронизации -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" 
                                          DataContext="{Binding mainModel.AdcBoardSettings.AdcSyncLevel}">
-                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcSyncLevelChangeCommand}"/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcSyncLevelChangeCommand}"/>
 
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Таймнр выдачи данных -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch" 
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <ListBoxItem HorizontalContentAlignment="Stretch"
+                                             DataContext="{Binding mainModel.AdcBoardSettings.PreampGain}">
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetPreampGainChangeCommand}"/>
+                                </ListBoxItem>
+                                <!--#region Таймнр выдачи данных -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" 
                                          DataContext="{Binding mainModel.AdcBoardSettings.TimerMax}">
-                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetTimerMaxChangeCommand}"/>
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetTimerMaxChangeCommand}"/>
 
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Запуск/останов платы АЦП -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button Margin="5,0,5,0"
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Запуск/останов платы АЦП -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Margin="5,0,5,0"
                                             Command="{Binding StartAdcCommand}"
                                             CommandParameter="1"
                                             Content="Включить плату АЦП"/>
-                                    <Button Margin="5,0,5,0"
+                                        <Button Margin="5,0,5,0"
                                             Command="{Binding StartAdcCommand}"
                                             CommandParameter="0"
                                             Grid.Column="1"
                                             Content="Выключить плату АЦП"/>
-                                </Grid>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                            <!--#region Запуск/останов выдачи данных АЦП  -->
-                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button Margin="5,0,5,0"
+                                    </Grid>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Запуск/останов выдачи данных АЦП  -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Margin="5,0,5,0"
                                             Command="{Binding StartAdcDataCommand}"
                                             CommandParameter="1"
                                             Content="Старт выдачи данных АЦП"/>
-                                    <Button Margin="5,0,5,0"
+                                        <Button Margin="5,0,5,0"
                                             Command="{Binding StartAdcDataCommand}"
                                             CommandParameter="0"
                                             Grid.Column="1"
                                             Content="Стоп выдачи данных АЦП"/>
-                                </Grid>
-                            </ListBoxItem>
+                                    </Grid>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                            </ListBox>
+                            <!--#region Тренд в режиме осциллографа-->
+                            <oxy:Plot PlotMargins="30,0,0,30"  
+                                      Visibility="{Binding mainModel.AdcBoardSettings.AdcMode.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}"
+                                      Grid.Row="1"
+                                      PlotType="XY"                                         
+                                      PlotAreaBorderThickness="0" 
+                                      TextColor="WhiteSmoke"                               
+                                      Background="DarkSlateGray"   
+                                      PlotAreaBackground="DarkGray">
+
+                                <oxy:Plot.Axes>
+                                    <oxy:LinearAxis  
+                                        TextColor="WhiteSmoke"
+                                        FontSize="14"
+                                        MajorGridlineColor="WhiteSmoke"
+                                        MajorGridlineStyle="Dot"
+                                        Position ="Left" />
+                                </oxy:Plot.Axes>
+                                <oxy:LineSeries  LineStyle="Dash"                                           
+                                               ItemsSource="{Binding AdcDataTrend}"
+                                               DataFieldX="X" DataFieldY="Y"                                           
+                                               Color="Black"/>  
+                            </oxy:Plot>
                             <!--#endregion-->
-                        </ListBox>                        
+                            <!--#region Гистограмма в режиме максимальных амплитуд -->
+                            <oxy:Plot Grid.Row="1"
+                                      TextColor="WhiteSmoke"
+                                      PlotAreaBorderColor="WhiteSmoke"
+                                      SelectionColor="WhiteSmoke"
+                                      LegendTextColor="WhiteSmoke"
+                                      Visibility="{Binding mainModel.AdcBoardSettings.AdcMode.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}"
+                                      Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
+                                      PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
+                                <oxy:Plot.Axes>
+                                    <oxy:LinearAxis Title="Значение"                                                    
+                                                    Position="Left"
+                                                    AbsoluteMinimum="0"/>
+                                    <oxy:LinearAxis Title="Номер" 
+                                                    Position="Bottom"
+                                                    AbsoluteMinimum="0"/>
+                                </oxy:Plot.Axes>
+                                <oxy:LinearBarSeries Color="Red"                                                   
+                                                     BarWidth="40"
+                                                     ItemsSource="{Binding MaxAmplitudesData}"
+                                                     DataFieldX="X"
+                                                     DataFieldY="Y"/>
+                                
+                            </oxy:Plot>
+                            <!--#endregion-->
+
+                        </Grid>
+                                         
                     </TabItem>
                     <!--#endregion-->
                     <!--#region АНАЛОГОВЫЕ МОДУЛИ -->
