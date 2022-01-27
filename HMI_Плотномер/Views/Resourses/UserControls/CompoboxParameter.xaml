@@ -14,7 +14,7 @@
                    TextWrapping="Wrap"/>
         <ComboBox Width="{Binding RelativeSource={RelativeSource AncestorType=local:CompoboxParameter}, Path=CompoboxWidth}"
                   ItemsSource="{Binding RelativeSource= {RelativeSource AncestorType=local:CompoboxParameter}, Path=ItemSource}"
-                  SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=local:CompoboxParameter}, Path=SelectedItem}"
+                  SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=local:CompoboxParameter}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                   SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=local:CompoboxParameter}, Path=Index}"
                   HorizontalAlignment="Right"
                   VerticalAlignment="Center">

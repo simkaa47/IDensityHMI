@@ -40,7 +40,7 @@ namespace IDensity.Models
         {
             Init();// Инициализация параметров
             CalibrDataDescribe();
-            AdcSettingsEventDescribe();            
+            AdcSettingsEventDescribe();
         }
 
 
@@ -74,6 +74,10 @@ namespace IDensity.Models
 
         #region ФВ усредненное по диапазонам усредненное
         public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");
+        #endregion
+
+        #region Текущие значения счетчиков
+        public Parameter<float>[] CountersCur = Enumerable.Range(0, 3).Select(i => new Parameter<float>("CounterCur" + i.ToString(), "Текущее значение счетчика " + i.ToString(), float.NegativeInfinity, float.PositiveInfinity, 31 + i * 2, "read")).ToArray();
         #endregion
 
         #region Концентрация мгновенная

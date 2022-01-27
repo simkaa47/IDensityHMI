@@ -13,7 +13,7 @@ namespace IDensity.Models.SQL
     /// <summary>
     /// Коллекция, синхронизирующаяся с базой данных
     /// </summary>
-    class DataBaseCollection<T> where T: PropertyChangedBase
+    class DataBaseCollection<T> where T: PropertyChangedBase, IDataBased
     {
         #region Событие ошибки работы с ДБ
         /// <summary>

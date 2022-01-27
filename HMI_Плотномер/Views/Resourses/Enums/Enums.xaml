@@ -43,6 +43,14 @@
         <sys1:String>Диапазон 2</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList x:Key="PortSpeeds">
+        <sys1:UInt32>2400</sys1:UInt32>
+        <sys1:UInt32>4800</sys1:UInt32>
+        <sys1:UInt32>9600</sys1:UInt32>
+        <sys1:UInt32>19200</sys1:UInt32>
+        <sys1:UInt32>38400</sys1:UInt32>
+        <sys1:UInt32>115200</sys1:UInt32>
+    </col1:ArrayList>
+    <col1:ArrayList x:Key="PortSpeedsInt">
         <sys1:Int32>2400</sys1:Int32>
         <sys1:Int32>4800</sys1:Int32>
         <sys1:Int32>9600</sys1:Int32>

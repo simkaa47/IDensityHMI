@@ -1,11 +1,12 @@
-﻿using System;
+﻿using IDensity.Models.SQL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class User: PropertyChangedBase
+    class User: PropertyChangedBase, IDataBased
     {
         public long Id { get; set; }
         #region Логин пользователя

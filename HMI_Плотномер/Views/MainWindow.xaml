@@ -372,7 +372,7 @@
                                         <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <Grid>
                                                 <TextBlock Style="{StaticResource Common}" Text="Скорость передачи даных, бит/c" HorizontalAlignment="Left"></TextBlock>
-                                                <ComboBox  Width="80"   ItemsSource="{StaticResource PortSpeeds}"  SelectedItem="{Binding mainModel.rs.BaudRate}"  HorizontalAlignment="Right"/>
+                                                <ComboBox  Width="80"   ItemsSource="{StaticResource PortSpeedsInt}"  SelectedItem="{Binding mainModel.rs.BaudRate}"  HorizontalAlignment="Right"/>
                                             </Grid>
                                         </ListBoxItem>
                                         <!--#endregion-->
@@ -908,6 +908,7 @@
                             </Grid.RowDefinitions>
                             <GroupBox Header="Единичное измерение">
                                 <ListBox>
+                                    <!--#region Время еденичного измерения, секунд -->
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
                                         <DockPanel>
                                             <TextBlock Text="Время еденичного измерения, секунд"
@@ -919,18 +920,71 @@
                                                      HorizontalContentAlignment="Center"/>
                                         </DockPanel>
                                     </ListBoxItem>
+                                    <!--#endregion-->                                    
+                                    <!--#region "Управление еденичным измерением" -->
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
                                         <DockPanel>
                                             <TextBlock Text="Управление еденичным измерением"
+                                                       VerticalAlignment="Center"
                                                    Style="{StaticResource Common}"/>
                                             <Button Width="200"
+                                                    Height="Auto"
                                                     HorizontalAlignment="Right"
-                                                    Command="{Binding MakeSingleMeasCommand}"/>
-                                        </DockPanel>                                        
+                                                    Command="{Binding MakeSingleMeasCommand}">
+                                                <TextBlock Text="{Binding SingelMeasFlag, 
+                                                    Converter={StaticResource StatusFromNum}, 
+                                                    ConverterParameter={StaticResource SingleMeasures}}"
+                                                           TextWrapping="Wrap"/>
+                                            </Button>
+                                        </DockPanel>
                                     </ListBoxItem>
+                                    <!--#endregion-->
+                                    <!--#region Осталось времени ед. измерения -->
+                                    <ListBoxItem HorizontalContentAlignment="Stretch"
+                                                 Visibility="{Binding SingelMeasFlag, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <DockPanel>
+                                            <TextBlock Text="Осталось времени еденичного измерения, секунд"
+                                                       Style="{StaticResource Common}"/>
+                                            <TextBlock Text="{Binding SingleMeasCurTime}"
+                                                       Style="{StaticResource Common}"
+                                                       HorizontalAlignment="Right"/>
+                                        </DockPanel>
+                                    </ListBoxItem>
+                                    <!--#endregion-->
+                                    <!--#region Результат -->
+                                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                                        <DockPanel>
+                                            <TextBlock Text="Результат, каунтов"
+                                                       Style="{StaticResource Common}"/>
+                                            <TextBlock Text="{Binding SingleMeasResult}"
+                                                       HorizontalAlignment="Right"
+                                                       Style="{StaticResource Common}"/>
+                                        </DockPanel>
+                                    </ListBoxItem>
+                                    <!--#endregion-->
                                 </ListBox>
                             </GroupBox>
-
+                            <GroupBox Grid.Row="1"
+                                      Header="Таблица результатов еденичного измерения">
+                                <StackPanel>
+                                    <DataGrid AutoGenerateColumns="False"
+                                              ItemsSource="{Binding CalibrationClass.SingleMeasCells.Data}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Физическая величина" Binding="{Binding PhysVal}"/>
+                                            <DataGridTextColumn Header="Значение счетчика" Binding="{Binding CounterValue}"/>
+                                        </DataGrid.Columns>
+                                        
+                                    </DataGrid>
+                                    <UniformGrid Columns="2">
+                                        <Button Margin="5"
+                                                Command="{Binding GetCalibrCoeffsCommand}"
+                                                Content="Рассчитать к-ты"/>
+                                        <Button Margin="5"
+                                                Content="Загрузить к-ты в память контроллера"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                                
+                            </GroupBox>
                         </Grid>
                         
                     </TabItem>

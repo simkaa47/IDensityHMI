@@ -265,6 +265,9 @@ namespace IDensity.Models
 
                 if (model.CycleMeasStatus.Value)
                 {
+                    model.CountersCur[0].Value = nums[0];
+                    model.CountersCur[1].Value = nums[1];
+                    model.CountersCur[2].Value = nums[2];
                     model.PhysValueCur.Value = nums[6];
                     model.PhysValueAvg.Value = nums[7];
                     model.ContetrationValueAvg.Value = nums[9];

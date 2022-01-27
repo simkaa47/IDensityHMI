@@ -366,7 +366,7 @@ namespace IDensity.ViewModels
 
         #region Сменить баудрейт 
         RelayCommand _changeBaudrateCommand;
-        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)o), o =>o != null));
+        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)(o)), o =>o != null));
         #endregion
         #endregion
 
@@ -440,7 +440,11 @@ namespace IDensity.ViewModels
         #region Произвести единичное измерение"
         private RelayCommand _makeSingleMeasCommand;
 
-        public RelayCommand MakeSingleMeasCommand => _makeSingleMeasCommand ?? (_makeSingleMeasCommand = new RelayCommand(execObj => mainModel.MakeSingleMeasure(SingleMeasTime), canExecObj => true));
+        public RelayCommand MakeSingleMeasCommand => _makeSingleMeasCommand ?? (_makeSingleMeasCommand = new RelayCommand(execObj => { 
+            mainModel.MakeSingleMeasure(SingleMeasTime);
+            SingleMeasCurTime = SingleMeasTime;
+            SingelMeasFlag = true;
+        }, canExecObj => true));
 
         #endregion
 
@@ -453,6 +457,7 @@ namespace IDensity.ViewModels
             mainModel.ModelProcess();
             mainModel.UpdateDataEvent += AddDataToCollection;
             timer.Elapsed += (s, e) => CurPcDateTime.Value = DateTime.Now;
+            timer.Elapsed += (s, e) => UpdateSingleMeasTime();
             timer.Start();
             Events = new Events(mainModel);
             GetEventHistory();
@@ -468,6 +473,27 @@ namespace IDensity.ViewModels
 
         UDP Udp { get; set; }
 
+        #region Расчет коэффициентов калибровки
+        #region Класс, включающий в себя данные ед. измерений, методы расчета к-тов
+        public Calibration CalibrationClass { get; } = new Calibration();
+        #endregion
+
+        #region Команда расчета к-тов калибровки
+        private RelayCommand _getCalibrCoeffsCommand;
+
+        public RelayCommand GetCalibrCoeffsCommand => _getCalibrCoeffsCommand ?? (_getCalibrCoeffsCommand = new RelayCommand(execObj => CalibrationClass.GetCoeffs(), canExec => true));
+
+
+        #endregion
+
+        #region Команда "Загрузить коэффициенты калибровики"
+        RelayCommand _setCalibrCoeffsCommand;
+        public RelayCommand SetCalibrCoeffsCommand => _setCalibrCoeffsCommand ?? (_setCalibrCoeffsCommand = new RelayCommand(execPar => { }, canExecPar => true));
+        #endregion
+
+        #endregion
+
+        #region Единичное измерение
         #region Время еденичного измерения
         private ushort _singleMeasTime = 30;
 
@@ -478,6 +504,77 @@ namespace IDensity.ViewModels
         }
 
         #endregion
+
+        #region Флаг еденичного измерения
+        private bool _singelMeasFlag;
+
+        public bool SingelMeasFlag
+        {
+            get { return _singelMeasFlag;; }
+            set { Set(ref _singelMeasFlag, value); }
+        }
+
+        #endregion
+
+
+
+        #region Текущее время еденичного измерения
+        private int _singleMeasCurTime;
+
+        public int SingleMeasCurTime
+        {
+            get { return _singleMeasCurTime; }
+            set { Set(ref _singleMeasCurTime, value); }
+        }
+
+        #endregion
+
+        #region Результат еденичного измерения
+        private float _singleMeasResult;
+
+        public float SingleMeasResult
+        {
+            get { return _singleMeasResult; }
+            set { Set(ref _singleMeasResult, value); }
+        }
+
+        #endregion
+
+        #region Таймер еденичного измерения
+        void UpdateSingleMeasTime()
+        {
+            if (SingelMeasFlag)
+            {
+                // если прошло 2 секунды и не в режиме измерения, то снимаем флаг измерения
+                if (SingleMeasTime - SingleMeasCurTime > 2 && !mainModel.CycleMeasStatus.Value)
+                {
+                    SingelMeasFlag = false;
+                } 
+                SingleMeasCurTime--;
+                if (SingleMeasCurTime < 0)
+                {
+                    SingelMeasFlag = false;
+                    singleMeasTimer = new System.Timers.Timer(1000);
+                    singleMeasTimer.Elapsed += (s, e) => 
+                    {
+                        singleMeasTimer?.Stop();
+                        singleMeasTimer?.Dispose();
+                        SingleMeasResult = mainModel.CountersCur[0].Value;
+                    };
+                    singleMeasTimer.Start();
+                }
+            }
+        }
+
+        #region Таймер запроса результата измерения
+        System.Timers.Timer singleMeasTimer;
+        #endregion
+
+
+        #endregion
+        #endregion
+
+
 
         #region Текущая дата-время компьютера
         public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");

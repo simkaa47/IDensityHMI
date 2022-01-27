@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDensity.Models.SQL;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +8,7 @@ namespace IDensity.AddClasses
     /// <summary>
     /// Универсальный класс перечислений
     /// </summary>
-    class EnumCustom : PropertyChangedBase
+    class EnumCustom : PropertyChangedBase, IDataBased
     {
         #region Id
         long _id;

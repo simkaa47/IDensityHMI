@@ -238,6 +238,11 @@ namespace IDensity.Models
             model.CycleMeasStatus.Value = SelectRegs(model.CycleMeasStatus.RegType)[model.CycleMeasStatus.RegNum] == 0 ? false : true;
             if (model.CycleMeasStatus.Value)
             {
+                for (int i = 0; i < 3; i++)
+                {
+                    model.CountersCur[i].Value = GetFloatFromUshorts(SelectRegs(model.CountersCur[i].RegType), model.CountersCur[i].RegNum);
+
+                }
                 model.PhysValueCur.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueCur.RegType), model.PhysValueCur.RegNum);
                 model.PhysValueAvg.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueAvg.RegType), model.PhysValueAvg.RegNum);
                 model.ContetrationValueCur.Value = GetFloatFromUshorts(SelectRegs(model.ContetrationValueCur.RegType), model.ContetrationValueCur.RegNum);
@@ -797,7 +802,7 @@ namespace IDensity.Models
         {
             commands.Enqueue(new Command((p1, p2) =>
             {
-                client.WriteSingleRegister((int)Holds.SingleMeasDuration, time);
+                client.WriteSingleRegister((int)Holds.SingleMeasDuration, time*10);
                 client.WriteSingleRegister((int)Holds.SingleMeasStart, 1);
             }, 0, 0));
         }
