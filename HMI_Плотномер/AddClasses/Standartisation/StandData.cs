@@ -45,9 +45,11 @@ namespace IDensity.AddClasses.Standartisation
                 Duration = this.Duration.Clone() as Parameter<ushort>,
                 Type = this.Type.Clone() as Parameter<ushort>,
                 Value = this.Value.Clone() as Parameter<float>,
-                Results = this.Results.Select(r=>r.Clone() as Parameter<float>).ToArray()
+                Results = this.Results.Select(r => r.Clone() as Parameter<float>).ToArray()
             };
         }
         #endregion
+       
+
     }
 }

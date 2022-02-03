@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using EasyModbus;
 using IDensity.AddClasses;
+using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Standartisation;
 
 namespace IDensity.Models
@@ -29,7 +30,9 @@ namespace IDensity.Models
             SendTestValue = 13, // отправка тестового значения на ЦАП
             AdcSett = 45, // начальный номер регистров, отвечающих за настройки АЦП
             DacSett=51, // начальный номер регистров, отвечающих за настройки ЦАП
-            UdpAddr = 109 // начальный номер регистров, отвечающих за IP адрес UDP приемника
+            UdpAddr = 109, // начальный номер регистров, отвечающих за IP адрес UDP приемника
+            StartAdc = 118,// старт-стоп платы АЦП
+            StartAdcData = 119// старт-стоп выдачи данных АЦП
         }
         #endregion        
 
@@ -185,6 +188,7 @@ namespace IDensity.Models
         void RecognizePacket()
         {
             GetRtc();
+            GetHalfPeriodStandartisation();
             GetCurMeas();
             GetAmTelemetry();
             GetHVTelemetry();
@@ -314,6 +318,17 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Запрос стандартизаций, скорректированных по времени
+        void GetHalfPeriodStandartisation()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                model.StandHalfPeriodValues[i].Value = GetFloatFromUshorts(readRegs, model.StandHalfPeriodValues[i].RegNum);
+                model.StandHalfPeriodAges[i].Value = GetFloatFromUshorts(readRegs, model.StandHalfPeriodAges[i].RegNum);
+            }
+        }
+        #endregion
+
         #region Запрос телеметрии от платы температуры
         void GetTempTelemetry()
         {
@@ -338,6 +353,8 @@ namespace IDensity.Models
                 GetCounterSettingsAll();
                 GetCalibrDataAll();
                 GetUdpAddr();
+                GetAdcBoardSettings();
+                GetMeasUnitSettingsAll();
             }
         }
         #region Данные измерительных настроек
@@ -499,6 +516,21 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Настройки платы АЦП
+        void GetAdcBoardSettings()
+        {
+            model.SettingsReaded = false;
+            ReadHoldRegs(model.AdcBoardSettings.AdcMode.RegNum, 6);
+            model.AdcBoardSettings.AdcMode.Value = holdRegs[model.AdcBoardSettings.AdcMode.RegNum];
+            model.AdcBoardSettings.AdcProcMode.Value = holdRegs[model.AdcBoardSettings.AdcProcMode.RegNum];
+            model.AdcBoardSettings.AdcSyncLevel.Value = holdRegs[model.AdcBoardSettings.AdcSyncLevel.RegNum];
+            model.AdcBoardSettings.AdcSyncMode.Value = holdRegs[model.AdcBoardSettings.AdcSyncMode.RegNum];
+            model.AdcBoardSettings.TimerMax.Value = holdRegs[model.AdcBoardSettings.TimerMax.RegNum];
+            model.AdcBoardSettings.PreampGain.Value = holdRegs[model.AdcBoardSettings.PreampGain.RegNum];
+            model.SettingsReaded = true;
+        }
+        #endregion
+
         #region Настройки калибровочных кривых
         /// <summary>
         /// Получить данные всех калибровочных кривых
@@ -525,6 +557,26 @@ namespace IDensity.Models
             {
                 model.CalibrDatas[index].Coeffs[i].Value = GetFloatFromUshorts(holdRegs, model.CalibrDatas[index].Coeffs[i].RegNum);                    
             }
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Настройки единиц измерения
+        void GetMeasUnitSettingsAll()
+        {
+            for (ushort i = 0; i < 5; i++)
+            {
+                GetMeasUnitSettings(i);
+            }
+        }
+        void GetMeasUnitSettings(ushort index)
+        {
+            model.SettingsReaded = false;
+            client.WriteSingleRegister(model.MeasUnitSettings[0].Id.RegNum, index);
+            ReadHoldRegs(model.MeasUnitSettings[0].A.RegNum, 4);
+            model.MeasUnitSettings[index].Id.Value = index;
+            model.MeasUnitSettings[index].A.Value = GetFloatFromUshorts(holdRegs, model.MeasUnitSettings[0].A.RegNum);
+            model.MeasUnitSettings[index].B.Value = GetFloatFromUshorts(holdRegs, model.MeasUnitSettings[0].B.RegNum);
             model.SettingsReaded = true;
         }
         #endregion
@@ -806,7 +858,67 @@ namespace IDensity.Models
                 client.WriteSingleRegister((int)Holds.SingleMeasStart, 1);
             }, 0, 0));
         }
-            #endregion
-            #endregion
+        #endregion
+
+        #region Команды изменения настроек платы АЦП
+        public void SetAdcBoardSettings(AdcBoardSettings settings)
+        {
+            SwitchAdcBoard(0);
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                Thread.Sleep(200);
+                holdRegs[model.AdcBoardSettings.AdcMode.RegNum] = settings.AdcMode.Value;
+                holdRegs[model.AdcBoardSettings.AdcProcMode.RegNum] = settings.AdcProcMode.Value;
+                holdRegs[model.AdcBoardSettings.AdcSyncLevel.RegNum] = settings.AdcSyncLevel.Value;
+                holdRegs[model.AdcBoardSettings.AdcSyncMode.RegNum] = settings.AdcSyncMode.Value;
+                holdRegs[model.AdcBoardSettings.TimerMax.RegNum] = settings.TimerMax.Value;
+                holdRegs[model.AdcBoardSettings.PreampGain.RegNum] = settings.PreampGain.Value;
+                WriteRegs(model.AdcBoardSettings.AdcMode.RegNum, 6);
+                GetAdcBoardSettings();
+                Thread.Sleep(200);
+                SwitchAdcBoard(1);
+
+            }, 0, 0));
+            
+        }
+        #endregion
+
+        #region Команда "Запуск-останов платы АЦП"
+        public void SwitchAdcBoard(ushort value)
+        {            
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                
+                client.WriteSingleRegister((int)Holds.StartAdc, value);
+            }, 0, 0));
+            
+        }
+        #endregion
+
+        #region Команда "Запуск/останов выдачи данных АЦП "
+        public void StartStopAdcData(ushort value)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client.WriteSingleRegister((int)Holds.StartAdcData, value);
+            }, 0, 0));
+        }
+        #endregion
+
+        #region Команда "Записать настройки едениц измерерия"
+        public void SetMeasUnitsSettings(MeasUnitSettings settings)
+        {
+            commands.Enqueue(new Command((p1, p2) =>
+            {
+                client.WriteSingleRegister(settings.Id.RegNum, settings.Id.Value);
+                GetUshortsFromFloat(holdRegs, settings.A.RegNum, settings.A.Value);
+                GetUshortsFromFloat(holdRegs, settings.B.RegNum, settings.B.Value);
+                WriteRegs(settings.A.RegNum, 4);
+                GetMeasUnitSettings((ushort)settings.Id.Value);
+            }, 0, 0));
+        }
+
+        #endregion
+        #endregion
     }
 }

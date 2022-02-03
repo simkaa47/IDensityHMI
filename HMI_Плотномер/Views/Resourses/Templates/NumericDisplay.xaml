@@ -19,7 +19,8 @@
                            Grid.Row="1"
                            FontSize="40">
                     <Run Text="{Binding Value, StringFormat={}{0:F1}}"/>
-                    <Run Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"/>
+                    <Run Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
+                         FontSize="20"/>
                 </TextBlock>
             </Grid>
         </Border>

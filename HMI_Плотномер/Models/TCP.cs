@@ -46,6 +46,11 @@ namespace IDensity.Models
 
         int indexAm = 0;
 
+        /// <summary>
+        /// Количество ошибок соединений
+        /// </summary>
+        int errCommCount = 0;
+
         #region Клиент
         TcpClient client;
         #endregion
@@ -110,6 +115,7 @@ namespace IDensity.Models
                 GetCurDateTime();
                 GetCurMeas();
                 GetPeriphTelemetry();
+                GetHalfPeriodStandartisation();
                 //GetAmTelemetry();
                 //GetHVTelemetry();
                 //GetTempTelemetry();                
@@ -120,14 +126,19 @@ namespace IDensity.Models
                     command.Action?.Invoke(command.Parameter);
                     Thread.Sleep(100);
                 }
+                errCommCount = 0;
 
             }
             catch (Exception ex)
             {
-                TcpEvent?.Invoke(ex.Message);
-                commands?.Clear();
-                Disconnect();
-                Thread.Sleep(1000);
+                if (++errCommCount == 5)
+                {
+                    TcpEvent?.Invoke(ex.Message);
+                    commands?.Clear();
+                    Disconnect();
+                    Thread.Sleep(1000);
+                }
+                else Thread.Sleep(200);
             }
         }
         #endregion
@@ -245,6 +256,13 @@ namespace IDensity.Models
                 model.TelemetryHV.VoltageCurIn.Value = nums[1];
                 model.TelemetryHV.VoltageCurOut.Value = (ushort)nums[2];
                 model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
+                for (int i = 0; i < 2; i++)
+                {
+                    model.AnalogGroups[i].AO.VoltageDac.Value = (ushort)nums[4 + i*4];
+                    model.AnalogGroups[i].AO.VoltageTest.Value = (ushort)nums[4 + i * 4 + 1];
+                    model.AnalogGroups[i].AO.AdcValue.Value = (ushort)nums[4 + i * 4 + 2];
+                    model.AnalogGroups[i].AI.AdcValue.Value = (ushort)nums[4 + i * 4 + 3];
+                }
             }
         }
         #endregion
@@ -275,6 +293,24 @@ namespace IDensity.Models
                 }              
             
             }
+        }
+        #endregion
+
+        #region Запрос стандартизаций, скорректированных по времени
+        void GetHalfPeriodStandartisation()
+        {
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,SCR"));
+            float temp = 0;
+            var nums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => float.TryParse(s.Replace(".", ","), out temp)).Select(s => temp).ToArray();
+            if (nums.Length == 6)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    model.StandHalfPeriodValues[i].Value = nums[i];
+                    model.StandHalfPeriodAges[i].Value = nums[i+3];
+                }
+            }
+
         }
         #endregion
 
@@ -328,6 +364,7 @@ namespace IDensity.Models
                 GetCalibrCoeffs();
                 GetSettings7();
                 GetSettings1();
+                GetSettings4();
 
             } 
             
@@ -494,6 +531,31 @@ namespace IDensity.Models
             
             model.SettingsReaded = true;
         }
+        #endregion
+
+        #region Настройки 4
+        void GetSettings4()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,4#"));
+            var indexOfEqual = str.LastIndexOf('=');
+            if (indexOfEqual < 1) return;
+            float temp = 0;
+            var nums = str.Substring(indexOfEqual).
+                Split(new char[] { '#', ',', '=' }, StringSplitOptions.RemoveEmptyEntries).
+                Where(s => float.TryParse(s.Replace(".", ","), out temp)).
+                Select(s => temp).ToArray();
+            if (nums.Length != 15) return;
+            for (int i = 0; i < 5; i++)
+            {
+                model.MeasUnitSettings[i].Id.Value = (ushort)i;
+                model.MeasUnitSettings[i].A.Value = nums[i * 3 + 1];
+                model.MeasUnitSettings[i].B.Value = nums[i * 3 + 2];
+            }
+
+            model.SettingsReaded = true;
+        }
+
         #endregion
 
         #region Настройки № 7
@@ -706,7 +768,7 @@ namespace IDensity.Models
         #region Отправить значение тестовой величины
         public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
         {
-            var str = $"CMND,AMV,{groupNum},{moduleNum},{value}";
+            var str = $"CMND,AMV,{groupNum},{value}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false;}, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -828,6 +890,23 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Команда "Записать настройки едениц измерерия"
+        public void SetMeasUnitsSettings(MeasUnitSettings settings)
+        {
+            var str = $"SETT,meas_unit={settings.Id.Value},{settings.A.Value.ToString().Replace(",",".")},{settings.B.Value.ToString().Replace(",", ".")}";            
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings4(); }, Encoding.ASCII.GetBytes(str + "#")));
+        }
+
+        #endregion
+
+        #region Команда "Переключить реле"
+        public void SwitchRelay(ushort value)
+        {
+            var str = $"CMND,RLS,{value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) =>SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
         #endregion
 
         #region Очистка буфера
@@ -841,6 +920,8 @@ namespace IDensity.Models
         #endregion
 
         
+
+
 
 
     }

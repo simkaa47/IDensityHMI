@@ -41,6 +41,7 @@ namespace IDensity.Models
             Init();// Инициализация параметров
             CalibrDataDescribe();
             AdcSettingsEventDescribe();
+            MeasUnitSettingsDescribe();
         }
 
 
@@ -74,6 +75,13 @@ namespace IDensity.Models
 
         #region ФВ усредненное по диапазонам усредненное
         public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");
+        #endregion
+
+        #region Значения стандартизаций, скорректированных по времени
+        public Parameter<float>[] StandHalfPeriodValues { get; } = Enumerable.Range(0, 3).Select(i => new Parameter<float>("StandHalfPeriodValue" + i.ToString(), $"Значение стандартизации, скорректированное по времени  {i}", float.NegativeInfinity, float.PositiveInfinity, 51 + i * 2, "read")).ToArray();
+        #endregion
+        #region Возвраст
+        public Parameter<float>[] StandHalfPeriodAges { get; } = Enumerable.Range(0, 3).Select(i => new Parameter<float>("StandHalfPeriodAge" + i.ToString(), $"Возраст стандартизации  {i}", float.NegativeInfinity, float.PositiveInfinity, 57 + i * 2, "read")).ToArray();
         #endregion
 
         #region Текущие значения счетчиков
@@ -207,6 +215,17 @@ namespace IDensity.Models
         #endregion
         #endregion
 
+        #region Настройки едениц измерений
+        public MeasUnitSettings[] MeasUnitSettings { get; } = Enumerable.Range(0, 5).Select(i => new MeasUnitSettings()).ToArray();
+        void MeasUnitSettingsDescribe()
+        {
+            foreach (var sett in MeasUnitSettings)
+            {
+                sett.Writing += SetMeasUnitsSettings;
+            }
+        }
+        #endregion
+
         #region Настройки платы АЦП
 
         #region Адрес UDP приемника        
@@ -304,7 +323,7 @@ namespace IDensity.Models
                     ContetrationValueAvg.Value = 0;
                     ContetrationValueCur.Value = 0;
                     PhysValueCur.Value = 0;
-                    UpdateDataEvent?.Invoke();
+                    UpdateDataEvent?.Invoke();                    
                 }
             };
             Connecting.PropertyChanged += (obj, args) => SettingsReaded = false;
@@ -336,6 +355,7 @@ namespace IDensity.Models
                 AnalogGroups[i].AI.PwrState.Value = (AnalogStateGroups[i].Value & 2) != 2;
                 AnalogGroups[i].AO.CommState.Value = (AnalogStateGroups[i].Value & 4) != 4;
                 AnalogGroups[i].AI.CommState.Value = (AnalogStateGroups[i].Value & 8) != 8;
+                
             }            
         }
         #endregion
@@ -521,7 +541,7 @@ namespace IDensity.Models
         public void SetAdcBoardSettings(AdcBoardSettings settings)
         {
             if (CommMode.EthEnable) Tcp.SetAdcBoardSettings(settings);
-            //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+            else if (CommMode.RsEnable) rs.SetAdcBoardSettings(settings);
         }
         #endregion
 
@@ -529,7 +549,7 @@ namespace IDensity.Models
         public void SwitchAdcBoard(ushort value)
         {
             if (CommMode.EthEnable) Tcp.SwitchAdcBoard(value);
-            //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+            else if (CommMode.RsEnable) rs.SwitchAdcBoard(value);
         }
         #endregion
 
@@ -537,7 +557,7 @@ namespace IDensity.Models
         public void StartStopAdcData(ushort value)
         {
             if (CommMode.EthEnable) Tcp.StartStopAdcData(value);
-            //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+            else if (CommMode.RsEnable) rs.StartStopAdcData(value);
         }
         #endregion
 
@@ -546,7 +566,24 @@ namespace IDensity.Models
         {
             if (CommMode.EthEnable) Tcp.MakeSingleMeasure(time);
             else if (CommMode.RsEnable) rs.MakeSingleMeasure(time);
-        }   
+        }
+        #endregion
+
+        #region Команда "Записать настройки едениц измерерия"
+        public void SetMeasUnitsSettings(MeasUnitSettings settings)
+        {
+            if (CommMode.EthEnable) Tcp.SetMeasUnitsSettings(settings);
+            else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
+        }
+
+        #endregion
+
+        #region Команда "Переключить реле"
+        public void SwitchRelay(ushort value)
+        {
+            if (CommMode.EthEnable) Tcp.SwitchRelay(value);
+            //else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
+        }
         #endregion
         #endregion
 

@@ -40,7 +40,7 @@ namespace IDensity.AddClasses
         #region Команды
         #region Команда подать питание
         RelayCommand _switchPwrAmCommand;
-        public RelayCommand SwitchPwrAmCommand => _switchPwrAmCommand ?? (_switchPwrAmCommand = new RelayCommand(o => SwitchPwrEvent?.Invoke(GroupNum, ModulNum, !PwrState.Value), o => true));
+        public RelayCommand SwitchPwrAmCommand => _switchPwrAmCommand ?? (_switchPwrAmCommand = new RelayCommand(o => SwitchPwrEvent?.Invoke(GroupNum, ModulNum, !CommState.Value), o => true));
         #endregion
         #endregion
         #region Событие вкл-выкл модуля

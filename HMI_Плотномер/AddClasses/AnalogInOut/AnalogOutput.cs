@@ -36,7 +36,7 @@ namespace IDensity.AddClasses
         #endregion
 
         #region Номер еденицы измерения
-        public Parameter<ushort> DacEiNdx { get; } = new Parameter<ushort>("DacEiNdx", "Номер еденицы измерения", 0, 4, 0, "");
+        public Parameter<ushort> DacEiNdx { get; } = new Parameter<ushort>("DacEiNdx", "Номер еденицы измерения", 0, 7, 0, "");
         #endregion
 
         #region Номер переменной для выдачи
@@ -55,7 +55,10 @@ namespace IDensity.AddClasses
         #region Команды
         #region Команда отправить тестовый сигнал
         RelayCommand _setTestSignalCommand;
-        public RelayCommand SetTestSignalCommand => _setTestSignalCommand ?? (_setTestSignalCommand = new RelayCommand(o => SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, AmTestValue.WriteValue), o => AmTestValue.ValidationOk));
+        public RelayCommand SetTestSignalCommand => _setTestSignalCommand ?? (_setTestSignalCommand = new RelayCommand(o => {
+            AmTestValue.Value = AmTestValue.WriteValue;
+            SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, (ushort)(AmTestValue.WriteValue*10)); 
+        } , o => AmTestValue.ValidationOk));
         #endregion
 
         #region Команда "Записать настройки ЦАП"

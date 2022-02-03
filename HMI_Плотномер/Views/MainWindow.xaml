@@ -281,13 +281,27 @@
                         <!--#region Мгновенное значение ФВ -->
                         <UserControl Margin="5"                                    
                                      Template="{StaticResource NumericDisplay}"                                     
-                                     DataContext="{Binding mainModel.PhysValueCur}"/>
+                                     DataContext="{Binding mainModel.PhysValueCur}">
+                            <UserControl.Tag>
+                                <MultiBinding Converter="{StaticResource StringByIndex}">
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.CurMeasNum" Mode="OneWay"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnits" Mode="OneWay"/>
+                                </MultiBinding>
+                            </UserControl.Tag>
+                        </UserControl>
                         <!--#endregion-->
                         <!--#region Усредненное значение ФВ -->
                         <UserControl Margin="5"
                                      Grid.Column="1"
                                      Template="{StaticResource NumericDisplay}"                                     
-                                     DataContext="{Binding mainModel.PhysValueAvg}"/>
+                                     DataContext="{Binding mainModel.PhysValueAvg}">
+                            <UserControl.Tag>
+                                <MultiBinding Converter="{StaticResource StringByIndex}">
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.CurMeasNum" Mode="OneWay"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnits" Mode="OneWay"/>
+                                </MultiBinding>
+                            </UserControl.Tag>
+                        </UserControl>
                         <!--#endregion-->
                         <!--#region Мгновенное значение концетрации -->
                         <UserControl Grid.Row="1"
@@ -330,8 +344,8 @@
                         </Button>
                         <!--#endregion-->
                     </Grid>
-                    <!--#endregion-->
-                    
+                    <!--#endregion-->                    
+
                 </Grid>
             </TabItem>
             <!--#endregion-->
@@ -548,41 +562,21 @@
                             <!--#endregion-->
                             <!--#region Параметры -->                            
                             <ListBox HorizontalContentAlignment="Stretch">
-                                <!--#region Диапазоны -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">                                    
-                                    <GroupBox>
-                                        <!--#region Выбор диапазона -->
-                                        <GroupBox.Header>
-                                            <DockPanel>
-                                                <TextBlock Text="Номер диапазона"></TextBlock>
-                                                <ComboBox ItemsSource="{StaticResource Diapasons}" 
-                                                          SelectedIndex="{Binding  SelectedDiapNum}"/>
-                                            </DockPanel>
-                                        </GroupBox.Header>
-                                        
-                                        <!--#endregion-->
-                                        <!--#region Настройки диапазонов -->
-                                        <ListBox>                                            
-                                            <!--#region Номер калибровочной кривой -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CalibCurveNum}">
-                                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"/>                                                
-                                            </ListBoxItem>                                           
-                                            <!--#endregion-->
-                                            <!--#region Номер стандартизации ЕИ -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.StandNum}">
-                                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"/>                                                
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                            <!--#region Счетчик -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CounterNum}">
-                                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"/>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                        </ListBox>
-                                        <!--#endregion-->
-                                    </GroupBox>                                    
+                                <!--#region Номер калибровочной кривой -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CalibCurveNum}">
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"/>
                                 </ListBoxItem>
-                                <!--#endregion--> 
+                                <!--#endregion-->
+                                <!--#region Номер стандартизации ЕИ -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.StandNum}">
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->
+                                <!--#region Счетчик -->
+                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CounterNum}">
+                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"/>
+                                </ListBoxItem>
+                                <!--#endregion-->                                
                                 <!--#region Номер стандартизации -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.BackStandNum}">
                                     <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumCommand}"/>
@@ -694,212 +688,308 @@
                     <!--#endregion-->
                     <!--#region Калибровочные криые -->
                     <TabItem Header="КАЛИБРОВОЧНЫЕ КРИВЫЕ">
-                        <DataGrid ItemsSource="{Binding mainModel.CalibrDatas}">
-                            <DataGrid.Columns>
-                                <!--#region № -->
-                                <DataGridTextColumn Header="№" IsReadOnly="True"  Binding="{Binding Num.Value}"/>
-                                <!--#endregion-->
-                                <!--#region Единица измерения -->                                
-                                <DataGridTemplateColumn Header="Единица измерения">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.UnitNames.Data}"
+                        <StackPanel>
+                            <GroupBox Header="Настройки калибровочных кривых">
+                                <DataGrid ItemsSource="{Binding mainModel.CalibrDatas}">
+                                    <DataGrid.Columns>
+                                        <!--#region № -->
+                                        <DataGridTextColumn Header="№" IsReadOnly="True"  Binding="{Binding Num.Value}"/>
+                                        <!--#endregion-->
+                                        <!--#region Единица измерения -->
+                                        <DataGridTemplateColumn Header="Единица измерения">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.UnitNames.Data}"
                                                       DisplayMemberPath="Name"
                                                       SelectedIndex="{Binding MeasUnitNum.WriteValue, UpdateSourceTrigger=LostFocus}">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="DropDownClosed">
-                                                        <i:InvokeCommandAction Command="{Binding SetMeasUnitCommand}"/>
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </ComboBox>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region К-т 0 -->
-                                <DataGridTemplateColumn Header="Коэффициент 0">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="">
-                                            <DockPanel>
-                                                <TextBox Width="50"
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="DropDownClosed">
+                                                                <i:InvokeCommandAction Command="{Binding SetMeasUnitCommand}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </ComboBox>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т 0 -->
+                                        <DataGridTemplateColumn Header="Коэффициент 0">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
-                                                    <TextBox.Text>
-                                                        <Binding Path="Coeffs[0].WriteValue" UpdateSourceTrigger="LostFocus" StringFormat="{}{0:#.##}">
-                                                            <Binding.ValidationRules>
-                                                                <DataErrorValidationRule />
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                                <Button Margin="5,0,5,0"
+                                                            <TextBox.Text>
+                                                                <Binding Path="Coeffs[0].WriteValue" UpdateSourceTrigger="LostFocus">
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
                                                         Command="{Binding SetCoeffCommand}"
                                                         CommandParameter="0"
                                                         >--></Button>
-                                                <TextBlock Text="{Binding Coeffs[0].Value}"
+                                                        <TextBlock Text="{Binding Coeffs[0].Value}"
                                                            Width="50"                                                           
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
                                                            Foreground="Black"/>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region К-т 1 -->
-                                <DataGridTemplateColumn Header="Коэффициент 1">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="">
-                                            <DockPanel>
-                                                <TextBox Width="50"
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т 1 -->
+                                        <DataGridTemplateColumn Header="Коэффициент 1">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
-                                                    <TextBox.Text>
-                                                        <Binding Path="Coeffs[1].WriteValue" UpdateSourceTrigger="LostFocus" >
-                                                            <Binding.ValidationRules>
-                                                                <DataErrorValidationRule />
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                                <Button Margin="5,0,5,0"
+                                                            <TextBox.Text>
+                                                                <Binding Path="Coeffs[1].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
                                                         Command="{Binding SetCoeffCommand}"
                                                         CommandParameter="1"
                                                         >--></Button>
-                                                <TextBlock Text="{Binding Coeffs[1].Value}"
+                                                        <TextBlock Text="{Binding Coeffs[1].Value}"
                                                            Width="50"
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
                                                            Foreground="Black"/>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region К-т 2 -->
-                                <DataGridTemplateColumn Header="Коэффициент 2">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="">
-                                            <DockPanel>
-                                                <TextBox Width="50"
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т 2 -->
+                                        <DataGridTemplateColumn Header="Коэффициент 2">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
-                                                    <TextBox.Text>
-                                                        <Binding Path="Coeffs[2].WriteValue" UpdateSourceTrigger="LostFocus" >
-                                                            <Binding.ValidationRules>
-                                                                <DataErrorValidationRule />
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                                <Button Margin="5,0,5,0"
+                                                            <TextBox.Text>
+                                                                <Binding Path="Coeffs[2].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
                                                         Command="{Binding SetCoeffCommand}"
                                                         CommandParameter="2"
                                                         >--></Button>
-                                                <TextBlock Text="{Binding Coeffs[2].Value}"
+                                                        <TextBlock Text="{Binding Coeffs[2].Value}"
                                                            Width="50"
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
                                                            Foreground="Black"/>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region К-т 3 -->
-                                <DataGridTemplateColumn Header="Коэффициент 3">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="">
-                                            <DockPanel>
-                                                <TextBox Width="50"
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т 3 -->
+                                        <DataGridTemplateColumn Header="Коэффициент 3">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
-                                                    <TextBox.Text>
-                                                        <Binding Path="Coeffs[3].WriteValue" UpdateSourceTrigger="LostFocus" >
-                                                            <Binding.ValidationRules>
-                                                                <DataErrorValidationRule />
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                                <Button Margin="5,0,5,0"
+                                                            <TextBox.Text>
+                                                                <Binding Path="Coeffs[3].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
                                                         Command="{Binding SetCoeffCommand}"
                                                         CommandParameter="3"
                                                         >--></Button>
-                                                <TextBlock Text="{Binding Coeffs[3].Value}"
+                                                        <TextBlock Text="{Binding Coeffs[3].Value}"
                                                            Width="50"
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
                                                            Foreground="Black"/>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region К-т 4 -->
-                                <DataGridTemplateColumn Header="Коэффициент 4">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="">
-                                            <DockPanel>
-                                                <TextBox Width="50"
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т 4 -->
+                                        <DataGridTemplateColumn Header="Коэффициент 4">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
-                                                    <TextBox.Text>
-                                                        <Binding Path="Coeffs[4].WriteValue" UpdateSourceTrigger="LostFocus" >
-                                                            <Binding.ValidationRules>
-                                                                <DataErrorValidationRule />
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                                <Button Margin="5,0,5,0"
+                                                            <TextBox.Text>
+                                                                <Binding Path="Coeffs[4].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
                                                         Command="{Binding SetCoeffCommand}"
                                                         CommandParameter="4"
                                                         >--></Button>
-                                                <TextBlock Text="{Binding Coeffs[4].Value}"
+                                                        <TextBlock Text="{Binding Coeffs[4].Value}"
                                                            Width="50"
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
                                                            Foreground="Black"/>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region К-т 5 -->
-                                <DataGridTemplateColumn Header="Коэффициент 5">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="">
-                                            <DockPanel>
-                                                <TextBox Width="50"
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т 5 -->
+                                        <DataGridTemplateColumn Header="Коэффициент 5">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
                                                          VerticalContentAlignment="Center"
                                                          HorizontalContentAlignment="Center">
-                                                    <TextBox.Text>
-                                                        <Binding Path="Coeffs[5].WriteValue" UpdateSourceTrigger="LostFocus" >
-                                                            <Binding.ValidationRules>
-                                                                <DataErrorValidationRule />
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                                <Button Margin="5,0,5,0"
+                                                            <TextBox.Text>
+                                                                <Binding Path="Coeffs[5].WriteValue" UpdateSourceTrigger="LostFocus" >
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
                                                         Command="{Binding SetCoeffCommand}"
                                                         CommandParameter="5"
                                                         >--></Button>
-                                                <TextBlock Text="{Binding Coeffs[5].Value}"
+                                                        <TextBlock Text="{Binding Coeffs[5].Value}"
                                                            Width="50"
                                                            VerticalAlignment="Center"
                                                            Style="{StaticResource Common}"
                                                            Foreground="Black"/>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </GroupBox>
+                            <GroupBox Header="Настройки единиц измерения">
+                                <DataGrid ItemsSource="{Binding mainModel.MeasUnitSettings}"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <!--#region Название еденицы измерения -->
+                                        <DataGridTemplateColumn>
+                                            <DataGridTemplateColumn.Header>
+                                                <TextBlock Text="Название единицы измерения"
+                                                           TextWrapping="Wrap"
+                                                           Width="120"/>                                                
+                                            </DataGridTemplateColumn.Header>
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock>
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource StringByIndex}">
+                                                                <Binding Path="Id.Value"/>
+                                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnits" Mode="OneWay"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region Коэффициент A -->
+                                        <DataGridTemplateColumn Header="Коэффициент A">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                            <TextBox.Text>
+                                                                <Binding Path="A.WriteValue" UpdateSourceTrigger="LostFocus">
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetACommand}"                                                        
+                                                        >--></Button>
+                                                        <TextBlock Text="{Binding A.Value}"
+                                                           Width="50"                                                           
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region "Коэффициент B" -->
+                                        <DataGridTemplateColumn Header="Коэффициент B">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="">
+                                                    <DockPanel>
+                                                        <TextBox Width="50"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center">
+                                                            <TextBox.Text>
+                                                                <Binding Path="B.WriteValue" UpdateSourceTrigger="LostFocus">
+                                                                    <Binding.ValidationRules>
+                                                                        <DataErrorValidationRule />
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox.Text>
+                                                        </TextBox>
+                                                        <Button Margin="5,0,5,0"
+                                                        Command="{Binding SetBCommand}"                                                        
+                                                        >--></Button>
+                                                        <TextBlock Text="{Binding B.Value}"
+                                                           Width="50"                                                           
+                                                           VerticalAlignment="Center"
+                                                           Style="{StaticResource Common}"
+                                                           Foreground="Black"/>
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                    </DataGrid.Columns>
+                                    
+                                </DataGrid>
+                            </GroupBox>
+                        </StackPanel>
+                        
+                        
                     </TabItem>
                     <!--#endregion-->
+                    <!--#region Калибровка -->
                     <TabItem Header="КАЛИБРОВКА">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -920,7 +1010,7 @@
                                                      HorizontalContentAlignment="Center"/>
                                         </DockPanel>
                                     </ListBoxItem>
-                                    <!--#endregion-->                                    
+                                    <!--#endregion-->
                                     <!--#region "Управление еденичным измерением" -->
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
                                         <DockPanel>
@@ -973,7 +1063,7 @@
                                             <DataGridTextColumn Header="Физическая величина" Binding="{Binding PhysVal}"/>
                                             <DataGridTextColumn Header="Значение счетчика" Binding="{Binding CounterValue}"/>
                                         </DataGrid.Columns>
-                                        
+
                                     </DataGrid>
                                     <UniformGrid Columns="2">
                                         <Button Margin="5"
@@ -983,101 +1073,142 @@
                                                 Content="Загрузить к-ты в память контроллера"/>
                                     </UniformGrid>
                                 </StackPanel>
-                                
+
                             </GroupBox>
                         </Grid>
-                        
+
                     </TabItem>
+                    <!--#endregion-->
                     <!--#region Стандартизация -->
                     <TabItem Header="СТАНДАРТИЗАЦИЯ">
-                        <GroupBox>
-                            <!--#region Выбор набора станд-ии -->
-                            <GroupBox.Header>
-                                <DockPanel>
-                                    <TextBlock Text="Номер набора стандартизации"/>
-                                    <ComboBox ItemsSource="{Binding StandNames.Data}"
+                        
+                        <ScrollViewer>
+                            <StackPanel>
+                                <GroupBox>
+                                    <!--#region Выбор набора станд-ии -->
+                                    <GroupBox.Header>
+                                        <DockPanel>
+                                            <TextBlock Text="Номер набора стандартизации"/>
+                                            <ComboBox ItemsSource="{Binding StandNames.Data}"
                                               HorizontalAlignment="Right"
                                               SelectedIndex="{Binding StandSelNum}"
                                               DisplayMemberPath="Name"/>
-                                </DockPanel>
-                            </GroupBox.Header>
-                            <!--#endregion-->
-                            <ListBox>
-                                <!--#region Длительность стандартизации -->
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Duration}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdDurationCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Тип -->
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Type}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdTypeCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Физ. величина -->
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Value}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdValueCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Результаты -->
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[0]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </DockPanel>
+                                    </GroupBox.Header>
+                                    <!--#endregion-->
+                                    <ListBox>
+                                        <!--#region Длительность стандартизации -->
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Duration}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdDurationCommand}"/>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Тип -->
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Type}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdTypeCommand}"/>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Физ. величина -->
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Value}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdValueCommand}"/>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Результаты -->
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[0]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="0"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[1]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[1]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="1"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[2]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[2]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="2"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[3]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[3]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="3"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[4]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[4]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="4"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[5]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[5]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="5"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[6]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[6]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="6"/>
-                                </ListBoxItem>
-                                <ListBoxItem DataContext="{Binding SelectedStandData.Results[7]}" HorizontalContentAlignment="Stretch">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
+                                        </ListBoxItem>
+                                        <ListBoxItem DataContext="{Binding SelectedStandData.Results[7]}" HorizontalContentAlignment="Stretch">
+                                            <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStdResultCommand}"
                                                   CommanDParameter="7"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Время последней стандартизации -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock  Text="{Binding SelectedStandData.Date.Description}"
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Время последней стандартизации -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock  Text="{Binding SelectedStandData.Date.Description}"
                                                     Style="{StaticResource Common}"/>
-                                        <TextBlock  Text="{Binding SelectedStandData.Date.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
+                                                <TextBlock  Text="{Binding SelectedStandData.Date.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
                                                     HorizontalAlignment="Right"                                                    
                                                     Style="{StaticResource Common}"/>
-                                    </DockPanel>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Управление стандартизацией" Style="{StaticResource Common}" />
-                                        <Button Width="200" Height="Auto"
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Управление стандартизацией" Style="{StaticResource Common}" />
+                                                <Button Width="200" Height="Auto"
                                                 Command="{Binding MakeStandCommand}"
                                                 HorizontalContentAlignment="Center"
                                                 HorizontalAlignment="Right">
-                                            <TextBlock Text="{Binding IsStandartisation, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource StandStates}}"
+                                                    <TextBlock Text="{Binding IsStandartisation, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource StandStates}}"
                                                        TextWrapping="Wrap"/>
-                                        </Button>
-                                    </DockPanel>                                    
-                                </ListBoxItem>
-
-                            </ListBox>
-                        </GroupBox>
+                                                </Button>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                    </ListBox>
+                                </GroupBox>
+                                <GroupBox Header="Стандартизации текущего измерительного процесса, скорректированные по времени"
+                                              HorizontalContentAlignment="Stretch"                                      >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <ListView ItemsSource="{Binding mainModel.StandHalfPeriodValues}"
+                                              Foreground="WhiteSmoke">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn  Width="200" DisplayMemberBinding="{Binding Path=Value}">
+                                                        <GridViewColumn.Header>
+                                                            <TextBlock Text="Значение" Style="{StaticResource Common}"
+                                                                       HorizontalAlignment="Center"/>
+                                                        </GridViewColumn.Header>
+                                                    </GridViewColumn>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <ListView Grid.Column="1" ItemsSource="{Binding mainModel.StandHalfPeriodAges}"
+                                              Foreground="WhiteSmoke">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn  Width="200" DisplayMemberBinding="{Binding Path=Value}">
+                                                        <GridViewColumn.Header>
+                                                            <TextBlock Text="Возраст" Style="{StaticResource Common}"
+                                                                       HorizontalAlignment="Center"/>
+                                                        </GridViewColumn.Header>
+                                                    </GridViewColumn>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+                        
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Настройки платы HV -->
@@ -1329,8 +1460,8 @@
                                             <DataGridTemplateColumn Header="Питание">
                                                 <DataGridTemplateColumn.CellTemplate >
                                                     <DataTemplate DataType="add:AnalogInput">
-                                                        <Button Content="{Binding PwrState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
-                                                                Background="{Binding PwrState.Value, Converter={StaticResource ColorToBool}}"
+                                                        <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
+                                                                Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
                                                                 Command="{Binding SwitchPwrAmCommand}"></Button>
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
@@ -1338,16 +1469,7 @@
                                             <!--#endregion-->
                                             <!--#region АЦП -->
                                             <DataGridTextColumn Header="Напряжение АЦП, мВ" Binding="{Binding AdcValue.Value}" IsReadOnly="True"/>
-                                            <!--#endregion-->
-                                            <!--#region Тип протокола -->
-                                            <DataGridTemplateColumn Header="Тип протокола">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate DataType="add:AnalogInput">
-                                                        <ComboBox ItemsSource="{StaticResource AnalogProtocols}" SelectedIndex="{Binding Protocol.WriteValue}"></ComboBox>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
-                                            <!--#endregion-->
+                                            <!--#endregion-->                                            
                                         <!--#region Активность -->
                                         <DataGridTemplateColumn Width="120">
                                             <DataGridTemplateColumn.Header>
@@ -1390,8 +1512,8 @@
                                             <DataGridTemplateColumn Header="Питание">
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate DataType="add:AnalogOutput">
-                                                        <Button Content="{Binding PwrState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
-                                                                Background="{Binding PwrState.Value, Converter={StaticResource ColorToBool}}"
+                                                        <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
+                                                                Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
                                                                 Command="{Binding SwitchPwrAmCommand}" ></Button>
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
@@ -1442,16 +1564,7 @@
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
-                                            <!--#endregion-->
-                                       <!--#region Тип протокола -->
-                                            <DataGridTemplateColumn Header="Тип протокола">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate DataType="add:AnalogOutput">
-                                                        <ComboBox ItemsSource="{StaticResource AnalogProtocols}" SelectedIndex="{Binding Protocol.WriteValue}"></ComboBox>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
-                                            <!--#endregion-->
+                                            <!--#endregion-->                                       
                                         <!--#region Активность -->
                                         <DataGridTemplateColumn Width="120">
                                             <DataGridTemplateColumn.Header>
@@ -1539,7 +1652,7 @@
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBox  Width="50" HorizontalAlignment="Left">
                                                                 <TextBox.Text>
-                                                                    <Binding Path="DacLowLimit.WriteValue" UpdateSourceTrigger="PropertyChanged">
+                                                                    <Binding Path="DacLowLimit.WriteValue" UpdateSourceTrigger="LostFocus">
                                                                         <Binding.ValidationRules>
                                                                             <DataErrorValidationRule />
                                                                         </Binding.ValidationRules>
@@ -1565,7 +1678,7 @@
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBox  Width="50" HorizontalAlignment="Left">
                                                                 <TextBox.Text>
-                                                                    <Binding Path="DacHighLimit.WriteValue" UpdateSourceTrigger="PropertyChanged">
+                                                                    <Binding Path="DacHighLimit.WriteValue" UpdateSourceTrigger="LostFocus">
                                                                         <Binding.ValidationRules>
                                                                             <DataErrorValidationRule />
                                                                         </Binding.ValidationRules>
@@ -1585,6 +1698,14 @@
                                 </GroupBox>
                                 <!--#endregion-->
                             </DockPanel>                        
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Релейный выход -->
+                    <TabItem Header="РЕЛЕЙНЫЙ ВЫХОД">
+                        <StackPanel>
+                            <Button Content="Включить реле" Command="{Binding SwitchRelayCommand}" CommandParameter="1"/>
+                            <Button Content="Выключить реле" Command="{Binding SwitchRelayCommand}" CommandParameter="0"/>
+                        </StackPanel>
                     </TabItem>
                     <!--#endregion-->
                     <!--#region События -->
@@ -1780,6 +1901,7 @@
                                     <DataGridTextColumn Header="Пользователь" Binding="{Binding UserName}"/>
                                     <DataGridTextColumn Header="Код события" Binding="{Binding Event.Num, StringFormat=d4}"/>
                                     <DataGridTextColumn Header="Сообщение" Binding="{Binding Event.Title}"/>
+                                    <DataGridTextColumn Header="Активность" Binding="{Binding Activity, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource Activities}}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <!--#endregion-->

@@ -21,12 +21,12 @@ namespace IDensity.AddClasses
         #endregion
 
         #region Значение счетчика
-        private float _counterValue;
+        private float weak;
 
-        public float CounterValue
+        public float Weak
         {
-            get { return _counterValue; }
-            set { Set(ref _counterValue, value); }
+            get { return weak; }
+            set { Set(ref weak, value); }
         }
 
         #endregion

@@ -12,5 +12,6 @@
     <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
     <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
     <conv:EqualityToVisibilityConverter x:Key="VisibleIfEqual"/>
+    <conv:StringByIndexConverter x:Key="StringByIndex"/>
 
 </ResourceDictionary>

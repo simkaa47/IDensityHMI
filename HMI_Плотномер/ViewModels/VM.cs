@@ -49,10 +49,10 @@ namespace IDensity.ViewModels
 
         #region Команда "Закрыть приложение"
         RelayCommand _closeAppCommand;
-        public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o => 
+        public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o =>
         {
             Udp?.Stop();
-            Application.Current.Shutdown(); 
+            Application.Current.Shutdown();
         }, o => true));
         #endregion
 
@@ -366,28 +366,28 @@ namespace IDensity.ViewModels
 
         #region Сменить баудрейт 
         RelayCommand _changeBaudrateCommand;
-        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)(o)), o =>o != null));
+        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)(o)), o => o != null));
         #endregion
         #endregion
 
         #region Команда изменения времени усреднения для пользователя
         RelayCommand _changeUserAvgTime;
-        public RelayCommand ChangeUserAvgTime => _changeUserAvgTime ?? (_changeUserAvgTime = new RelayCommand(o => 
+        public RelayCommand ChangeUserAvgTime => _changeUserAvgTime ?? (_changeUserAvgTime = new RelayCommand(o =>
         {
             if (mainModel.CurMeasProcess.MeasDuration.Value > 0)
             {
                 MeasProcess process = mainModel.CurMeasProcess.Clone() as MeasProcess;
-                process.MeasDeep.Value = (ushort)(((uint)o)*10/ mainModel.CurMeasProcess.MeasDuration.Value);
+                process.MeasDeep.Value = (ushort)(((uint)o) * 10 / mainModel.CurMeasProcess.MeasDuration.Value);
                 mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
             }
-        
+
         }, o => true));
 
         #endregion
 
         #region Команда "Установить напряжение HV"
         RelayCommand _setHvCommand;
-        public RelayCommand SetHvCommand => _setHvCommand ?? (_setHvCommand = new RelayCommand(obj =>mainModel.SetHv(mainModel.TelemetryHV.VoltageSV.WriteValue), obj => true));
+        public RelayCommand SetHvCommand => _setHvCommand ?? (_setHvCommand = new RelayCommand(obj => mainModel.SetHv(mainModel.TelemetryHV.VoltageSV.WriteValue), obj => true));
         #endregion
 
         #region Команды вывода и фильтрации событий
@@ -399,12 +399,12 @@ namespace IDensity.ViewModels
 
         #region Команда "Установить настроку IP приемника UDP даных
         RelayCommand _setUpsAddrCommand;
-        public RelayCommand SetUpsAddrCommand => _setUpsAddrCommand ?? (_setUpsAddrCommand = new RelayCommand(execPar => 
+        public RelayCommand SetUpsAddrCommand => _setUpsAddrCommand ?? (_setUpsAddrCommand = new RelayCommand(execPar =>
         {
             byte num = 0;
             var nums = (mainModel.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
             if (nums.Length == 4) mainModel.SetUdpAddr(nums);
-        }, 
+        },
             canExecPar => mainModel.Connecting.Value));
 
         #endregion        
@@ -422,7 +422,7 @@ namespace IDensity.ViewModels
                     Udp.UpdateOscillEvent += UpdateAdcTrend;
                     Udp.UpdateAmplitudesEvent += UpdateMaxAmpsData;
                 }
-                
+
 
             }
         }, canEcecPar => true));
@@ -440,12 +440,23 @@ namespace IDensity.ViewModels
         #region Произвести единичное измерение"
         private RelayCommand _makeSingleMeasCommand;
 
-        public RelayCommand MakeSingleMeasCommand => _makeSingleMeasCommand ?? (_makeSingleMeasCommand = new RelayCommand(execObj => { 
+        public RelayCommand MakeSingleMeasCommand => _makeSingleMeasCommand ?? (_makeSingleMeasCommand = new RelayCommand(execObj => {
             mainModel.MakeSingleMeasure(SingleMeasTime);
             SingleMeasCurTime = SingleMeasTime;
             SingelMeasFlag = true;
         }, canExecObj => true));
 
+        #endregion
+
+        #region Переключить реле
+        RelayCommand _switchRelayCommand;
+        public RelayCommand SwitchRelayCommand => _switchRelayCommand ?? (_switchRelayCommand = new RelayCommand(par => {
+            ushort temp = 0;
+            if (par != null && ushort.TryParse(par.ToString(), out temp))
+            {
+                mainModel.SwitchRelay(temp);
+            }
+        }, canExec => true));
         #endregion
 
         #endregion
@@ -465,7 +476,9 @@ namespace IDensity.ViewModels
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
-            
+            MeasUnitSDescribe();
+            CurMeasNumDescribe();
+
         }
 
 
@@ -510,7 +523,7 @@ namespace IDensity.ViewModels
 
         public bool SingelMeasFlag
         {
-            get { return _singelMeasFlag;; }
+            get { return _singelMeasFlag; ; }
             set { Set(ref _singelMeasFlag, value); }
         }
 
@@ -529,14 +542,26 @@ namespace IDensity.ViewModels
 
         #endregion
 
-        #region Результат еденичного измерения
-        private float _singleMeasResult;
+        #region Результат еденичного измерения (счетчик)
+        private float _singleMeasCounterResult;
 
-        public float SingleMeasResult
+        public float SingleMeasCounterResult
         {
-            get { return _singleMeasResult; }
-            set { Set(ref _singleMeasResult, value); }
+            get { return _singleMeasCounterResult; }
+            set { Set(ref _singleMeasCounterResult, value); }
         }
+
+        #endregion
+
+        #region Результат еденичного измерения (ослабление)
+        private float _singleMeasWeakResult;
+
+        public float SingleMeasWeakResult
+        {
+            get { return _singleMeasWeakResult; }
+            set { Set(ref _singleMeasWeakResult, value); }
+        }
+               
 
         #endregion
 
@@ -549,36 +574,35 @@ namespace IDensity.ViewModels
                 if (SingleMeasTime - SingleMeasCurTime > 2 && !mainModel.CycleMeasStatus.Value)
                 {
                     SingelMeasFlag = false;
-                } 
+                }
                 SingleMeasCurTime--;
                 if (SingleMeasCurTime < 0)
                 {
                     SingelMeasFlag = false;
                     singleMeasTimer = new System.Timers.Timer(1000);
-                    singleMeasTimer.Elapsed += (s, e) => 
+                    singleMeasTimer.Elapsed += (s, e) =>
                     {
                         singleMeasTimer?.Stop();
                         singleMeasTimer?.Dispose();
-                        SingleMeasResult = mainModel.CountersCur[0].Value;
+                        SingleMeasCounterResult = mainModel.CountersCur[0].Value;
+
                     };
                     singleMeasTimer.Start();
                 }
             }
         }
+        #endregion
 
         #region Таймер запроса результата измерения
         System.Timers.Timer singleMeasTimer;
         #endregion
 
-
         #endregion
-        #endregion
-
 
 
         #region Текущая дата-время компьютера
         public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");
-        
+
         #endregion
 
         #region таймер
@@ -591,7 +615,7 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Аналоговые входы
-        public List<AnalogInput> AnalogInputs  => mainModel.AnalogGroups.Select(g => g.AI).ToList();
+        public List<AnalogInput> AnalogInputs => mainModel.AnalogGroups.Select(g => g.AI).ToList();
         #endregion
 
         #region Аналоговые выходы
@@ -657,7 +681,7 @@ namespace IDensity.ViewModels
         #region Список дат, когда происходили измерения
         List<BlackOutData> MeasDates { get; set; } = new List<BlackOutData>();
         void GetMeasDates()
-        { 
+        {
             MeasDates = SqlMethods.ReadFromSql<BlackOutData>($"SELECT DISTINCT date(time) FROM TimePoints;");
         }
         #endregion
@@ -683,6 +707,19 @@ namespace IDensity.ViewModels
 
         #region Названия единиц измерения
         public DataBaseCollection<EnumCustom> UnitNames { get; } = new DataBaseCollection<EnumCustom>("UnitNames", new EnumCustom());
+        string[] _measUnits;
+        public string[] MeasUnits
+        {
+            get => _measUnits;            
+            set => Set(ref _measUnits, value);
+        }
+        void MeasUnitSDescribe()
+        {
+            _measUnits = UnitNames.Data.Select(enumCustom => enumCustom.Name).ToArray();
+            UnitNames.CollectionChangedEvent+=()=> MeasUnits = UnitNames.Data.Select(enumCustom => enumCustom.Name).ToArray();
+        }
+
+       
         #endregion
 
         #region Названия переменных для аналогового выхода
@@ -754,7 +791,7 @@ namespace IDensity.ViewModels
                 {
                     Set(ref _selectedMeasProcessNum, value);
                     SelectedMeasProcess = mainModel.MeasProcesses[value];
-                    SelectedDiap = SelectedMeasProcess.Ranges[SelectedDiapNum];
+                    SelectedDiap = SelectedMeasProcess.Ranges[0];
                 }
                     
 
@@ -787,11 +824,46 @@ namespace IDensity.ViewModels
         }
         #endregion
 
+        #region Текущая еденица измерений
+        int _curMeasNum;
+        public int CurMeasNum
+        {
+            get => _curMeasNum;
+            set => Set(ref _curMeasNum, value);
+        }
+        /// <summary>
+        /// Отслеживание изменений номера ед. изм
+        /// </summary>
+        void CurMeasNumDescribe()
+        {
+            mainModel.CurMeasProcessNum.PropertyChanged += OnPropChanged;
+            foreach (var process in mainModel.MeasProcesses)
+            {
+                process.Ranges[0].CalibCurveNum.PropertyChanged += OnPropChanged;
+            }
+            foreach (var calibrData in mainModel.CalibrDatas)
+            {
+                calibrData.MeasUnitNum.PropertyChanged+= OnPropChanged;
+            }
+            //локальная ф-я
+            void OnPropChanged(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == "Value")
+                {
+                    CurMeasNum = mainModel.CalibrDatas[mainModel.CurMeasProcess.Ranges[0].CalibCurveNum.Value].MeasUnitNum.Value;
+                }
+            }
+        }
+
+
+
+        #endregion
+
         #region Выбранный диапазон
         public Diapasone _selectedDiap;
         public Diapasone SelectedDiap
         {
-            get => _selectedDiap ?? (_selectedDiap = SelectedMeasProcess.Ranges[SelectedDiapNum]);
+            get => _selectedDiap ?? (_selectedDiap = SelectedMeasProcess.Ranges[0]);
             set => Set(ref _selectedDiap, value);
         }
         #endregion
@@ -905,7 +977,6 @@ namespace IDensity.ViewModels
         }
         #endregion
         #endregion
-
 
         #region Запись в файл
         async void WriteArchivalTrendToText()

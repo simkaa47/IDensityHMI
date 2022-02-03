@@ -15,6 +15,9 @@ namespace IDensity.Models.SQL
     /// </summary>
     class DataBaseCollection<T> where T: PropertyChangedBase, IDataBased
     {
+        #region Событие изменения коллекции
+        public event Action CollectionChangedEvent;
+        #endregion
         #region Событие ошибки работы с ДБ
         /// <summary>
         /// Событие ошибки работы с ДБ
@@ -48,11 +51,19 @@ namespace IDensity.Models.SQL
             DoSqlCommand(ReadFromSql);// Читаем данные
             // Подписка на изменение коллекции
             Data.CollectionChanged += UpdateCollection;
+            Data.CollectionChanged += (o, e) =>
+             {
+                 CollectionChangedEvent?.Invoke();
+             };
             if (Data.Count == 0 && defaultCell != null)// Если ничего не прочитали, то добавляем значение по умолчанию
                 Data.Add(defaultCell);
-            
+
             // Подписка на изменение свойтсва каждого элемента коллекции
-            foreach (var item in Data) item.PropertyChanged += EditCellSql;
+            foreach (var item in Data) 
+            {
+                item.PropertyChanged += EditCellSql;
+                item.PropertyChanged += (o, e) => CollectionChangedEvent?.Invoke();
+            } 
         }
         #endregion
         #region Методы работы с ДБ

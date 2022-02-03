@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class AnalogGroup
+    class AnalogGroup: PropertyChangedBase
     {
         public AnalogInput AI { get; }
         public AnalogOutput AO { get; }
