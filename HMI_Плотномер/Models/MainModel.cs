@@ -521,7 +521,7 @@ namespace IDensity.Models
         #endregion
 
         #region Команда "Записать данные калибровочных кривых"
-        void SetCalibrData(CalibrData calibrData)
+        public void SetCalibrData(CalibrData calibrData)
         {
             if (CommMode.EthEnable) Tcp.SetCalibrData(calibrData);
             else if (CommMode.RsEnable) rs.SetCalibrData(calibrData);

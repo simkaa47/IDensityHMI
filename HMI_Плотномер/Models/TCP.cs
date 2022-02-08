@@ -124,7 +124,7 @@ namespace IDensity.Models
                 {
                     var command = commands.Dequeue();
                     command.Action?.Invoke(command.Parameter);
-                    Thread.Sleep(100);
+                    Thread.Sleep(50);
                 }
                 errCommCount = 0;
 
@@ -863,6 +863,7 @@ namespace IDensity.Models
             SwitchAdcBoard(1);
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetSettings7(), null));
         }
         #endregion
 

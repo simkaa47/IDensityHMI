@@ -459,6 +459,79 @@ namespace IDensity.ViewModels
         }, canExec => true));
         #endregion
 
+        #region Команда расчета к-тов калибровки
+        private RelayCommand _getCalibrCoeffsCommand;
+
+        public RelayCommand GetCalibrCoeffsCommand => _getCalibrCoeffsCommand ?? (_getCalibrCoeffsCommand = new RelayCommand(execObj =>
+        {
+            CalibrationClass.GetCoeffs();
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                CalculatedCoeffs.Clear();
+                int deg = 0;
+                foreach (var num in CalibrationClass.CalcCoeefs)
+                {
+                    CalculatedCoeffs.Add(new CalcCalibrationResult(deg, num));
+                    deg++;
+                }
+            });
+
+
+        }, canExec => true));
+
+
+        #endregion
+
+        #region Команда "Загрузить коэффициенты калибровики"
+        RelayCommand _setCalibrCoeffsCommand;
+        public RelayCommand SetCalibrCoeffsCommand => _setCalibrCoeffsCommand ?? (_setCalibrCoeffsCommand = new RelayCommand(execPar =>
+        {
+            if (CalculatedCoeffs.Count >= 2)
+            {
+                var calibData = new CalibrData();
+                calibData.Num.Value = mainModel.CurMeasProcess.Ranges[0].CalibCurveNum.Value;
+                calibData.MeasUnitNum.Value = (ushort)CurMeasNum;
+                for (int i = 0; i < CalculatedCoeffs.Count; i++)
+                {
+                    calibData.Coeffs[i].Value = (float)CalculatedCoeffs[i].Coeff;
+                }
+                mainModel.SetCalibrData(calibData);
+            };
+        }, canExecPar => true));
+        #endregion
+
+        #region Команда посчитать график для проверки полинома
+        RelayCommand _showPolinomTrend;
+        public RelayCommand ShowPolinomTrendCommand => _showPolinomTrend ?? (_showPolinomTrend = new RelayCommand(par => 
+        {
+            if (CalibrationClass.SingleMeasCells.Data.Count >= 2 && CalculatedCoeffs.Count != 0)
+            {
+                var measList = CalibrationClass.SingleMeasCells.Data.OrderBy(sm => sm.Weak).Select(sm => new Point(sm.Weak, sm.PhysVal)).ToList();
+                var startWeak = measList[0].X;
+                var finishWeak = measList[measList.Count-1].X;
+                if (startWeak != finishWeak)
+                {
+                    int cnt = 50;
+                    double diff = (finishWeak - startWeak) / cnt;
+                    var calcList = Enumerable.Range(0, cnt).
+                    Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
+                    MeasuredPointsCollection = measList;
+                    CalculatedMeasCollection = calcList;
+                }
+                
+            }
+        }, canExecPar => true));
+        #endregion
+        double GetPhysvalueByWeak(double weak)
+        {
+            double result = 0;
+            for (int i = 0; i < CalculatedCoeffs.Count; i++)
+            {
+                result += (Math.Pow(weak, i) * CalculatedCoeffs[i].Coeff);
+            }
+            return result;
+        }
+
         #endregion
         public MainModel mainModel { get; } = new MainModel();
 
@@ -491,19 +564,7 @@ namespace IDensity.ViewModels
         public Calibration CalibrationClass { get; } = new Calibration();
         #endregion
 
-        #region Команда расчета к-тов калибровки
-        private RelayCommand _getCalibrCoeffsCommand;
-
-        public RelayCommand GetCalibrCoeffsCommand => _getCalibrCoeffsCommand ?? (_getCalibrCoeffsCommand = new RelayCommand(execObj => CalibrationClass.GetCoeffs(), canExec => true));
-
-
-        #endregion
-
-        #region Команда "Загрузить коэффициенты калибровики"
-        RelayCommand _setCalibrCoeffsCommand;
-        public RelayCommand SetCalibrCoeffsCommand => _setCalibrCoeffsCommand ?? (_setCalibrCoeffsCommand = new RelayCommand(execPar => { }, canExecPar => true));
-        #endregion
-
+        
         #endregion
 
         #region Единичное измерение
@@ -529,7 +590,16 @@ namespace IDensity.ViewModels
 
         #endregion
 
+        #region Физическая величина образца
+        private double _singleMeasPhysValue;
 
+        public double SingleMeasPhysValue
+        {
+            get { return _singleMeasPhysValue; }
+            set { Set(ref _singleMeasPhysValue, value); }
+        }
+
+        #endregion
 
         #region Текущее время еденичного измерения
         private int _singleMeasCurTime;
@@ -543,9 +613,9 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Результат еденичного измерения (счетчик)
-        private float _singleMeasCounterResult;
+        private double _singleMeasCounterResult;
 
-        public float SingleMeasCounterResult
+        public double SingleMeasCounterResult
         {
             get { return _singleMeasCounterResult; }
             set { Set(ref _singleMeasCounterResult, value); }
@@ -554,9 +624,9 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Результат еденичного измерения (ослабление)
-        private float _singleMeasWeakResult;
+        private double _singleMeasWeakResult;
 
-        public float SingleMeasWeakResult
+        public double SingleMeasWeakResult
         {
             get { return _singleMeasWeakResult; }
             set { Set(ref _singleMeasWeakResult, value); }
@@ -579,13 +649,27 @@ namespace IDensity.ViewModels
                 if (SingleMeasCurTime < 0)
                 {
                     SingelMeasFlag = false;
-                    singleMeasTimer = new System.Timers.Timer(1000);
+                    singleMeasTimer = new System.Timers.Timer(2000);
                     singleMeasTimer.Elapsed += (s, e) =>
                     {
                         singleMeasTimer?.Stop();
                         singleMeasTimer?.Dispose();
                         SingleMeasCounterResult = mainModel.CountersCur[0].Value;
-
+                        int bcStanNum = mainModel.CurMeasProcess.BackStandNum.Value;
+                        int physStandNum = mainModel.CurMeasProcess.Ranges[0].StandNum.Value;
+                        int countNum = mainModel.CurMeasProcess.Ranges[0].CounterNum.Value;
+                        bcStanNum = bcStanNum < 4 && bcStanNum >= 0 ? bcStanNum : 0;
+                        physStandNum = physStandNum < 12 && physStandNum >= 4 ? physStandNum : 4;
+                        countNum = countNum < 7 && countNum >= 0 ? countNum : 0;
+                        double bcStandValue = mainModel.StandSettings[bcStanNum].Results[countNum].Value;
+                        double physStandValue = mainModel.StandHalfPeriodValues[0].Value;
+                        SingleMeasWeakResult = Math.Log(Math.Abs((physStandValue - bcStandValue) / (SingleMeasCounterResult - bcStandValue)));
+                        var singleMeasCell = new SingleMeasCell() { Weak = SingleMeasWeakResult, PhysVal = SingleMeasPhysValue };
+                        App.Current.Dispatcher.Invoke(() =>
+                        {
+                            CalibrationClass.SingleMeasCells.Data.Add(singleMeasCell);
+                        });
+                       
                     };
                     singleMeasTimer.Start();
                 }
@@ -597,7 +681,37 @@ namespace IDensity.ViewModels
         System.Timers.Timer singleMeasTimer;
         #endregion
 
+        #region Отображение графика из измеренных точек
+        private IEnumerable<Point> _measuredPointsCollection;
+        /// <summary>
+        /// Данные для графика "Измеренное ослабление - плотность"
+        /// </summary>
+        public IEnumerable<Point> MeasuredPointsCollection
+        {
+            get { return _measuredPointsCollection; }
+            set { Set(ref _measuredPointsCollection, value); }
+        } 
         #endregion
+
+        #region Отображение графика из посчитанного полинома
+        private IEnumerable<Point> _calculatedMeasCollection;
+
+        public IEnumerable<Point> CalculatedMeasCollection
+        {
+            get { return _calculatedMeasCollection; }
+            set { Set(ref _calculatedMeasCollection, value); }
+        }
+
+        #endregion
+
+        #region Коллекция к-тов
+        public ObservableCollection<CalcCalibrationResult> CalculatedCoeffs { get; } = new ObservableCollection<CalcCalibrationResult>();
+        #endregion
+        #endregion
+
+
+
+
 
 
         #region Текущая дата-время компьютера

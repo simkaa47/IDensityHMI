@@ -11,25 +11,28 @@ namespace IDensity.AddClasses
 
         public long Id { get; set; }
         #region Физическая величина
-        private float _physVal;
+        private double _physVal;
 
-        public float PhysVal
+        public double PhysVal
         {
             get { return _physVal; }
             set { Set(ref _physVal, value); }
         }
         #endregion
 
-        #region Значение счетчика
-        private float weak;
+        #region Значение Ослабление
+        private double weak;
 
-        public float Weak
+        public double Weak
         {
             get { return weak; }
             set { Set(ref weak, value); }
         }
 
         #endregion
+
+
+
 
     }
 }

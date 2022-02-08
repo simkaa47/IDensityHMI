@@ -991,91 +991,193 @@
                     <!--#endregion-->
                     <!--#region Калибровка -->
                     <TabItem Header="КАЛИБРОВКА">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="300"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <GroupBox Header="Единичное измерение">
-                                <ListBox>
-                                    <!--#region Время еденичного измерения, секунд -->
-                                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <DockPanel>
-                                            <TextBlock Text="Время еденичного измерения, секунд"
+                        <ScrollViewer>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="300"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <GroupBox Header="Единичное измерение">
+                                    <ListBox>
+                                        <!--#region Время еденичного измерения, секунд -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Время еденичного измерения, секунд"
                                                        Style="{StaticResource Common}"/>
-                                            <TextBox Width="80"
+                                                <TextBox Width="80"
                                                      Text="{Binding SingleMeasTime}"
                                                      HorizontalAlignment="Right"
                                                      VerticalContentAlignment="Center"
                                                      HorizontalContentAlignment="Center"/>
-                                        </DockPanel>
-                                    </ListBoxItem>
-                                    <!--#endregion-->
-                                    <!--#region "Управление еденичным измерением" -->
-                                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <DockPanel>
-                                            <TextBlock Text="Управление еденичным измерением"
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Степень полинома  -->
+                                        <ListBoxItem  HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Степень полинома"
+                                                       Style="{StaticResource Common}"/>
+                                                <TextBox Width="80"
+                                                     HorizontalAlignment="Right"
+                                                     HorizontalContentAlignment="Center"
+                                                     Text="{Binding CalibrationClass.PolDegree}"/>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region ФВ -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Физическая величина образца, "
+                                                       Style="{StaticResource Common}"/>
+                                                <TextBlock Style="{StaticResource Common}">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding Converter="{StaticResource StringByIndex}">
+                                                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.CurMeasNum" Mode="OneWay"/>
+                                                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnits" Mode="OneWay"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBox Width="80"
+                                                     HorizontalAlignment="Right"
+                                                     HorizontalContentAlignment="Center"
+                                                     VerticalContentAlignment="Center"
+                                                     Text="{Binding SingleMeasPhysValue}"/>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region "Управление еденичным измерением" -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Управление еденичным измерением"
                                                        VerticalAlignment="Center"
                                                    Style="{StaticResource Common}"/>
-                                            <Button Width="200"
+                                                <Button Width="200"
                                                     Height="Auto"
                                                     HorizontalAlignment="Right"
                                                     Command="{Binding MakeSingleMeasCommand}">
-                                                <TextBlock Text="{Binding SingelMeasFlag, 
+                                                    <TextBlock Text="{Binding SingelMeasFlag, 
                                                     Converter={StaticResource StatusFromNum}, 
                                                     ConverterParameter={StaticResource SingleMeasures}}"
                                                            TextWrapping="Wrap"/>
-                                            </Button>
-                                        </DockPanel>
-                                    </ListBoxItem>
-                                    <!--#endregion-->
-                                    <!--#region Осталось времени ед. измерения -->
-                                    <ListBoxItem HorizontalContentAlignment="Stretch"
+                                                </Button>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Осталось времени ед. измерения -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch"
                                                  Visibility="{Binding SingelMeasFlag, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                        <DockPanel>
-                                            <TextBlock Text="Осталось времени еденичного измерения, секунд"
+                                            <DockPanel>
+                                                <TextBlock Text="Осталось времени еденичного измерения, секунд"
                                                        Style="{StaticResource Common}"/>
-                                            <TextBlock Text="{Binding SingleMeasCurTime}"
+                                                <TextBlock Text="{Binding SingleMeasCurTime}"
                                                        Style="{StaticResource Common}"
                                                        HorizontalAlignment="Right"/>
-                                        </DockPanel>
-                                    </ListBoxItem>
-                                    <!--#endregion-->
-                                    <!--#region Результат -->
-                                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <DockPanel>
-                                            <TextBlock Text="Результат, каунтов"
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Результат счетчика -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Результат, каунтов"
                                                        Style="{StaticResource Common}"/>
-                                            <TextBlock Text="{Binding SingleMeasResult}"
+                                                <TextBlock Text="{Binding SingleMeasCounterResult, UpdateSourceTrigger=PropertyChanged}"
                                                        HorizontalAlignment="Right"
                                                        Style="{StaticResource Common}"/>
-                                        </DockPanel>
-                                    </ListBoxItem>
-                                    <!--#endregion-->
-                                </ListBox>
-                            </GroupBox>
-                            <GroupBox Grid.Row="1"
-                                      Header="Таблица результатов еденичного измерения">
-                                <StackPanel>
-                                    <DataGrid AutoGenerateColumns="False"
-                                              ItemsSource="{Binding CalibrationClass.SingleMeasCells.Data}">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Физическая величина" Binding="{Binding PhysVal}"/>
-                                            <DataGridTextColumn Header="Значение счетчика" Binding="{Binding CounterValue}"/>
-                                        </DataGrid.Columns>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Результат ослабление -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Вычисленное ослабление"
+                                                       Style="{StaticResource Common}"/>
+                                                <TextBlock Text="{Binding SingleMeasWeakResult, UpdateSourceTrigger=PropertyChanged}"
+                                                       HorizontalAlignment="Right"
+                                                       Style="{StaticResource Common}"/>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
 
-                                    </DataGrid>
-                                    <UniformGrid Columns="2">
-                                        <Button Margin="5"
+                                    </ListBox>
+                                </GroupBox>
+                                <!--#region Таблица результатов еденичного измерения -->
+                                <GroupBox Grid.Row="1"
+                                      Header="Таблица результатов еденичного измерения">
+                                    <StackPanel>
+                                        <DataGrid AutoGenerateColumns="False"
+                                              ItemsSource="{Binding CalibrationClass.SingleMeasCells.Data}">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Физическая величина" Binding="{Binding PhysVal}"/>
+                                                <DataGridTextColumn Header="Значение ослабления" Binding="{Binding Weak}"/>
+                                            </DataGrid.Columns>
+
+                                        </DataGrid>
+                                        <UniformGrid Columns="3">
+                                            <Button Margin="5"
                                                 Command="{Binding GetCalibrCoeffsCommand}"
                                                 Content="Рассчитать к-ты"/>
-                                        <Button Margin="5"
-                                                Content="Загрузить к-ты в память контроллера"/>
-                                    </UniformGrid>
-                                </StackPanel>
+                                            <Button Margin="5"
+                                                Content="Загрузить к-ты в память контроллера"
+                                                    Command="{Binding SetCalibrCoeffsCommand}"/>
+                                            <ToggleButton Style="{StaticResource MaterialDesignRaisedButton}" Margin="5"
+                                                    Content="Показать график зависимости"
+                                                          Command="{Binding ShowPolinomTrendCommand}"
+                                                          Name="PopupOpen">                                                
+                                            </ToggleButton>
+                                            
+                                        </UniformGrid>
+                                        <Popup IsOpen="{Binding ElementName=PopupOpen, Path=IsChecked}" 
+                                               StaysOpen="False"
+                                               Placement="MousePoint">
+                                            <Grid>
+                                                <Border Style="{StaticResource BorderLight}"
+                                                        Height="600"
+                                                        Width="800">
+                                                    <oxy:Plot TextColor="WhiteSmoke"                                                          
+                                                          PlotAreaBorderColor="WhiteSmoke"
+                                                          SelectionColor="WhiteSmoke"
+                                                          LegendTextColor="WhiteSmoke" 
+                                                          IsLegendVisible="True"
+                                                          Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
+                                                          PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
+                                                        <oxy:Plot.Axes>
+                                                            <oxy:LinearAxis Title="Физ. величина"                                                    
+                                                                            Position="Left"
+                                                                            MajorGridlineColor="WhiteSmoke"
+                                                                            MajorGridlineStyle="Dot"/>
+                                                            <oxy:LinearAxis Title="Ослабление"
+                                                                             MajorGridlineColor="WhiteSmoke"
+                                                                            MajorGridlineStyle="Dot"
+                                                                            Position="Bottom"/>
+                                                        </oxy:Plot.Axes>
+                                                        <oxy:LineSeries    ItemsSource="{Binding MeasuredPointsCollection}"
+                                                                       DataFieldX="X" DataFieldY="Y"
+                                                                       Title="Измереннные точки"
+                                                                       Color="Red"/>
+                                                        <oxy:LineSeries    ItemsSource="{Binding CalculatedMeasCollection}"
+                                                                       DataFieldX="X" DataFieldY="Y"
+                                                                       Title="Кривая по полиному"
+                                                                       Color="Blue"/>
 
-                            </GroupBox>
-                        </Grid>
+                                                    </oxy:Plot>
+                                                </Border>
+                                                
+                                            </Grid>
+                                        </Popup>
+                                        <!--#region Расчитанные к-ты -->
+                                        <DataGrid ItemsSource="{Binding CalculatedCoeffs}">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Степень полинома" Binding="{Binding Deegry}" IsReadOnly="True"/>
+                                                <DataGridTextColumn Header="Коэффициент" Binding="{Binding Coeff}"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <!--#endregion-->
+                                    </StackPanel>
+                                </GroupBox>
+                                <!--#endregion-->
+                            </Grid>
+                        </ScrollViewer>
+                       
 
                     </TabItem>
                     <!--#endregion-->
