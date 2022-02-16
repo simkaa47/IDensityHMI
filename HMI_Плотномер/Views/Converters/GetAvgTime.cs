@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.AddClasses.Settings;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,7 +16,7 @@ namespace IDensity.Views.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var process = value as MeasProcess;
+            var process = value as MeasProcSettings;
             if (process != null) return process.MeasDeep.Value * 0.1 * process.MeasDuration.Value;
             return 0;
         }

@@ -1,5 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
+using IDensity.AddClasses.Settings;
 using IDensity.AddClasses.Standartisation;
 using IDensity.Models.XML;
 using System;
@@ -30,16 +31,15 @@ namespace IDensity.Models
         public static readonly int CountCounters = 8;
         #endregion
 
-        #region Количетво калибровочных кривых
+        #region Количество измерительных процессов
         /// <summary>
-        /// Количетво калибровочных кривых
+        /// Количество измерительных процессов
         /// </summary>
-        public static int CalibCurveNum = 6;
+        public const int MeasProcNum = 8; 
         #endregion
         public MainModel()
         {
-            Init();// Инициализация параметров
-            CalibrDataDescribe();
+            Init();// Инициализация параметров            
             AdcSettingsEventDescribe();
             MeasUnitSettingsDescribe();
         }
@@ -68,6 +68,9 @@ namespace IDensity.Models
         #endregion
 
         #region Данные измерения
+        #region Данные измерительных процессов
+        public MeasProcSettings[] MeasProcSettings { get; } = Enumerable.Range(0, MeasProcNum).Select(i => new MeasProcSettings(i)).ToArray();
+        #endregion
         #region ФВ усредненное по диапазонам мгновенное
         public Parameter<float> PhysValueCur { get; } = new Parameter<float>("PhysValueCur", "ФВ усредненное по диапазонам мгновенное", 0, float.PositiveInfinity, 0, "read");
 
@@ -106,11 +109,7 @@ namespace IDensity.Models
 
         #region Данные телеметрии платы питания(темпратуры)
         public TempBoardTelemetry TempTelemetry { get; } = new TempBoardTelemetry();
-        #endregion
-
-        #region Номер текущкго измерительного процесса
-        public Parameter<ushort> CurMeasProcessNum { get; } = new Parameter<ushort>("CurMeasProcessNum", "Номер текущего измерительного процесса", 0, (ushort)MainModel.measProcessNum, 25, "hold");
-        #endregion
+        #endregion        
 
         #region Статус связи с платой АЦП
         public Parameter<bool> AdcBoardCommState { get; } = new Parameter<bool>("AdcBoardCommState", "Статус связи с платой АЦП", false, true, 0, "");
@@ -166,24 +165,7 @@ namespace IDensity.Models
         }
         #endregion       
 
-        #region Настройки измерительных процессов
-        #region Количество измерительных процессов
-        /// <summary>
-        /// Количество измерительных процессов
-        /// </summary>
-        public static int measProcessNum = 4;
-        #endregion
-
-        #region Текущий процесс
-        MeasProcess _curMeasProcess = new MeasProcess();
-        public MeasProcess CurMeasProcess { get => _curMeasProcess; set => Set(ref _curMeasProcess, value); }
-        #endregion
-
-        #region Настройки измерительных процессов
-        public MeasProcess[] MeasProcesses { get; set; } = Enumerable.Range(0, measProcessNum).Select(z => new MeasProcess()).ToArray();
-        #endregion
-
-        #endregion
+        
 
         #region Данные стандартизаций
 
@@ -192,18 +174,7 @@ namespace IDensity.Models
 
         #region Данные счетчиков        
         public CountDiapasone[] CountDiapasones { get; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
-        #endregion
-
-        #region Данные калибровочных кривых        
-        public CalibrData[] CalibrDatas { get; } = Enumerable.Range(0, CalibCurveNum).Select(i => new CalibrData()).ToArray();
-        void CalibrDataDescribe()
-        {
-            foreach (var calibr in CalibrDatas)
-            {
-                calibr.SetSettingsCommandEvent += SetCalibrData;
-            }
-        }
-        #endregion
+        #endregion        
 
         #region Параметры полседовательного порта платы
         #region Баудрейт
@@ -395,10 +366,9 @@ namespace IDensity.Models
         #region Настройки измерительных процессов
 
         #region Записать данные измерительных процессов
-        public void SetMeasProcessSettings(MeasProcess process, int index)
+        public void SetMeasProcessSettings(MeasProcSettings process, int index)
         {
-            if (CommMode.EthEnable) Tcp.SetMeasProcessSettings(process,index);
-            else if((CommMode.RsEnable))rs.SetMeasProcessSettings(process, index);
+            
         }
 
         #endregion
@@ -406,8 +376,7 @@ namespace IDensity.Models
         #region Сменить номер измерительного процесса
         public void ChangeMeasProcess(int index)
         {
-            if (CommMode.EthEnable) Tcp.ChangeMeasProcess(index);
-            else if (CommMode.RsEnable) rs.ChangeMeasProcess(index);
+            
         }
         #endregion
         #endregion
@@ -518,15 +487,7 @@ namespace IDensity.Models
                 else if (CommMode.RsEnable) rs.WriteCounterSettings(diapasone);
             }
         }
-        #endregion
-
-        #region Команда "Записать данные калибровочных кривых"
-        public void SetCalibrData(CalibrData calibrData)
-        {
-            if (CommMode.EthEnable) Tcp.SetCalibrData(calibrData);
-            else if (CommMode.RsEnable) rs.SetCalibrData(calibrData);
-        }
-        #endregion
+        #endregion        
 
         #region Команда "Поменять UDP адрес источника"
         public void SetUdpAddr(byte[] addr)

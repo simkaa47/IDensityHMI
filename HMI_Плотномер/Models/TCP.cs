@@ -1,5 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
+using IDensity.AddClasses.Settings;
 using IDensity.AddClasses.Standartisation;
 using System;
 using System.Collections.Generic;
@@ -131,12 +132,13 @@ namespace IDensity.Models
             }
             catch (Exception ex)
             {
-                if (++errCommCount == 5)
+                if (++errCommCount >= 5)
                 {
                     TcpEvent?.Invoke(ex.Message);
                     commands?.Clear();
                     Disconnect();
                     Thread.Sleep(1000);
+                    errCommCount = 0;
                 }
                 else Thread.Sleep(200);
             }
@@ -359,12 +361,11 @@ namespace IDensity.Models
             if (!model.SettingsReaded)
             {
                 GetMeasProcessData();// Получить данные процеса измерений
-                GetStdSettings();
-                GetSettings2();
-                GetCalibrCoeffs();
-                GetSettings7();
-                GetSettings1();
-                GetSettings4();
+                //GetStdSettings();
+                //GetSettings2();                
+                //GetSettings7();
+                //GetSettings1();
+                //GetSettings4();
 
             } 
             
@@ -373,46 +374,7 @@ namespace IDensity.Models
         void GetMeasProcessData()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,6"));
-            if (!CheckFsrdPacket(str)) return;//Проверка пакета
-            ushort temp = 0;
-            var strParts = str.Split(",meas_prc_ndx=");
-            if (strParts.Length != 2) return;
-            if (!ushort.TryParse(strParts[1].Replace("#",""), out temp)) return;
-            model.CurMeasProcessNum.Value = temp;// Получаем номер текущего измерительного процесса           
-            var numStr = strParts[0].Replace("*FSRD,6,meas_proc=", "").Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
-            if (numStr.Length != 19 * MainModel.measProcessNum) return;            
-            for (int i = 0; i < 19*MainModel.measProcessNum; i += 19)
-            {
-                int index = i / 19;
-                var numUshort = numStr
-                     .Skip(i)
-                     .Take(16)
-                     .Where(s => ushort.TryParse(s, out temp))
-                     .Select(n => temp)
-                     .ToArray();
-                if (numUshort.Length != 16) return;
-                for (int j = 0; j < MeasProcess.rangeNum; j++)
-                {
-                    model.MeasProcesses[index].Ranges[j].CalibCurveNum.Value = numUshort[2 + j * 4];// Номер калибровочной кривой
-                    model.MeasProcesses[index].Ranges[j].StandNum.Value = numUshort[3 + j * 4];// Номер стандартизации ЕИ
-                    model.MeasProcesses[index].Ranges[j].CounterNum.Value = numUshort[4 + j * 4];// Счетчик
-                }
-                model.MeasProcesses[index].BackStandNum.Value = numUshort[13];
-                model.MeasProcesses[index].MeasDuration.Value = numUshort[14];
-                model.MeasProcesses[index].MeasDeep.Value = numUshort[15];
-                float tempFloat = 0;
-                var numsFloat = numStr.Skip(i+16)
-                    .Take(3)
-                    .Where(s => float.TryParse(s.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out tempFloat))
-                    .Select(n => tempFloat)
-                    .ToArray();
-                if (numsFloat.Length!=3) return;
-                model.MeasProcesses[index].HalfLife.Value = numsFloat[0];
-                model.MeasProcesses[index].DensityLiquid.Value = numsFloat[1];
-                model.MeasProcesses[index].DensitySolid.Value = numsFloat[2];
-            }
-            if (model.CurMeasProcessNum.Value < MainModel.measProcessNum) model.CurMeasProcess = model.MeasProcesses[model.CurMeasProcessNum.Value];
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,6#"));
             model.SettingsReaded = true;
         }
         #endregion
@@ -508,30 +470,7 @@ namespace IDensity.Models
             }
             model.SettingsReaded = true;
         }
-        #endregion
-
-        #region Настроки № 3
-        void GetCalibrCoeffs()
-        {
-            model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,3#"));
-            if (str.Length < 20 || str.Substring(0, 7) != "*FSRD,3" || str[str.Length - 1] != '#') return;
-            float temp = 0;
-            var nums = str.Substring(7).Split(new char[] { ',','=', '#' },StringSplitOptions.RemoveEmptyEntries).Where(s => float.TryParse(s.Replace(".",","), out temp)).Select(s => temp).ToList();
-            if (nums.Count != 64) return;
-            for (int i = 0; i < MainModel.CalibCurveNum; i++)
-            {
-                model.CalibrDatas[i].Num.Value = (ushort)nums[i * 8];
-                model.CalibrDatas[i].MeasUnitNum.Value = (ushort)nums[i * 8+1];
-                for (int j = 0; j < 6; j++)
-                {
-                    model.CalibrDatas[i].Coeffs[j].Value = nums[i * 8 + 2+j];
-                }
-            }
-            
-            model.SettingsReaded = true;
-        }
-        #endregion
+        #endregion        
 
         #region Настройки 4
         void GetSettings4()
@@ -699,33 +638,11 @@ namespace IDensity.Models
         #endregion
 
         #region Записать данные измерений
-        public void SetMeasProcessSettings(MeasProcess process, int index)
+        public void SetMeasProcessSettings(MeasProcSettings process, int index)
         {
-            string cmd = $"SETT,meas_proc={index},";
-            // Добавлям данные диапазонов
-            for (int i = 0; i < process.Ranges.Length; i++)
-            {
-                cmd = cmd + $"{i},";
-                cmd = cmd + $"{process.Ranges[i].CalibCurveNum.Value},";// Номер калибровочной кривой
-                cmd = cmd + $"{process.Ranges[i].StandNum.Value},";// Номер стандартизации
-                cmd = cmd + $"{process.Ranges[i].CounterNum.Value},";// Счетчик
-            }
-            cmd = cmd + $"{process.BackStandNum.Value},";
-            cmd = cmd + $"{process.MeasDuration.Value},";
-            cmd = cmd + $"{process.MeasDeep.Value},";
-            cmd = cmd + $"{process.HalfLife.Value.ToString().Replace(",", ".")},";
-            cmd = cmd + $"{process.DensityLiquid.Value.ToString().Replace(",", ".")},";
-            cmd = cmd + $"{process.DensitySolid.Value.ToString().Replace(",", ".")},";            
-            commands.Enqueue(new TcpWriteCommand((buf)=> { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(cmd)));
+            
         }
-        #endregion
-
-        #region Изменить номер текущего процесса
-        public void ChangeMeasProcess(int index)
-        {
-            if(index>=0 && index<MainModel.measProcessNum)commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,meas_prc_ndx={index}#")));
-        }
-        #endregion
+        #endregion        
 
         #region Изменить режим работы последовательного порта
         public void ChangeSerialSelect(ushort value)
@@ -826,16 +743,7 @@ namespace IDensity.Models
             var str = $"SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str + "#")));
         }
-        #endregion
-
-        #region Команда "Записать данные калибровочных кривых"
-        public void SetCalibrData(CalibrData calibrData)
-        {
-            var str = $"SETT,adc_calib_coeff={calibrData.Num.Value},{calibrData.MeasUnitNum.Value}";
-            for (int i = 0; i < MainModel.CalibCurveNum; i++) str = str + $",{calibrData.Coeffs[i].Value.ToString().Replace(",",".")}";           
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetCalibrCoeffs(); }, Encoding.ASCII.GetBytes(str + "#")));
-        }
-        #endregion
+        #endregion        
 
         #region Команда "Поменять UDP адрес источника"
         public void SetUdpAddr(byte[] addr)

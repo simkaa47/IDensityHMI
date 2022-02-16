@@ -79,133 +79,7 @@ namespace IDensity.ViewModels
         #region Команда "Записать архивный тренд в файл"
         RelayCommand _writeLogCommand;
         public RelayCommand WriteLogCommand { get => _writeLogCommand ?? (_writeLogCommand = new RelayCommand(o => WriteArchivalTrendToText(), o => true)); }
-        #endregion
-
-        #region Команды настроек измерительных процессов
-        #region Команда "Записать номер калибровочной кривой в диапазоне"
-        RelayCommand _setCalibCurveDiapCommand;
-        public RelayCommand SetCalibCurveDiapCommand
-        {
-            get => _setCalibCurveDiapCommand ?? (_setCalibCurveDiapCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.Ranges[SelectedDiapNum].CalibCurveNum.Value = process.Ranges[SelectedDiapNum].CalibCurveNum.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-
-        }
-        #endregion
-        #region Команда "Записать номер стандартизации в диапазоне"
-        RelayCommand _setStandNumDiapCommand;
-        public RelayCommand SetStandNumDiapCommand
-        {
-            get => _setStandNumDiapCommand ?? (_setStandNumDiapCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.Ranges[SelectedDiapNum].StandNum.Value = process.Ranges[SelectedDiapNum].StandNum.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-
-        }
-        #endregion
-        #region Команда "Записать счетчик в диапазоне"
-        RelayCommand _setCounterDiapCommand;
-        public RelayCommand SetCounterDiapCommand
-        {
-            get => _setCounterDiapCommand ?? (_setCounterDiapCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.Ranges[SelectedDiapNum].CounterNum.Value = process.Ranges[SelectedDiapNum].CounterNum.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-
-        }
-        #endregion
-        #region Команда "Записать номер стандартизации"
-        RelayCommand _setStandNumCommand;
-        public RelayCommand SetStandNumCommand
-        {
-            get => _setStandNumCommand ?? (_setStandNumCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.BackStandNum.Value = process.BackStandNum.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-        }
-        #endregion
-        #region Команда "Записать время измерения одной точки"
-        RelayCommand _setMeasDurationCommand;
-        public RelayCommand SetMeasDurationCommand
-        {
-            get => _setMeasDurationCommand ?? (_setMeasDurationCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.MeasDuration.Value = process.MeasDuration.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-        }
-        #endregion
-        #region Команда "Записать глубину усреднения"
-        RelayCommand _setMeasDeepCommand;
-        public RelayCommand SetMeasDeepCommand
-        {
-            get => _setMeasDeepCommand ?? (_setMeasDeepCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.MeasDeep.Value = process.MeasDeep.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-        }
-        #endregion
-        #region Команда "Отправить данные периода-полураспада"
-        RelayCommand _setHalfLifeCommand;
-        public RelayCommand SetHalfLifeCommand {
-            get => _setHalfLifeCommand ?? (_setHalfLifeCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.HalfLife.Value = process.HalfLife.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true)); }
-        #endregion
-        #region Команда "Отправить данные плотности жидкости"
-        RelayCommand _setDensityLiqCommand;
-        public RelayCommand SetDensityLiqCommand
-        {
-            get => _setDensityLiqCommand ?? (_setDensityLiqCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.DensityLiquid.Value = process.DensityLiquid.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-        }
-        #endregion
-        #region Команда "Отправить данные плотности твердости"
-        RelayCommand _setDensitySolidCommand;
-        public RelayCommand SetDensitySolidCommand
-        {
-            get => _setDensitySolidCommand ?? (_setDensitySolidCommand = new RelayCommand(execPar =>
-            {
-                MeasProcess process = SelectedMeasProcess.Clone() as MeasProcess;
-                process.DensitySolid.Value = process.DensitySolid.WriteValue;
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            },
-                canExecPar => true));
-        }
-        #endregion
-        #region Команда "Сменить номер измерительного процесса"
-        RelayCommand _changeMeasProcessCommand;
-        public RelayCommand ChangeMeasProcessCommand => _changeMeasProcessCommand ?? (_changeMeasProcessCommand = new RelayCommand(execPar => mainModel.ChangeMeasProcess((int)execPar), canExecPar => canExecPar != null));
-        #endregion
-
-        #endregion
+        #endregion        
 
         #region Команды стандартизации
 
@@ -368,22 +242,7 @@ namespace IDensity.ViewModels
         RelayCommand _changeBaudrateCommand;
         public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)(o)), o => o != null));
         #endregion
-        #endregion
-
-        #region Команда изменения времени усреднения для пользователя
-        RelayCommand _changeUserAvgTime;
-        public RelayCommand ChangeUserAvgTime => _changeUserAvgTime ?? (_changeUserAvgTime = new RelayCommand(o =>
-        {
-            if (mainModel.CurMeasProcess.MeasDuration.Value > 0)
-            {
-                MeasProcess process = mainModel.CurMeasProcess.Clone() as MeasProcess;
-                process.MeasDeep.Value = (ushort)(((uint)o) * 10 / mainModel.CurMeasProcess.MeasDuration.Value);
-                mainModel.SetMeasProcessSettings(process, SelectedMeasProcessNum);
-            }
-
-        }, o => true));
-
-        #endregion
+        #endregion        
 
         #region Команда "Установить напряжение HV"
         RelayCommand _setHvCommand;
@@ -480,25 +339,7 @@ namespace IDensity.ViewModels
         }, canExec => true));
 
 
-        #endregion
-
-        #region Команда "Загрузить коэффициенты калибровики"
-        RelayCommand _setCalibrCoeffsCommand;
-        public RelayCommand SetCalibrCoeffsCommand => _setCalibrCoeffsCommand ?? (_setCalibrCoeffsCommand = new RelayCommand(execPar =>
-        {
-            if (CalculatedCoeffs.Count >= 2)
-            {
-                var calibData = new CalibrData();
-                calibData.Num.Value = mainModel.CurMeasProcess.Ranges[0].CalibCurveNum.Value;
-                calibData.MeasUnitNum.Value = (ushort)CurMeasNum;
-                for (int i = 0; i < CalculatedCoeffs.Count; i++)
-                {
-                    calibData.Coeffs[i].Value = (float)CalculatedCoeffs[i].Coeff;
-                }
-                mainModel.SetCalibrData(calibData);
-            };
-        }, canExecPar => true));
-        #endregion
+        #endregion        
 
         #region Команда посчитать график для проверки полинома
         RelayCommand _showPolinomTrend;
@@ -549,8 +390,7 @@ namespace IDensity.ViewModels
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
-            MeasUnitSDescribe();
-            CurMeasNumDescribe();
+            MeasUnitSDescribe();           
 
         }
 
@@ -652,23 +492,23 @@ namespace IDensity.ViewModels
                     singleMeasTimer = new System.Timers.Timer(2000);
                     singleMeasTimer.Elapsed += (s, e) =>
                     {
-                        singleMeasTimer?.Stop();
-                        singleMeasTimer?.Dispose();
-                        SingleMeasCounterResult = mainModel.CountersCur[0].Value;
-                        int bcStanNum = mainModel.CurMeasProcess.BackStandNum.Value;
-                        int physStandNum = mainModel.CurMeasProcess.Ranges[0].StandNum.Value;
-                        int countNum = mainModel.CurMeasProcess.Ranges[0].CounterNum.Value;
-                        bcStanNum = bcStanNum < 4 && bcStanNum >= 0 ? bcStanNum : 0;
-                        physStandNum = physStandNum < 12 && physStandNum >= 4 ? physStandNum : 4;
-                        countNum = countNum < 7 && countNum >= 0 ? countNum : 0;
-                        double bcStandValue = mainModel.StandSettings[bcStanNum].Results[countNum].Value;
-                        double physStandValue = mainModel.StandHalfPeriodValues[0].Value;
-                        SingleMeasWeakResult = Math.Log(Math.Abs((physStandValue - bcStandValue) / (SingleMeasCounterResult - bcStandValue)));
-                        var singleMeasCell = new SingleMeasCell() { Weak = SingleMeasWeakResult, PhysVal = SingleMeasPhysValue };
-                        App.Current.Dispatcher.Invoke(() =>
-                        {
-                            CalibrationClass.SingleMeasCells.Data.Add(singleMeasCell);
-                        });
+                        //singleMeasTimer?.Stop();
+                        //singleMeasTimer?.Dispose();
+                        //SingleMeasCounterResult = mainModel.CountersCur[0].Value;
+                        //int bcStanNum = mainModel.CurMeasProcess.BackStandNum.Value;
+                        //int physStandNum = mainModel.CurMeasProcess.Ranges[0].StandNum.Value;
+                        //int countNum = mainModel.CurMeasProcess.Ranges[0].CounterNum.Value;
+                        //bcStanNum = bcStanNum < 4 && bcStanNum >= 0 ? bcStanNum : 0;
+                        //physStandNum = physStandNum < 12 && physStandNum >= 4 ? physStandNum : 4;
+                        //countNum = countNum < 7 && countNum >= 0 ? countNum : 0;
+                        //double bcStandValue = mainModel.StandSettings[bcStanNum].Results[countNum].Value;
+                        //double physStandValue = mainModel.StandHalfPeriodValues[0].Value;
+                        //SingleMeasWeakResult = Math.Log(Math.Abs((physStandValue - bcStandValue) / (SingleMeasCounterResult - bcStandValue)));
+                        //var singleMeasCell = new SingleMeasCell() { Weak = SingleMeasWeakResult, PhysVal = SingleMeasPhysValue };
+                        //App.Current.Dispatcher.Invoke(() =>
+                        //{
+                        //    CalibrationClass.SingleMeasCells.Data.Add(singleMeasCell);
+                        //});
                        
                     };
                     singleMeasTimer.Start();
@@ -892,94 +732,6 @@ namespace IDensity.ViewModels
         System.Timers.Timer standTimer;
         #endregion
 
-        #endregion
-
-        #region Выбранный номер измерительного процесса (не текущий!)
-        int _selectedMeasProcessNum;
-        public int SelectedMeasProcessNum
-        {
-            get => _selectedMeasProcessNum;
-            set 
-            {
-                if (value < mainModel.MeasProcesses.Length)
-                {
-                    Set(ref _selectedMeasProcessNum, value);
-                    SelectedMeasProcess = mainModel.MeasProcesses[value];
-                    SelectedDiap = SelectedMeasProcess.Ranges[0];
-                }
-                    
-
-            } 
-        }
-        #endregion
-
-        #region Выбранный измерительный процесс
-        MeasProcess _selectedMeasProcess;
-        public MeasProcess SelectedMeasProcess
-        {
-            get => _selectedMeasProcess ?? (_selectedMeasProcess = mainModel.MeasProcesses[0]);
-            set => Set(ref _selectedMeasProcess, value);            
-        }
-        #endregion
-
-        #region Выбранный номер диапазона
-        int _selectedDiapNum;
-        public int SelectedDiapNum
-        {
-            get => _selectedDiapNum;
-            set
-            {
-                if (value < SelectedMeasProcess.Ranges.Length)
-                {
-                    Set(ref _selectedDiapNum, value);
-                    SelectedDiap = SelectedMeasProcess.Ranges[value];
-                }
-            }
-        }
-        #endregion
-
-        #region Текущая еденица измерений
-        int _curMeasNum;
-        public int CurMeasNum
-        {
-            get => _curMeasNum;
-            set => Set(ref _curMeasNum, value);
-        }
-        /// <summary>
-        /// Отслеживание изменений номера ед. изм
-        /// </summary>
-        void CurMeasNumDescribe()
-        {
-            mainModel.CurMeasProcessNum.PropertyChanged += OnPropChanged;
-            foreach (var process in mainModel.MeasProcesses)
-            {
-                process.Ranges[0].CalibCurveNum.PropertyChanged += OnPropChanged;
-            }
-            foreach (var calibrData in mainModel.CalibrDatas)
-            {
-                calibrData.MeasUnitNum.PropertyChanged+= OnPropChanged;
-            }
-            //локальная ф-я
-            void OnPropChanged(object sender, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName == "Value")
-                {
-                    CurMeasNum = mainModel.CalibrDatas[mainModel.CurMeasProcess.Ranges[0].CalibCurveNum.Value].MeasUnitNum.Value;
-                }
-            }
-        }
-
-
-
-        #endregion
-
-        #region Выбранный диапазон
-        public Diapasone _selectedDiap;
-        public Diapasone SelectedDiap
-        {
-            get => _selectedDiap ?? (_selectedDiap = SelectedMeasProcess.Ranges[0]);
-            set => Set(ref _selectedDiap, value);
-        }
         #endregion
 
         #region Вывести данные из БД

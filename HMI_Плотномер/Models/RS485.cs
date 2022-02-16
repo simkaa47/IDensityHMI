@@ -7,6 +7,7 @@ using System.Threading;
 using EasyModbus;
 using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
+using IDensity.AddClasses.Settings;
 using IDensity.AddClasses.Standartisation;
 
 namespace IDensity.Models
@@ -89,11 +90,7 @@ namespace IDensity.Models
         /// </summary>
         ushort[] readRegs = new ushort[100];
         #endregion
-        #endregion        
-
-        #region Номер процесса для выбора
-        public Parameter<int> SelectMeasNum = new Parameter<int>("SelectMeasNum", "Номер процесса для выбора", 0, MainModel.measProcessNum - 1, 26, "hold");
-        #endregion        
+        #endregion                      
 
         #region Очередь для хранения команд, которые надо выполнить
         Queue<Command> commands = new Queue<Command>();
@@ -350,8 +347,7 @@ namespace IDensity.Models
                 GetAnalogOutSettings();
                 GetAllStandSettings();
                 GetAnalogInSettings();
-                GetCounterSettingsAll();
-                GetCalibrDataAll();
+                GetCounterSettingsAll();                
                 GetUdpAddr();
                 GetAdcBoardSettings();
                 GetMeasUnitSettingsAll();
@@ -360,31 +356,7 @@ namespace IDensity.Models
         #region Данные измерительных настроек
         void GetMeasProcessData()
         {
-            model.SettingsReaded = false;
-            // Читаем данные процессов
-            for (int i = 0; i < MainModel.measProcessNum; i++)
-            {
-                client.WriteSingleRegister(SelectMeasNum.RegNum, i);
-                for (int j = 0; j < 2; j++)
-                {
-                    ReadHoldRegs(j * 10 + MeasProcess.ModbRegNum, 10);
-                }
-                for (int j = 0; j < 3; j++)
-                {
-                    model.MeasProcesses[i].Ranges[j].CalibCurveNum.Value = holdRegs[MeasProcess.ModbRegNum + j * 3];
-                    model.MeasProcesses[i].Ranges[j].StandNum.Value = holdRegs[MeasProcess.ModbRegNum + j * 3 + 1];
-                    model.MeasProcesses[i].Ranges[j].CounterNum.Value = holdRegs[MeasProcess.ModbRegNum + j * 3 + 2];
-                }
-                model.MeasProcesses[i].BackStandNum.Value = holdRegs[MeasProcess.ModbRegNum + 9];
-                model.MeasProcesses[i].MeasDuration.Value = holdRegs[MeasProcess.ModbRegNum + 10];
-                model.MeasProcesses[i].MeasDeep.Value = holdRegs[MeasProcess.ModbRegNum + 11];
-                model.MeasProcesses[i].HalfLife.Value = GetFloatFromUshorts(holdRegs, MeasProcess.ModbRegNum + 12);
-                model.MeasProcesses[i].DensityLiquid.Value = GetFloatFromUshorts(holdRegs, MeasProcess.ModbRegNum + 14);
-                model.MeasProcesses[i].DensitySolid.Value = GetFloatFromUshorts(holdRegs, MeasProcess.ModbRegNum + 16);
-            }
-            //Текущий номер измерений
-            model.CurMeasProcessNum.Value = SelectRegs(model.CurMeasProcessNum.RegType)[model.CurMeasProcessNum.RegNum];
-            if (model.CurMeasProcessNum.Value < MainModel.measProcessNum) model.CurMeasProcess = model.MeasProcesses[model.CurMeasProcessNum.Value];
+            model.SettingsReaded = false;            
             model.SettingsReaded = true;
         }
         #endregion
@@ -529,37 +501,7 @@ namespace IDensity.Models
             model.AdcBoardSettings.PreampGain.Value = holdRegs[model.AdcBoardSettings.PreampGain.RegNum];
             model.SettingsReaded = true;
         }
-        #endregion
-
-        #region Настройки калибровочных кривых
-        /// <summary>
-        /// Получить данные всех калибровочных кривых
-        /// </summary>
-        void GetCalibrDataAll()
-        {
-            for (ushort i = 0; i < MainModel.CalibCurveNum; i++)
-            {
-                GetCalibrData(i);
-            }
-        }
-        /// <summary>
-        /// Получить данные калибровочной кривой по индексу
-        /// </summary>
-        /// <param name="index"></param>
-        void GetCalibrData(ushort index)
-        {
-            model.SettingsReaded = false;
-            client.WriteSingleRegister(model.CalibrDatas[index].Num.RegNum, index);
-            ReadHoldRegs(model.CalibrDatas[index].MeasUnitNum.RegNum, 14);
-            model.CalibrDatas[index].Num.Value = index;
-            model.CalibrDatas[index].MeasUnitNum.Value = holdRegs[model.CalibrDatas[index].MeasUnitNum.RegNum];
-            for (int i = 0; i < 6; i++)
-            {
-                model.CalibrDatas[index].Coeffs[i].Value = GetFloatFromUshorts(holdRegs, model.CalibrDatas[index].Coeffs[i].RegNum);                    
-            }
-            model.SettingsReaded = true;
-        }
-        #endregion
+        #endregion        
 
         #region Настройки единиц измерения
         void GetMeasUnitSettingsAll()
@@ -600,45 +542,11 @@ namespace IDensity.Models
         #endregion
 
         #region Записать данные измерительного процеса
-        public void SetMeasProcessSettings(MeasProcess process, int index)
-        {
-            commands.Enqueue(new Command((p1, p2) =>
-            {
-                model.SettingsReaded = false;
-                //Записываем регистр для записи
-                client.WriteSingleRegister(SelectMeasNum.RegNum, index);
-                //Записываем данные процесса измерений
-                for (int i = 0; i < 3; i++)// Данные диапазонов
-                {
-                    holdRegs[MeasProcess.ModbRegNum + i * 3] = process.Ranges[i].CalibCurveNum.Value;
-                    holdRegs[MeasProcess.ModbRegNum + i * 3 + 1] = process.Ranges[i].StandNum.Value;
-                    holdRegs[MeasProcess.ModbRegNum + i * 3 + 2] = process.Ranges[i].CounterNum.Value;
-                }
-                holdRegs[MeasProcess.ModbRegNum + 9] = process.BackStandNum.Value;
-                holdRegs[MeasProcess.ModbRegNum + 10] = process.MeasDuration.Value;
-                holdRegs[MeasProcess.ModbRegNum + 11] = process.MeasDeep.Value;
-                GetUshortsFromFloat(holdRegs, MeasProcess.ModbRegNum + 12, process.HalfLife.Value);
-                GetUshortsFromFloat(holdRegs, MeasProcess.ModbRegNum + 14, process.DensityLiquid.Value);
-                GetUshortsFromFloat(holdRegs, MeasProcess.ModbRegNum + 16, process.DensitySolid.Value);
-                for (int i = 0; i < 2; i++)
-                {
-                    WriteRegs(MeasProcess.ModbRegNum + i * 9, 9);
-                }
-            }, 0, 0));
+        public void SetMeasProcessSettings(MeasProcSettings process, int index)
+        {            
             
         }
-        #endregion
-
-        #region Смена номера измерительного процесса
-        public void ChangeMeasProcess(int index)
-        {
-            commands.Enqueue(new Command((p1, p2) => 
-            {
-                model.SettingsReaded = false;
-                client?.WriteSingleRegister(model.CurMeasProcessNum.RegNum, index);
-            }, 0, 0));            
-        }
-        #endregion
+        #endregion        
 
         #region Команды настроек последовательного порта
         #region Записать бадрейт
@@ -807,28 +715,7 @@ namespace IDensity.Models
                 GetCounterSettings(diapasone.Num.Value);
             }, 0, 0));
         }
-        #endregion
-
-        #region Команда "Записать данные калибровочных кривых"
-        public void SetCalibrData(CalibrData calibrData)
-        {
-            commands.Enqueue(new Command((p1, p2) =>
-            {
-                if (calibrData.Num.Value<MainModel.CalibCurveNum)
-                {
-                    client.WriteSingleRegister(calibrData.Num.RegNum, calibrData.Num.Value);
-                    holdRegs[calibrData.MeasUnitNum.RegNum] = calibrData.MeasUnitNum.Value;
-                    for (int i = 0; i < 6; i++)
-                    {
-                        GetUshortsFromFloat(holdRegs, calibrData.Coeffs[i].RegNum, calibrData.Coeffs[i].Value);
-                    }
-                    WriteRegs(calibrData.MeasUnitNum.RegNum, 14);
-                    GetCalibrData(calibrData.Num.Value);
-                }
-                
-            }, 0, 0));
-        }
-        #endregion
+        #endregion        
 
         #region Команда "Поменять UDP адрес источника"
         public void SetUdpAddr(byte[] addr)
