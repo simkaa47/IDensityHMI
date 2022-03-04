@@ -69,7 +69,25 @@ namespace IDensity.Models
 
         #region Данные измерения
         #region Данные измерительных процессов
-        public MeasProcSettings[] MeasProcSettings { get; } = Enumerable.Range(0, MeasProcNum).Select(i => new MeasProcSettings(i)).ToArray();
+        MeasProcSettings[] _measProcSettings;
+        public MeasProcSettings[] MeasProcSettings
+        {
+            get 
+            {
+                if (_measProcSettings == null)
+                {
+                    _measProcSettings = Enumerable.Range(0, MeasProcNum)
+                        .Select(i => 
+                        {
+                            var mp = new MeasProcSettings(i);
+                            mp.NeedWriteEvent += WriteMeasProcSettings;
+                            return mp; 
+                        })
+                        .ToArray();
+                }
+                return _measProcSettings;
+            }
+        }
         #endregion
         #region ФВ усредненное по диапазонам мгновенное
         public Parameter<float> PhysValueCur { get; } = new Parameter<float>("PhysValueCur", "ФВ усредненное по диапазонам мгновенное", 0, float.PositiveInfinity, 0, "read");
@@ -362,13 +380,13 @@ namespace IDensity.Models
             else if (CommMode.RsEnable) rs.SwitchHv(value);
         }
         #endregion
-
+    
         #region Настройки измерительных процессов
 
         #region Записать данные измерительных процессов
-        public void SetMeasProcessSettings(MeasProcSettings process, int index)
+        public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
         {
-            
+            if (CommMode.EthEnable) Tcp.WriteMeasProcSettings(tcpArg, measProcNum);
         }
 
         #endregion

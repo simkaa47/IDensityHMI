@@ -1,4 +1,5 @@
 ﻿using IDensity.Models;
+using IDensity.ViewModels.Commands;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -59,9 +60,16 @@ namespace IDensity.AddClasses
         public Parameter()
         {
 
-        } 
+        }
         #endregion
 
+        #region Команда
+        RelayCommand _command;
+        public RelayCommand Command => _command ?? (_command = new RelayCommand(par => CommandEcecutedEvent?.Invoke(par), canExecPar => true));
+        #endregion
+        #region Событие 
+        public event Action<object> CommandEcecutedEvent;
+        #endregion
         #region Описание
         string _description = "";
         public string Description{ get => _description; set => Set(ref _description, value); }       

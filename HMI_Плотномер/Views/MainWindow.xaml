@@ -6,13 +6,17 @@
         xmlns:vm="clr-namespace:IDensity.ViewModels"       
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"        
         xmlns:add="clr-namespace:IDensity.AddClasses"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"       
-        mc:Ignorable="d"        
+        xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"    
+        xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
+        mc:Ignorable="d"         
         Title="MainWindow" Height="450" Width="800"
         Background="DarkSlateGray">
+    <Window.Resources>
+        
+    </Window.Resources>
     <Window.DataContext>
         <vm:VM/>
     </Window.DataContext>
@@ -545,73 +549,7 @@
                     <!--#endregion-->
                 </TabItem.Resources>
                 <TabControl TabStripPlacement="Left">                    
-                    <!--#region Настройки измерительных процессов -->
-                    <TabItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ">
-                        <GroupBox>                            
-                            <!--#region Выбор измерительного процесса -->
-                            <GroupBox.Header>
-                                <DockPanel>
-                                    <TextBlock Text="Название измерительного процесса"></TextBlock>
-                                    <ComboBox Name="Selector" HorizontalAlignment="Right" 
-                                              ItemsSource="{Binding MeasProcessNames.Data}"
-                                              DisplayMemberPath="Name"
-                                              Margin="10,0"
-                                              SelectedIndex="{Binding SelectedMeasProcessNum}"  ></ComboBox>
-                                </DockPanel>
-                            </GroupBox.Header>
-                            <!--#endregion-->
-                            <!--#region Параметры -->                            
-                            <ListBox HorizontalContentAlignment="Stretch">
-                                <!--#region Номер калибровочной кривой -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CalibCurveNum}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCalibCurveDiapCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Номер стандартизации ЕИ -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.StandNum}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumDiapCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Счетчик -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedDiap.CounterNum}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetCounterDiapCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->                                
-                                <!--#region Номер стандартизации -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.BackStandNum}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetStandNumCommand}"/>
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Время измерения, x0.1 c -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.MeasDuration}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDurationCommand}"/>                                    
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Глубина усреднения, точек измерения -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.MeasDeep}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetMeasDeepCommand}"/>                                    
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Период полупаспада -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.HalfLife}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetHalfLifeCommand}"/>                                   
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Плотность жидкости -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.DensityLiquid}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensityLiqCommand}"/>                                    
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Плотность твердости -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding SelectedMeasProcess.DensitySolid}">
-                                    <uc:Parameter Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SetDensitySolidCommand}"/>                                   
-                                </ListBoxItem>
-                                <!--#endregion-->
-                            </ListBox>                                
-                            <!--#endregion-->
-                        </GroupBox>
-                    </TabItem>
-                    <!--#endregion-->
+                    
                     <!--#region Настройки счетчиков -->
                     <TabItem Header="СЧЕТЧИКИ">
                         <DataGrid ItemsSource="{Binding mainModel.CountDiapasones}"
@@ -1927,6 +1865,56 @@
                 </TabControl>
             </TabItem>
             <!--#endregion-->
+            <TabItem Header="НОВЫЕ НАСТРОЙКИ">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="MenuItem" >
+                            <Style.Setters>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="Background" Value="Gray"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter Property="IsSubmenuOpen" Value="True"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="IsSubmenuOpen" Value="False"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.5"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>                    
+                    <StackPanel Grid.Column="2"                                
+                                VerticalAlignment="Center"                                
+                                HorizontalAlignment="Left">
+                        <MenuItem  Header="ИЗМЕРЕНИЕ" FlowDirection="LeftToRight">
+                            <MenuItem.Resources>
+                                <DataTemplate  DataType="{x:Type sett:MeasProcSettings}">
+
+                                    <MenuItem  Width="160"  Header="{Binding Num}" HeaderStringFormat="Процесс №{0}" HorizontalContentAlignment="Stretch" StaysOpenOnClick="True">
+                                        <MenuItem  DataContext="{Binding MeasProcCounterNum}" Header="{Binding Description}" HorizontalContentAlignment="Stretch">
+                                            <StackPanel Margin="0" Orientation="Horizontal" Focusable="True" FocusVisualStyle="{x:Null}"  Height="10">
+                                                <TextBox Width="50" Margin="5,0,5,0" Text="{Binding WriteValue}" HorizontalAlignment="Left"/>
+                                                <Button Width="50" Command="{Binding Command}"/>
+                                                <TextBlock Width="50" Text="{Binding Value}"/>
+                                            </StackPanel>
+                                        </MenuItem>
+                                    </MenuItem>
+                                </DataTemplate>
+                            </MenuItem.Resources>
+                            <MenuItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ"   ItemsSource="{Binding mainModel.MeasProcSettings}">
+                            </MenuItem>
+                        </MenuItem>
+                        <MenuItem  Header="Что то другое"></MenuItem>
+
+                    </StackPanel>
+                </Grid>
+            </TabItem>
             <!--#region События -->
             <TabItem Header="СОБЫТИЯ">
                 <TabControl TabStripPlacement="Top">

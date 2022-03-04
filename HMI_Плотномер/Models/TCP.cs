@@ -112,20 +112,20 @@ namespace IDensity.Models
                     Connect();
                     return;
                 }
-                GetDeviceStatus();
+                /*GetDeviceStatus();
                 GetCurDateTime();
                 GetCurMeas();
                 GetPeriphTelemetry();
                 GetHalfPeriodStandartisation();
                 //GetAmTelemetry();
                 //GetHVTelemetry();
-                //GetTempTelemetry();                
+                //GetTempTelemetry();*/
                 GetSetiings();
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
                     command.Action?.Invoke(command.Parameter);
-                    Thread.Sleep(50);
+                    Thread.Sleep(200);
                 }
                 errCommCount = 0;
 
@@ -133,15 +133,16 @@ namespace IDensity.Models
             catch (Exception ex)
             {
                 if (++errCommCount >= 5)
-                {
-                    TcpEvent?.Invoke(ex.Message);
+                {                    
                     commands?.Clear();
                     Disconnect();
                     Thread.Sleep(1000);
                     errCommCount = 0;
                 }
                 else Thread.Sleep(200);
+                TcpEvent?.Invoke(ex.Message);
             }
+
         }
         #endregion
 
@@ -360,7 +361,7 @@ namespace IDensity.Models
         {
             if (!model.SettingsReaded)
             {
-                GetMeasProcessData();// Получить данные процеса измерений
+                GetMeasProcessDataAll();// Получить данные процеса измерений
                 //GetStdSettings();
                 //GetSettings2();                
                 //GetSettings7();
@@ -371,13 +372,152 @@ namespace IDensity.Models
             
         }
         #region Настройки измерительных процессов
-        void GetMeasProcessData()
+        /// <summary>
+        /// Метод получения всех данных изменительных настроек
+        /// </summary>
+        void GetMeasProcessDataAll()
+        {
+            for (int i = 0; i < MainModel.MeasProcNum; i++)
+                GetMeasProcessData(i);
+        }
+        /// <summary>
+        /// Прочитать набор измерительных процессов по номеру
+        /// </summary>
+        /// <param name="index"></param>
+        void GetMeasProcessData(int index)
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,6#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,{index}#"));
+            var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
+            if (arr == null || arr.Length != 103) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            model.MeasProcSettings[index].Num = (ushort)arr[0];
+            model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
+            RecognizeStandDataFromArr(arr, index);
+            RecognizeSingleMeasData(arr, index);
+            RecognizeCalibrCurveFromArr(arr, index);
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 81);
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 83);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 85);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 91);
+            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[97];
+            RecognizeFastChangeSett(arr, index);
+            model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[100];
+            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[101];
+            model.MeasProcSettings[index].OutMeasNum.Value = (ushort)arr[102];
             model.SettingsReaded = true;
         }
+
+        /// <summary>
+        /// Функция распознавания данных стандартизации изм. процессов из массива
+        /// </summary>
+        /// <param name="arr">массив чисел</param>
+        /// /// <param name="num">НОмер измерительного процесса</param>
+        void RecognizeStandDataFromArr(float[] arr, int num)
+        {
+            for (int i = 0; i < MeasProcSettings.StandCount; i++)
+            {
+                model.MeasProcSettings[num].MeasStandSettings[i].Id = i;
+                model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)arr[2 + i * 7];
+                int day = (ushort)arr[3 + i * 7];
+                day = day > 0 && day <= 31 ? day : 1;
+                int month = (ushort)arr[4 + i * 7];
+                month = month > 0 && month <= 12 ? month : 1;
+                int year = ((ushort)arr[5 + i * 7]) + 2000;
+                model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);
+                model.MeasProcSettings[num].MeasStandSettings[i].StandMeasUnitNum.Value = (ushort)arr[6 + i * 7];
+                model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 7];
+                model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 7];
+            }
+        }
+        /// <summary>
+        /// Функция распознавания данных калибр. кривой изм. процессов из массива
+        /// </summary>
+        /// <param name="arr">Массив чисел</param>
+        /// <param name="num">Номер изм. процесса</param>
+        void RecognizeCalibrCurveFromArr(float[] arr, int num)
+        {
+            var offset = 73;
+            model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
+            model.MeasProcSettings[num].CalibrCurve.MeasUnitNum.Value = (ushort)arr[offset+1];
+            for (int i = 0; i < 6; i++)
+            {
+                model.MeasProcSettings[num].CalibrCurve.Coeffs[i].Value = arr[offset + 2 + i];
+            }
+        }
+
+        /// <summary>
+        /// Метод распознавания данных еденичного измерния из массива чисел
+        /// </summary>
+        /// <param name="arr">Массив чисел</param>
+        /// <param name="num">Номер изм. процесса</param>
+        void RecognizeSingleMeasData(float[] arr, int num)
+        {
+            for (int i = 23; i < MeasProcSettings.SingleMeasResCount*5+23; i+=5)
+            {
+                var j = (i - 23) / 5;
+                int day = (ushort)arr[i];
+                day = day > 0 && day <= 31 ? day : 1;
+                int month = (ushort)arr[i+1];
+                month = month > 0 && month <= 12 ? month : 1;
+                int year = ((ushort)arr[i+2]) + 2000;
+                model.MeasProcSettings[num].SingleMeasResults[j].Date.Value = new DateTime(year, month, day);
+                model.MeasProcSettings[num].SingleMeasResults[j].Weak.Value = arr[i + 3];
+                model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];
+            }
+        }
+        /// <summary>
+        /// Метод распознавания настроек плотности из данных измерительного процесса
+        /// </summary>
+        /// <param name="arr">Массив чисел</param>        
+        /// /// <param name="offset">смещение данных в массиве</param>
+        /// <param name="density">Класс, в который</param>
+        void RecognizeDensityFromArr(float[] arr, DensitySett density, int offset)
+        {
+            density.MeasValueNum.Value = (ushort)arr[offset];
+            density.PhysValue.Value = arr[offset+1];
+        }
+
+        /// <summary>
+        /// Метод распознавания настроек компенсации
+        /// </summary>
+        /// <param name="arr">Массив чисел</param>
+        /// <param name="compensation">Класс определяющий данные компенсации</param>
+        /// <param name="offset">Смещение данных компенсации в массиве чисел</param>
+        void RecognizeCompensationFromArr(float[] arr, Compensation compensation, int offset)
+        {
+            compensation.Activity.Value = arr[offset] > 0;
+            compensation.MeasUnitNum.Value = (ushort)arr[offset + 1];
+            compensation.Sourse.Value = (ushort)arr[offset + 2];
+            compensation.A.Value = arr[offset + 3];
+            compensation.B.Value = arr[offset + 4];
+            compensation.C.Value = arr[offset + 5];
+        }
+        /// <summary>
+        /// Метод распознаания настроек быстрого измерения
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="num"></param>
+        void RecognizeFastChangeSett(float[] arr, int num)
+        {
+            model.MeasProcSettings[num].FastChange.Activity.Value = arr[98] > 0;
+            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[99];
+        }
+
         #endregion
+        /// <summary>
+        /// Выполняет разбиение строки по переданным в качестве параметра разделителя
+        /// </summary>
+        /// <param name="str">строка для разделения</param>
+        /// /// <param name="seps">Массив разделителей</param>
+        /// <returns>Массив чисел</returns>
+        float[] GetNumericsFromString(string str, char[] seps)
+        {
+            float temp = 0;
+            return str.Split(seps, StringSplitOptions.RemoveEmptyEntries)
+                .Where(s => float.TryParse(s.Replace(".", ","), out temp))
+                .Select(s => temp)
+                .ToArray();
+        }
 
         #region Настройки №1
         void GetSettings1()
@@ -637,10 +777,10 @@ namespace IDensity.Models
         }
         #endregion
 
-        #region Записать данные измерений
-        public void SetMeasProcessSettings(MeasProcSettings process, int index)
+        #region Записать данные измерений()
+        public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
         {
-            
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetMeasProcessData(measProcNum); }, Encoding.ASCII.GetBytes(tcpArg)));
         }
         #endregion        
 
@@ -798,7 +938,7 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
-
+        
         #region Команда "Записать настройки едениц измерерия"
         public void SetMeasUnitsSettings(MeasUnitSettings settings)
         {
@@ -815,8 +955,11 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) =>SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
+        
 
         #endregion
+
+       
 
         #region Очистка буфера
         void StreamClear()

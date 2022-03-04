@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDensity.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace IDensity.AddClasses.Settings
         public MeasProcSettings(int num)
         {
             Num = (ushort)num;
+            // Действие по измерению значения счетчика
+            MeasProcCounterNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"cntr={MeasProcCounterNum.WriteValue}");
         }
         #region Константы
         #region Количество стандартизаций
@@ -78,44 +81,53 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Компенсация по температуре
         /// </summary>
-        public Compensation TempCompensation => new Compensation();
+        public Compensation TempCompensation { get; } = new Compensation();
         #endregion
         #region Компенсация паровой фазы
         /// <summary>
         /// Компенсация паровой фазы
         /// </summary>
-        public Compensation SteamCompensation => new Compensation();
+        public Compensation SteamCompensation { get; } = new Compensation();
         #endregion
         #region Тип измерения
         /// <summary>
         /// Тип измерения
         /// </summary>
-        public Parameter<int> MeasType => new Parameter<int>("MeasType", "Тип измерения", 0, 10, 0, "");
+        public Parameter<int> MeasType { get; } = new Parameter<int>("MeasType", "Тип измерения", 0, 10, 0, "");
         #endregion
         #region Быстрые изменения
         /// <summary>
         /// Быстрые изменения
         /// </summary>
-        public FastChange FastChange => new FastChange();
+        public FastChange FastChange { get; } = new FastChange();
         #endregion
         #region Длительность измерения
         /// <summary>
         /// Длительность измерения
         /// </summary>
-        public Parameter<ushort> MeasDuration => new Parameter<ushort>("MeasDuration", "Длительность измерения, x0.1 c.", 0, ushort.MaxValue, 0, "");
+        public Parameter<ushort> MeasDuration { get; } = new Parameter<ushort>("MeasDuration", "Длительность измерения, x0.1 c.", 0, ushort.MaxValue, 0, "");
         #endregion
         #region Глубина усреднения
         /// <summary>
         /// Глубина усреднения
         /// </summary>
-        public Parameter<ushort> MeasDeep => new Parameter<ushort>("MeasDeep", "Глубина усреднения", 0, ushort.MaxValue, 0, "");
+        public Parameter<ushort> MeasDeep { get; } = new Parameter<ushort>("MeasDeep", "Глубина усреднения", 0, ushort.MaxValue, 0, "");
         #endregion
         #region Выходная ЕИ
         /// <summary>
         /// Выходная ЕИ
         /// </summary>
-        public Parameter<ushort> OutMeasNum => new Parameter<ushort>("OutMeasNum", "Выходная ЕИ", 0, ushort.MaxValue, 0, ""); 
-        #endregion
+        public Parameter<ushort> OutMeasNum { get; } = new Parameter<ushort>("OutMeasNum", "Выходная ЕИ", 0, ushort.MaxValue, 0, "");
+        #endregion        
+
+        void OnWriteCommandExecuted(string argument)
+        {
+            NeedWriteEvent?.Invoke($"SETT,meas_proc={Num},{argument}#", Num);
+        }
+        /// <summary>
+        /// Необходимо записать настройки измерительных процессов
+        /// </summary>
+        public event Action<string,ushort> NeedWriteEvent;
 
     }
 }

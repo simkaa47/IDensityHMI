@@ -19,13 +19,13 @@ namespace IDensity.AddClasses
         /// <summary>
         /// Номер единицы измерения
         /// </summary>
-        public Parameter<ushort> MeasUnitNum { get; set; } = new Parameter<ushort>("CalibrDataMeasUnitNum", "Номер еденицы измерения", 0, ushort.MaxValue, 0, "hold");
+        public Parameter<ushort> MeasUnitNum { get; } = new Parameter<ushort>("CalibrDataMeasUnitNum", "Номер еденицы измерения", 0, ushort.MaxValue, 0, "hold");
         #endregion
         #region КОэффициенты калибровки
         /// <summary>
         /// КОэффициенты калибровки
         /// </summary>
-        public List<Parameter<float>> Coeffs { get; set; } = Enumerable.Range(0, 6).Select(i => new Parameter<float>("CalibrCoeff" + i, "Коэффициент калибровочной кривой " + i, float.NegativeInfinity, float.PositiveInfinity, 97 + i * 2, "hold")).ToList();
+        public List<Parameter<float>> Coeffs { get; } = Enumerable.Range(0, 6).Select(i => new Parameter<float>("CalibrCoeff" + i, "Коэффициент калибровочной кривой " + i, float.NegativeInfinity, float.PositiveInfinity, 97 + i * 2, "hold")).ToList();
 
         #endregion
     }
