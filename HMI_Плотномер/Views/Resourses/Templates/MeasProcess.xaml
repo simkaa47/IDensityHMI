@@ -1,0 +1,160 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls" 
+                    xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
+    <!--#region Шаблон настроек плотности -->
+    <ControlTemplate TargetType="MenuItem" x:Key="DensitySett">
+        <MenuItem Header="{TemplateBinding Header}" Template="{StaticResource SubMenuHeaderTemplate}">
+            <!--#region ЕИ -->
+            <MenuItem DataContext="{Binding MeasValueNum}" Header="{Binding Description}">
+                <uc:MenuItemCompoboxParameter Command="{Binding Command}"
+                                              CompoboxWidth="150"
+                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                              ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
+                                              DisplayMemberPath="Name"/>
+            </MenuItem>
+            <!--#endregion-->
+            <!--#region Физическая величина-->
+            <MenuItem DataContext="{Binding PhysValue}" Header="{Binding Description}">
+                <uc:MenuItemParameterText Command="{Binding Command}"/>
+            </MenuItem>
+            <!--#endregion-->            
+        </MenuItem>
+    </ControlTemplate>
+    <!--#endregion-->
+    <!--#region  Шаблон для настроек стандартизаций -->
+    <DataTemplate DataType="{x:Type sett:StandSettings}">
+        <Menu>
+            <MenuItem>
+                <MenuItem.Header>
+                    <MultiBinding Converter="{StaticResource StringByIndex}">
+                        <Binding Path="Id"/>
+                        <Binding Source="{StaticResource StandTypes}"/>
+                    </MultiBinding>
+                </MenuItem.Header>
+                <!--#region Номер ЕИ -->
+                <MenuItem DataContext="{Binding StandMeasUnitNum}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Длительность -->
+                <MenuItem DataContext="{Binding StandDuration}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Дата -->
+                <MenuItem DataContext="{Binding LastStandDate}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Физическая величина -->
+                <MenuItem DataContext="{Binding StandPhysValue}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Результат -->
+                <MenuItem DataContext="{Binding StandResult}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+            </MenuItem>
+        </Menu>
+    </DataTemplate>
+    <!--#endregion-->
+    <!--#region Шаблон типа данных настроек измерительных процессов -->
+    <DataTemplate  DataType="{x:Type sett:MeasProcSettings}">
+        <Menu>
+            <MenuItem Header="{Binding Num}" HeaderStringFormat="Процесс №{0}"  HorizontalContentAlignment="Stretch" StaysOpenOnClick="True">
+                <!--#region Номер счетчика -->
+                <MenuItem  DataContext="{Binding MeasProcCounterNum}" Header="{Binding Description}" HorizontalContentAlignment="Stretch">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Настройки стандартизаций -->
+                <MenuItem Header="Настройки стандартизаций" ItemsSource="{Binding MeasStandSettings}"/>
+                <!--#endregion-->
+                <!--#region Единичные измерения -->
+                <MenuItem Header="Единичные измерения" ItemsSource="{Binding SingleMeasResults}"/>
+                <!--#endregion-->
+                <!--#region Калибровочная кривая -->
+                <MenuItem Header="Калибровочная кривая">
+                    <!--#region ЕИ -->
+                    <MenuItem DataContext="{Binding CalibrCurve.MeasUnitNum}" Header="{Binding Description}">
+                        <uc:MenuItemCompoboxParameter Command="{Binding Command}"
+                                                                                  CompoboxWidth="150"
+                                                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
+                                                                                  DisplayMemberPath="Name"/>
+                    </MenuItem>
+                    <!--#endregion-->
+                    <!--#region Тип калибровки -->
+                    <MenuItem DataContext="{Binding CalibrCurve.Type}" Header="{Binding Description}">
+                        <uc:MenuItemParameterText Command="{Binding Command}"/>
+                    </MenuItem>
+                    <!--#endregion-->
+                    <!--#region К-ты -->
+                    <MenuItem Header="К-ты полинома" ItemsSource="{Binding CalibrCurve.Coeffs}">
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate>
+                                <Menu>
+                                    <MenuItem Header="{Binding Description}">
+                                        <uc:MenuItemParameterText Command="{Binding Command}"/>
+                                    </MenuItem>
+                                </Menu>
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                    <!--#endregion-->
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Плотность жидкости -->
+                <MenuItem  Header="Плотность жидкости" DataContext="{Binding DensityLiq}" Template="{StaticResource DensitySett}"/>
+                <!--#endregion-->
+                <!--#region Плотность твердого -->
+                <MenuItem  Header="Плотность твердого" DataContext="{Binding DensitySol}" Template="{StaticResource DensitySett}"/>
+                <!--#endregion-->
+                <!--#region Длительность измерения -->
+                <MenuItem DataContext="{Binding MeasDuration}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Глубина скользящего среднего -->
+                <MenuItem DataContext="{Binding MeasDeep}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <DockPanel DataContext="{Binding IsActive}">
+                    <TextBlock Text="{Binding Description}"/>
+                    <CheckBox IsChecked="{Binding WriteValue}" Command="{Binding Command}" Style="{StaticResource MaterialDesignActionAccentCheckBox}" ></CheckBox>
+                </DockPanel>
+            </MenuItem>
+        </Menu>
+    </DataTemplate>
+    <!--#endregion-->
+    <!--#region Шаблон под класс данных источника калибровочной кривой -->
+    <DataTemplate DataType="{x:Type sett:CalibCurveCrcValue}">
+        <Menu>
+            <MenuItem Header="{Binding Id}" HeaderStringFormat="Точка №{0}" >
+                <!--#region Дата измерения -->
+                <MenuItem DataContext="{Binding Date}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Значение счетчика -->
+                <MenuItem DataContext="{Binding CounterValue}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+                <!--#region Ослабление -->
+                <MenuItem DataContext="{Binding Weak}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
+            </MenuItem>
+        </Menu>
+    </DataTemplate>
+    <!--#endregion-->
+    
+</ResourceDictionary>

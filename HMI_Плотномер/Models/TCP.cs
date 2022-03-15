@@ -78,8 +78,7 @@ namespace IDensity.Models
             client.ReceiveTimeout = 2000;
             TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
             client.Connect(IP, PortNum);
-
-            model.Connecting.Value = client.Connected;
+            
             TcpEvent?.Invoke(($"Произведено подключение к {IP}:{PortNum}"));
             stream = client.GetStream();
 
@@ -112,15 +111,15 @@ namespace IDensity.Models
                     Connect();
                     return;
                 }
-                /*GetDeviceStatus();
+                GetDeviceStatus();
                 GetCurDateTime();
                 GetCurMeas();
                 GetPeriphTelemetry();
                 GetHalfPeriodStandartisation();
                 //GetAmTelemetry();
                 //GetHVTelemetry();
-                //GetTempTelemetry();*/
-                GetSetiings();
+                //GetTempTelemetry(); 
+                 GetSetiings();
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
@@ -128,7 +127,7 @@ namespace IDensity.Models
                     Thread.Sleep(200);
                 }
                 errCommCount = 0;
-
+                model.Connecting.Value = client.Connected;
             }
             catch (Exception ex)
             {
@@ -145,6 +144,8 @@ namespace IDensity.Models
 
         }
         #endregion
+
+        
 
         #region Получить данные телеметрии
         void GetAmTelemetry()
@@ -274,25 +275,23 @@ namespace IDensity.Models
         void GetCurMeas()
         {
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,AMC"));
-            str = str.TrimEnd(new char[] { '#' }).Substring(5);
+            
             float temp = 0;
-            var nums = str.Split(new char[] { ',' })
+            var nums = str.Split(new char[] { ',','#' }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(str => float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out temp)).
                 Select(str => temp).
                 ToArray();
-            if (nums.Length == 11)
+            if (nums.Length == 8)
             {
-                model.CycleMeasStatus.Value = nums[8] > 0 ? true : false;
+                model.CycleMeasStatus.Value = nums[5] > 0 ? true : false;
 
                 if (model.CycleMeasStatus.Value)
                 {
                     model.CountersCur[0].Value = nums[0];
                     model.CountersCur[1].Value = nums[1];
                     model.CountersCur[2].Value = nums[2];
-                    model.PhysValueCur.Value = nums[6];
-                    model.PhysValueAvg.Value = nums[7];
-                    model.ContetrationValueAvg.Value = nums[9];
-                    model.ContetrationValueCur.Value = nums[10];
+                    model.PhysValueCur.Value = nums[3];
+                    model.PhysValueAvg.Value = nums[4];                    
                 }              
             
             }
@@ -362,11 +361,12 @@ namespace IDensity.Models
             if (!model.SettingsReaded)
             {
                 GetMeasProcessDataAll();// Получить данные процеса измерений
-                //GetStdSettings();
-                //GetSettings2();                
-                //GetSettings7();
-                //GetSettings1();
-                //GetSettings4();
+                
+                GetStdSettings();
+                GetSettings2();
+                GetSettings7();
+                GetSettings1();
+                GetSettings4();
 
             } 
             
@@ -379,6 +379,26 @@ namespace IDensity.Models
         {
             for (int i = 0; i < MainModel.MeasProcNum; i++)
                 GetMeasProcessData(i);
+            ReadActivity();
+        }
+        /// <summary>
+        /// Прочитать активности измерительных процессов
+        /// </summary>
+        void ReadActivity()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,65536#"));
+            var temp = 0;
+            var mask = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(s => int.TryParse(s, out temp))
+                .Select(s => temp)
+                .FirstOrDefault();
+            for (int i = 0; i < MainModel.MeasProcNum; i++)
+            {
+                model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2,i)) > 0;
+            }
+
+                model.SettingsReaded = true;
         }
         /// <summary>
         /// Прочитать набор измерительных процессов по номеру
@@ -518,6 +538,8 @@ namespace IDensity.Models
                 .Select(s => temp)
                 .ToArray();
         }
+
+
 
         #region Настройки №1
         void GetSettings1()
@@ -782,7 +804,13 @@ namespace IDensity.Models
         {
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetMeasProcessData(measProcNum); }, Encoding.ASCII.GetBytes(tcpArg)));
         }
-        #endregion        
+        #endregion     
+        #region Записать активности измерительных процессов
+        public void SetMeasProcActivity(string cmd)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); ReadActivity(); }, Encoding.ASCII.GetBytes(cmd)));
+        }
+        #endregion
 
         #region Изменить режим работы последовательного порта
         public void ChangeSerialSelect(ushort value)

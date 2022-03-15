@@ -13,6 +13,33 @@ namespace IDensity.AddClasses.Settings
             Num = (ushort)num;
             // Действие по измерению значения счетчика
             MeasProcCounterNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"cntr={MeasProcCounterNum.WriteValue}");
+            // Подписка на события настроек стандартизаций
+            foreach (var std in MeasStandSettings)
+            {
+                std.NeedWriteEvent += s => OnWriteCommandExecuted(s);
+            }
+            // Подписка на события настроек данных еденичных измерений
+            foreach (var src in SingleMeasResults)
+            {
+                src.NeedWriteEvent += (arg, i) => 
+                {
+                    var str = "calib_src=";
+                    for (int j = 0; j < SingleMeasResCount; j++)
+                    {
+                        if (j != i) str += $"{src.Date.Value.ToString("dd:MM:yy")},{src.Weak.Value.ToString().Replace(",", ".")},{src.CounterValue.Value.ToString().Replace(",", ".")}";
+                        else str += arg;
+                        if (j < SingleMeasResCount - 1) str += ",";
+                    }
+                    OnWriteCommandExecuted(str);
+                };
+            }
+            // Подписка на собтия записи данных калибровочгных кривых
+            CalibrCurve.NeedWriteEvent += OnWriteCommandExecuted;
+            //Действие по изменению продолжительности и глубины измерения
+            MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue}");
+            MeasDeep.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"aver_depth={MeasDeep.WriteValue}");
+
+
         }
         #region Константы
         #region Количество стандартизаций
@@ -56,7 +83,7 @@ namespace IDensity.AddClasses.Settings
         /// Массив значений еденичных измерений
         /// </summary>
         public CalibCurveCrcValue[] SingleMeasResults { get; } = Enumerable.Range(0, SingleMeasResCount)
-            .Select(i => new CalibCurveCrcValue())
+            .Select(i => new CalibCurveCrcValue(i))
             .ToArray();
         #endregion
         #region Данные коэффициентов калибровочной кривой
@@ -118,7 +145,10 @@ namespace IDensity.AddClasses.Settings
         /// Выходная ЕИ
         /// </summary>
         public Parameter<ushort> OutMeasNum { get; } = new Parameter<ushort>("OutMeasNum", "Выходная ЕИ", 0, ushort.MaxValue, 0, "");
-        #endregion        
+        #endregion
+        #region Активность
+        public Parameter<bool> IsActive { get; } = new Parameter<bool>("MeasProcActive", "Активность измерительного процесса", false, true, 0, "hold");
+        #endregion
 
         void OnWriteCommandExecuted(string argument)
         {

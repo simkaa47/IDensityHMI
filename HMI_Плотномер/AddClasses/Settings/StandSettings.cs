@@ -6,10 +6,56 @@ namespace IDensity.AddClasses.Settings
 {
     class StandSettings:PropertyChangedBase
     {
+        const string TcpArg = "std=id,stdMeasUnitNum,duration,date,result,value";
         public StandSettings(int id)
         {
             this.Id = id;
-        }       
+            DescribeOnCommands();
+        }
+        /// <summary>
+        /// Подписка на изменения 
+        /// </summary>
+        void DescribeOnCommands()
+        {
+            StandMeasUnitNum.CommandEcecutedEvent += o => CallWriteEvent("stdMeasUnitNum", StandMeasUnitNum.WriteValue);
+            StandDuration.CommandEcecutedEvent += o => CallWriteEvent("duration", StandDuration.WriteValue);
+            LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:ss"));
+            StandResult.CommandEcecutedEvent += o => CallWriteEvent("result", StandResult.WriteValue);
+            StandPhysValue.CommandEcecutedEvent += o => CallWriteEvent("value", StandPhysValue.WriteValue);
+        }
+        void CallWriteEvent<T>(string parName, T value)
+        {
+            var arg = TcpArg.Replace(parName, value.ToString().Replace(",", "."));
+            var parameters = arg.Split(new char[] { ',', '=' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var par in parameters)
+            {
+                switch (par)
+                {
+                    case "id":
+                        arg = arg.Replace(par, Id.ToString());
+                        break;
+                    case "stdMeasUnitNum":
+                        arg = arg.Replace(par, StandMeasUnitNum.Value.ToString());
+                        break;
+                    case "duration":
+                        arg = arg.Replace(par, StandDuration.Value.ToString());
+                        break;
+                    case "date":
+                        arg = arg.Replace(par, LastStandDate.Value.ToString("dd:MM:ss"));
+                        break;
+                    case "result":
+                        arg = arg.Replace(par, StandResult.Value.ToString().Replace(",", "."));
+                        break;
+                    case "value":
+                        arg = arg.Replace(par, StandPhysValue.Value.ToString().Replace(",", "."));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            NeedWriteEvent?.Invoke(arg);
+
+        }
         #region Id
         private int _id;
         /// <summary>
@@ -53,5 +99,10 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         public Parameter<float> StandPhysValue { get; } = new Parameter<float>("StandPhysValue", "Физическая величина", float.MinValue, float.MaxValue, 7, "hold");
         #endregion
+        /// <summary>
+        /// Необходимо записать настройки стандартизаций
+        /// </summary>
+        public event Action<string> NeedWriteEvent;
+
     }
 }

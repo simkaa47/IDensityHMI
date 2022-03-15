@@ -81,6 +81,7 @@ namespace IDensity.Models
                         {
                             var mp = new MeasProcSettings(i);
                             mp.NeedWriteEvent += WriteMeasProcSettings;
+                            mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();                            
                             return mp; 
                         })
                         .ToArray();
@@ -106,7 +107,7 @@ namespace IDensity.Models
         #endregion
 
         #region Текущие значения счетчиков
-        public Parameter<float>[] CountersCur = Enumerable.Range(0, 3).Select(i => new Parameter<float>("CounterCur" + i.ToString(), "Текущее значение счетчика " + i.ToString(), float.NegativeInfinity, float.PositiveInfinity, 31 + i * 2, "read")).ToArray();
+        public Parameter<float>[] CountersCur { get; } = Enumerable.Range(0, 3).Select(i => new Parameter<float>("CounterCur" + i.ToString(), "Текущее значение счетчика " + i.ToString(), float.NegativeInfinity, float.PositiveInfinity, 31 + i * 2, "read")).ToArray();
         #endregion
 
         #region Концентрация мгновенная
@@ -353,19 +354,7 @@ namespace IDensity.Models
         #region Старт-стоп циклических измерений        
         public async void SwitchMeas()
         {
-            var value = CycleMeasStatus.Value ? 0 : 1;
-            if (value > 0 && !TelemetryHV.HvOn.Value)
-            {
-
-                SwitchHv();
-                await Task.Run(() =>
-                {
-                    while (Connecting.Value && !TelemetryHV.HvOn.Value)
-                    {
-                        Thread.Sleep(100);
-                    }
-                });
-            }
+            var value = CycleMeasStatus.Value ? 0 : 1;            
 
             if (CommMode.EthEnable) Tcp.SwitchMeas(value);
             else if (CommMode.RsEnable) rs.SwitchMeas(value);
@@ -386,7 +375,7 @@ namespace IDensity.Models
         #region Записать данные измерительных процессов
         public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
         {
-            if (CommMode.EthEnable) Tcp.WriteMeasProcSettings(tcpArg, measProcNum);
+           if (CommMode.EthEnable) Tcp.WriteMeasProcSettings(tcpArg, measProcNum);
         }
 
         #endregion
@@ -397,6 +386,20 @@ namespace IDensity.Models
             
         }
         #endregion
+        #endregion
+
+        #region Записать активности измерительных процессов
+        void SetMeasProcActivity()
+        {
+            string cmd = "SETT,meas_prc_ndx=";
+            for (int i = 0; i < MeasProcNum; i++)
+            {
+                if (MeasProcSettings[i].IsActive.WriteValue) cmd += $"{i},";
+            }
+            cmd = cmd.Remove(cmd.Length - 1) + "#";
+            if (CommMode.EthEnable) Tcp.SetMeasProcActivity(cmd);
+        }
+
         #endregion
 
         #region Команды настроек последовательного порта

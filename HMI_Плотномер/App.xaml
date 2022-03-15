@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="Views/Resourses/Templates/NumericDisplay.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/MenuItem.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/DataGridRows.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Templates/MeasProcess.xaml"/>
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
         

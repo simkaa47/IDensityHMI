@@ -24,9 +24,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Resourses\UserControls\MenuItemCompoboxParameter.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Resourses\UserControls\MenuItemParameterText.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="settings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\Resourses\UserControls\MenuItemCompoboxParameter.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Resourses\UserControls\MenuItemParameterText.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>
