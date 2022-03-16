@@ -111,15 +111,11 @@ namespace IDensity.Models
                     Connect();
                     return;
                 }
-                //GetDeviceStatus();
+                GetDeviceStatus();
                 GetCurDateTime();
                 GetCurMeas();
-                GetPeriphTelemetry();
-                //GetHalfPeriodStandartisation();
-                //GetAmTelemetry();
-                //GetHVTelemetry();
-                //GetTempTelemetry(); 
-                 GetSetiings();
+                GetPeriphTelemetry();                
+                GetSetiings();
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
@@ -131,7 +127,7 @@ namespace IDensity.Models
             }
             catch (Exception ex)
             {
-                if (++errCommCount >= 5)
+                if (++errCommCount >= 3)
                 {                    
                     commands?.Clear();
                     Disconnect();
@@ -143,31 +139,9 @@ namespace IDensity.Models
             }
 
         }
-        #endregion
+        #endregion       
 
         
-
-        #region Получить данные телеметрии
-        void GetAmTelemetry()
-        {
-            var numGroup = indexAm / 2;
-            var numModule = indexAm % 2;
-            var bytes = AskResponseBytes(Encoding.ASCII.GetBytes($"CMND,AMT,{numGroup},{numModule}"));
-            if (bytes != 11) return;
-            if (numModule == 0)// Если телеметрия аналогового выхода
-            {
-                model.AnalogGroups[numGroup].AO.VoltageTest.Value = (ushort)(inBuf[3] + inBuf[4] * 256);
-                model.AnalogGroups[numGroup].AO.AdcValue.Value = (ushort)(inBuf[5] + inBuf[6] * 256);
-                model.AnalogGroups[numGroup].AO.VoltageDac.Value = (ushort)(inBuf[7] + inBuf[9] * 256);
-            }
-            else// Если телеметрия аналогового входа
-            {
-                model.AnalogGroups[numGroup].AI.AdcValue.Value = (ushort)(inBuf[5] + inBuf[6] * 256);
-            }
-            indexAm = indexAm++ <= 3 ? indexAm : 0;
-
-        }
-        #endregion
 
         #region Отправить телеграмму без требования ответа без ожидания
         void SendTlg(byte[] buffer)
@@ -281,59 +255,28 @@ namespace IDensity.Models
                 .Where(str => float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out temp)).
                 Select(str => temp).
                 ToArray();
-            if (nums.Length > 0)
+            if (nums.Length>0 && nums.Length%5==0)
             {
                 model.CycleMeasStatus.Value = nums[4] > 0 ? true : false;
-                model.CountersCur[0].Value = nums[1];
+                for (int i = 0; i < nums.Length; i+=5)
+                {
+                    int j = i/5;
+                    model.MeasResults[j].MeasProcessNum.Value = (ushort)nums[i];
+                    model.MeasResults[j].CounterValue.Value = nums[i + 1];
+                    model.MeasResults[j].PhysValueCur.Value = nums[i + 2];
+                    model.MeasResults[j].PhysValueAvg.Value = nums[i + 3];
+                    model.MeasResults[j].IsActive = true;
+                }
                 
 
             }
             else
             {
                 model.CycleMeasStatus.Value = false;
-            }
-        }
-        #endregion
-
-        #region Запрос стандартизаций, скорректированных по времени
-        void GetHalfPeriodStandartisation()
-        {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,SCR"));
-            float temp = 0;
-            var nums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => float.TryParse(s.Replace(".", ","), out temp)).Select(s => temp).ToArray();
-            if (nums.Length == 6)
-            {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    model.StandHalfPeriodValues[i].Value = nums[i];
-                    model.StandHalfPeriodAges[i].Value = nums[i+3];
+                    model.MeasResults[i].ClearResult();
                 }
-            }
-
-        }
-        #endregion
-
-        #region Запрос телеметрии от Платы HV
-        void GetHVTelemetry()
-        {
-            int byteNum = AskResponseBytes(Encoding.ASCII.GetBytes("CMND,HVT"));
-            if (byteNum != 13) return;
-            model.TelemetryHV.VoltageSV.Value = (ushort)((inBuf[2] + inBuf[3] * 256) * 0.05);
-            model.TelemetryHV.VoltageCurIn.Value = (inBuf[4] + (float)inBuf[5] * 256) / 1000;
-            model.TelemetryHV.VoltageCurOut.Value = (ushort)((inBuf[6] + inBuf[7] * 256) * 0.05);
-            model.TelemetryHV.Current.Value = (ushort)(inBuf[8] + inBuf[9] * 256);
-            model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
-        }
-        #endregion
-
-        #region Запрос телеметрии от платы температуры
-        void GetTempTelemetry()
-        {
-            int byteNum = AskResponseBytes(Encoding.ASCII.GetBytes("CMND,TET"));
-            if (byteNum == 9)
-            {
-                model.TempTelemetry.TempExternal.Value = ((float)(BitConverter.ToInt16(inBuf, 2) - 2730)) / 10;
-                model.TempTelemetry.TempInternal.Value = ((float)(BitConverter.ToInt16(inBuf, 4) - 2730)) / 10;
             }
         }
         #endregion

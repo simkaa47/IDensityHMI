@@ -184,8 +184,7 @@ namespace IDensity.Models
         #region Функция распознавания данных из  регистров
         void RecognizePacket()
         {
-            GetRtc();
-            GetHalfPeriodStandartisation();
+            GetRtc();            
             GetCurMeas();
             GetAmTelemetry();
             GetHVTelemetry();
@@ -237,18 +236,7 @@ namespace IDensity.Models
         void GetCurMeas()
         {
             model.CycleMeasStatus.Value = SelectRegs(model.CycleMeasStatus.RegType)[model.CycleMeasStatus.RegNum] == 0 ? false : true;
-            if (model.CycleMeasStatus.Value)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    model.CountersCur[i].Value = GetFloatFromUshorts(SelectRegs(model.CountersCur[i].RegType), model.CountersCur[i].RegNum);
-
-                }
-                model.PhysValueCur.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueCur.RegType), model.PhysValueCur.RegNum);
-                model.PhysValueAvg.Value = GetFloatFromUshorts(SelectRegs(model.PhysValueAvg.RegType), model.PhysValueAvg.RegNum);
-                model.ContetrationValueCur.Value = GetFloatFromUshorts(SelectRegs(model.ContetrationValueCur.RegType), model.ContetrationValueCur.RegNum);
-                model.ContetrationValueAvg.Value = GetFloatFromUshorts(SelectRegs(model.ContetrationValueAvg.RegType), model.ContetrationValueAvg.RegNum);
-            }            
+                   
             
         }
         
@@ -314,17 +302,7 @@ namespace IDensity.Models
             model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
         }
         #endregion
-
-        #region Запрос стандартизаций, скорректированных по времени
-        void GetHalfPeriodStandartisation()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                model.StandHalfPeriodValues[i].Value = GetFloatFromUshorts(readRegs, model.StandHalfPeriodValues[i].RegNum);
-                model.StandHalfPeriodAges[i].Value = GetFloatFromUshorts(readRegs, model.StandHalfPeriodAges[i].RegNum);
-            }
-        }
-        #endregion
+       
 
         #region Запрос телеметрии от платы температуры
         void GetTempTelemetry()

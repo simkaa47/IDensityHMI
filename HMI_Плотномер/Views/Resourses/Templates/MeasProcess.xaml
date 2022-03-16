@@ -59,7 +59,7 @@
                     <uc:MenuItemParameterText Command="{Binding Command}"/>
                 </MenuItem>
                 <!--#endregion-->
-                <!--#region Результат -->
+                <!--#region Значение стандартизации с учетом полураспада -->
                 <MenuItem DataContext="{Binding HalfLifeCorr}" Header="{Binding Description}">
                     <uc:MenuItemParameterText Command="{Binding Command}"/>
                 </MenuItem>
@@ -119,12 +119,7 @@
                 <!--#endregion-->
                 <!--#region Плотность твердого -->
                 <MenuItem  Header="Плотность твердого" DataContext="{Binding DensitySol}" Template="{StaticResource DensitySett}"/>
-                <!--#endregion-->
-                <!--#region Длительность измерения -->
-                <MenuItem DataContext="{Binding MeasDuration}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
+                <!--#endregion-->               
                 <!--#region Глубина скользящего среднего -->
                 <MenuItem DataContext="{Binding MeasDeep}" Header="{Binding Description}">
                     <uc:MenuItemParameterText Command="{Binding Command}"/>

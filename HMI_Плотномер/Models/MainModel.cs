@@ -68,55 +68,17 @@ namespace IDensity.Models
         #endregion
 
         #region Данные измерения
-        #region Данные измерительных процессов
-        MeasProcSettings[] _measProcSettings;
-        public MeasProcSettings[] MeasProcSettings
+        public MeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new MeasResult()).ToArray();
+
+        public void SetMeasResultData()
         {
-            get 
+            int max = 0;
+            for (int i = 0; i < MeasProcNum; i++)
             {
-                if (_measProcSettings == null)
-                {
-                    _measProcSettings = Enumerable.Range(0, MeasProcNum)
-                        .Select(i => 
-                        {
-                            var mp = new MeasProcSettings(i);
-                            mp.NeedWriteEvent += WriteMeasProcSettings;
-                            mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();                            
-                            return mp; 
-                        })
-                        .ToArray();
-                }
-                return _measProcSettings;
+
             }
         }
-        #endregion
-        #region ФВ усредненное по диапазонам мгновенное
-        public Parameter<float> PhysValueCur { get; } = new Parameter<float>("PhysValueCur", "ФВ усредненное по диапазонам мгновенное", 0, float.PositiveInfinity, 0, "read");
 
-        #endregion
-
-        #region ФВ усредненное по диапазонам усредненное
-        public Parameter<float> PhysValueAvg { get; } = new Parameter<float>("PhysValueAvg", "ФВ усредненное по диапазонам усредненное", 0, float.PositiveInfinity, 2, "read");
-        #endregion
-
-        #region Значения стандартизаций, скорректированных по времени
-        public Parameter<float>[] StandHalfPeriodValues { get; } = Enumerable.Range(0, 3).Select(i => new Parameter<float>("StandHalfPeriodValue" + i.ToString(), $"Значение стандартизации, скорректированное по времени  {i}", float.NegativeInfinity, float.PositiveInfinity, 51 + i * 2, "read")).ToArray();
-        #endregion
-        #region Возвраст
-        public Parameter<float>[] StandHalfPeriodAges { get; } = Enumerable.Range(0, 3).Select(i => new Parameter<float>("StandHalfPeriodAge" + i.ToString(), $"Возраст стандартизации  {i}", float.NegativeInfinity, float.PositiveInfinity, 57 + i * 2, "read")).ToArray();
-        #endregion
-
-        #region Текущие значения счетчиков
-        public Parameter<float>[] CountersCur { get; } = Enumerable.Range(0, 3).Select(i => new Parameter<float>("CounterCur" + i.ToString(), "Текущее значение счетчика " + i.ToString(), float.NegativeInfinity, float.PositiveInfinity, 31 + i * 2, "read")).ToArray();
-        #endregion
-
-        #region Концентрация мгновенная
-        public Parameter<float> ContetrationValueCur { get; } = new Parameter<float>("ContetrationValueCur", "Мгновенное значение концентрации", 0, float.PositiveInfinity, 27, "read");
-        #endregion
-
-        #region Концентрация усредненная
-        public Parameter<float> ContetrationValueAvg { get; } = new Parameter<float>("ContetrationValueAvg", "Усреднненное значение концентрации", 0, float.PositiveInfinity, 29, "read");
-        #endregion
 
         #region Статус циклических измерений
         public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("CycleMeasStatus", "Статус циклических измерений", false, true, 1, "hold");
@@ -154,6 +116,29 @@ namespace IDensity.Models
         #endregion
 
         #region Настройки в плате
+        #region Данные измерительных процессов
+        MeasProcSettings[] _measProcSettings;
+        public MeasProcSettings[] MeasProcSettings
+        {
+            get
+            {
+                if (_measProcSettings == null)
+                {
+                    _measProcSettings = Enumerable.Range(0, MeasProcNum)
+                        .Select(i =>
+                        {
+                            var mp = new MeasProcSettings(i);
+                            mp.NeedWriteEvent += WriteMeasProcSettings;
+                            mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
+                            return mp;
+                        })
+                        .ToArray();
+                }
+                return _measProcSettings;
+            }
+        }
+        #endregion
+
         #region Настройки платы АЦП
         public AdcParameters AdcBoard { get; } = new AdcParameters();
         #endregion
@@ -182,9 +167,7 @@ namespace IDensity.Models
                 return _analogGroups;
             }
         }
-        #endregion       
-
-        
+        #endregion               
 
         #region Данные стандартизаций
 
@@ -308,11 +291,7 @@ namespace IDensity.Models
             CycleMeasStatus.PropertyChanged += (obj, args) =>
             {
                 if (args.PropertyName == "Value")
-                {
-                    PhysValueAvg.Value = 0;
-                    ContetrationValueAvg.Value = 0;
-                    ContetrationValueCur.Value = 0;
-                    PhysValueCur.Value = 0;
+                {                    
                     UpdateDataEvent?.Invoke();                    
                 }
             };

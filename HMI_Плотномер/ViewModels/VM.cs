@@ -758,7 +758,7 @@ namespace IDensity.ViewModels
             App.Current?.Dispatcher?.Invoke(
                 () =>
                 {
-                    var tp = new TimePoint { time = DateTime.Now, y1 = mainModel.PhysValueAvg.Value, y2 = mainModel.PhysValueCur.Value };
+                    var tp = new TimePoint { time = DateTime.Now, y1 = mainModel.MeasResults[0].PhysValueAvg.Value, y2 = mainModel.MeasResults[0].PhysValueCur.Value };
                     PlotCollection.Add(tp);
                     while (PlotCollection.Count>0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)))
                     {

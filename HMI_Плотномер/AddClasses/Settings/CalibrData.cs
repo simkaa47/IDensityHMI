@@ -27,6 +27,8 @@ namespace IDensity.AddClasses
             }
             NeedWriteEvent?.Invoke(arg);
         }
+
+        
         #region Тип калибровки
         /// <summary>
         /// Тип калибровки
