@@ -111,11 +111,11 @@ namespace IDensity.Models
                     Connect();
                     return;
                 }
-                GetDeviceStatus();
+                //GetDeviceStatus();
                 GetCurDateTime();
                 GetCurMeas();
                 GetPeriphTelemetry();
-                GetHalfPeriodStandartisation();
+                //GetHalfPeriodStandartisation();
                 //GetAmTelemetry();
                 //GetHVTelemetry();
                 //GetTempTelemetry(); 
@@ -281,19 +281,16 @@ namespace IDensity.Models
                 .Where(str => float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out temp)).
                 Select(str => temp).
                 ToArray();
-            if (nums.Length == 8)
+            if (nums.Length > 0)
             {
-                model.CycleMeasStatus.Value = nums[5] > 0 ? true : false;
+                model.CycleMeasStatus.Value = nums[4] > 0 ? true : false;
+                model.CountersCur[0].Value = nums[1];
+                
 
-                if (model.CycleMeasStatus.Value)
-                {
-                    model.CountersCur[0].Value = nums[0];
-                    model.CountersCur[1].Value = nums[1];
-                    model.CountersCur[2].Value = nums[2];
-                    model.PhysValueCur.Value = nums[3];
-                    model.PhysValueAvg.Value = nums[4];                    
-                }              
-            
+            }
+            else
+            {
+                model.CycleMeasStatus.Value = false;
             }
         }
         #endregion
@@ -362,7 +359,7 @@ namespace IDensity.Models
             {
                 GetMeasProcessDataAll();// Получить данные процеса измерений
                 
-                GetStdSettings();
+                //GetStdSettings();
                 GetSettings2();
                 GetSettings7();
                 GetSettings1();
@@ -409,21 +406,21 @@ namespace IDensity.Models
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
-            if (arr == null || arr.Length != 103) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 106) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             model.MeasProcSettings[index].Num = (ushort)arr[0];
             model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 81);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 83);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 85);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 91);
-            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[97];
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 84);
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 86);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 88);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 94);
+            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[100];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[100];
-            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[101];
-            model.MeasProcSettings[index].OutMeasNum.Value = (ushort)arr[102];
+            model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[103];
+            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[104];
+            model.MeasProcSettings[index].OutMeasNum.Value = (ushort)arr[105];
             model.SettingsReaded = true;
         }
 
@@ -437,16 +434,16 @@ namespace IDensity.Models
             for (int i = 0; i < MeasProcSettings.StandCount; i++)
             {
                 model.MeasProcSettings[num].MeasStandSettings[i].Id = i;
-                model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)arr[2 + i * 7];
-                int day = (ushort)arr[3 + i * 7];
+                model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)arr[2 + i * 8];
+                int day = (ushort)arr[3 + i * 8];
                 day = day > 0 && day <= 31 ? day : 1;
-                int month = (ushort)arr[4 + i * 7];
+                int month = (ushort)arr[4 + i * 8];
                 month = month > 0 && month <= 12 ? month : 1;
-                int year = ((ushort)arr[5 + i * 7]) + 2000;
+                int year = ((ushort)arr[5 + i * 8]) + 2000;
                 model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);
-                model.MeasProcSettings[num].MeasStandSettings[i].StandMeasUnitNum.Value = (ushort)arr[6 + i * 7];
-                model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 7];
-                model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 7];
+                model.MeasProcSettings[num].MeasStandSettings[i].StandMeasUnitNum.Value = (ushort)arr[6 + i * 8];
+                model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 8];
+                model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
             }
         }
         /// <summary>
@@ -456,7 +453,7 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeCalibrCurveFromArr(float[] arr, int num)
         {
-            var offset = 73;
+            var offset = 76;
             model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
             model.MeasProcSettings[num].CalibrCurve.MeasUnitNum.Value = (ushort)arr[offset+1];
             for (int i = 0; i < 6; i++)
@@ -472,9 +469,9 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeSingleMeasData(float[] arr, int num)
         {
-            for (int i = 23; i < MeasProcSettings.SingleMeasResCount*5+23; i+=5)
+            for (int i = 26; i < MeasProcSettings.SingleMeasResCount*5+26; i+=5)
             {
-                var j = (i - 23) / 5;
+                var j = (i - 26) / 5;
                 int day = (ushort)arr[i];
                 day = day > 0 && day <= 31 ? day : 1;
                 int month = (ushort)arr[i+1];
@@ -689,14 +686,8 @@ namespace IDensity.Models
             if (list == null) return;
             model.AnalogGroups[0].AI.Activity.Value = (ushort)list[0][1];
             model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1];
-            list = GetNumber("udp_dst_addr", 4, 1);
-            if (list == null) return;
-            var ip = "";
-            foreach (var num in list[0])
-            {
-                ip = ip + num + ".";
-            }
-            model.UdpAddrString = ip.Remove(ip.Length - 1,1);
+            
+           
             list = GetNumber("preamp_gain", 1, 1);
             if (list == null) return;
             model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];

@@ -59,6 +59,11 @@
                     <uc:MenuItemParameterText Command="{Binding Command}"/>
                 </MenuItem>
                 <!--#endregion-->
+                <!--#region Результат -->
+                <MenuItem DataContext="{Binding HalfLifeCorr}" Header="{Binding Description}">
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <!--#endregion-->
             </MenuItem>
         </Menu>
     </DataTemplate>

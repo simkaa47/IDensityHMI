@@ -537,7 +537,7 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Расширенные настройки -->
-            <TabItem Header="РАСШИРЕННЫЕ НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+            <TabItem Header="РАСШИРЕННЫЕ НАСТРОЙКИ">
                 <TabItem.Resources>
                     <!--#region Общий стиль для DaraGrid -->
                     <Style TargetType="DataGrid">

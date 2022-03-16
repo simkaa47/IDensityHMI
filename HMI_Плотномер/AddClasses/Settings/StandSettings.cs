@@ -99,6 +99,10 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         public Parameter<float> StandPhysValue { get; } = new Parameter<float>("StandPhysValue", "Физическая величина", float.MinValue, float.MaxValue, 7, "hold");
         #endregion
+        #region Значение стандартизации, скорректрованое по времени
+        public Parameter<float> HalfLifeCorr { get; } = new Parameter<float>("StandHalfLifeCorr", "Значение с учетом полураспада", float.MinValue, float.MaxValue, 0, "");
+
+        #endregion
         /// <summary>
         /// Необходимо записать настройки стандартизаций
         /// </summary>
