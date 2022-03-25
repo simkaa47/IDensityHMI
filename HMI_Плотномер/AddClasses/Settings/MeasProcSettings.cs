@@ -1,8 +1,10 @@
-﻿using IDensity.ViewModels.Commands;
+﻿using IDensity.Models;
+using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 
 namespace IDensity.AddClasses.Settings
 {
@@ -17,6 +19,8 @@ namespace IDensity.AddClasses.Settings
             foreach (var std in MeasStandSettings)
             {
                 std.NeedWriteEvent += s => OnWriteCommandExecuted(s);
+                std.NeedMakeStand += () => NeedMakeStand?.Invoke(Num, (ushort)std.Id);
+                std.StandFinishEvent += () => StandFinishEvent?.Invoke(Num);
             }
             // Подписка на события настроек данных еденичных измерений
             foreach (var src in SingleMeasResults)
@@ -38,8 +42,18 @@ namespace IDensity.AddClasses.Settings
             //Действие по изменению продолжительности и глубины измерения
             MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue}");
             MeasDeep.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"aver_depth={MeasDeep.WriteValue}");
-
-
+            // Действия по изменению настроек плотности
+            DensityLiq.NeedWriteEvent+=(s)=> OnWriteCommandExecuted($"dens_liq={s}");
+            DensitySol.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
+            // Действия по изменению настроек компенсаций
+            TempCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_temp={s}");
+            SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");
+            // Подписка на изменение типа измерения
+            MeasType.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"type={MeasType.WriteValue}");
+            // Подписка на изменение настроек быстрых измерений
+            FastChange.NeedWriteEvent+= OnWriteCommandExecuted;
+            // Подписка на изменение выходной ЕИ
+            OutMeasNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"ei={OutMeasNum.WriteValue}");
         }
         #region Константы
         #region Количество стандартизаций
@@ -70,7 +84,7 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Номер счетчика
         /// </summary>
-        public Parameter<ushort> MeasProcCounterNum { get; } = new Parameter<ushort>("MeasProcCounterNum", "Номер счетчика", 0, Counters.CountersNum, 0, "hold");
+        public Parameter<ushort> MeasProcCounterNum { get; } = new Parameter<ushort>("MeasProcCounterNum", "Номер счетчика", 0, 8, 0, "hold");
         #endregion
         #region Данные стандартизаций
         /// <summary>
@@ -149,6 +163,65 @@ namespace IDensity.AddClasses.Settings
         #region Активность
         public Parameter<bool> IsActive { get; } = new Parameter<bool>("MeasProcActive", "Активность измерительного процесса", false, true, 0, "hold");
         #endregion
+        #region Настройки единичного измерения
+        Timer singleMeasTimer = new Timer();
+        #region Время единичного измерния
+        public Parameter<ushort> SingleMeasTime { get; } = new Parameter<ushort>("SingleMeasTime", "Время еденичного измерения, c.", 1, ushort.MaxValue, 0, "");
+        #endregion
+
+        #region Осталось времени еденичного измерения
+        private int _singleMeasTimeLeft;
+
+        public int SingleMeasTimeLeft
+        {
+            get { return _singleMeasTimeLeft; }
+            set { Set(ref _singleMeasTimeLeft, value); }
+        }
+
+        #endregion
+
+        #region Степень полинома
+        private int _singleMeasDeg = 1;
+        public int SingleMeasDeg
+        {
+            get { return _singleMeasDeg; }
+            set
+            {
+                Calibration.PolDegree = value;
+                Set(ref _singleMeasDeg, Calibration.PolDegree);
+            }
+        }
+        #endregion
+
+        #region ФВ
+        private float _singleMeasPhysValue;
+
+        public float SingleMeasPhysValue
+        {
+            get { return _singleMeasPhysValue; }
+            set { Set(ref _singleMeasPhysValue, value); }
+        }
+        #endregion
+
+        #region Команда - произвести еденичное измерение
+        private RelayCommand _singleMeasCommand;
+
+        public RelayCommand SingleMeasCommand
+        {
+            get
+            {
+                return _singleMeasCommand ?? (_singleMeasCommand = new RelayCommand(par => 
+                {
+                    NeedMakeSingleMeasEvent.Invoke(SingleMeasTime.Value * 10);
+
+                }, can => IsActive.Value));
+            }
+        }
+
+        #endregion
+
+
+        #endregion
 
         void OnWriteCommandExecuted(string argument)
         {
@@ -158,6 +231,20 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать настройки измерительных процессов
         /// </summary>
         public event Action<string,ushort> NeedWriteEvent;
+
+        /// <summary>
+        /// Необходимо произвести стандартизацию
+        /// </summary>
+        public event Action<ushort, ushort> NeedMakeStand;
+        /// <summary>
+        /// Стандартизация закончена
+        /// </summary>
+        public event Action<ushort> StandFinishEvent;
+
+        /// <summary>
+        /// Необходимо произвести еденичное измерение
+        /// </summary>
+        public event Action<int> NeedMakeSingleMeasEvent;
 
     }
 }

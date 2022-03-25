@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls" 
+                    xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
+                    xmlns:add="clr-namespace:IDensity.AddClasses"
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
+    <DataTemplate DataType="{x:Type add:CountDiapasone}">
+        <Menu>
+            <MenuItem Header="{Binding Num.Value}" HeaderStringFormat="Счетчик №{0}">
+                <MenuItem DataContext="{Binding Start}" Header="{Binding Description}" >
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+                <MenuItem DataContext="{Binding Finish}" Header="{Binding Description}" >
+                    <uc:MenuItemParameterText Command="{Binding Command}"/>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
+    </DataTemplate>
+</ResourceDictionary>

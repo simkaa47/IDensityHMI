@@ -37,11 +37,18 @@ namespace IDensity.Models
         /// </summary>
         public const int MeasProcNum = 8; 
         #endregion
+
+        
         public MainModel()
         {
             Init();// Инициализация параметров            
             AdcSettingsEventDescribe();
             MeasUnitSettingsDescribe();
+            // Дествия по изменению счетчиков
+            foreach (var diap in CountDiapasones)
+            {
+                diap.NeedWriteEvent += WriteCounterSettings;
+            }
         }
 
 
@@ -69,13 +76,17 @@ namespace IDensity.Models
 
         #region Данные измерения
         public MeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new MeasResult()).ToArray();
-
+        /// <summary>
+        /// Привязка настроек измерения к результатам измерения
+        /// </summary>
         public void SetMeasResultData()
-        {
-            int max = 0;
-            for (int i = 0; i < MeasProcNum; i++)
+        {            
+            for (int i = 0; i < 2; i++)
             {
-
+                if (MeasResults[i].IsActive)
+                {
+                    MeasResults[i].Settings = MeasProcSettings[MeasResults[i].MeasProcessNum.Value];
+                }
             }
         }
 
@@ -114,6 +125,7 @@ namespace IDensity.Models
 
 
         #endregion
+        int countnull = 0;
 
         #region Настройки в плате
         #region Данные измерительных процессов
@@ -124,12 +136,16 @@ namespace IDensity.Models
             {
                 if (_measProcSettings == null)
                 {
+                    countnull++;
                     _measProcSettings = Enumerable.Range(0, MeasProcNum)
                         .Select(i =>
                         {
                             var mp = new MeasProcSettings(i);
                             mp.NeedWriteEvent += WriteMeasProcSettings;
                             mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
+                            mp.NeedMakeStand += MakeStand;
+                            mp.StandFinishEvent += (num)=>Tcp.GetStdSel(num);
+                            mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
                             return mp;
                         })
                         .ToArray();
@@ -137,7 +153,7 @@ namespace IDensity.Models
                 return _measProcSettings;
             }
         }
-        #endregion
+        #endregion        
 
         #region Настройки платы АЦП
         public AdcParameters AdcBoard { get; } = new AdcParameters();
@@ -331,7 +347,7 @@ namespace IDensity.Models
 
         #region Команды
         #region Старт-стоп циклических измерений        
-        public async void SwitchMeas()
+        public  void SwitchMeas()
         {
             var value = CycleMeasStatus.Value ? 0 : 1;            
 
@@ -358,13 +374,7 @@ namespace IDensity.Models
         }
 
         #endregion
-
-        #region Сменить номер измерительного процесса
-        public void ChangeMeasProcess(int index)
-        {
-            
-        }
-        #endregion
+        
         #endregion
 
         #region Записать активности измерительных процессов
@@ -448,25 +458,16 @@ namespace IDensity.Models
             if (CommMode.EthEnable) Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);
             else if (CommMode.RsEnable) rs.SendAnalogInSwttings(groupNum, moduleNum, value);
         }
-        #endregion
-
-        #region Команда "Записать настройки стандартизации"
-        public void WriteStdSettings(ushort index, StandData stand)
-        {
-            if (CommMode.EthEnable) Tcp.WriteStdSettings(index, stand);
-            else if (CommMode.RsEnable) rs.WriteStdSettings(index, stand);
-        }
-        #endregion
+        #endregion        
 
         #region Команда "Произвести стандартизацию"
         /// <summary>
         /// Произвести стандартизацию
         /// </summary>
         /// <param name="index">Номер набора стандартизации</param>
-        public void MakeStand(int index)
+        public void MakeStand(ushort measProcNum, ushort standNum)
         {
-            if (CommMode.EthEnable) Tcp.MakeStand(index);
-            else if (CommMode.RsEnable) rs.MakeStand(index);
+            if (CommMode.EthEnable) Tcp.MakeStand(measProcNum, standNum);            
         }
         #endregion
 
@@ -523,10 +524,10 @@ namespace IDensity.Models
         #endregion
 
         #region Команда "Произвести еденичное измеренине"
-        public void MakeSingleMeasure(ushort time)
+        public void MakeSingleMeasure(int time)
         {
-            if (CommMode.EthEnable) Tcp.MakeSingleMeasure(time);
-            else if (CommMode.RsEnable) rs.MakeSingleMeasure(time);
+            if (CommMode.EthEnable) Tcp.MakeSingleMeasure((ushort)time);
+            else if (CommMode.RsEnable) rs.MakeSingleMeasure((ushort)time);
         }
         #endregion
 

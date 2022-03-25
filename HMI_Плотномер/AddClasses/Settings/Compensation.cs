@@ -6,17 +6,30 @@ namespace IDensity.AddClasses.Settings
 {
     class Compensation :PropertyChangedBase
     {
+        public Compensation()
+        {
+            Activity.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            MeasUnitNum.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            Sourse.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            A.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            B.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            C.CommandEcecutedEvent += (o) => OnWriteExecuted();
+        }
+        void OnWriteExecuted()
+        {
+            NeedWriteEvent?.Invoke($"{(Activity.WriteValue ? 1:0)},{MeasUnitNum.WriteValue},{Sourse.WriteValue},{A.WriteValue.ToStringPoint()},{B.WriteValue.ToStringPoint()},{C.WriteValue.ToStringPoint()}");
+        }
         #region Активность компенсации
         /// <summary>
         /// Активность компенсации
         /// </summary>
-        public Parameter<bool> Activity => new Parameter<bool>("CompensationActivity", "Активность", false, true, 0, "");
+        public Parameter<bool> Activity { get; } = new Parameter<bool>("CompensationActivity", "Активность", false, true, 0, "");
         #endregion
         #region  Номер ЕИ
         /// <summary>
         /// Номер ЕИ
         /// </summary>
-        public Parameter<ushort> MeasUnitNum => new Parameter<ushort>("CompensationMeasUnitNum", "Тип ЕИ", 0, ushort.MaxValue, 0, "");
+        public Parameter<ushort> MeasUnitNum { get; } = new Parameter<ushort>("CompensationMeasUnitNum", "Тип ЕИ", 0, ushort.MaxValue, 0, "");
         #endregion
         #region Источник компенсации
         /// <summary>
@@ -43,5 +56,9 @@ namespace IDensity.AddClasses.Settings
         public Parameter<float> C { get; } = new Parameter<float>("CompensationC", "Коэффициент C", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
+        /// <summary>
+        /// Необходимо записать настройки стандартизаций
+        /// </summary>
+        public event Action<string> NeedWriteEvent;
     }
 }

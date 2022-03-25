@@ -3,7 +3,7 @@
                     xmlns:add="clr-namespace:IDensity.AddClasses"
                     xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
     <DataTemplate DataType="{x:Type add:MeasResult}">
-        <GroupBox Header="Процесс №">
+        <GroupBox Header="Процесс №" Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ListBox HorizontalContentAlignment="Stretch">
                 <DockPanel DataContext="{Binding CounterValue}">
                     <TextBlock Text="{Binding Description}" Foreground="WhiteSmoke"/>

@@ -265,7 +265,8 @@ namespace IDensity.Models
                     model.MeasResults[j].CounterValue.Value = nums[i + 1];
                     model.MeasResults[j].PhysValueCur.Value = nums[i + 2];
                     model.MeasResults[j].PhysValueAvg.Value = nums[i + 3];
-                    model.MeasResults[j].IsActive = true;
+                    model.MeasResults[j].IsActive = nums[i + 4] > 0;
+                    model.SetMeasResultData();
                 }
                 
 
@@ -301,15 +302,11 @@ namespace IDensity.Models
             if (!model.SettingsReaded)
             {
                 GetMeasProcessDataAll();// Получить данные процеса измерений
-                
-                //GetStdSettings();
                 GetSettings2();
                 GetSettings7();
                 GetSettings1();
                 GetSettings4();
-
-            } 
-            
+            }             
         }
         #region Настройки измерительных процессов
         /// <summary>
@@ -333,18 +330,25 @@ namespace IDensity.Models
                 .Where(s => int.TryParse(s, out temp))
                 .Select(s => temp)
                 .FirstOrDefault();
+            int max = 0;
             for (int i = 0; i < MainModel.MeasProcNum; i++)
             {
                 model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2,i)) > 0;
+                if (model.MeasProcSettings[i].IsActive.Value && max <= 2)
+                {
+                    model.MeasResults[max].IsActive = true;
+                    max++;
+                }
             }
+            model.SetMeasResultData();
+            model.SettingsReaded = true;
 
-                model.SettingsReaded = true;
         }
         /// <summary>
         /// Прочитать набор измерительных процессов по номеру
         /// </summary>
         /// <param name="index"></param>
-        void GetMeasProcessData(int index)
+        public void GetMeasProcessData(int index)
         {
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,{index}#"));
@@ -387,6 +391,7 @@ namespace IDensity.Models
                 model.MeasProcSettings[num].MeasStandSettings[i].StandMeasUnitNum.Value = (ushort)arr[6 + i * 8];
                 model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 8];
                 model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
+                model.MeasProcSettings[num].MeasStandSettings[i].HalfLifeCorr.Value = arr[9 + i * 8];
             }
         }
         /// <summary>
@@ -459,8 +464,8 @@ namespace IDensity.Models
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            model.MeasProcSettings[num].FastChange.Activity.Value = arr[98] > 0;
-            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[99];
+            model.MeasProcSettings[num].FastChange.Activity.Value = arr[101] > 0;
+            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[102];
         }
 
         #endregion
@@ -662,43 +667,7 @@ namespace IDensity.Models
             }
             model.SettingsReaded = true;
         }
-        #endregion
-
-        #region Настройки стандартизации
-        void GetStdSettings()
-        {
-            for (ushort i = 0; i < 12; i++)
-            {
-                if (!GetStdSelection(i))break;
-            }
-        }
-
-        bool GetStdSelection(ushort num)
-        {
-            model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,ASR,{num}#"));
-            if (str.Length < 10 || str.Substring(0, 4) != "*ASR" || str[str.Length - 1] != '#') return false;
-            var parts = str.Substring(4).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 13) return false;
-            ushort tempUshort = 0;
-            model.StandSettings[num].Duration.Value = ushort.TryParse(parts[1], out tempUshort) ? tempUshort : model.StandSettings[num].Duration.Value;
-            model.StandSettings[num].Type.Value = ushort.TryParse(parts[2], out tempUshort) ? tempUshort : model.StandSettings[num].Type.Value;
-            float tempFloat = 0;
-            model.StandSettings[num].Value.Value = float.TryParse(parts[3].Replace(".",","), out tempFloat) ? tempFloat : model.StandSettings[num].Value.Value;
-            for (int i = 0; i < 8; i++)
-            {
-                model.StandSettings[num].Results[i].Value = float.TryParse(parts[4 + i].Replace(".", ","), out tempFloat) ? tempFloat : model.StandSettings[num].Results[i].Value;
-            }
-            var dateParts = parts[12].Split(":").Where(s => ushort.TryParse(s, out tempUshort)).Select(s => tempUshort).ToArray();
-            if (dateParts.Length != 3) return false;
-            dateParts[2] = (ushort)(2000 + dateParts[2]);
-            dateParts[1] = dateParts[1] > 0 && dateParts[1] <= 12 ? dateParts[1] : (ushort)1;
-            dateParts[0] = dateParts[0] > 0 && dateParts[0] <= 31 ? dateParts[0] : (ushort)1;
-            model.StandSettings[num].Date.Value = new DateTime(dateParts[2], dateParts[1], dateParts[0]);
-            model.SettingsReaded = true;
-            return true;
-        }
-        #endregion
+        #endregion        
 
         #region Проверка корректности пакета FSRD
         /// <summary>
@@ -736,7 +705,7 @@ namespace IDensity.Models
         #region Записать данные измерений()
         public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetMeasProcessData(measProcNum); }, Encoding.ASCII.GetBytes(tcpArg)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetMeasProcessData(measProcNum); ReadActivity(); }, Encoding.ASCII.GetBytes(tcpArg)));
         }
         #endregion     
         #region Записать активности измерительных процессов
@@ -806,36 +775,24 @@ namespace IDensity.Models
             var str = $"SETT,am_in_sett={groupNum},{value.Activity.Value}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
-        #endregion
-
-        #region Записать настройки набора стандартизации
-        public void WriteStdSettings(ushort index, StandData stand)
-        {
-            var str = $"SETT,std={index},{stand.Duration.Value},{stand.Type.Value},{stand.Value.Value.ToString().Replace(",",".")}";
-            for (int i = 0; i < 8 ; i++)
-            {
-                str = str + $",{stand.Results[i].Value.ToString().Replace(",", ".")}";
-            }
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetStdSelection(index); }, Encoding.ASCII.GetBytes(str)));
-        }
-        #endregion
+        #endregion        
 
         #region Команда "Произвести стандартизацию"
         /// <summary>
         /// Произвести стандартизацию
         /// </summary>
         /// <param name="index">Номер набора стандартизации</param>
-        public void MakeStand(int index)
+        public void MakeStand(int measProcNum, int standNum)
         {
-            var str = $"CMND,ASM,{index}";
+            var str = $"CMND,ASM,{measProcNum},{standNum}";
             commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
 
         #region Команда принудиельного запроса набора стандартизации после стандартизации
-        public void GetStdSel(ushort index)
+        public void GetStdSel(int index)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => GetStdSelection(index) , null));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetMeasProcessData(index) , null));
         }
         #endregion
 
@@ -843,7 +800,7 @@ namespace IDensity.Models
         public void WriteCounterSettings(CountDiapasone diapasone)
         {
             var str = $"SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str + "#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings2(); }, Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion        
 

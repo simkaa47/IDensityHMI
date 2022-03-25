@@ -74,6 +74,20 @@ namespace IDensity.Views.Resourses.UserControls
 
         #endregion
 
+        #region DisplayMemberPath
+        public string DisplayMemberPath
+        {
+            get { return (string)GetValue(DisplayMemberPathProperty); }
+            set { SetValue(DisplayMemberPathProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DisplayMemberPath.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DisplayMemberPathProperty =
+            DependencyProperty.Register("DisplayMemberPath", typeof(string), typeof(CompoboxParameter), new PropertyMetadata());
+
+
+        #endregion
+
         public CompoboxParameter()
         {
             InitializeComponent();

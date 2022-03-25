@@ -11,7 +11,7 @@
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
     </local:CommandExtention.Resources>
     <DockPanel>        
-        <TextBox x:Name="Write" Width="80" VerticalContentAlignment="Center"
+        <TextBox x:Name="Write" Width="55" VerticalContentAlignment="Center"
                      Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}">
             <TextBox.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}"  
@@ -33,8 +33,8 @@
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemParameterText}, Path=CommanDParameter}"
                     IsEnabled="{Binding ValidationOk}"
                     Margin="5,0,5,0"/>
-        <Border Width="80" BorderThickness="1" >
-            <TextBlock Width="80" Foreground="Black"
+        <Border Width="55" BorderThickness="1" >
+            <TextBlock Width="55" Foreground="Black"
                            VerticalAlignment="Center">
                 <TextBlock.Text>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}" 

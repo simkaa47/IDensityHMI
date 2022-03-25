@@ -1,12 +1,15 @@
-﻿using System;
+﻿using IDensity.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 
 namespace IDensity.AddClasses.Settings
 {
     class StandSettings:PropertyChangedBase
     {
-        const string TcpArg = "std=id,stdMeasUnitNum,duration,date,result,value";
+        Timer standTimer = new Timer();
+        const string TcpArg = "std=id,stdMeasUnitNum,duration,date,result,value,halfLifeValue";
         public StandSettings(int id)
         {
             this.Id = id;
@@ -22,6 +25,7 @@ namespace IDensity.AddClasses.Settings
             LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:ss"));
             StandResult.CommandEcecutedEvent += o => CallWriteEvent("result", StandResult.WriteValue);
             StandPhysValue.CommandEcecutedEvent += o => CallWriteEvent("value", StandPhysValue.WriteValue);
+            HalfLifeCorr.CommandEcecutedEvent += o => CallWriteEvent("halfLifeValue", HalfLifeCorr.WriteValue);
         }
         void CallWriteEvent<T>(string parName, T value)
         {
@@ -44,10 +48,13 @@ namespace IDensity.AddClasses.Settings
                         arg = arg.Replace(par, LastStandDate.Value.ToString("dd:MM:ss"));
                         break;
                     case "result":
-                        arg = arg.Replace(par, StandResult.Value.ToString().Replace(",", "."));
+                        arg = arg.Replace(par, StandResult.Value.ToStringPoint());
                         break;
                     case "value":
-                        arg = arg.Replace(par, StandPhysValue.Value.ToString().Replace(",", "."));
+                        arg = arg.Replace(par, StandPhysValue.Value.ToStringPoint());
+                        break;
+                    case "halfLifeValue":
+                        arg = arg.Replace(par, StandPhysValue.Value.ToStringPoint());
                         break;
                     default:
                         break;
@@ -107,6 +114,47 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать настройки стандартизаций
         /// </summary>
         public event Action<string> NeedWriteEvent;
+
+        #region Проведение стандартизации
+        #region Флаг стандартищации
+        private bool _isStandartisation;
+
+        public bool IsStandartisation
+        {
+            get { return _isStandartisation; }
+            set { Set(ref _isStandartisation, value); }
+        }
+        #endregion
+
+        private int _curStandTime;
+
+        public int CurStandTime
+        { 
+            get { return _curStandTime; }
+            set { Set(ref _curStandTime, value); }
+        }
+
+
+        RelayCommand _makeStandCommand;
+        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(par => {
+            if (!IsStandartisation)
+            {
+                NeedMakeStand?.Invoke();
+                standTimer.Elapsed += (o, e) => 
+                {
+                    IsStandartisation = false;
+                    StandFinishEvent?.Invoke();
+                    standTimer.Stop();
+                };
+                standTimer.Interval = StandDuration.Value*100+4000;
+                standTimer.Start();
+                IsStandartisation = true;
+            }
+
+        }, o => true));
+        public event Action NeedMakeStand;
+        public event Action StandFinishEvent;
+        #endregion
 
     }
 }

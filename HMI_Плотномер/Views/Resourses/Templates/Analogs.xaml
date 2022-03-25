@@ -1,0 +1,270 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls" 
+                    xmlns:add="clr-namespace:IDensity.AddClasses"
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
+    <!--#region Шаблон для аналогового входа -->
+    <ControlTemplate TargetType="MenuItem" x:Key="AnalogInput" >
+        <MenuItem Header="{TemplateBinding Header}"
+                  Template="{StaticResource SubMenuHeaderTemplate}" 
+                  Style="{StaticResource WithoutMenu}"
+                  HorizontalContentAlignment="Stretch">
+            <ListBox HorizontalContentAlignment="Stretch">
+                <!--#region Связь с модулем -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Связь с модулем"/>
+                        <CheckBox IsChecked="{Binding CommState.Value}"
+                                  Style="{StaticResource MaterialDesignActionDarkCheckBox}"
+                                  HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Значение АЦП -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Значение АЦП"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding AdcValue.Value}"                                  
+                                   HorizontalAlignment="Right"/>
+
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Активность модуля -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Активность модуля"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+
+                        <ComboBox HorizontalAlignment="Right"
+                                  Margin="50,0,0,0"
+                                  SelectedIndex="{Binding Activity.WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  ItemsSource="{StaticResource On/Off }">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DropDownClosed">
+                                    <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Управлене питанием -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
+                            Command="{Binding SwitchPwrAmCommand}"/>
+                </ListBoxItem>
+                <!--#endregion-->
+            </ListBox>
+        </MenuItem>
+    </ControlTemplate>
+    <!--#endregion-->
+    <ControlTemplate TargetType="MenuItem" x:Key="AnalogOutput">
+        <MenuItem Header="{TemplateBinding Header}"
+                  Template="{StaticResource SubMenuHeaderTemplate}" 
+                  Style="{StaticResource WithoutMenu}"
+                  HorizontalContentAlignment="Stretch">
+            <ListBox>
+                <!--#region Связь с модулем -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Связь с модулем"
+                                   Margin="0,0,100,0"/>
+                        <CheckBox IsChecked="{Binding CommState.Value}"
+                                  Style="{StaticResource MaterialDesignActionDarkCheckBox}"
+                                  HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Управление питанием -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"                           
+                            Command="{Binding SwitchPwrAmCommand}"></Button>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Значение ЦАП -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Значение ЦАП, мВ"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding VoltageDac.Value}"                                  
+                                   HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Напряжение TEST, мВ -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Напряжение TEST, мВ"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding AdcValue.Value}"                                  
+                                   HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Напряжение RX, мВ -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Напряжение RX, мВ"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding VoltageTest.Value}"                                  
+                                   HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Тестовое значение -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Тестовое значение"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBox  Width="50" 
+                                      HorizontalAlignment="Left" 
+                                      VerticalAlignment="Center"
+                                      Height="{Binding ElementName=TstBtn, Path=Height}">
+                                <TextBox.Text>
+                                    <Binding Path="AmTestValue.WriteValue" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <DataErrorValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Button x:Name="TstBtn" Width="50"  Margin="2,0,0,0" Command="{Binding SetTestSignalCommand}">--></Button>
+                        </StackPanel>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Активность АЦП модлуя -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Активность модуля" Margin="0,0,10,0"/>
+                        <ComboBox ItemsSource="{StaticResource On/Off}" 
+                                  HorizontalAlignment="Right"
+                                  SelectedIndex="{Binding Activity.WriteValue, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DropDownClosed">
+                                    <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>                    
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Тип ЦАП -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Тип значения"/>
+                        <ComboBox Width="100" 
+                                  ItemsSource="{StaticResource DacSources}"
+                                  HorizontalAlignment="Right"
+                                  SelectedIndex="{Binding DacType.WriteValue, 
+                            UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DropDownClosed">
+                                    <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region ЕИ -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Единица измерения" TextWrapping="Wrap"/>
+                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
+                                  Width="100"
+                                  HorizontalAlignment="Right"
+                                                              DisplayMemberPath="Name" 
+                                                              SelectedIndex="{Binding DacEiNdx.WriteValue, UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DropDownClosed">
+                                    <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Измерияемая переменная -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Измеряемая переменная"/>
+                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.TypeAnalogOutVars.Data}" 
+                                  DisplayMemberPath="Name" 
+                                  HorizontalAlignment="Right"
+                                  Width="100"
+                                  SelectedIndex="{Binding DacVarNdx.WriteValue, UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DropDownClosed">
+                                    <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Нижний предел -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Нижний предел ФВ"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox  Width="50" HorizontalAlignment="Left">
+                                <TextBox.Text>
+                                    <Binding Path="DacLowLimit.WriteValue" UpdateSourceTrigger="LostFocus">
+                                        <Binding.ValidationRules>
+                                            <DataErrorValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Button Width="50" Margin="2,0,2,0" Command="{Binding SetSettingsCommand}">--></Button>
+                            <TextBlock Width="50" Style="{StaticResource Common}" Foreground="Black" Text="{Binding DacLowLimit.Value}"></TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Верхний предел -->
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <DockPanel>
+                        <TextBlock Text="Верхний предел ФВ"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox  Width="50" HorizontalAlignment="Left">
+                                <TextBox.Text>
+                                    <Binding Path="DacHighLimit.WriteValue" UpdateSourceTrigger="LostFocus">
+                                        <Binding.ValidationRules>
+                                            <DataErrorValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Button Width="50" Margin="2,0,2,0" Command="{Binding SetSettingsCommand}">--></Button>
+                            <TextBlock Width="50" Style="{StaticResource Common}" Foreground="Black" Text="{Binding DacHighLimit.Value}"></TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+            </ListBox>
+        </MenuItem>
+    </ControlTemplate>
+    <!--#region Аналоговые групы -->
+    <DataTemplate DataType="{x:Type add:AnalogGroup}">
+        <Menu>
+            <MenuItem Header="{Binding Id}" HeaderStringFormat="Группа №{0}" >
+                <MenuItem Header="Вход" DataContext="{Binding AI}" Template="{StaticResource AnalogInput}"/>
+                <MenuItem Header="Выход" DataContext="{Binding AO}" Template="{StaticResource AnalogOutput}"/>
+            </MenuItem>
+        </Menu>
+    </DataTemplate>
+    <!--#endregion-->
+    
+
+</ResourceDictionary>

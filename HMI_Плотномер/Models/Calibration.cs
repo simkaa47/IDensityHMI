@@ -1,66 +1,62 @@
 ﻿using IDensity.AddClasses;
 using IDensity.Models.SQL;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 
 namespace IDensity.Models
 {
-    class Calibration:PropertyChangedBase
-    {
-        #region Коллукция измерений
-        public DataBaseCollection<SingleMeasCell> SingleMeasCells { get; } = new DataBaseCollection<SingleMeasCell>("SingleMeasures", null);
-        #endregion
+    /// <summary>
+    /// Набор статических методов для расчета к-тов полинома методои наименьших квадратов
+    /// </summary>
+    static class Calibration
+    {        
         #region Степень полинома
-        private int polDegree = 2;
+        private static  int polDegree = 1;
 
-        public int PolDegree
+        public static  int PolDegree
         {
             get { return polDegree; }
             set 
             {
                 var temp = polDegree;
-                if (value >= 2 && value <= 5)
+                if (value >= 1 && value <= 5)
                 {
                     temp = value;
-                }
-                Set(ref polDegree, temp);
+                }                
             }
         }
-
         #endregion
 
         #region Конструктор
-        public Calibration()
+        static Calibration()
         {
             CalculateExecEvent += (mes) => MessageBox.Show(mes);
         }
         #endregion
-
-        #region К-ты
-        public List<double> CalcCoeefs { get; set; } = new List<double>();
-        #endregion
+        
 
         #region Метод расчета калибровочной кривой
-        public void GetCoeffs()
-        {
-            if (SingleMeasCells.Data.Count < 2)
+        public static List<double> GetCoeffs(List<Point> data)
+        {           
+            if (data == null || data.Count < 2)
             {
                 CalculateExecEvent?.Invoke("Количество данных в таблице меньше 2!");
-                CalcCoeefs = new List<double>();
+                return new List<double>();
             }
-            var xyTable = new double[2, SingleMeasCells.Data.Count];
-            for (int i = 0; i < SingleMeasCells.Data.Count; i++)
+            var xyTable = new double[2, data.Count];
+            for (int i = 0; i < data.Count; i++)
             {
-                xyTable[0, i] = SingleMeasCells.Data[i].Weak;
-                xyTable[1, i] = SingleMeasCells.Data[i].PhysVal;
+                xyTable[0, i] = data[i].X;
+                xyTable[1, i] = data[i].Y;
             }
             var matrix = MakeSystem(xyTable, polDegree+1);// составляем СЛУ
             var resArr = GaussMethod(matrix);
-            CalcCoeefs = new List<double>(resArr);
+            return new List<double>(resArr);
         }
-        private double[,] MakeSystem(double[,] xyTable, int basis)
+        private static double[,] MakeSystem(double[,] xyTable, int basis)
         {
             double[,] matrix = new double[basis, basis + 1];
             for (int i = 0; i < basis; i++)
@@ -86,7 +82,7 @@ namespace IDensity.Models
             }
             return matrix;
         }
-        double[] GaussMethod(double[,] matrix)
+        static double[]  GaussMethod(double[,] matrix)
         {
             double s,d = 0;
             var sizeX = matrix.GetLength(0);
@@ -135,7 +131,7 @@ namespace IDensity.Models
         #endregion       
 
         #region Событие расчета коэффициентов
-        public event Action<string> CalculateExecEvent; 
+        public static event Action<string> CalculateExecEvent; 
         #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using IDensity.Models;
+﻿using IDensity.AddClasses.Settings;
+using IDensity.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,10 @@ namespace IDensity.AddClasses
 {
     class MeasResult:PropertyChangedBase
     {
+        public MeasResult()
+        {
+
+        }
         #region Значение счетчика, импульсов/с
         /// <summary>
         /// Значение счетчика, импульсов/с
@@ -30,9 +35,20 @@ namespace IDensity.AddClasses
         public Parameter<ushort> MeasProcessNum { get; } = new Parameter<ushort>("MeasResultProcNum", "Номер измерительного процесса", 0, MainModel.MeasProcNum, 0, "");
         #endregion
 
-        #region Тип Калибровки
-        public Parameter<ushort> CalibrType { get; } = new Parameter<ushort>("MeasResultType", "Тип измерения", 0, 10, 0, "");
+        #region Настройки соответствующего измерительногоь процесса
+        private MeasProcSettings _settings;
+        /// <summary>
+        /// Настройки соответствующего измерительногоь процесса
+        /// </summary>
+        public MeasProcSettings Settings
+        {
+            get { return _settings; }
+            set { Set(ref _settings,value); }
+        }
+
         #endregion
+
+
 
         #region Активность
         private bool _isActive;
@@ -43,6 +59,7 @@ namespace IDensity.AddClasses
             set { Set(ref _isActive, value); }
         } 
         #endregion
+
 
         public void ClearResult()
         {

@@ -9,6 +9,7 @@
     <DockPanel>
         <ComboBox Width="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=CompoboxWidth}"
                   DisplayMemberPath="{Binding RelativeSource= {RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=DisplayMemberPath}"
+                  HorizontalContentAlignment="Right"
                   ItemsSource="{Binding RelativeSource= {RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=ItemSource}"
                   SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                   SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=Index, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

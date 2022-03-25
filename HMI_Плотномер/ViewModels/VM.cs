@@ -79,141 +79,7 @@ namespace IDensity.ViewModels
         #region Команда "Записать архивный тренд в файл"
         RelayCommand _writeLogCommand;
         public RelayCommand WriteLogCommand { get => _writeLogCommand ?? (_writeLogCommand = new RelayCommand(o => WriteArchivalTrendToText(), o => true)); }
-        #endregion        
-
-        #region Команды стандартизации
-
-        #region Команды записи  настроек стандартизации
-        #region Команда "Записать длительность стандартизации"
-        RelayCommand _setStdDurationCommand;
-        /// <summary>
-        /// Команда "Записать длительность стандартизации"
-        /// </summary>
-        public RelayCommand SetStdDurationCommand => _setStdDurationCommand ?? (_setStdDurationCommand = new RelayCommand(execPar =>
-        {
-            StandData stand = SelectedStandData.Clone() as StandData;
-            stand.Duration.Value = SelectedStandData.Duration.WriteValue;
-            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
-        }, canExecPar => true));
-        #endregion
-        #region Команда "Записать тип стандартизации"
-        RelayCommand _setStdTypeCommand;
-        /// <summary>
-        /// Команда "Записать тип стандартизации"
-        /// </summary>
-        public RelayCommand SetStdTypeCommand => _setStdTypeCommand ?? (_setStdTypeCommand = new RelayCommand(execPar =>
-        {
-            StandData stand = SelectedStandData.Clone() as StandData;
-            stand.Type.Value = SelectedStandData.Type.WriteValue;
-            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
-        }, canExecPar => true));
-        #endregion
-        #region Команда "Записать физ. величину стандартизации"
-        RelayCommand _setStdValueCommand;
-        /// <summary>
-        /// Команда "Записать физ. величину стандартизации"
-        /// </summary>
-        public RelayCommand SetStdValueCommand => _setStdValueCommand ?? (_setStdValueCommand = new RelayCommand(execPar =>
-        {
-            StandData stand = SelectedStandData.Clone() as StandData;
-            stand.Value.Value = SelectedStandData.Value.WriteValue;
-            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
-        }, canExecPar => true));
-        #endregion
-        #region Команда "Записать результат стандартизации"
-        RelayCommand _setStdResultCommand;
-        /// <summary>
-        /// Команда "Записать результат стандартизации"
-        /// </summary>
-        public RelayCommand SetStdResultCommand => _setStdResultCommand ?? (_setStdResultCommand = new RelayCommand(execPar =>
-        {
-            int index = 0;
-            if (execPar != null) int.TryParse(execPar.ToString(), out index);
-            StandData stand = SelectedStandData.Clone() as StandData;
-            stand.Results[index].Value = SelectedStandData.Results[index].WriteValue;
-            mainModel.WriteStdSettings((ushort)StandSelNum, stand);
-        }, canExecPar => true));
-        #endregion
-        #endregion
-
-        #region Произвести стандартизацию
-        RelayCommand _makeStandCommand;
-        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(execPar => MakeStand(), canExecPar => mainModel.Connecting.Value));
-        void MakeStand()
-        {
-            if (!IsStandartisation)
-            {
-                ushort index = (ushort)StandSelNum;
-                mainModel.MakeStand(index);
-                standTimer = new System.Timers.Timer(mainModel.StandSettings[index].Duration.Value * 100 + 1000);
-                standTimer.Start();
-                IsStandartisation = true;
-                standTimer.Elapsed += (s, e) =>
-                {
-                    mainModel.GetStdSelection(index);
-                    IsStandartisation = false;
-                    standTimer.Stop();
-                    standTimer?.Dispose();
-                };
-            }
-        }
-        #endregion
-        #endregion
-
-        #region Команды настроек счетчиков
-
-        #region Записать стартовую точку
-        RelayCommand _changeCounterDiapStartCommand;
-        public RelayCommand ChangeCounterDiapStartCommand
-        {
-            get
-            {
-                if (_changeCounterDiapStartCommand == null)
-                {
-                    _changeCounterDiapStartCommand = new RelayCommand(execPar =>
-                    {
-                        if (execPar == null) return;
-                        ushort index = 0;
-                        if (ushort.TryParse(execPar.ToString(), out index) && index < MainModel.CountCounters)
-                        {
-                            var diap = mainModel.CountDiapasones[index].Clone() as CountDiapasone;
-                            diap.Start.Value = mainModel.CountDiapasones[index].Start.WriteValue;
-                            mainModel.WriteCounterSettings(diap);
-                        }
-                    },
-                    canExec => mainModel.Connecting.Value);
-                }
-                return _changeCounterDiapStartCommand;
-            }
-        }
-        #endregion
-
-        #region Записать конечную точку
-        RelayCommand _changeCounterDiapFinishCommand;
-        public RelayCommand ChangeCounterDiapFinishCommand
-        {
-            get
-            {
-                if (_changeCounterDiapFinishCommand == null)
-                {
-                    _changeCounterDiapFinishCommand = new RelayCommand(execPar =>
-                    {
-                        if (execPar == null) return;
-                        ushort index = 0;
-                        if (ushort.TryParse(execPar.ToString(), out index) && index < MainModel.CountCounters)
-                        {
-                            var diap = mainModel.CountDiapasones[index].Clone() as CountDiapasone;
-                            diap.Finish.Value = mainModel.CountDiapasones[index].Finish.WriteValue;
-                            mainModel.WriteCounterSettings(diap);
-                        }
-                    },
-                    canExec => mainModel.Connecting.Value);
-                }
-                return _changeCounterDiapFinishCommand;
-            }
-        }
-        #endregion
-        #endregion 
+        #endregion                   
 
         #region Команды измерения даты-времени
         #region установить RTC пользователя
@@ -294,18 +160,7 @@ namespace IDensity.ViewModels
             ushort num = 0;
             if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) mainModel.StartStopAdcData(num);
         }, canEcecPar => true));
-        #endregion
-
-        #region Произвести единичное измерение"
-        private RelayCommand _makeSingleMeasCommand;
-
-        public RelayCommand MakeSingleMeasCommand => _makeSingleMeasCommand ?? (_makeSingleMeasCommand = new RelayCommand(execObj => {
-            mainModel.MakeSingleMeasure(SingleMeasTime);
-            SingleMeasCurTime = SingleMeasTime;
-            SingelMeasFlag = true;
-        }, canExecObj => true));
-
-        #endregion
+        #endregion        
 
         #region Переключить реле
         RelayCommand _switchRelayCommand;
@@ -318,62 +173,62 @@ namespace IDensity.ViewModels
         }, canExec => true));
         #endregion
 
-        #region Команда расчета к-тов калибровки
-        private RelayCommand _getCalibrCoeffsCommand;
+        //#region Команда расчета к-тов калибровки
+        //private RelayCommand _getCalibrCoeffsCommand;
 
-        public RelayCommand GetCalibrCoeffsCommand => _getCalibrCoeffsCommand ?? (_getCalibrCoeffsCommand = new RelayCommand(execObj =>
-        {
-            CalibrationClass.GetCoeffs();
-            App.Current.Dispatcher.Invoke(() =>
-            {
-                CalculatedCoeffs.Clear();
-                int deg = 0;
-                foreach (var num in CalibrationClass.CalcCoeefs)
-                {
-                    CalculatedCoeffs.Add(new CalcCalibrationResult(deg, num));
-                    deg++;
-                }
-            });
+        //public RelayCommand GetCalibrCoeffsCommand => _getCalibrCoeffsCommand ?? (_getCalibrCoeffsCommand = new RelayCommand(execObj =>
+        //{
+        //    CalibrationClass.GetCoeffs();
+        //    App.Current.Dispatcher.Invoke(() =>
+        //    {
+        //        CalculatedCoeffs.Clear();
+        //        int deg = 0;
+        //        foreach (var num in CalibrationClass.CalcCoeefs)
+        //        {
+        //            CalculatedCoeffs.Add(new CalcCalibrationResult(deg, num));
+        //            deg++;
+        //        }
+        //    });
 
 
-        }, canExec => true));
+        //}, canExec => true));
 
 
         #endregion        
 
-        #region Команда посчитать график для проверки полинома
-        RelayCommand _showPolinomTrend;
-        public RelayCommand ShowPolinomTrendCommand => _showPolinomTrend ?? (_showPolinomTrend = new RelayCommand(par => 
-        {
-            if (CalibrationClass.SingleMeasCells.Data.Count >= 2 && CalculatedCoeffs.Count != 0)
-            {
-                var measList = CalibrationClass.SingleMeasCells.Data.OrderBy(sm => sm.Weak).Select(sm => new Point(sm.Weak, sm.PhysVal)).ToList();
-                var startWeak = measList[0].X;
-                var finishWeak = measList[measList.Count-1].X;
-                if (startWeak != finishWeak)
-                {
-                    int cnt = 50;
-                    double diff = (finishWeak - startWeak) / cnt;
-                    var calcList = Enumerable.Range(0, cnt).
-                    Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
-                    MeasuredPointsCollection = measList;
-                    CalculatedMeasCollection = calcList;
-                }
+        //#region Команда посчитать график для проверки полинома
+        //RelayCommand _showPolinomTrend;
+        //public RelayCommand ShowPolinomTrendCommand => _showPolinomTrend ?? (_showPolinomTrend = new RelayCommand(par => 
+        //{
+        //    if (CalibrationClass.SingleMeasCells.Data.Count >= 2 && CalculatedCoeffs.Count != 0)
+        //    {
+        //        var measList = CalibrationClass.SingleMeasCells.Data.OrderBy(sm => sm.Weak).Select(sm => new Point(sm.Weak, sm.PhysVal)).ToList();
+        //        var startWeak = measList[0].X;
+        //        var finishWeak = measList[measList.Count-1].X;
+        //        if (startWeak != finishWeak)
+        //        {
+        //            int cnt = 50;
+        //            double diff = (finishWeak - startWeak) / cnt;
+        //            var calcList = Enumerable.Range(0, cnt).
+        //            Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
+        //            MeasuredPointsCollection = measList;
+        //            CalculatedMeasCollection = calcList;
+        //        }
                 
-            }
-        }, canExecPar => true));
-        #endregion
-        double GetPhysvalueByWeak(double weak)
-        {
-            double result = 0;
-            for (int i = 0; i < CalculatedCoeffs.Count; i++)
-            {
-                result += (Math.Pow(weak, i) * CalculatedCoeffs[i].Coeff);
-            }
-            return result;
-        }
+        //    }
+        //}, canExecPar => true));
+        //#endregion
+        //double GetPhysvalueByWeak(double weak)
+        //{
+        //    double result = 0;
+        //    for (int i = 0; i < CalculatedCoeffs.Count; i++)
+        //    {
+        //        result += (Math.Pow(weak, i) * CalculatedCoeffs[i].Coeff);
+        //    }
+        //    return result;
+        //}
 
-        #endregion
+        //#endregion
         public MainModel mainModel { get; } = new MainModel();
 
         #region Конструктор
@@ -397,15 +252,7 @@ namespace IDensity.ViewModels
 
         #endregion
 
-        UDP Udp { get; set; }
-
-        #region Расчет коэффициентов калибровки
-        #region Класс, включающий в себя данные ед. измерений, методы расчета к-тов
-        public Calibration CalibrationClass { get; } = new Calibration();
-        #endregion
-
-        
-        #endregion
+        UDP Udp { get; set; }        
 
         #region Единичное измерение
         #region Время еденичного измерения
@@ -549,11 +396,6 @@ namespace IDensity.ViewModels
         #endregion
         #endregion
 
-
-
-
-
-
         #region Текущая дата-время компьютера
         public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");
 
@@ -670,7 +512,19 @@ namespace IDensity.ViewModels
             UnitNames.CollectionChangedEvent+=()=> MeasUnits = UnitNames.Data.Select(enumCustom => enumCustom.Name).ToArray();
         }
 
-       
+
+        #endregion
+
+        #region Названия типов измерений
+        public DataBaseCollection<EnumCustom> MeasTypesNamesNames { get; } = new DataBaseCollection<EnumCustom>("MeasTypesNamesNames", new EnumCustom());
+        #endregion
+
+        #region Названия источников компенсаций
+        public DataBaseCollection<EnumCustom> CompensationSrcNames { get; } = new DataBaseCollection<EnumCustom>("CompensationSrcNames", new EnumCustom());
+        #endregion
+
+        #region Названия типов калибровок
+        public DataBaseCollection<EnumCustom> TypeCalibrations { get; } = new DataBaseCollection<EnumCustom>("TypeCalibrations", new EnumCustom());
         #endregion
 
         #region Названия переменных для аналогового выхода
@@ -996,7 +850,7 @@ namespace IDensity.ViewModels
         #region Метод загрузки события в базу данных и коллекцию
         void AddHistoryItem(EventDevice device)
         {            
-            App.Current.Dispatcher.Invoke(()=> 
+            App.Current?.Dispatcher.Invoke(()=> 
             {
                 var time = DateTime.Now;
                 var name = CurUser == null ? "Пользователь не авторизован" : $"{CurUser.Somename} {CurUser.Name}";

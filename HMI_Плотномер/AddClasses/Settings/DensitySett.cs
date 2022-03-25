@@ -19,7 +19,22 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Физическая величина
         /// </summary>
-        public Parameter<float> PhysValue { get; } = new Parameter<float>("DensitySettValue", "Физическая величина", float.MinValue, float.MaxValue, 0, ""); 
+        public Parameter<float> PhysValue { get; } = new Parameter<float>("DensitySettValue", "Физическая величина", float.MinValue, float.MaxValue, 0, "");
         #endregion
+
+        public DensitySett()
+        {
+            //Подписка на изменение свойств
+            MeasValueNum.CommandEcecutedEvent +=(o)=> OnWriteExecuted();
+            PhysValue.CommandEcecutedEvent += (o) => OnWriteExecuted();
+        }
+        void OnWriteExecuted()
+        {
+            NeedWriteEvent?.Invoke($"{MeasValueNum.WriteValue},{PhysValue.WriteValue.ToStringPoint()}");
+        }
+        /// <summary>
+        /// Необходимо записать настройки стандартизаций
+        /// </summary>
+        public event Action<string> NeedWriteEvent;
     }
 }

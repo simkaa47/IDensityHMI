@@ -44,6 +44,14 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         public Parameter<float> CounterValue { get; } = new Parameter<float>("CalibCurveCrcValue", "Значение счетчика", 0, float.MaxValue, 0, "");
         #endregion
+        #region Флаг участия в расчете к-тов
+        private bool _selected;
+        public bool Selected
+        {
+            get { return _selected; }
+            set { Set(ref _selected, value); }
+        } 
+        #endregion
 
         void CallWriteEvent<T>(string parName, T value)
         {
@@ -75,4 +83,6 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         public event Action<string, int> NeedWriteEvent;
     }
+   
+
 }
