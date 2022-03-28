@@ -435,6 +435,7 @@
                     <!--#endregion-->
                 </TabItem.Resources>
                 <TabControl TabStripPlacement="Left">
+                    <!--#region Измерительные процессы -->
                     <TabItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ">
                         <TabControl TabStripPlacement="Top"
                                     ContentTemplate="{StaticResource TabItemMeasProc}"
@@ -446,9 +447,18 @@
                                     <Setter Property="Tag" Value="{Binding IsActive.WriteValue}"/>
                                 </Style>
                             </TabControl.ItemContainerStyle>
-                            
-                            
                         </TabControl>
+                    </TabItem>
+                    <!--#endregion-->
+                    <TabItem Header="СЧЕТЧИКИ">
+                        <StackPanel>
+                            <DataGrid CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      AutoGenerateColumns="False"
+                                      ItemsSource="{Binding mainModel.CountDiapasones}">
+                                
+                            </DataGrid>
+                        </StackPanel>
                     </TabItem>
                     <!--#region Калибровка -->
                     <TabItem Header="КАЛИБРОВКА">

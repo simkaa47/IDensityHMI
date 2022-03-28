@@ -54,6 +54,16 @@ namespace IDensity.AddClasses.Settings
             FastChange.NeedWriteEvent+= OnWriteCommandExecuted;
             // Подписка на изменение выходной ЕИ
             OutMeasNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"ei={OutMeasNum.WriteValue}");
+            // Настройка таймера
+            singleMeasTimer.Elapsed += (o, e) =>
+            {                
+                if (--SingleMeasTimeLeft <= 0)
+                {
+                    singleMeasTimer?.Stop();
+                    SingleMeasFlag = false;
+                    SingleMeasEventFinishedEvent?.Invoke();
+                } 
+            };
         }
         #region Константы
         #region Количество стандартизаций
@@ -203,6 +213,17 @@ namespace IDensity.AddClasses.Settings
         }
         #endregion
 
+        #region Флаг измерения
+        private bool _singleMeasFlag;
+
+        public bool SingleMeasFlag
+        {
+            get { return _singleMeasFlag; }
+            set { Set(ref _singleMeasFlag, value); }
+        }
+
+        #endregion
+
         #region Команда - произвести еденичное измерение
         private RelayCommand _singleMeasCommand;
 
@@ -212,9 +233,16 @@ namespace IDensity.AddClasses.Settings
             {
                 return _singleMeasCommand ?? (_singleMeasCommand = new RelayCommand(par => 
                 {
-                    NeedMakeSingleMeasEvent.Invoke(SingleMeasTime.Value * 10);
+                    if (!SingleMeasFlag)
+                    {
+                        NeedMakeSingleMeasEvent?.Invoke(SingleMeasTime.Value * 10);                        
+                        singleMeasTimer.Interval = 1000;                       
+                        singleMeasTimer.Start();
+                        SingleMeasFlag = true;
+                        SingleMeasTimeLeft = SingleMeasTime.Value + 4; 
+                    }
 
-                }, can => IsActive.Value));
+                }, can => true));
             }
         }
 
@@ -245,6 +273,11 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо произвести еденичное измерение
         /// </summary>
         public event Action<int> NeedMakeSingleMeasEvent;
+
+        /// <summary>
+        /// Закончилось ЕИ
+        /// </summary>
+        public event Action SingleMeasEventFinishedEvent;
 
     }
 }

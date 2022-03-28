@@ -142,10 +142,7 @@
                 <!--#endregion-->
                 <!--#region Настройки стандартизаций -->
                 <MenuItem Header="Настройки стандартизаций" ItemsSource="{Binding MeasStandSettings}" ItemTemplate="{StaticResource MenuStandSettings}"/>
-                <!--#endregion-->
-                <!--#region Единичные измерения -->
-                <MenuItem Header="Единичные измерения" ItemsSource="{Binding SingleMeasResults}" ItemTemplate="{StaticResource MenuItemCalibSrcData}"/>
-                <!--#endregion-->
+                <!--#endregion-->                
                 <!--#region Калибровочная кривая -->
                 <MenuItem Header="Калибровочная кривая">
                     <!--#region ЕИ -->
@@ -606,15 +603,22 @@
                         <WrapPanel Orientation="Horizontal">
                             <!--#region Произвести ед измерение -->
                             <Button Height="60"
+                                    HorizontalContentAlignment="Center"
                                     Margin="2"
                                     Command="{Binding SingleMeasCommand}"
                                     CommandParameter="{Binding IsActive.Value}"
                                     Width="200">
                                 <Button.Content>
-                                    <TextBlock>
-                                        <Run/>
-                                        <Run/>
-                                    </TextBlock>
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding SingleMeasFlag, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SingleMeasures}}"
+                                                   HorizontalAlignment="Right"
+                                                   TextWrapping="WrapWithOverflow"/>
+                                        <TextBlock Text="{Binding SingleMeasTimeLeft, StringFormat=({0})}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="5,0,0,0"
+                                                   HorizontalAlignment="Right"
+                                                   Visibility="{Binding SingleMeasFlag, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </DockPanel>
                                 </Button.Content>
                             </Button>
                             <!--#endregion-->
