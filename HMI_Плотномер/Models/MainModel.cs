@@ -144,8 +144,9 @@ namespace IDensity.Models
                             mp.NeedWriteEvent += WriteMeasProcSettings;
                             mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
                             mp.NeedMakeStand += MakeStand;
-                            mp.StandFinishEvent += (num)=>Tcp.GetStdSel(num);
+                            mp.StandFinishEvent += (num)=>Tcp.GetMeasSettingsExternal(num);
                             mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
+                            mp.StandFinishEvent += (num) => Tcp.GetMeasSettingsExternal(num);
                             return mp;
                         })
                         .ToArray();
@@ -474,7 +475,7 @@ namespace IDensity.Models
         #region Команда принудиельного запроса набора стандартизации после стандартизации
         public void GetStdSelection(ushort index)
         {
-            if (CommMode.EthEnable) Tcp.GetStdSel(index);
+            if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);
             else if (CommMode.RsEnable) rs.GetStdSelection(index);
         }
         #endregion
@@ -524,10 +525,10 @@ namespace IDensity.Models
         #endregion
 
         #region Команда "Произвести еденичное измеренине"
-        public void MakeSingleMeasure(int time)
+        public void MakeSingleMeasure(int time, ushort measProcNdx, ushort index)
         {
-            if (CommMode.EthEnable) Tcp.MakeSingleMeasure((ushort)time);
-            else if (CommMode.RsEnable) rs.MakeSingleMeasure((ushort)time);
+            if (CommMode.EthEnable) Tcp.MakeSingleMeasure((ushort)time, measProcNdx, index);
+            //else if (CommMode.RsEnable) rs.MakeSingleMeasure((ushort)time);
         }
         #endregion
 

@@ -549,6 +549,12 @@ namespace IDensity.Models
             list = GetNumber("adc_proc_mode", 1, 1);
             if (list == null) return;
             model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
+            list = GetNumber("adc_single_meas_time", 1, 1);
+            if (list == null) return;
+            foreach (var mp in model.MeasProcSettings)
+            {
+                mp.SingleMeasTime.Value = (ushort)list[0][0];
+            }
             // локальная функция
             List<List<float>> GetNumber(string id, int parNum, int count)
             {
@@ -790,7 +796,7 @@ namespace IDensity.Models
         #endregion
 
         #region Команда принудиельного запроса набора стандартизации после стандартизации
-        public void GetStdSel(int index)
+        public void GetMeasSettingsExternal(int index)
         {
             commands.Enqueue(new TcpWriteCommand((buf) => GetMeasProcessData(index) , null));
         }
@@ -851,9 +857,9 @@ namespace IDensity.Models
         #endregion
 
         #region Команда "Произвести еденичное измеренине"
-        public void MakeSingleMeasure(ushort time)
+        public void MakeSingleMeasure(int time, ushort measProcNdx, ushort index)
         {
-            var str = $"CMND,AMS,{time*10}#";
+            var str = $"CMND,AMS,{time*10},{measProcNdx},{index}#";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion

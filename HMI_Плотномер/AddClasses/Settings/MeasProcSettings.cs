@@ -61,7 +61,7 @@ namespace IDensity.AddClasses.Settings
                 {
                     singleMeasTimer?.Stop();
                     SingleMeasFlag = false;
-                    SingleMeasEventFinishedEvent?.Invoke();
+                    SingleMeasEventFinishedEvent?.Invoke(Num);
                 } 
             };
         }
@@ -235,11 +235,11 @@ namespace IDensity.AddClasses.Settings
                 {
                     if (!SingleMeasFlag)
                     {
-                        NeedMakeSingleMeasEvent?.Invoke(SingleMeasTime.Value * 10);                        
+                        NeedMakeSingleMeasEvent?.Invoke(SingleMeasTime.Value, Num, SingleMeasIndex);                        
                         singleMeasTimer.Interval = 1000;                       
                         singleMeasTimer.Start();
                         SingleMeasFlag = true;
-                        SingleMeasTimeLeft = SingleMeasTime.Value + 4; 
+                        SingleMeasTimeLeft = SingleMeasTime.Value/10 + 4; 
                     }
 
                 }, can => true));
@@ -248,6 +248,15 @@ namespace IDensity.AddClasses.Settings
 
         #endregion
 
+        #region Выбранная ячейка для записи
+        private byte _singleMeasIndex;
+
+        public byte SingleMeasIndex
+        {
+            get { return _singleMeasIndex; }
+            set { Set(ref _singleMeasIndex, value); }
+        }
+        #endregion
 
         #endregion
 
@@ -272,12 +281,12 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Необходимо произвести еденичное измерение
         /// </summary>
-        public event Action<int> NeedMakeSingleMeasEvent;
+        public event Action<int,ushort,ushort> NeedMakeSingleMeasEvent;
 
         /// <summary>
         /// Закончилось ЕИ
         /// </summary>
-        public event Action SingleMeasEventFinishedEvent;
+        public event Action<ushort> SingleMeasEventFinishedEvent;
 
     }
 }

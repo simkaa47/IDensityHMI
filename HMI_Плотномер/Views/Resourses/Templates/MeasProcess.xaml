@@ -508,7 +508,14 @@
                         <!--#region Общие настройки -->
                         <ListBox HorizontalContentAlignment="Stretch">
                             <!--#region Время ед. измерения -->
-                            <uc:Parameter DataContext="{Binding SingleMeasTime}" Command="{Binding Command}"/>
+                            <DockPanel>
+                                <TextBlock Text="Время еденичного измерения" Style="{StaticResource Common}"/>
+                                <TextBox Width="80"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalAlignment="Right"
+                                     Height="30"
+                                     Text="{Binding SingleMeasTime.Value}"/>
+                            </DockPanel>
                             <!--#endregion-->
                             <!--#region Степень полинома -->
                             <DockPanel>
@@ -534,20 +541,33 @@
                         </ListBox>
                         <!--#endregion-->
                         <WrapPanel Orientation="Horizontal">
+                            <WrapPanel.Resources>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Aqua"/>
+                                        </Trigger>
+                                    </Style.Triggers>                                    
+                                </Style>
+                                <!--<Style TargetType="DataGridCell" >
+                                    <Setter Property="Margin" Value="2"/>
+                                </Style>-->
+                            </WrapPanel.Resources>
                             <GroupBox Header="Единичные измерения">
                                 <!--#region Данные ед.измерений -->
                                 <DataGrid CanUserAddRows="False" 
-                              FontSize="16"
-                              FontWeight="Bold"
-                              CanUserDeleteRows="False" 
-                              ItemsSource="{Binding SingleMeasResults}"
-                              AutoGenerateColumns="False">
+                                          SelectedIndex="{Binding SingleMeasIndex}"
+                                          FontSize="16"
+                                          FontWeight="Bold"                                          
+                                          CanUserDeleteRows="False" 
+                                          ItemsSource="{Binding SingleMeasResults}"
+                                          AutoGenerateColumns="False">
                                     <DataGrid.Columns>
                                         <!--#region № -->
                                         <DataGridTextColumn 
                                 Header="№" 
                                 MaxWidth="50"
-                                Binding="{Binding Id}" />
+                                Binding="{Binding Id}" IsReadOnly="True" />
                                         <!--#endregion-->
                                         <!--#region Дата измерения-->
                                         <DataGridTemplateColumn MaxWidth="140">

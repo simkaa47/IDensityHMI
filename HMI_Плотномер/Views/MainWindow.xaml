@@ -453,9 +453,28 @@
                     <TabItem Header="СЧЕТЧИКИ">
                         <StackPanel>
                             <DataGrid CanUserAddRows="False"
+                                      FontSize="16"
+                                      FontWeight="Bold"
                                       CanUserDeleteRows="False"
                                       AutoGenerateColumns="False"
                                       ItemsSource="{Binding mainModel.CountDiapasones}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="№" IsReadOnly="True" Binding="{Binding Num.Value}"/>
+                                    <DataGridTemplateColumn Header="Старт">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <uc:MenuItemParameterText DataContext="{Binding Start}" Command="{Binding Command}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Финиш">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <uc:MenuItemParameterText DataContext="{Binding Finish}" Command="{Binding Command}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
                                 
                             </DataGrid>
                         </StackPanel>
