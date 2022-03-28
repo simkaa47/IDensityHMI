@@ -478,7 +478,7 @@ namespace IDensity.Models
         float[] GetNumericsFromString(string str, char[] seps)
         {
             float temp = 0;
-            return str.Split(seps, StringSplitOptions.RemoveEmptyEntries)
+            return str.Replace("inf", "∞").Split(seps, StringSplitOptions.RemoveEmptyEntries)
                 .Where(s => float.TryParse(s.Replace(".", ","), out temp))
                 .Select(s => temp)
                 .ToArray();

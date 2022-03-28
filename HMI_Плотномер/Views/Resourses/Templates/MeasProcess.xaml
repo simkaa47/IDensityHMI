@@ -604,7 +604,7 @@
                                             </DataGridTemplateColumn.Header>
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding Weak}" Command="{Binding Command}"/>
+                                                    <uc:MenuItemParameterText DataContext="{Binding CounterValue}" Command="{Binding Command}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>

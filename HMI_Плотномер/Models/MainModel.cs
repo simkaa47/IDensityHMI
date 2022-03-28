@@ -146,7 +146,7 @@ namespace IDensity.Models
                             mp.NeedMakeStand += MakeStand;
                             mp.StandFinishEvent += (num)=>Tcp.GetMeasSettingsExternal(num);
                             mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
-                            mp.StandFinishEvent += (num) => Tcp.GetMeasSettingsExternal(num);
+                            mp.SingleMeasEventFinishedEvent += (num) => Tcp.GetMeasSettingsExternal(num);
                             return mp;
                         })
                         .ToArray();
