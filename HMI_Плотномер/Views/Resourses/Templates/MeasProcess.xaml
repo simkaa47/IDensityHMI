@@ -509,7 +509,7 @@
                         <ListBox HorizontalContentAlignment="Stretch">
                             <!--#region Время ед. измерения -->
                             <DockPanel>
-                                <TextBlock Text="Время еденичного измерения" Style="{StaticResource Common}"/>
+                                <TextBlock Text="Время еденичного измерения, x0.1 c." Style="{StaticResource Common}"/>
                                 <TextBox Width="80"
                                      VerticalContentAlignment="Center"
                                      HorizontalAlignment="Right"
