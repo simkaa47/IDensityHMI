@@ -859,7 +859,7 @@ namespace IDensity.Models
         #region Команда "Произвести еденичное измеренине"
         public void MakeSingleMeasure(int time, ushort measProcNdx, ushort index)
         {
-            var str = $"CMND,AMS,{time*10},{measProcNdx},{index}#";
+            var str = $"CMND,AMS,{time},{measProcNdx},{index}#";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
