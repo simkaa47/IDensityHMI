@@ -2,9 +2,11 @@
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using System.Windows;
 
 namespace IDensity.AddClasses.Settings
 {
@@ -242,7 +244,7 @@ namespace IDensity.AddClasses.Settings
                         SingleMeasTimeLeft = SingleMeasTime.Value/10 + 4; 
                     }
 
-                }, can => true));
+                }, can => IsActive.Value));
             }
         }
 
@@ -257,6 +259,101 @@ namespace IDensity.AddClasses.Settings
             set { Set(ref _singleMeasIndex, value); }
         }
         #endregion
+
+
+
+        #endregion
+        #region Расчет к-тов полинома
+        RelayCommand _calculatePolinomCommand;
+        public RelayCommand CalculatePolinomCommand => _calculatePolinomCommand ?? (_calculatePolinomCommand = new RelayCommand(par => 
+        {
+            var measPoints = SingleMeasResults.Where(smr => smr.Selected)
+                .Select(smr => new Point(smr.Weak.Value, smr.CounterValue.Value))
+                .ToList();
+            if (measPoints.Count > 0)
+            {
+                CalculatedCoeefs.Clear();
+                var result = Calibration.GetCoeffs(measPoints);
+                for (int i = 0; i < result.Count; i++)
+                {
+                    CalculatedCoeefs.Add((new CalibrationCoeff(i,result[i])));
+                }
+            }
+
+        }, o => true));
+
+        public ObservableCollection<CalibrationCoeff> CalculatedCoeefs { get; } = new ObservableCollection<CalibrationCoeff>();
+
+        #endregion
+
+        #region Команда посчитать график для проверки полинома
+        RelayCommand _showPolinomTrend;
+        public RelayCommand ShowPolinomTrendCommand => _showPolinomTrend ?? (_showPolinomTrend = new RelayCommand(par =>
+        {
+            var measList = SingleMeasResults.Where(sm => sm.Selected).
+            OrderBy(sm => sm.Weak.Value).Select(sm => new Point(sm.Weak.Value, sm.CounterValue.Value)).ToList();
+            if (measList.Count>=2)
+            {
+                var startWeak = measList[0].X;
+                var finishWeak = measList[measList.Count - 1].X;
+                if (startWeak != finishWeak)
+                {
+                    int cnt = 50;
+                    double diff = (finishWeak - startWeak) / cnt;
+                    var calcList = Enumerable.Range(0, cnt).
+                    Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
+                    MeasuredPointsCollection = measList;
+                    CalculatedMeasCollection = calcList;
+                } 
+            }
+        }, canExecPar => true));
+
+        double GetPhysvalueByWeak(double weak)
+        {
+            double result = 0;
+            for (int i = 0; i < CalculatedCoeefs.Count; i++)
+            {
+                result += (Math.Pow(weak, i) * CalculatedCoeefs[i].Coeff);
+            }
+            return result;
+        }
+
+        #region Коллекция измеренных значений для тренда
+        private List<Point> _measuredPointsCollection;
+
+        public List<Point> MeasuredPointsCollection
+        {
+            get { return _measuredPointsCollection; }
+            set { Set(ref _measuredPointsCollection, value); }
+        }
+        #endregion
+
+        #region Коллекция рассичтанных значений для тренда
+        private List<Point> _сalculatedMeasCollection;
+
+        public List<Point> CalculatedMeasCollection
+        {
+            get { return _сalculatedMeasCollection; }
+            set { Set(ref _сalculatedMeasCollection, value); }
+        }
+        #endregion
+
+
+        #endregion
+
+        #region КОманда записать рассчитанные к-ты в память
+        private RelayCommand _writeCalibrCoeefsCommand;
+
+        public RelayCommand WriteCalibrCoeefsCommand => _writeCalibrCoeefsCommand ?? (_writeCalibrCoeefsCommand = new RelayCommand(par => 
+        {
+            var arg = $"calib_curve={CalibrCurve.Type.Value},{CalibrCurve.MeasUnitNum.Value}";
+            for (int i = 0; i < 6; i++)
+            {
+                arg += "," + (i < CalculatedCoeefs.Count ? ((float)CalculatedCoeefs[i].Coeff).ToStringPoint() : "0");
+            }
+            OnWriteCommandExecuted(arg);
+
+        }, o => true));
 
         #endregion
 

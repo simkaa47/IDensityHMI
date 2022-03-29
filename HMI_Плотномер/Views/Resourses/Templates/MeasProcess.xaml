@@ -5,7 +5,7 @@
                     xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates" xmlns:oxy="http://oxyplot.org/wpf">
     <Style TargetType="MenuItem" x:Key="WithoutMenu">
         <Style.Triggers>
             <Trigger Property="IsHighlighted" Value="True">
@@ -615,24 +615,37 @@
                                 <!--#endregion-->
                             </GroupBox>
                             <GroupBox Header="Расчитанные к-ты полинома" Margin="5,0,0,0">
-
+                                <DataGrid AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          ItemsSource="{Binding CalculatedCoeefs}"
+                                          CanUserDeleteRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Cтепень" Binding="{Binding Deg}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Величина" Binding="{Binding Coeff}"/>
+                                    </DataGrid.Columns>                                    
+                                </DataGrid>
                             </GroupBox>
-
                         </WrapPanel>
                         <!--#region Кнопки -->
                         <WrapPanel Orientation="Horizontal">
+                            <WrapPanel.Resources>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <Setter Property="Width" Value="200"/>
+                                    <Setter Property="Height" Value="60"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                            </WrapPanel.Resources>
                             <!--#region Произвести ед измерение -->
-                            <Button Height="60"
-                                    HorizontalContentAlignment="Center"
-                                    Margin="2"
-                                    Command="{Binding SingleMeasCommand}"
-                                    CommandParameter="{Binding IsActive.Value}"
-                                    Width="200">
+                            <Button Command="{Binding SingleMeasCommand}"
+                                    CommandParameter="{Binding IsActive.Value}">
                                 <Button.Content>
                                     <DockPanel>
                                         <TextBlock Text="{Binding SingleMeasFlag, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SingleMeasures}}"
-                                                   HorizontalAlignment="Right"
-                                                   TextWrapping="WrapWithOverflow"/>
+                                                   HorizontalAlignment="Right"/>
                                         <TextBlock Text="{Binding SingleMeasTimeLeft, StringFormat=({0})}"
                                                    VerticalAlignment="Center"
                                                    Margin="5,0,0,0"
@@ -642,7 +655,67 @@
                                 </Button.Content>
                             </Button>
                             <!--#endregion-->
+                            <!--#region Расчитать к-ты -->
+                            <Button Command="{Binding CalculatePolinomCommand}">
+                                <TextBlock Text="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ"/>
+                            </Button>
+                            <!--#endregion-->
+                            <!--#region Показать зависимость -->
+                            <ToggleButton Style="{StaticResource MaterialDesignRaisedButton}"  
+                                          Width="200"
+                                          Margin="2"
+                                          Height="60"
+                                          Name="PopupOpen" 
+                                          Command="{Binding ShowPolinomTrendCommand}">
+                                <TextBlock Text="ПОКАЗАТЬ ЗАВИСИМОСТЬ"/>
+                            </ToggleButton>
+                            <!--#endregion-->
+                            <!--#region Записать коэффиценты -->
+                            <Button Command="{Binding WriteCalibrCoeefsCommand}">
+                                <TextBlock Text="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ"/>
+                            </Button>
+                            <!--#endregion-->
                         </WrapPanel>
+                        <!--#endregion-->
+                        <!--#region Тренд -->
+                        <Popup IsOpen="{Binding ElementName=PopupOpen, Path=IsChecked}" 
+                                               StaysOpen="False"
+                                               Placement="MousePoint">
+                            <Grid>
+                                <Border Style="{StaticResource BorderLight}"
+                                                        Height="600"
+                                                        Width="800">
+                                    <oxy:Plot TextColor="WhiteSmoke"                                                          
+                                                          PlotAreaBorderColor="WhiteSmoke"
+                                                          SelectionColor="WhiteSmoke"
+                                                          LegendTextColor="WhiteSmoke" 
+                                                          IsLegendVisible="True"
+                                                          Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
+                                                          PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
+                                        <oxy:Plot.Axes>
+                                            <oxy:LinearAxis Title="Физ. величина"                                                    
+                                                                            Position="Left"
+                                                                            MajorGridlineColor="WhiteSmoke"
+                                                                            MajorGridlineStyle="Dot"/>
+                                            <oxy:LinearAxis Title="Ослабление"
+                                                                             MajorGridlineColor="WhiteSmoke"
+                                                                            MajorGridlineStyle="Dot"
+                                                                            Position="Bottom"/>
+                                        </oxy:Plot.Axes>
+                                        <oxy:LineSeries    ItemsSource="{Binding MeasuredPointsCollection}"
+                                                                       DataFieldX="X" DataFieldY="Y"
+                                                                       Title="Измереннные точки"
+                                                                       Color="Red"/>
+                                        <oxy:LineSeries    ItemsSource="{Binding CalculatedMeasCollection}"
+                                                                       DataFieldX="X" DataFieldY="Y"
+                                                                       Title="Кривая по полиному"
+                                                                       Color="Blue"/>
+
+                                    </oxy:Plot>
+                                </Border>
+
+                            </Grid>
+                        </Popup>
                         <!--#endregion-->
                     </StackPanel>
                 </ScrollViewer>

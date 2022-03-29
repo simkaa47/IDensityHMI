@@ -86,7 +86,7 @@
     <col1:ArrayList x:Key="EventTypes">
         <sys1:String>Ошибка</sys1:String>
         <sys1:String>Событие</sys1:String>
-    </col1:ArrayList>
+    </col1:ArrayList>    
     <col1:ArrayList x:Key="StandStates">
         <sys1:String>ПРОИЗВЕСТИ СТАНДАРТИЗАЦИЮ</sys1:String>
         <sys1:String>ПРОИЗВОДИТСЯ СТАНДАРТИЗАЦИЯ</sys1:String>

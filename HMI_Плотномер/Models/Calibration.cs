@@ -24,7 +24,7 @@ namespace IDensity.Models
                 var temp = polDegree;
                 if (value >= 1 && value <= 5)
                 {
-                    temp = value;
+                    polDegree = value;
                 }                
             }
         }

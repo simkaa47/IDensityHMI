@@ -39,6 +39,20 @@ namespace IDensity.Models
         int _portNum;
         public int PortNum { get => _portNum; set => Set(ref _portNum, value); }
         #endregion
+
+        #region Пауза между запросами
+        private int _pause;
+
+        public int Pause
+        {
+            get { return _pause; }
+            set 
+            {
+                if (value >= 100) Set(ref _pause, value);
+            }
+        }
+
+        #endregion
         #endregion
 
         #region Поля       
@@ -134,7 +148,7 @@ namespace IDensity.Models
                     Thread.Sleep(1000);
                     errCommCount = 0;
                 }
-                else Thread.Sleep(200);
+                else Thread.Sleep(Pause);
                 TcpEvent?.Invoke(ex.Message);
             }
 
@@ -146,22 +160,9 @@ namespace IDensity.Models
         #region Отправить телеграмму без требования ответа без ожидания
         void SendTlg(byte[] buffer)
         {
-            try
-            {
-                if (client != null && client.Connected)
-                {
-                    StreamClear();
-                    stream?.Write(buffer, 0, buffer.Length);
-                    Thread.Sleep(100);
-                }
-            }
-            catch (Exception ex)
-            {
-                TcpEvent?.Invoke(ex.Message);
-                commands?.Clear();
-                Disconnect();
-            }
-
+            StreamClear();
+            stream?.Write(buffer, 0, buffer.Length);
+            Thread.Sleep(Pause);
         }
         #endregion
 
@@ -180,7 +181,7 @@ namespace IDensity.Models
             do
             {
                 num = stream.Read(inBuf, offset, inBuf.Length);
-                Thread.Sleep(100);
+                Thread.Sleep(Pause);
                 offset += num;
 
             } while (stream.DataAvailable);
@@ -201,7 +202,7 @@ namespace IDensity.Models
                 num = stream.Read(inBuf, 0, inBuf.Length);
 
             } while (stream.DataAvailable);
-            Thread.Sleep(100);
+            Thread.Sleep(Pause);
             model.Connecting.Value = true;
             return num;
         }

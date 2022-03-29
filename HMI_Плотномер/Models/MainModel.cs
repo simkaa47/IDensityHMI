@@ -41,7 +41,8 @@ namespace IDensity.Models
         
         public MainModel()
         {
-            Init();// Инициализация параметров            
+            Init();// Инициализация параметров  
+            MeasProccessInit();
             AdcSettingsEventDescribe();
             MeasUnitSettingsDescribe();
             // Дествия по изменению счетчиков
@@ -132,26 +133,28 @@ namespace IDensity.Models
         MeasProcSettings[] _measProcSettings;
         public MeasProcSettings[] MeasProcSettings
         {
-            get
+            get=> _measProcSettings;            
+        }
+        /// <summary>
+        /// Инициализация измерительных процессов
+        /// </summary>
+        void MeasProccessInit()
+        {
+            if (_measProcSettings == null)
             {
-                if (_measProcSettings == null)
-                {
-                    countnull++;
-                    _measProcSettings = Enumerable.Range(0, MeasProcNum)
-                        .Select(i =>
-                        {
-                            var mp = new MeasProcSettings(i);
-                            mp.NeedWriteEvent += WriteMeasProcSettings;
-                            mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
-                            mp.NeedMakeStand += MakeStand;
-                            mp.StandFinishEvent += (num)=>Tcp.GetMeasSettingsExternal(num);
-                            mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
-                            mp.SingleMeasEventFinishedEvent += (num) => Tcp.GetMeasSettingsExternal(num);
-                            return mp;
-                        })
-                        .ToArray();
-                }
-                return _measProcSettings;
+                _measProcSettings = Enumerable.Range(0, MeasProcNum)
+                    .Select(i =>
+                    {
+                        var mp = new MeasProcSettings(i);
+                        mp.NeedWriteEvent += WriteMeasProcSettings;
+                        mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
+                        mp.NeedMakeStand += MakeStand;
+                        mp.StandFinishEvent += (num) => Tcp.GetMeasSettingsExternal(num);
+                        mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
+                        mp.SingleMeasEventFinishedEvent += (num) => Tcp.GetMeasSettingsExternal(num);
+                        return mp;
+                    })
+                    .ToArray();
             }
         }
         #endregion        

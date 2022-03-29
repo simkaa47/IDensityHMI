@@ -160,7 +160,12 @@ namespace IDensity.ViewModels
             ushort num = 0;
             if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) mainModel.StartStopAdcData(num);
         }, canEcecPar => true));
-        #endregion        
+        #endregion
+
+        #region Разорвать tcp соединение 
+        RelayCommand _tcpDisconnectCommand;
+        public RelayCommand TcpDisconnectCommand => _tcpDisconnectCommand ?? (_tcpDisconnectCommand = new RelayCommand(par => mainModel.Tcp.Disconnect(), o => true));
+        #endregion
 
         #region Переключить реле
         RelayCommand _switchRelayCommand;
@@ -172,63 +177,8 @@ namespace IDensity.ViewModels
             }
         }, canExec => true));
         #endregion
-
-        //#region Команда расчета к-тов калибровки
-        //private RelayCommand _getCalibrCoeffsCommand;
-
-        //public RelayCommand GetCalibrCoeffsCommand => _getCalibrCoeffsCommand ?? (_getCalibrCoeffsCommand = new RelayCommand(execObj =>
-        //{
-        //    CalibrationClass.GetCoeffs();
-        //    App.Current.Dispatcher.Invoke(() =>
-        //    {
-        //        CalculatedCoeffs.Clear();
-        //        int deg = 0;
-        //        foreach (var num in CalibrationClass.CalcCoeefs)
-        //        {
-        //            CalculatedCoeffs.Add(new CalcCalibrationResult(deg, num));
-        //            deg++;
-        //        }
-        //    });
-
-
-        //}, canExec => true));
-
-
-        #endregion        
-
-        //#region Команда посчитать график для проверки полинома
-        //RelayCommand _showPolinomTrend;
-        //public RelayCommand ShowPolinomTrendCommand => _showPolinomTrend ?? (_showPolinomTrend = new RelayCommand(par => 
-        //{
-        //    if (CalibrationClass.SingleMeasCells.Data.Count >= 2 && CalculatedCoeffs.Count != 0)
-        //    {
-        //        var measList = CalibrationClass.SingleMeasCells.Data.OrderBy(sm => sm.Weak).Select(sm => new Point(sm.Weak, sm.PhysVal)).ToList();
-        //        var startWeak = measList[0].X;
-        //        var finishWeak = measList[measList.Count-1].X;
-        //        if (startWeak != finishWeak)
-        //        {
-        //            int cnt = 50;
-        //            double diff = (finishWeak - startWeak) / cnt;
-        //            var calcList = Enumerable.Range(0, cnt).
-        //            Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
-        //            MeasuredPointsCollection = measList;
-        //            CalculatedMeasCollection = calcList;
-        //        }
-                
-        //    }
-        //}, canExecPar => true));
-        //#endregion
-        //double GetPhysvalueByWeak(double weak)
-        //{
-        //    double result = 0;
-        //    for (int i = 0; i < CalculatedCoeffs.Count; i++)
-        //    {
-        //        result += (Math.Pow(weak, i) * CalculatedCoeffs[i].Coeff);
-        //    }
-        //    return result;
-        //}
-
-        //#endregion
+        
+        #endregion
         public MainModel mainModel { get; } = new MainModel();
 
         #region Конструктор
