@@ -625,17 +625,19 @@ namespace IDensity.Models
             list = GetNumber("serial_select", 1,1);
             if (list==null) return;
             model.PortSelectMode.Value = (ushort)list[0][0];
-            list = GetNumber("am_out_sett", 7, 2);
+            list = GetNumber("am_out_sett", 10, 2);
             if (list == null) return;
             for (int i = 0; i < 2; i++)
             {
                 model.AnalogGroups[i].AO.Activity.Value = (ushort)list[i][1];
                 model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];
                 model.AnalogGroups[i].AO.DacEiNdx.Value = (ushort)list[i][3];
-                model.AnalogGroups[i].AO.DacVarNdx.Value = (ushort)list[i][4];
-                model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][5];
-                model.AnalogGroups[i].AO.DacHighLimit.Value = list[i][6];
-
+                model.AnalogGroups[i].AO.AnalogMeasProcNdx.Value = (ushort)list[i][4];
+                model.AnalogGroups[i].AO.VarNdx.Value = (ushort)list[i][5];
+                model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][6];
+                model.AnalogGroups[i].AO.DacHighLimit.Value = list[i][7];
+                model.AnalogGroups[i].AO.DacLowLimitMa.Value = list[i][8];
+                model.AnalogGroups[i].AO.DacHighLimitMa.Value = list[i][9];
             }
             list = GetNumber("am_in_sett", 2, 2);
             if (list == null) return;
@@ -771,8 +773,8 @@ namespace IDensity.Models
         #region Отправить настройки аналоговых выходов
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
-            var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.DacEiNdx.Value},{value.DacVarNdx.Value},{value.DacLowLimit.Value.ToString().Replace(",",".")},{value.DacHighLimit.Value.ToString().Replace(",", ".")}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; } , Encoding.ASCII.GetBytes(str)));
+            var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.DacEiNdx.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); } , Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 

@@ -12,6 +12,11 @@ namespace IDensity.AddClasses
         public AnalogOutput(int groupNum) : base(groupNum)
         {
             ModulNum = 0;
+            AmTestValue.CommandEcecutedEvent += (par) => 
+            {
+                AmTestValue.Value = AmTestValue.WriteValue;
+                SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, (ushort)(AmTestValue.WriteValue * 10));
+            };
         }
         #endregion
 
@@ -39,8 +44,12 @@ namespace IDensity.AddClasses
         public Parameter<ushort> DacEiNdx { get; } = new Parameter<ushort>("DacEiNdx", "Номер еденицы измерения", 0, 7, 0, "");
         #endregion
 
-        #region Номер переменной для выдачи
-        public Parameter<ushort> DacVarNdx { get; } = new Parameter<ushort>("DacVarNdx", "Номер переменной для выдачи", 0, 4, 0, "");
+        #region Номер измерительного процесса
+        public Parameter<ushort> AnalogMeasProcNdx { get; } = new Parameter<ushort>("AnalogMeasProcNdx", "Номер измерительного процесса", 0, 4, 0, "");
+        #endregion
+
+        #region Тип переменной
+        public Parameter<ushort> VarNdx { get; } = new Parameter<ushort>("AnalogVarNdx", "Тип переменной", 0, 1, 1, "");
         #endregion
 
         #region Нижняя граница ЦАП
@@ -51,15 +60,15 @@ namespace IDensity.AddClasses
         public Parameter<float> DacHighLimit { get; } = new Parameter<float>("DacHighLimit", "Верхний предел для ЦАП", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
-
-        #region Команды
-        #region Команда отправить тестовый сигнал
-        RelayCommand _setTestSignalCommand;
-        public RelayCommand SetTestSignalCommand => _setTestSignalCommand ?? (_setTestSignalCommand = new RelayCommand(o => {
-            AmTestValue.Value = AmTestValue.WriteValue;
-            SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, (ushort)(AmTestValue.WriteValue*10)); 
-        } , o => AmTestValue.ValidationOk));
+        #region Нижняя граница ЦАП(mA)
+        public Parameter<float> DacLowLimitMa { get; } = new Parameter<float>("DacLowLimitMa", "Нижний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
         #endregion
+
+        #region Верхняя граница ЦАП(mA)
+        public Parameter<float> DacHighLimitMa { get; } = new Parameter<float>("DacHighLimitMa", "Верхний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
+        #endregion
+
+        #region Команды      
 
         #region Команда "Записать настройки ЦАП"
         RelayCommand _setSettings;
@@ -73,9 +82,12 @@ namespace IDensity.AddClasses
             output.Activity.Value = this.Activity.ValidationOk ? this.Activity.WriteValue : this.Activity.Value;
             output.DacType.Value = this.DacType.ValidationOk ? this.DacType.WriteValue : this.DacType.Value;
             output.DacEiNdx.Value = this.DacEiNdx.ValidationOk ? this.DacEiNdx.WriteValue : this.DacEiNdx.Value;
-            output.DacVarNdx.Value = this.DacVarNdx.ValidationOk ? this.DacVarNdx.WriteValue : this.DacVarNdx.Value;
+            output.AnalogMeasProcNdx.Value = this.AnalogMeasProcNdx.ValidationOk ? this.AnalogMeasProcNdx.WriteValue : this.AnalogMeasProcNdx.Value;
+            output.VarNdx.Value = this.VarNdx.ValidationOk ? this.VarNdx.WriteValue : this.VarNdx.Value;
             output.DacLowLimit.Value = this.DacLowLimit.ValidationOk ? this.DacLowLimit.WriteValue : this.DacLowLimit.Value;
             output.DacHighLimit.Value = this.DacHighLimit.ValidationOk ? this.DacHighLimit.WriteValue : this.DacHighLimit.Value;
+            output.DacLowLimitMa.Value = this.DacLowLimitMa.ValidationOk ? this.DacLowLimitMa.WriteValue : this.DacLowLimitMa.Value;
+            output.DacHighLimitMa.Value = this.DacHighLimitMa.ValidationOk ? this.DacHighLimitMa.WriteValue : this.DacHighLimitMa.Value;
             return output;
         }
 
