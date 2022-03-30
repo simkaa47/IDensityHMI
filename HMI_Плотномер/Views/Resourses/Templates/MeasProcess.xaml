@@ -292,6 +292,66 @@
         </Setter>
     </Style>
     <!--#endregion-->
+    <!--#region Шаблон для настроек плотности -->
+    <ControlTemplate TargetType="ListBox" x:Key="DeinsitySettingsItem">
+        <ListBox HorizontalContentAlignment="Stretch">
+            <!--#region ЕИ -->
+            <uc:CompoboxParameter DataContext="{Binding MeasValueNum}"
+                                  CompoboxWidth="120"
+                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
+                                  DisplayMemberPath="Name"
+                                  Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region Величина -->
+            <uc:Parameter DataContext="{Binding PhysValue}"
+                          Command="{Binding Command}"/>
+            <!--#endregion-->
+        </ListBox>
+    </ControlTemplate>
+    <!--#endregion-->    
+    <!--#region Шаблон компенсации -->
+    <ControlTemplate TargetType="ListBox" x:Key="CompensationItemTemplate">
+        <ListBox HorizontalContentAlignment="Stretch">
+            <!--#region Активность -->
+            <DockPanel DataContext="{Binding Activity}">
+                <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
+                <CheckBox HorizontalAlignment="Right"
+                          Command="{Binding Command}"
+                          IsChecked="{Binding WriteValue}"/>
+            </DockPanel>
+            <!--#endregion-->
+            <!--#region ЕИ -->
+            <uc:CompoboxParameter DataContext="{Binding MeasUnitNum}"
+                                  CompoboxWidth="120"
+                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}"
+                                  DisplayMemberPath="Name"
+                                  Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region Источник -->
+            <uc:CompoboxParameter DataContext="{Binding Sourse}"
+                                  CompoboxWidth="120"
+                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CompensationSrcNames.Data}"
+                                  DisplayMemberPath="Name"
+                                  Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region A -->
+            <uc:Parameter DataContext="{Binding A}"
+                          Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region B -->
+            <uc:Parameter DataContext="{Binding B}"
+                          Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region C -->
+            <uc:Parameter DataContext="{Binding C}"
+                          Command="{Binding Command}"/>
+            <!--#endregion-->
+        </ListBox>
+    </ControlTemplate>
+    <!--#endregion-->
     <DataTemplate DataType="{x:Type sett:MeasProcSettings}" x:Key="TabItemMeasProc" >
         <TabControl TabStripPlacement="Right">
             <TabControl.ItemsPanel>
@@ -299,33 +359,44 @@
                     <VirtualizingStackPanel/>
                 </ItemsPanelTemplate>
             </TabControl.ItemsPanel>
-
             <!--#region Основное -->
             <TabItem Header="ОСНОВНОЕ">
-                <ListBox HorizontalContentAlignment="Stretch">
+                <ListBox HorizontalContentAlignment="Stretch">                    
+                    <!--#region Номер счетчика -->
                     <uc:Parameter DataContext="{Binding MeasProcCounterNum}"
                                   Command="{Binding Command}"/>
+                    <!--#endregion-->                    
+                    <!--#region Длительность измерения -->
                     <uc:Parameter DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.MeasProcSettings[0].MeasDuration}"
                                   Command="{Binding Command}"/>
+                    <!--#endregion-->
+                    <!--#region Глубина усреднения -->
                     <uc:Parameter DataContext="{Binding MeasDeep}"
                                   Command="{Binding Command}"/>
+                    <!--#endregion-->
+                    <!--#region Тип измерения -->
                     <uc:CompoboxParameter DataContext="{Binding MeasType}"
                                           CompoboxWidth="150"  
                                           DisplayMemberPath="Name"
                                           ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.MeasTypesNamesNames.Data}"
                                           Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <!--#endregion-->
+                    <!--#region Выходная ЕИ -->
                     <uc:CompoboxParameter DataContext="{Binding OutMeasNum}"
                                           Command="{Binding Command}"
                                           CompoboxWidth="150"
                                           Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                           ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
                                           DisplayMemberPath="Name"/>
+                    <!--#endregion-->
+                    <!--#region Активность -->
                     <DockPanel DataContext="{Binding IsActive}">
                         <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
                         <CheckBox Command="{Binding Command}"  
                                   IsChecked="{Binding WriteValue}"
                                   HorizontalAlignment="Right"/>
                     </DockPanel>
+                    <!--#endregion-->
                 </ListBox>
             </TabItem>
             <!--#endregion-->
@@ -502,6 +573,7 @@
                 </StackPanel>
             </TabItem>
             <!--#endregion-->
+            <!--#region Калибровка -->
             <TabItem Header="КАЛИБРОВКА">
                 <ScrollViewer>
                     <StackPanel>
@@ -547,11 +619,8 @@
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Background" Value="Aqua"/>
                                         </Trigger>
-                                    </Style.Triggers>                                    
-                                </Style>
-                                <!--<Style TargetType="DataGridCell" >
-                                    <Setter Property="Margin" Value="2"/>
-                                </Style>-->
+                                    </Style.Triggers>
+                                </Style>                               
                             </WrapPanel.Resources>
                             <GroupBox Header="Единичные измерения">
                                 <!--#region Данные ед.измерений -->
@@ -564,10 +633,9 @@
                                           AutoGenerateColumns="False">
                                     <DataGrid.Columns>
                                         <!--#region № -->
-                                        <DataGridTextColumn 
-                                Header="№" 
-                                MaxWidth="50"
-                                Binding="{Binding Id}" IsReadOnly="True" />
+                                        <DataGridTextColumn Header="№" 
+                                                            MaxWidth="50"
+                                                            Binding="{Binding Id}" IsReadOnly="True" /> 
                                         <!--#endregion-->
                                         <!--#region Дата измерения-->
                                         <DataGridTemplateColumn MaxWidth="140">
@@ -622,7 +690,7 @@
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Cтепень" Binding="{Binding Deg}" IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Величина" Binding="{Binding Coeff}"/>
-                                    </DataGrid.Columns>                                    
+                                    </DataGrid.Columns>
                                 </DataGrid>
                             </GroupBox>
                         </WrapPanel>
@@ -719,8 +787,53 @@
                         <!--#endregion-->
                     </StackPanel>
                 </ScrollViewer>
-                
             </TabItem>
+            <!--#endregion-->
+            <!--#region НАСТРОЙКИ ПЛОТНОСТИ -->
+            <TabItem Header="НАСТРОЙКИ ПЛОТНОСТИ">
+                <StackPanel>
+                    <GroupBox  DataContext="{Binding DensityLiq}"
+                               Header="ПЛОТНОСТЬ ЖИДКОГО">
+                        <ListBox Template="{StaticResource DeinsitySettingsItem}"/>
+                    </GroupBox>
+                    <GroupBox  DataContext="{Binding DensitySol}"
+                               Header="ПЛОТНОСТЬ ТВЕРДОГО">
+                        <ListBox Template="{StaticResource DeinsitySettingsItem}"/>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <!--#endregion-->
+            <!--#region Компенсации -->
+            <TabItem Header="КОМПЕНСАЦИИ">
+                <StackPanel>
+                    <GroupBox DataContext="{Binding TempCompensation}"
+                              Header="ТЕМПЕРАТУРНАЯ КОМПЕНСАЦИЯ">
+                        <ListBox Template="{StaticResource CompensationItemTemplate }"/>
+                    </GroupBox>
+                    <GroupBox DataContext="{Binding SteamCompensation}"
+                              Header="КОМПЕНСАЦИЯ ПАРОВОЙ ФАЗЫ">
+                        <ListBox Template="{StaticResource CompensationItemTemplate }"/>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <!--#endregion-->
+            <!--#region БЫСТРЫЕ ИЗМЕНЕНИЯ -->
+            <TabItem Header="БЫСТРЫЕ ИЗМЕНЕНИЯ">
+                <ListBox DataContext="{Binding FastChange}"
+                         HorizontalContentAlignment="Stretch">
+                    <!--#region Активность -->
+                    <DockPanel DataContext="{Binding Activity}">
+                        <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
+                        <CheckBox IsChecked="{Binding WriteValue}"
+                                  HorizontalAlignment="Right"
+                                  Command="{Binding Command}"/>
+                    </DockPanel>
+                    <!--#endregion-->
+                    <uc:Parameter DataContext="{Binding Threshold}"
+                                  Command="{Binding Command}"/>
+                </ListBox>
+            </TabItem>
+            <!--#endregion-->
         </TabControl>
     </DataTemplate>
     

@@ -827,20 +827,37 @@ namespace IDensity.Models
         #endregion
 
         #region Команды изменения настроек платы АЦП
-        public void SetAdcBoardSettings(AdcBoardSettings settings)
+        public void SetAdcMode(ushort value)
         {
-            SwitchAdcBoard(0);            
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_mode={settings.AdcMode.Value}#")));
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_proc_mode={settings.AdcProcMode.Value}#")));
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_mode={settings.AdcSyncMode.Value}#")));
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_level={settings.AdcSyncLevel.Value}#")));
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,timer_max={settings.TimerMax.Value}#")));
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,preamp_gain={settings.PreampGain.Value}#")));
-            SwitchAdcBoard(1);
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_mode={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
+        }
+        public void SetAdcProcMode(ushort value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_proc_mode={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
+        }
+        public void SetAdcSyncMode(ushort value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_mode={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
+        }
+        public void SetAdcSyncLevel(ushort value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_level={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
+        }
+        public void SetAdcTimerMax(ushort value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,timer_max={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
+        }
+        public void SetPreampGain(ushort value)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,preamp_gain={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings7(), null));
         }
+
         #endregion
 
         #region Команда "Запуск-останов платы АЦП"
@@ -882,11 +899,9 @@ namespace IDensity.Models
             var str = $"CMND,RLS,{value}#";
             commands.Enqueue(new TcpWriteCommand((buf) =>SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
-        #endregion
-        
+        #endregion        
 
         #endregion
-
        
 
         #region Очистка буфера
