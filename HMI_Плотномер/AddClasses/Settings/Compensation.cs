@@ -14,10 +14,11 @@ namespace IDensity.AddClasses.Settings
             A.CommandEcecutedEvent += (o) => OnWriteExecuted();
             B.CommandEcecutedEvent += (o) => OnWriteExecuted();
             C.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            D.CommandEcecutedEvent += (o) => OnWriteExecuted();
         }
         void OnWriteExecuted()
         {
-            NeedWriteEvent?.Invoke($"{(Activity.WriteValue ? 1:0)},{MeasUnitNum.WriteValue},{Sourse.WriteValue},{A.WriteValue.ToStringPoint()},{B.WriteValue.ToStringPoint()},{C.WriteValue.ToStringPoint()}");
+            NeedWriteEvent?.Invoke($"{(Activity.WriteValue ? 1:0)},{MeasUnitNum.WriteValue},{Sourse.WriteValue},{A.WriteValue.ToStringPoint()},{B.WriteValue.ToStringPoint()},{C.WriteValue.ToStringPoint()},{D.WriteValue.ToStringPoint()}");
         }
         #region Активность компенсации
         /// <summary>
@@ -54,6 +55,13 @@ namespace IDensity.AddClasses.Settings
         /// Коэффициент C
         /// </summary>
         public Parameter<float> C { get; } = new Parameter<float>("CompensationC", "Коэффициент C", float.MinValue, float.MaxValue, 0, "");
+        #endregion
+
+        #region Коэффициент D
+        /// <summary>
+        /// Коэффициент D
+        /// </summary>
+        public Parameter<float> D { get; } = new Parameter<float>("CompensationD", "Коэффициент D", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         /// <summary>

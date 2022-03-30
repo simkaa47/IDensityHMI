@@ -321,14 +321,14 @@
                           IsChecked="{Binding WriteValue}"/>
             </DockPanel>
             <!--#endregion-->
-            <!--#region ЕИ -->
+            <!--#region ЕИ --><!--
             <uc:CompoboxParameter DataContext="{Binding MeasUnitNum}"
                                   CompoboxWidth="120"
                                   Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}"
                                   DisplayMemberPath="Name"
                                   Command="{Binding Command}"/>
-            <!--#endregion-->
+            --><!--#endregion-->
             <!--#region Источник -->
             <uc:CompoboxParameter DataContext="{Binding Sourse}"
                                   CompoboxWidth="120"
@@ -347,6 +347,10 @@
             <!--#endregion-->
             <!--#region C -->
             <uc:Parameter DataContext="{Binding C}"
+                          Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region D -->
+            <uc:Parameter DataContext="{Binding D}"
                           Command="{Binding Command}"/>
             <!--#endregion-->
         </ListBox>

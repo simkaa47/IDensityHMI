@@ -259,12 +259,12 @@ namespace IDensity.Models
                 model.CycleMeasStatus.Value = nums[4] > 0 ? true : false;
                 for (int i = 0; i < nums.Length; i+=5)
                 {
+                    var actve = nums[i + 4] > 0;
                     int j = i/5;
-                    model.MeasResults[j].MeasProcessNum.Value = (ushort)nums[i];
-                    model.MeasResults[j].CounterValue.Value = nums[i + 1];
-                    model.MeasResults[j].PhysValueCur.Value = nums[i + 2];
-                    model.MeasResults[j].PhysValueAvg.Value = nums[i + 3];
-                    model.MeasResults[j].IsActive = nums[i + 4] > 0;
+                    model.MeasResults[j].MeasProcessNum.Value = (ushort)(actve ? nums[i] : 0);
+                    model.MeasResults[j].CounterValue.Value = actve ? nums[i + 1] : 0;
+                    model.MeasResults[j].PhysValueCur.Value = actve ? nums[i + 2] : 0;
+                    model.MeasResults[j].PhysValueAvg.Value = actve ? nums[i + 3] : 0;
                     model.SetMeasResultData();
                 }
                 
@@ -352,7 +352,7 @@ namespace IDensity.Models
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
-            if (arr == null || arr.Length != 106) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 108) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             model.MeasProcSettings[index].Num = (ushort)arr[0];
             model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
@@ -361,12 +361,12 @@ namespace IDensity.Models
             RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 84);
             RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 86);
             RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 88);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 94);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 95);
             model.MeasProcSettings[index].MeasType.Value = (ushort)arr[100];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[103];
-            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[104];
-            model.MeasProcSettings[index].OutMeasNum.Value = (ushort)arr[105];
+            model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[105];
+            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
+            model.MeasProcSettings[index].OutMeasNum.Value = (ushort)arr[107];
             model.SettingsReaded = true;
         }
 
@@ -455,6 +455,7 @@ namespace IDensity.Models
             compensation.A.Value = arr[offset + 3];
             compensation.B.Value = arr[offset + 4];
             compensation.C.Value = arr[offset + 5];
+            compensation.D.Value = arr[offset + 6];
         }
         /// <summary>
         /// Метод распознаания настроек быстрого измерения
@@ -463,8 +464,8 @@ namespace IDensity.Models
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            model.MeasProcSettings[num].FastChange.Activity.Value = arr[101] > 0;
-            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[102];
+            model.MeasProcSettings[num].FastChange.Activity.Value = arr[103] > 0;
+            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[104];
         }
 
         #endregion

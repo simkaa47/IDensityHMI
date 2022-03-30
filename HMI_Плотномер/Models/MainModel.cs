@@ -84,10 +84,8 @@ namespace IDensity.Models
         {            
             for (int i = 0; i < 2; i++)
             {
-                if (MeasResults[i].IsActive)
-                {
-                    MeasResults[i].Settings = MeasProcSettings[MeasResults[i].MeasProcessNum.Value];
-                }
+                MeasResults[i].Settings = MeasProcSettings[MeasResults[i].MeasProcessNum.Value];
+                if (MeasResults[i].Settings.IsActive.Value) MeasResults[i].IsActive = true;
             }
         }
 
@@ -125,8 +123,7 @@ namespace IDensity.Models
 
 
 
-        #endregion
-        int countnull = 0;
+        #endregion        
 
         #region Настройки в плате
         #region Данные измерительных процессов
