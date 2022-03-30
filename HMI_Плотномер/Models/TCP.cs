@@ -153,9 +153,7 @@ namespace IDensity.Models
             }
 
         }
-        #endregion       
-
-        
+        #endregion
 
         #region Отправить телеграмму без требования ответа без ожидания
         void SendTlg(byte[] buffer)
@@ -902,7 +900,6 @@ namespace IDensity.Models
         #endregion        
 
         #endregion
-       
 
         #region Очистка буфера
         void StreamClear()
