@@ -723,12 +723,16 @@
                                 <!--#region IP адрес udp приемника -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <DockPanel>
-                                        <TextBlock Text="IP адрес приемника данных по UDP"
+                                        <TextBlock Text="Адрес приемника данных по UDP(IP, порт)"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource Common}"/>
                                         <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Right">
                                             <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                                 MinWidth="100"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"/>
+                                            <TextBox Text="{Binding mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged}"
                                                  MinWidth="100"
                                                  HorizontalContentAlignment="Center"
                                                  VerticalContentAlignment="Center"/>
@@ -1003,9 +1007,17 @@
                                                                   Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeSerialSelectCommand}"
                                                                   CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=Index}"/>
                                         </ListBoxItem>
-                                        <!--#endregion-->
+                                        <!--#endregion-->                                        
                                     </ListBox>
                                 </GroupBox>
+                                <!--#endregion-->
+                                <!--#region Кнопка перезагрузить плату -->
+                                <Button Width="200"
+                                                Height="60"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding RstBoardCommand}">
+                                    <TextBlock Text="ПЕРЕЗАГРУЗИТЬ ПЛАТУ"/>
+                                </Button>
                                 <!--#endregion-->
                             </ListBox>
                         </Grid>

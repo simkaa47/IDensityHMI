@@ -235,6 +235,17 @@ namespace IDensity.Models
             }
         }
 
+        private int _portUdp;
+        /// <summary>
+        /// Номер порта Udp источника
+        /// </summary>
+        public int PortUdp
+        {
+            get { return _portUdp; }
+            set { Set(ref _portUdp, value); }
+        }
+
+
         #region Метод проверки корректности ip
         /// <summary>
         /// Проверка корректности ip
@@ -498,10 +509,10 @@ namespace IDensity.Models
         #endregion        
 
         #region Команда "Поменять UDP адрес источника"
-        public void SetUdpAddr(byte[] addr)
+        public void SetUdpAddr(byte[] addr,int portNum)
         {
-           if (CommMode.EthEnable) Tcp.SetUdpAddr(addr);
-           else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
+           if (CommMode.EthEnable) Tcp.SetUdpAddr(addr, portNum);
+           //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
         }
 
         #endregion
@@ -575,6 +586,13 @@ namespace IDensity.Models
         {
             if (CommMode.EthEnable) Tcp.SwitchRelay(value);
             //else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
+        }
+        #endregion
+
+        #region Команда "Перезагрузить плату"
+        public void RstBoard()
+        {
+            if (CommMode.EthEnable) Tcp.RstBoard();
         }
         #endregion
         #endregion

@@ -305,6 +305,7 @@ namespace IDensity.Models
                 GetSettings7();
                 GetSettings1();
                 GetSettings4();
+                GetSettings8();
             }             
         }
         #region Настройки измерительных процессов
@@ -484,8 +485,6 @@ namespace IDensity.Models
                 .ToArray();
         }
 
-
-
         #region Настройки №1
         void GetSettings1()
         {
@@ -538,7 +537,7 @@ namespace IDensity.Models
         {
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,2#"));
-            var list = GetNumber("adc_proc_cntr", 3, MainModel.CountCounters);
+            var list = GetNumber("adc_proc_cntr", 3, MainModel.CountCounters, str);
             if (list == null) return;
             for (int i = 0; i < MainModel.CountCounters; i++)
             {
@@ -546,41 +545,15 @@ namespace IDensity.Models
                 model.CountDiapasones[i].Start.Value = (ushort)list[i][1];
                 model.CountDiapasones[i].Finish.Value = (ushort)list[i][2];
             }
-            list = GetNumber("adc_proc_mode", 1, 1);
+            list = GetNumber("adc_proc_mode", 1, 1, str);
             if (list == null) return;
             model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
-            list = GetNumber("adc_single_meas_time", 1, 1);
+            list = GetNumber("adc_single_meas_time", 1, 1,str);
             if (list == null) return;
             foreach (var mp in model.MeasProcSettings)
             {
                 mp.SingleMeasTime.Value = (ushort)list[0][0];
-            }
-            // локальная функция
-            List<List<float>> GetNumber(string id, int parNum, int count)
-            {
-                var strTemp = str;
-                float temp = 0;
-                List<List<float>> list = new List<List<float>>();
-                for (int i = 0; i < count; i++)
-                {
-                    int index = strTemp.LastIndexOf(id);
-                    if (index < 1)
-                    {
-                        return null;
-                    }
-                    var sepStrs = strTemp.Substring(index, strTemp.Length - index).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Take(parNum);
-                    var nums = sepStrs.SelectMany(s => s.Split("=", StringSplitOptions.RemoveEmptyEntries))
-                        .Where(str => float.TryParse(str.Replace(".", ","), out temp))
-                        .Select(str => temp).ToList();
-                    if (nums == null || nums.Count != parNum)
-                    {
-                        return null;
-                    }
-                    list.Insert(0, nums);
-                    strTemp = strTemp.Remove(index, strTemp.Length - index);
-                }
-                return list;
-            }
+            }           
             model.SettingsReaded = true;
         }
         #endregion        
@@ -615,16 +588,16 @@ namespace IDensity.Models
         {
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7#"));
-            var list = GetNumber("serial_baudrate", 1,1);
+            var list = GetNumber("serial_baudrate", 1,1, str);
             if (list==null) return;
             model.PortBaudrate.Value = (uint)list[0][0];
-            list = GetNumber("hv_target", 1, 1);
+            list = GetNumber("hv_target", 1, 1, str);
             if (list == null) return;
             model.TelemetryHV.VoltageSV.Value = (ushort)(list[0][0]*0.05);
-            list = GetNumber("serial_select", 1,1);
+            list = GetNumber("serial_select", 1,1,str);
             if (list==null) return;
             model.PortSelectMode.Value = (ushort)list[0][0];
-            list = GetNumber("am_out_sett", 10, 2);
+            list = GetNumber("am_out_sett", 10, 2, str);
             if (list == null) return;
             for (int i = 0; i < 2; i++)
             {
@@ -638,59 +611,64 @@ namespace IDensity.Models
                 model.AnalogGroups[i].AO.DacLowLimitMa.Value = list[i][8];
                 model.AnalogGroups[i].AO.DacHighLimitMa.Value = list[i][9];
             }
-            list = GetNumber("am_in_sett", 2, 2);
+            list = GetNumber("am_in_sett", 2, 2, str);
             if (list == null) return;
             model.AnalogGroups[0].AI.Activity.Value = (ushort)list[0][1];
-            model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1];
-            
-           
-            list = GetNumber("preamp_gain", 1, 1);
+            model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1]; 
+            list = GetNumber("preamp_gain", 1, 1, str);
             if (list == null) return;
-            model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];
-            // локальная функция
-            List<List<float>> GetNumber(string id, int parNum, int count)
-            {
-                var strTemp = str;
-                float temp = 0;
-                List<List<float>> list = new List<List<float>>();
-                for (int i = 0; i < count; i++)
-                {
-                    int index = strTemp.LastIndexOf(id);
-                    if (index < 1)
-                    {
-                        return null;
-                    }
-                    var sepStrs = strTemp.Substring(index, strTemp.Length - index).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Take(parNum);
-                    var nums = sepStrs.SelectMany(s => s.Split("=", StringSplitOptions.RemoveEmptyEntries))
-                        .Where(str => float.TryParse(str.Replace(".", ","), out temp))
-                        .Select(str => temp).ToList();
-                    if (nums == null || nums.Count != parNum)
-                    {
-                        return null;
-                    }
-                    list.Insert(0, nums);
-                    strTemp = strTemp.Remove(index, strTemp.Length - index);
-                }
-                return list;
-            }
+            model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];           
             model.SettingsReaded = true;
         }
-        #endregion        
-
-        #region Проверка корректности пакета FSRD
-        /// <summary>
-        /// Проверка корректности пакета FSRD
-        /// </summary>
-        bool CheckFsrdPacket(string str)
-        {
-            //Проверка корректности пришедшего пакета
-            if (str.Length < 50) return false; ;// Проверка на длину
-            if (str.Substring(1, 4) != "FSRD") return false; ;// Проверка на заголовок..
-            if (str[str.Length - 1] != '#') return false; ;// Проверка на окончание
-            return true;
-        } 
         #endregion
 
+        #region Настройки №8
+        void GetSettings8()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,8#"));            
+            // Номер порта
+            var list = GetNumber("udp_sett", 5, 1, str);
+            model.UdpAddrString = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
+            model.PortUdp = (int)list[0][4];
+            model.SettingsReaded = true;
+        }
+        #endregion
+
+        #region Метод вычленения числовых данных по тестовому индикатору в пакетах FSRD
+        /// <summary>
+        /// Метод вычленения числовых данных по тестовому индикатору в пакетах FSRD
+        /// </summary>
+        /// <param name="id">Индентификатор данных</param>
+        /// <param name="parNum">количество данных в одном наборе настроек</param>
+        /// <param name="count">количество наборов</param>
+        /// <param name="str">источник данных</param>
+        /// <returns></returns>
+        List<List<float>> GetNumber(string id, int parNum, int count, string str)
+        {
+            var strTemp = str;
+            float temp = 0;
+            List<List<float>> list = new List<List<float>>();
+            for (int i = 0; i < count; i++)
+            {
+                int index = strTemp.LastIndexOf(id);
+                if (index < 1)
+                {
+                    return null;
+                }
+                var sepStrs = strTemp.Substring(index, strTemp.Length - index).Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Take(parNum);
+                var nums = sepStrs.SelectMany(s => s.Split("=", StringSplitOptions.RemoveEmptyEntries))
+                    .Where(str => float.TryParse(str.Replace(".", ","), out temp))
+                    .Select(str => temp).ToList();
+                if (nums == null || nums.Count != parNum)
+                {
+                    return null;
+                }
+                list.Insert(0, nums);
+                strTemp = strTemp.Remove(index, strTemp.Length - index);
+            }
+            return list;
+        }
         #endregion
 
         #region Команды
@@ -813,14 +791,13 @@ namespace IDensity.Models
         #endregion        
 
         #region Команда "Поменять UDP адрес источника"
-        public void SetUdpAddr(byte[] addr)
+        public void SetUdpAddr(byte[] addr, int portNum)
         {
             if (addr.Length != 4) return;
-            var str = $"SETT,udp_dst_addr=";
+            var str = $"SETT,udp_sett=";
             for (int i = 0; i < 4; i++) str = str + $"{addr[i]},";
-            str.Remove(str.Length - 1, 1);
-
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str + "#")));
+            str += portNum.ToString();
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(str + "#")));
         }
 
         #endregion
@@ -898,7 +875,15 @@ namespace IDensity.Models
             var str = $"CMND,RLS,{value}#";
             commands.Enqueue(new TcpWriteCommand((buf) =>SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
-        #endregion        
+        #endregion
+
+        #region Команда "Перезагрузитьь плату"
+        public void RstBoard()
+        {
+            var str = $"CMND,RST#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
 
         #endregion
 
@@ -912,7 +897,7 @@ namespace IDensity.Models
         }
         #endregion
 
-        
+        #endregion
 
 
 

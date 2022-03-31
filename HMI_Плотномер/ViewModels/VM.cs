@@ -128,7 +128,7 @@ namespace IDensity.ViewModels
         {
             byte num = 0;
             var nums = (mainModel.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
-            if (nums.Length == 4) mainModel.SetUdpAddr(nums);
+            if (nums.Length == 4) mainModel.SetUdpAddr(nums, mainModel.PortUdp);
         },
             canExecPar => mainModel.Connecting.Value));
 
@@ -177,7 +177,12 @@ namespace IDensity.ViewModels
             }
         }, canExec => true));
         #endregion
-        
+
+        #region Перезагрузить плату
+        RelayCommand _rstBoardCommand;
+        public RelayCommand RstBoardCommand => _rstBoardCommand ?? (_rstBoardCommand = new RelayCommand(par => mainModel.RstBoard(), o => mainModel.Connecting.Value));
+        #endregion
+
         #endregion
         public MainModel mainModel { get; } = new MainModel();
 
