@@ -158,7 +158,21 @@
                                                  LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                  LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
                                                  LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle3="{Binding ElementName=TrendName3, Path=Text}"/>
+                                                 LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
+                                                 LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
+                                                 LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
+                                                 LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
+                                                 LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
+                                                 LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
+                                                 LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
+                                                 LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
                             </Grid>
                             <!--#endregion-->
                         </TabItem>
