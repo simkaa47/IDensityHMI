@@ -3,7 +3,7 @@
     <!--#region Шаблон для тренда -->
     <ControlTemplate TargetType="oxy:Plot" x:Key="Trend">
 
-        <oxy:Plot PlotMargins="30,0,0,30" 
+        <oxy:Plot PlotMargins="30,0,0,30"                  
                       PlotType="XY" 
                       PlotAreaBorderThickness="0" 
                       TextColor="WhiteSmoke"                       
@@ -28,25 +28,16 @@
                                       MajorGridlineStyle="Dot"
                                       FontSize="14"/>
             </oxy:Plot.Axes>
-            <oxy:ThreeColorLineSeries  LineStyle="Dash"
-                                           Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
+            <oxy:LineSeries                Visibility="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
                                            ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
                                            DataFieldX="time" DataFieldY="y1"
-                                           Title="Усредненное значение"
-                                           Color="Black" ColorHi="Red" 
-                                           ColorLo="Blue" LimitHi="{Binding TrendSettings.PlotHighLimit}"
-                                           LimitLo="{Binding TrendSettings.PlotLowLimit}"                                             
-                                           LineStyleHi="Dash"/>
-            <oxy:ThreeColorLineSeries LineStyle="Automatic" 
-                                           Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"           
+                                           Title="{Binding ElementName=TrendName1, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                                           Color="{Binding ElementName=trendColor1, Path=Fill}"/>
+            <oxy:LineSeries                Visibility="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource VisibleConverter}}"
                                            ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
-                                           DataFieldX="time" DataFieldY="y2" 
-                                           Color="Green"
-                                           Title="Мгновенное значение"
-                                           ColorHi="Green"
-                                           ColorLo="Green"
-                                           LineStyleHi="Dash"/>
-
+                                           DataFieldX="time" DataFieldY="y2"
+                                           Title="{Binding ElementName=TrendName2, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                                           Color="{Binding ElementName=trendColor2, Path=Fill}"/>
         </oxy:Plot>
     </ControlTemplate>
     <!--#endregion-->

@@ -261,7 +261,7 @@ namespace IDensity.Models
                 {
                     var actve = nums[i + 4] > 0;
                     int j = i/5;
-                    model.MeasResults[j].MeasProcessNum.Value = (ushort)(actve ? nums[i] : 0);
+                    model.MeasResults[j].MeasProcessNum.Value = (ushort)nums[i];
                     model.MeasResults[j].CounterValue.Value = actve ? nums[i + 1] : 0;
                     model.MeasResults[j].PhysValueCur.Value = actve ? nums[i + 2] : 0;
                     model.MeasResults[j].PhysValueAvg.Value = actve ? nums[i + 3] : 0;
@@ -564,22 +564,26 @@ namespace IDensity.Models
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,4#"));
             var indexOfEqual = str.LastIndexOf('=');
-            if (indexOfEqual < 1) return;
+            if (indexOfEqual < 1) return;            
+            var strArr = str.Substring(indexOfEqual+1).
+                Split(new char[] { '#', ',', '=' })
+                .ToArray();
             float temp = 0;
-            var nums = str.Substring(indexOfEqual).
-                Split(new char[] { '#', ',', '=' }, StringSplitOptions.RemoveEmptyEntries).
-                Where(s => float.TryParse(s.Replace(".", ","), out temp)).
-                Select(s => temp).ToArray();
-            if (nums.Length != 15) return;
-            for (int i = 0; i < 5; i++)
+            if (strArr.Length <= 126) throw new Exception("Сигнатура ответа на запрос CMND,FSR,4# не соответствует ожидаемому!");
+            for (int i = 0; i < 126; i+=6)
             {
-                model.MeasUnitSettings[i].Id.Value = (ushort)i;
-                model.MeasUnitSettings[i].A.Value = nums[i * 3 + 1];
-                model.MeasUnitSettings[i].B.Value = nums[i * 3 + 2];
+                var id = i / 6;
+                model.MeasUnitSettings[id].Id.Value = float.TryParse(strArr[i], out temp) ? (ushort)temp : default(ushort);
+                model.MeasUnitSettings[id].MeasUnitClassNum.Value = float.TryParse(strArr[i+1], out temp) ? (ushort)temp : default(ushort);
+                model.MeasUnitSettings[id].Type.Value = float.TryParse(strArr[i + 2], out temp) ? (ushort)temp : default(ushort);
+                model.MeasUnitSettings[id].A.Value = float.TryParse(strArr[i+3].Replace(".",","), out temp) ? temp : default(float);
+                model.MeasUnitSettings[id].B.Value = float.TryParse(strArr[i + 4].Replace(".", ","), out temp) ? temp : default(float);
+                model.MeasUnitSettings[id].MeasUnitName.Value = strArr[i + 5];
             }
 
             model.SettingsReaded = true;
         }
+        
 
         #endregion
 
@@ -863,7 +867,12 @@ namespace IDensity.Models
         #region Команда "Записать настройки едениц измерерия"
         public void SetMeasUnitsSettings(MeasUnitSettings settings)
         {
-            var str = $"SETT,meas_unit={settings.Id.Value},{settings.A.Value.ToString().Replace(",",".")},{settings.B.Value.ToString().Replace(",", ".")}";            
+            var str = $"SETT,meas_unit={settings.Id.WriteValue}" +
+                $",{settings.MeasUnitClassNum.WriteValue}," +
+                $"{settings.Type.WriteValue}," +
+                $"{settings.A.WriteValue.ToStringPoint()}," +
+                $"{settings.B.WriteValue.ToStringPoint()}," +
+                settings.MeasUnitName.WriteValue.Replace(",", "").Substring(0, Math.Min(8, settings.MeasUnitName.WriteValue.Length));
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings4(); }, Encoding.ASCII.GetBytes(str + "#")));
         }
 

@@ -48,8 +48,6 @@ namespace IDensity.AddClasses
 
         #endregion
 
-
-
         #region Активность
         private bool _isActive;
 

@@ -191,7 +191,7 @@ namespace IDensity.ViewModels
         {
             mainModel.ModelProcess();
             mainModel.UpdateDataEvent += AddDataToCollection;
-            timer.Elapsed += (s, e) => CurPcDateTime.Value = DateTime.Now;
+            timer.Elapsed += (s, e) => CurPcDateTime = DateTime.Now;
             timer.Elapsed += (s, e) => UpdateSingleMeasTime();
             timer.Start();
             Events = new Events(mainModel);
@@ -352,7 +352,14 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Текущая дата-время компьютера
-        public Parameter<DateTime> CurPcDateTime { get; private set; } = new Parameter<DateTime>("CurPcDateTime", "Текущие время и дата компьютера", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        private DateTime _curPcDateTime;
+
+        public DateTime CurPcDateTime
+        {
+            get { return _curPcDateTime; }
+            set { Set(ref _curPcDateTime, value); }
+        }
+
 
         #endregion
 
@@ -389,6 +396,11 @@ namespace IDensity.ViewModels
         {
             get => _plotCollection ?? (_plotCollection = new ObservableCollection<TimePoint>());
         }
+        #endregion
+
+        #region Настройки видимости графиков
+        private TrendVisible _trendsVisible;
+        public TrendVisible TrendsVisible => _trendsVisible ?? (_trendsVisible = ClassInit<TrendVisible>());
         #endregion
 
         #region Данные для архивного тренда
@@ -482,8 +494,8 @@ namespace IDensity.ViewModels
         public DataBaseCollection<EnumCustom> TypeCalibrations { get; } = new DataBaseCollection<EnumCustom>("TypeCalibrations", new EnumCustom());
         #endregion
 
-        #region Названия переменных для аналогового выхода
-        public DataBaseCollection<EnumCustom> TypeAnalogOutVars { get; } = new DataBaseCollection<EnumCustom>("TypeAnalogOutVars", new EnumCustom());
+        #region Названия измерительных процессов
+        public DataBaseCollection<EnumCustom> MeasProcNames { get; } = new DataBaseCollection<EnumCustom>("MeasProcNames", new EnumCustom());
         #endregion
 
         #region Названия стандартизаций
@@ -567,7 +579,20 @@ namespace IDensity.ViewModels
             App.Current?.Dispatcher?.Invoke(
                 () =>
                 {
-                    var tp = new TimePoint { time = DateTime.Now, y1 = mainModel.MeasResults[0].PhysValueAvg.Value, y2 = mainModel.MeasResults[0].PhysValueCur.Value };
+                    var tp = new TimePoint
+                    {
+                        time = DateTime.Now,
+                        y1 = mainModel.MeasResults[0].CounterValue.Value,
+                        y2 = mainModel.MeasResults[0].PhysValueCur.Value,
+                        y3 = mainModel.MeasResults[0].PhysValueAvg.Value,
+                        y4 = mainModel.MeasResults[1].CounterValue.Value,
+                        y5 = mainModel.MeasResults[1].PhysValueCur.Value,
+                        y6 = mainModel.MeasResults[1].PhysValueAvg.Value,
+                        y7 = mainModel.AnalogGroups[0].AI.AdcValue.Value,
+                        y8 = mainModel.AnalogGroups[1].AI.AdcValue.Value,
+                        y9 = mainModel.TelemetryHV.VoltageCurOut.Value,
+                        y10 = mainModel.TempTelemetry.TempInternal.Value
+                    };
                     PlotCollection.Add(tp);
                     while (PlotCollection.Count>0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)))
                     {
@@ -662,7 +687,10 @@ namespace IDensity.ViewModels
                     StringBuilder builder = new StringBuilder();
                     foreach (var item in ArchivalDataPotnts)
                     {
-                        builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000" + "\n"));
+                        builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000") + "\t"
+                             + item.y3.ToString("0.000") + "\t" + item.y4.ToString("0.000") + "\t"
+                             + item.y5.ToString("0.000") + "\t" + item.y6.ToString("0.000") + "\t"
+                             + item.y7.ToString("0.000") + "\t" + item.y8.ToString("0.000") + "\t" + item.y9.ToString("0.000") + "\t" + item.y10.ToString("0.000") + "\n");
                     }
                     using (StreamWriter sw = new StreamWriter(LogPath, false, System.Text.Encoding.Default))
                     {

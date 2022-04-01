@@ -13,5 +13,5 @@
     <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
     <conv:EqualityToVisibilityConverter x:Key="VisibleIfEqual"/>
     <conv:StringByIndexConverter x:Key="StringByIndex"/>
-
+    <conv:GetNameFromEnumCustom x:Key="EnumCustomConverter"/>
 </ResourceDictionary>

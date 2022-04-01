@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="IDensity.Views.Resourses.UserControls.TrendControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:local="clr-namespace:IDensity.Views.Resourses.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <oxy:Plot PlotMargins="30,0,0,30"                  
+                      PlotType="XY" 
+                      PlotAreaBorderThickness="0" 
+                      TextColor="WhiteSmoke"                       
+                      x:Name="plot" 
+                      IsLegendVisible="True"
+                      Background="DarkSlateGray"   
+                      PlotAreaBackground="DarkGray">
+            
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis  
+                        TextColor="WhiteSmoke" 
+                        FontWeight="Bold" 
+                        FontSize="14"
+                        MajorGridlineColor="WhiteSmoke"
+                        MajorGridlineStyle="Dot"
+                        Position ="Left" />
+                <oxy:DateTimeAxis FontWeight="Bold"
+                                      MajorGridlineColor="WhiteSmoke"
+                                      MajorGridlineStyle="Dot"
+                                      FontSize="14"/>
+            </oxy:Plot.Axes>
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility1}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle1}"
+                                           DataFieldX="time" DataFieldY="y1" Color="Black"/>            
+        </oxy:Plot>     
+    </Grid>
+</UserControl>

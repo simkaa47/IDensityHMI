@@ -206,7 +206,7 @@ namespace IDensity.Models
         #endregion
 
         #region Настройки едениц измерений
-        public MeasUnitSettings[] MeasUnitSettings { get; } = Enumerable.Range(0, 5).Select(i => new MeasUnitSettings()).ToArray();
+        public MeasUnitSettings[] MeasUnitSettings { get; } = Enumerable.Range(0, 21).Select(i => new MeasUnitSettings()).ToArray();
         void MeasUnitSettingsDescribe()
         {
             foreach (var sett in MeasUnitSettings)
