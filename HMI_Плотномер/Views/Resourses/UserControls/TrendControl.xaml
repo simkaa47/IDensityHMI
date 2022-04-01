@@ -32,8 +32,53 @@
             </oxy:Plot.Axes>
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility1}"
-                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle1}"
-                                           DataFieldX="time" DataFieldY="y1" Color="Black"/>            
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle1, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y1" Color="Red"/>
+            
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility2}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle2, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y2" Color="Blue"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility3}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle3, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y3" Color="Green"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility4}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle4, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y4" Color="Brown"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility5}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle5, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y5" Color="Black"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility6}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle6, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y6" Color="Pink"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility7}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle7, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y7" Color="Yellow"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility8}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle8, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y8" Color="Aqua"/>
+
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility9}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle9, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y9" Color="Purple"/>
+            
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
+                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility10}"
+                                           Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle10, UpdateSourceTrigger=PropertyChanged}"
+                                           DataFieldX="time" DataFieldY="y10" Color="Orange"/>
         </oxy:Plot>     
     </Grid>
 </UserControl>

@@ -149,7 +149,16 @@
                                     <ColumnDefinition></ColumnDefinition>
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>                                
-                                <oxy:Plot  Grid.ColumnSpan="3" Tag="{Binding PlotCollection}" Template="{StaticResource Trend}"></oxy:Plot>
+                                <!--<oxy:Plot  Grid.ColumnSpan="3" Tag="{Binding PlotCollection}" Template="{StaticResource Trend}"></oxy:Plot>-->
+                                <uc:TrendControl Grid.Row="2"
+                                                 Grid.ColumnSpan="6" 
+                                                 DataSource="{Binding PlotCollection}"
+                                                 LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
+                                                 LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
+                                                 LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle3="{Binding ElementName=TrendName3, Path=Text}"/>
                             </Grid>
                             <!--#endregion-->
                         </TabItem>
@@ -169,15 +178,12 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock x:Name="TrendName1">
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EnumCustomConverter}">                   
-                                                        <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
-                                                        <Binding Path="MeasProcNames.Data" Mode="OneWay"/>                                                        
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                            <Run Text=": Значение счетчика"/>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Значение счетчика">
+                                                    <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
+                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
                                         <Rectangle x:Name="trendColor1" Fill="Red" Width="16" Margin="10,0,0,10" Height="16"/>                                        
                                     </StackPanel>
@@ -188,15 +194,12 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Name="TrendName2">
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EnumCustomConverter}">                   
-                                                        <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
-                                                        <Binding Path="MeasProcNames.Data" Mode="OneWay"/>                                                        
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                            <Run Text=": Мгновенное значение"/>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Мгновенное значение">
+                                                    <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
+                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
                                         <Rectangle x:Name="trendColor2" Fill="Blue" Width="16" Margin="10,0,0,10" Height="16"/>
                                     </StackPanel>
@@ -207,15 +210,12 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Name="TrendName3">
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EnumCustomConverter}">                   
-                                                        <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
-                                                        <Binding Path="MeasProcNames.Data" Mode="OneWay"/>                                                        
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                            <Run Text=": Усредненное значение"/>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Усредненное значение">
+                                                    <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
+                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
                                         <Rectangle x:Name="trendColor3" Fill="Green" Width="16" Margin="10,0,0,10" Height="16"/>
                                     </StackPanel>
@@ -226,15 +226,12 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Name="TrendName4">
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EnumCustomConverter}">                   
-                                                        <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
-                                                        <Binding Path="MeasProcNames.Data" Mode="OneWay"/>                                                        
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                            <Run Text=": Значение счетчика"/>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Значение счетчика">
+                                                    <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
+                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
                                         <Rectangle x:Name="trendColor4" Fill="Brown" Width="16" Margin="10,0,0,10" Height="16"/>
                                     </StackPanel>
@@ -245,15 +242,12 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Name="TrendName5">
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EnumCustomConverter}">                   
-                                                        <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
-                                                        <Binding Path="MeasProcNames.Data" Mode="OneWay"/>                                                        
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                            <Run Text=": Мгновенное значение"/>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Мгновенное значение">
+                                                    <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
+                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
                                         <Rectangle x:Name="trendColor5" Fill="Black" Width="16" Margin="10,0,0,10" Height="16"/>
                                     </StackPanel>
@@ -264,15 +258,12 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Name="TrendName6">
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EnumCustomConverter}">                   
-                                                        <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
-                                                        <Binding Path="MeasProcNames.Data" Mode="OneWay"/>                                                        
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                            <Run Text=": Усредненное значение"/>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Усредненное значение">
+                                                    <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
+                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
                                         <Rectangle x:Name="trendColor6" Fill="Pink" Width="16" Margin="10,0,0,10" Height="16"/>
                                     </StackPanel>
@@ -306,10 +297,10 @@
                                     <CheckBox  x:Name="VisibleLine9" IsChecked="{Binding TrendsVisible.VisLine9}" HorizontalAlignment="Right" />
                                 </DockPanel>
                                 <!--#endregion-->
-                                <!--#region HV -->
+                                <!--#region T -->
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="TrendName10" Text="Значение HV, С "/>
+                                        <TextBlock x:Name="TrendName10" Text="Значение температуры, С "/>
                                         <Rectangle x:Name="trendColor10" Fill="Orange" Width="16" Margin="10,0,0,10" Height="16"/>
                                     </StackPanel>
                                     <CheckBox  x:Name="VisibleLine10" IsChecked="{Binding TrendsVisible.VisLine10}" HorizontalAlignment="Right" />
@@ -344,7 +335,25 @@
                                                  Grid.ColumnSpan="6" 
                                                  DataSource="{Binding ArchivalDataPotnts}"
                                                  LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle1="{Binding ElementName=TrendName1, Path=Text}"/>
+                                                 LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
+                                                 LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
+                                                 LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
+                                                 LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
+                                                 LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
+                                                 LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
+                                                 LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
+                                                 LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
+                                                 LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
+                                                 LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
                                 <fa:ImageAwesome Grid.Row="2" Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"    Grid.ColumnSpan="6" Height="30"   Icon="Refresh" />
                                 <!--#endregion-->
                                 <!--#region Стартовая точка тренда -->
@@ -538,7 +547,7 @@
                                         </DataGridTemplateColumn>
                                         <!--#endregion-->
                                         <!--#region АЦП -->
-                                        <DataGridTextColumn Header="Напряжение АЦП, мВ" Binding="{Binding AdcValue.Value}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Ток AI, мкА" Binding="{Binding AdcValue.Value}" IsReadOnly="True"/>
                                         <!--#endregion-->
                                         <!--#region Активность -->
                                         <DataGridTemplateColumn Width="120" Header="Активность АЦП" HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
@@ -580,13 +589,13 @@
                                         <!--#region ЦАП -->
                                         <DataGridTextColumn IsReadOnly="True"
                                                             HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                            Header="Напряжение ЦАП, мВ"
+                                                            Header="Напряжение ЦАП, каунтов"
                                                             Binding="{Binding VoltageDac.Value}" 
                                                             Width="120"/>
                                         <!--#endregion-->
                                         <!--#region Напряжение TEST, мВ -->
                                         <DataGridTextColumn IsReadOnly="True"
-                                                            Header="Напряжение TEST, мВ"
+                                                            Header="Напряжение TEST, каунтов"
                                                             HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
                                                             Width="120" 
                                                             Binding="{Binding AdcValue.Value}"/>
@@ -594,14 +603,14 @@
                                         <!--#region Напряжение RX, мВ -->
                                         <DataGridTextColumn Width="120"
                                                             IsReadOnly="True" 
-                                                            Header="Напряжение RX, мВ"
+                                                            Header="Напряжение RX, каунтов"
                                                             HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
                                                             Binding="{Binding VoltageTest.Value}"/>
                                         <!--#endregion-->
                                         <!--#region Тестовое значение, мВ -->
                                         <DataGridTemplateColumn Width="135"
                                                                 HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                Header="Тестовое значение, мВ">
+                                                                Header="Тестовое значение, мкА">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="add:AnalogOutput">
                                                     <DockPanel>
