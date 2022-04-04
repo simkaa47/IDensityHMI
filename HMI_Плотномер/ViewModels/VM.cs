@@ -183,6 +183,14 @@ namespace IDensity.ViewModels
         public RelayCommand RstBoardCommand => _rstBoardCommand ?? (_rstBoardCommand = new RelayCommand(par => mainModel.RstBoard(), o => mainModel.Connecting.Value));
         #endregion
 
+        #region Обновить доступные ЕИ
+        RelayCommand _updateAvialablemeasUnitCommand;
+        public RelayCommand UpdateAvialablemeasUnitCommand => _updateAvialablemeasUnitCommand ?? (_updateAvialablemeasUnitCommand = new RelayCommand(par =>
+        {
+            OnPropertyChanged(nameof(AvialableMeasUnitSettings));
+        }, o => true)); 
+        #endregion
+
         #endregion
         public MainModel mainModel { get; } = new MainModel();
 
@@ -200,7 +208,7 @@ namespace IDensity.ViewModels
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
-            MeasUnitSDescribe();           
+            //MeasUnitSDescribe();           
 
         }
 
@@ -465,22 +473,13 @@ namespace IDensity.ViewModels
 
         #region Данные перечислений        
 
-        #region Названия единиц измерения
-        public DataBaseCollection<EnumCustom> UnitNames { get; } = new DataBaseCollection<EnumCustom>("UnitNames", new EnumCustom());
-        string[] _measUnits;
-        public string[] MeasUnits
-        {
-            get => _measUnits;            
-            set => Set(ref _measUnits, value);
-        }
-        void MeasUnitSDescribe()
-        {
-            _measUnits = UnitNames.Data.Select(enumCustom => enumCustom.Name).ToArray();
-            UnitNames.CollectionChangedEvent+=()=> MeasUnits = UnitNames.Data.Select(enumCustom => enumCustom.Name).ToArray();
-        }
-
-
+        #region Доступные ЕИ
+        public IEnumerable<MeasUnitSettings> AvialableMeasUnitSettings => mainModel.MeasUnitSettings.Where(mu => mu.A.Value != 0 || mu.B.Value != 0).Select(mu => mu);
+        
         #endregion
+
+
+        //#endregion
 
         #region Названия типов измерений
         public DataBaseCollection<EnumCustom> MeasTypesNamesNames { get; } = new DataBaseCollection<EnumCustom>("MeasTypesNamesNames", new EnumCustom());
@@ -572,6 +571,8 @@ namespace IDensity.ViewModels
             }
         }
         #endregion
+
+        public IEnumerable<string> UnitNames => mainModel.MeasUnitSettings.Select(mu => mu.MeasUnitName.Value);
 
         #region Добавление данных в график
         void AddDataToCollection()

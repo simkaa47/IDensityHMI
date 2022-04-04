@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDensity.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,11 +10,19 @@ namespace IDensity.AddClasses.Settings
     /// </summary>
     class DensitySett:PropertyChangedBase
     {
-        #region Номер еденицы измерения
+        #region ЕИ
+        MeasUnitSettings _measUnit = new MeasUnitSettings();
         /// <summary>
-        /// Номер еденицы измерения
+        /// ЕИ
         /// </summary>
-        public Parameter<ushort> MeasValueNum { get; } = new Parameter<ushort>("DensitySettMeasUnitNum", "Номер еденицы измерений", 0, 10, 0, "hold");
+        public MeasUnitSettings MeasUnit
+        {
+            get => _measUnit;
+            set => Set(ref _measUnit, value);
+        }
+        private RelayCommand _outMeasNumWriteCommand;
+
+        public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnWriteExecuted(), o => true));
         #endregion
         #region Физическая величина
         /// <summary>
@@ -24,13 +33,12 @@ namespace IDensity.AddClasses.Settings
 
         public DensitySett()
         {
-            //Подписка на изменение свойств
-            MeasValueNum.CommandEcecutedEvent +=(o)=> OnWriteExecuted();
+            //Подписка на изменение свойств            
             PhysValue.CommandEcecutedEvent += (o) => OnWriteExecuted();
         }
         void OnWriteExecuted()
         {
-            NeedWriteEvent?.Invoke($"{MeasValueNum.WriteValue},{PhysValue.WriteValue.ToStringPoint()}");
+            NeedWriteEvent?.Invoke($"{MeasUnit.Id.Value},{PhysValue.WriteValue.ToStringPoint()}");
         }
         /// <summary>
         /// Необходимо записать настройки стандартизаций

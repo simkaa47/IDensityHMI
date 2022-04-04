@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    abstract class AnalogData
+    abstract class AnalogData:PropertyChangedBase
     {
         public AnalogData(int groupNum)
         {

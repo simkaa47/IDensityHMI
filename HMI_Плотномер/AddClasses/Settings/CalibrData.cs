@@ -11,8 +11,7 @@ namespace IDensity.AddClasses
     {
         public CalibrData()
         {
-            Type.CommandEcecutedEvent += OnCommandWriteExecuted;
-            MeasUnitNum.CommandEcecutedEvent += OnCommandWriteExecuted;
+            Type.CommandEcecutedEvent += OnCommandWriteExecuted;            
             foreach (var coeff in Coeffs)
             {
                 coeff.CommandEcecutedEvent += OnCommandWriteExecuted;
@@ -20,7 +19,7 @@ namespace IDensity.AddClasses
         }
         void OnCommandWriteExecuted(object par)
         {
-            var arg = $"calib_curve={Type.WriteValue},{MeasUnitNum.WriteValue}";
+            var arg = $"calib_curve={Type.WriteValue},{MeasUnit.Id.Value}";
             foreach (var coeff in Coeffs)
             {
                 arg += $",{coeff.WriteValue.ToStringPoint()}";
@@ -33,13 +32,22 @@ namespace IDensity.AddClasses
         /// <summary>
         /// Тип калибровки
         /// </summary>
-        public Parameter<ushort> Type { get; } = new Parameter<ushort>("CalibrType", "Тип калибровки", 0, 10, 0, "hold"); 
+        public Parameter<ushort> Type { get; } = new Parameter<ushort>("CalibrType", "Тип калибровки", 0, 10, 0, "hold");
         #endregion
-        #region Номер единицы измерения
+
+        #region ЕИ
+        MeasUnitSettings _measUnit = new MeasUnitSettings();
         /// <summary>
-        /// Номер единицы измерения
+        /// ЕИ
         /// </summary>
-        public Parameter<ushort> MeasUnitNum { get; } = new Parameter<ushort>("CalibrDataMeasUnitNum", "Номер еденицы измерения", 0, ushort.MaxValue, 0, "hold");
+        public MeasUnitSettings MeasUnit
+        {
+            get => _measUnit;
+            set => Set(ref _measUnit, value);
+        }
+        private RelayCommand _outMeasNumWriteCommand;
+
+        public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnCommandWriteExecuted(null), o => true));
         #endregion
         #region КОэффициенты калибровки
         /// <summary>

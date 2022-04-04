@@ -368,7 +368,7 @@ namespace IDensity.Models
             {
                 model.AnalogGroups[i].AO.Activity.Value = holdRegs[(int)Holds.DacSett + i];
                 model.AnalogGroups[i].AO.DacType.Value = holdRegs[(int)Holds.DacSett + i + 2];
-                model.AnalogGroups[i].AO.DacEiNdx.Value = holdRegs[(int)Holds.DacSett + i + 4];
+                model.AnalogGroups[i].AO.MeasUnit = model.MeasUnitSettings[holdRegs[(int)Holds.DacSett + i + 4]];
                 //model.AnalogGroups[i].AO.DacVarNdx.Value = holdRegs[(int)Holds.DacSett + i + 6];
                 model.AnalogGroups[i].AO.DacLowLimit.Value = GetFloatFromUshorts(holdRegs, (int)Holds.DacSett + i * 2 + 8);
                 model.AnalogGroups[i].AO.DacHighLimit.Value = GetFloatFromUshorts(holdRegs, (int)Holds.DacSett + i * 2 + 12);
@@ -608,7 +608,7 @@ namespace IDensity.Models
             {
                 holdRegs[(int)Holds.DacSett + groupNum] = value.Activity.Value;// Активнсть
                 holdRegs[(int)Holds.DacSett + groupNum + 2] = value.DacType.Value;// Тип
-                holdRegs[(int)Holds.DacSett + groupNum + 4] = value.DacEiNdx.Value;// Номер ЕИ
+                holdRegs[(int)Holds.DacSett + groupNum + 4] = value.MeasUnit.Id.Value;// Номер ЕИ
                // holdRegs[(int)Holds.DacSett + groupNum + 6] = value.DacVarNdx.Value;// Номер переменной
                 GetUshortsFromFloat(holdRegs, (int)Holds.DacSett + groupNum * 2 + 8, value.DacLowLimit.Value); // нижний предел
                 GetUshortsFromFloat(holdRegs, (int)Holds.DacSett + groupNum * 2 + 12, value.DacHighLimit.Value); // верхний предел

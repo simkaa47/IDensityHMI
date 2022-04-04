@@ -108,7 +108,7 @@ namespace IDensity.Models
                 TcpEvent?.Invoke($"{IP}:{PortNum}: соединение завершено пользователем");
                 client.Close();
                 client.Dispose();
-                model.Connecting.Value = client.Connected;
+                
             }
 
         }
@@ -138,12 +138,14 @@ namespace IDensity.Models
                 }
                 errCommCount = 0;
                 model.Connecting.Value = client.Connected;
+                Disconnect();
             }
             catch (Exception ex)
             {
                 if (++errCommCount >= 3)
                 {                    
                     commands?.Clear();
+                    model.Connecting.Value = false;
                     Disconnect();
                     Thread.Sleep(1000);
                     errCommCount = 0;
@@ -209,7 +211,7 @@ namespace IDensity.Models
         #region Запрос текущего значения даты времени
         void GetCurDateTime()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DTG"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DTG#"));
             if (str.Length < 23) return;
             str = str.Substring(5, 17);
             var dt = new DateTime();
@@ -220,7 +222,7 @@ namespace IDensity.Models
         #region Получить данные периферийных модулей
         void GetPeriphTelemetry()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,PPG"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,PPG#"));
             str = str.TrimEnd(new char[] { '#' }).Substring(5);
             float temp = 0;
             var nums = str.Split(new char[] { ',' })
@@ -247,7 +249,7 @@ namespace IDensity.Models
         #region Запрос текущего значения измерения
         void GetCurMeas()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,AMC"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,AMC#"));
             
             float temp = 0;
             var nums = str.Split(new char[] { ',','#' }, StringSplitOptions.RemoveEmptyEntries)
@@ -265,7 +267,7 @@ namespace IDensity.Models
                     model.MeasResults[j].CounterValue.Value = actve ? nums[i + 1] : 0;
                     model.MeasResults[j].PhysValueCur.Value = actve ? nums[i + 2] : 0;
                     model.MeasResults[j].PhysValueAvg.Value = actve ? nums[i + 3] : 0;
-                    model.SetMeasResultData();
+                  //  model.SetMeasResultData();
                 }
                 
 
@@ -284,7 +286,7 @@ namespace IDensity.Models
         #region Запрос статусов устройств
         void GetDeviceStatus()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DSR"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DSR#"));
             ushort temp = 0;
             var strNums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => ushort.TryParse(s, NumberStyles.HexNumber,null, out temp)).Select(s => temp).ToArray();
             if (strNums.Length != 4) return;
@@ -333,14 +335,16 @@ namespace IDensity.Models
             int max = 0;
             for (int i = 0; i < MainModel.MeasProcNum; i++)
             {
+                if (i < 2) model.MeasResults[i].IsActive = false;
                 model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2,i)) > 0;
                 if (model.MeasProcSettings[i].IsActive.Value && max <= 2)
                 {
                     model.MeasResults[max].IsActive = true;
+                    model.MeasResults[max].Settings = model.MeasProcSettings[i];
                     max++;
                 }
             }
-            model.SetMeasResultData();
+            
             model.SettingsReaded = true;
 
         }
@@ -367,7 +371,7 @@ namespace IDensity.Models
             RecognizeFastChangeSett(arr, index);
             model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[105];
             model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
-            model.MeasProcSettings[index].OutMeasNum.Value = (ushort)arr[107];
+            model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[107]];
             model.SettingsReaded = true;
         }
 
@@ -388,7 +392,7 @@ namespace IDensity.Models
                 month = month > 0 && month <= 12 ? month : 1;
                 int year = ((ushort)arr[5 + i * 8]) + 2000;
                 model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);
-                model.MeasProcSettings[num].MeasStandSettings[i].StandMeasUnitNum.Value = (ushort)arr[6 + i * 8];
+                model.MeasProcSettings[num].MeasStandSettings[i].MeasUnit = model.MeasUnitSettings[(ushort)arr[6 + i * 8]];
                 model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 8];
                 model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
                 model.MeasProcSettings[num].MeasStandSettings[i].HalfLifeCorr.Value = arr[9 + i * 8];
@@ -403,7 +407,7 @@ namespace IDensity.Models
         {
             var offset = 76;
             model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
-            model.MeasProcSettings[num].CalibrCurve.MeasUnitNum.Value = (ushort)arr[offset+1];
+            model.MeasProcSettings[num].CalibrCurve.MeasUnit = model.MeasUnitSettings[(ushort)arr[offset+1]];
             for (int i = 0; i < 6; i++)
             {
                 model.MeasProcSettings[num].CalibrCurve.Coeffs[i].Value = arr[offset + 2 + i];
@@ -438,7 +442,7 @@ namespace IDensity.Models
         /// <param name="density">Класс, в который</param>
         void RecognizeDensityFromArr(float[] arr, DensitySett density, int offset)
         {
-            density.MeasValueNum.Value = (ushort)arr[offset];
+            density.MeasUnit = model.MeasUnitSettings[(ushort)arr[offset]];
             density.PhysValue.Value = arr[offset+1];
         }
 
@@ -607,7 +611,7 @@ namespace IDensity.Models
             {
                 model.AnalogGroups[i].AO.Activity.Value = (ushort)list[i][1];
                 model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];
-                model.AnalogGroups[i].AO.DacEiNdx.Value = (ushort)list[i][3];
+                model.AnalogGroups[i].AO.MeasUnit = model.MeasUnitSettings[(ushort)list[i][3]];
                 model.AnalogGroups[i].AO.AnalogMeasProcNdx.Value = (ushort)list[i][4];
                 model.AnalogGroups[i].AO.VarNdx.Value = (ushort)list[i][5];
                 model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][6];
@@ -754,7 +758,7 @@ namespace IDensity.Models
         #region Отправить настройки аналоговых выходов
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
-            var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.DacEiNdx.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
+            var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.MeasUnit.Id.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); } , Encoding.ASCII.GetBytes(str)));
         }
         #endregion

@@ -40,8 +40,16 @@ namespace IDensity.AddClasses
         public Parameter<ushort> DacType { get; } = new Parameter<ushort>("DacType", "Тип источника ЦАП", 0, 1, 0, "");
         #endregion
 
-        #region Номер еденицы измерения
-        public Parameter<ushort> DacEiNdx { get; } = new Parameter<ushort>("DacEiNdx", "Номер еденицы измерения", 0, 7, 0, "");
+        #region ЕИ
+        MeasUnitSettings _measUnit = new MeasUnitSettings();
+        /// <summary>
+        /// ЕИ
+        /// </summary>
+        public MeasUnitSettings MeasUnit
+        {
+            get => _measUnit;
+            set => Set(ref _measUnit, value);
+        }        
         #endregion
 
         #region Номер измерительного процесса
@@ -81,7 +89,7 @@ namespace IDensity.AddClasses
             var output = new AnalogOutput(GroupNum);
             output.Activity.Value = this.Activity.ValidationOk ? this.Activity.WriteValue : this.Activity.Value;
             output.DacType.Value = this.DacType.ValidationOk ? this.DacType.WriteValue : this.DacType.Value;
-            output.DacEiNdx.Value = this.DacEiNdx.ValidationOk ? this.DacEiNdx.WriteValue : this.DacEiNdx.Value;
+            output.MeasUnit = this.MeasUnit;
             output.AnalogMeasProcNdx.Value = this.AnalogMeasProcNdx.ValidationOk ? this.AnalogMeasProcNdx.WriteValue : this.AnalogMeasProcNdx.Value;
             output.VarNdx.Value = this.VarNdx.ValidationOk ? this.VarNdx.WriteValue : this.VarNdx.Value;
             output.DacLowLimit.Value = this.DacLowLimit.ValidationOk ? this.DacLowLimit.WriteValue : this.DacLowLimit.Value;

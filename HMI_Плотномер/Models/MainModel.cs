@@ -80,14 +80,14 @@ namespace IDensity.Models
         /// <summary>
         /// Привязка настроек измерения к результатам измерения
         /// </summary>
-        public void SetMeasResultData()
-        {            
-            for (int i = 0; i < 2; i++)
-            {
-                MeasResults[i].Settings = MeasProcSettings[MeasResults[i].MeasProcessNum.Value];
-                if (MeasResults[i].Settings.IsActive.Value) MeasResults[i].IsActive = true;
-            }
-        }
+        //public void SetMeasResultData()
+        //{            
+        //    for (int i = 0; i < 2; i++)
+        //    {
+        //        MeasResults[i].Settings = MeasProcSettings[MeasResults[i].MeasProcessNum.Value];
+        //        if (MeasResults[i].Settings.IsActive.Value) MeasResults[i].IsActive = true;
+        //    }
+        //}
 
 
         #region Статус циклических измерений
@@ -214,7 +214,7 @@ namespace IDensity.Models
                 sett.Writing += SetMeasUnitsSettings;
             }
         }
-        #endregion
+        #endregion        
 
         #region Настройки платы АЦП
 
@@ -311,8 +311,7 @@ namespace IDensity.Models
                 else if (CommMode.EthEnable) Tcp?.GetData(this);
                 else Connecting.Value = false;
                 if (CycleMeasStatus.Value && Connecting.Value)
-                    UpdateDataEvent?.Invoke();                
-                Thread.Sleep(100);
+                    UpdateDataEvent?.Invoke();
             }
         }
 

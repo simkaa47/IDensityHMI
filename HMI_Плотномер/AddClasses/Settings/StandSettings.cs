@@ -9,7 +9,7 @@ namespace IDensity.AddClasses.Settings
     class StandSettings:PropertyChangedBase
     {
         Timer standTimer = new Timer();
-        const string TcpArg = "std=id,stdMeasUnitNum,duration,date,result,value,halfLifeValue";
+        const string TcpArg = "std=id,stdMeasUnit,duration,date,result,value,halfLifeValue";
         public StandSettings(int id)
         {
             this.Id = id;
@@ -19,8 +19,7 @@ namespace IDensity.AddClasses.Settings
         /// Подписка на изменения 
         /// </summary>
         void DescribeOnCommands()
-        {
-            StandMeasUnitNum.CommandEcecutedEvent += o => CallWriteEvent("stdMeasUnitNum", StandMeasUnitNum.WriteValue);
+        {            
             StandDuration.CommandEcecutedEvent += o => CallWriteEvent("duration", StandDuration.WriteValue);
             LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:ss"));
             StandResult.CommandEcecutedEvent += o => CallWriteEvent("result", StandResult.WriteValue);
@@ -38,8 +37,8 @@ namespace IDensity.AddClasses.Settings
                     case "id":
                         arg = arg.Replace(par, Id.ToString());
                         break;
-                    case "stdMeasUnitNum":
-                        arg = arg.Replace(par, StandMeasUnitNum.Value.ToString());
+                    case "stdMeasUnit":
+                        arg = arg.Replace(par, MeasUnit.Id.Value.ToString());
                         break;
                     case "duration":
                         arg = arg.Replace(par, StandDuration.Value.ToString());
@@ -76,11 +75,19 @@ namespace IDensity.AddClasses.Settings
 
 
         #endregion
-        #region Номер единицы измерения
+        #region ЕИ
+        MeasUnitSettings _measUnit = new MeasUnitSettings();
         /// <summary>
-        /// Номер единицы измерения
+        /// ЕИ
         /// </summary>
-        public Parameter<ushort> StandMeasUnitNum { get; } = new Parameter<ushort>("StandMeasUnitNum", "Номер единицы измерения", 0, 5, 0, "hold");
+        public MeasUnitSettings MeasUnit
+        {
+            get => _measUnit;
+            set => Set(ref _measUnit, value);
+        }
+        private RelayCommand _outMeasNumWriteCommand;
+
+        public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => CallWriteEvent("stdMeasUnit", MeasUnit.Id.Value), o => true));
         #endregion
         #region Длительность стандартизации
         /// <summary>

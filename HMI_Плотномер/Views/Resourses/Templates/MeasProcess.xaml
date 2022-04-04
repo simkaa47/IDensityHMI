@@ -130,113 +130,7 @@
             </MenuItem>
         </Menu>
     </DataTemplate>
-    <!--#endregion-->
-    <!--#region Шаблон типа данных настроек измерительных процессов -->
-    <DataTemplate  DataType="{x:Type sett:MeasProcSettings}" x:Key="MeasProcMenu">
-        <Menu>
-            <MenuItem Header="{Binding Num}" HeaderStringFormat="Процесс №{0}"  HorizontalContentAlignment="Stretch" StaysOpenOnClick="True">
-                <!--#region Номер счетчика -->
-                <MenuItem  DataContext="{Binding MeasProcCounterNum}" Header="{Binding Description}" HorizontalContentAlignment="Stretch">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Настройки стандартизаций -->
-                <MenuItem Header="Настройки стандартизаций" ItemsSource="{Binding MeasStandSettings}" ItemTemplate="{StaticResource MenuStandSettings}"/>
-                <!--#endregion-->                
-                <!--#region Калибровочная кривая -->
-                <MenuItem Header="Калибровочная кривая">
-                    <!--#region ЕИ -->
-                    <MenuItem DataContext="{Binding CalibrCurve.MeasUnitNum}" Header="{Binding Description}">
-                        <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                                                                  CompoboxWidth="150"
-                                                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                                                                  DisplayMemberPath="Name"/>
-                    </MenuItem>
-                    <!--#endregion-->
-                    <!--#region Тип калибровки -->
-                    <MenuItem DataContext="{Binding CalibrCurve.Type}" Header="{Binding Description}">
-                        <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                                                                  CompoboxWidth="150"
-                                                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.TypeCalibrations.Data}" 
-                                                                                  DisplayMemberPath="Name"/>
-                    </MenuItem>
-                    <!--#endregion-->
-                    <!--#region К-ты -->
-                    <MenuItem Header="К-ты полинома" ItemsSource="{Binding CalibrCurve.Coeffs}">
-                        <MenuItem.ItemTemplate>
-                            <DataTemplate>
-                                <Menu>
-                                    <MenuItem Header="{Binding Description}">
-                                        <uc:MenuItemParameterText Command="{Binding Command}"/>
-                                    </MenuItem>
-                                </Menu>
-                            </DataTemplate>
-                        </MenuItem.ItemTemplate>
-                    </MenuItem>
-                    <!--#endregion-->
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Плотность жидкости -->
-                <MenuItem  Header="Плотность жидкости" DataContext="{Binding DensityLiq}" Template="{StaticResource DensitySett}"/>
-                <!--#endregion-->
-                <!--#region Плотность твердого -->
-                <MenuItem  Header="Плотность твердого" DataContext="{Binding DensitySol}" Template="{StaticResource DensitySett}"/>
-                <!--#endregion-->
-                <!--#region Компенсации -->
-                <MenuItem Header="Компенсация температуры" DataContext="{Binding TempCompensation}" Template="{StaticResource Compensation}"/>
-                <MenuItem Header="Компенсация паровой фазы" DataContext="{Binding SteamCompensation}" Template="{StaticResource Compensation}"/>
-                <!--#endregion-->
-                <!--#region Глубина скользящего среднего -->
-                <MenuItem DataContext="{Binding MeasDeep}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Тип измерения -->
-                <MenuItem DataContext="{Binding MeasType}" Header="{Binding Description}">
-                    <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                              CompoboxWidth="150"
-                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                              ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.MeasTypesNamesNames.Data}" 
-                                              DisplayMemberPath="Name"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Быстрые изменения -->
-                <MenuItem DataContext="{Binding FastChange}" Header="Быстрые изменения">
-                    <DockPanel DataContext="{Binding Activity}">
-                        <TextBlock Text="{Binding Description}"
-                                   VerticalAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding WriteValue}"
-                                  Margin="20,0,0,0"
-                                  Command="{Binding Command}" 
-                                  Style="{StaticResource MaterialDesignActionAccentCheckBox}"/>
-                    </DockPanel>
-                    <MenuItem DataContext="{Binding Threshold}" Header="{Binding Description}">
-                        <uc:MenuItemParameterText Command="{Binding Command}"/>
-                    </MenuItem>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Активность процесса -->
-                <DockPanel DataContext="{Binding IsActive}">
-                    <TextBlock Text="{Binding Description}"
-                               VerticalAlignment="Center"/>
-                    <CheckBox IsChecked="{Binding WriteValue}" Command="{Binding Command}" Style="{StaticResource MaterialDesignActionAccentCheckBox}" ></CheckBox>
-                </DockPanel>
-                <!--#endregion-->
-                <!--#region Выходная ЕИ -->
-                <MenuItem DataContext="{Binding OutMeasNum}" Header="{Binding Description}">
-                    <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                                                                  CompoboxWidth="150"
-                                                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                                                                  DisplayMemberPath="Name"/>
-                </MenuItem>
-                <!--#endregion-->
-            </MenuItem>
-        </Menu>
-    </DataTemplate>
-    <!--#endregion-->
+    <!--#endregion-->    
     <!--#region Шаблон под класс данных источника калибровочной кривой -->
     <DataTemplate DataType="{x:Type sett:CalibCurveCrcValue}" x:Key="MenuItemCalibSrcData">
         <Menu>
@@ -296,12 +190,23 @@
     <ControlTemplate TargetType="ListBox" x:Key="DeinsitySettingsItem">
         <ListBox HorizontalContentAlignment="Stretch">
             <!--#region ЕИ -->
-            <uc:CompoboxParameter DataContext="{Binding MeasValueNum}"
-                                  CompoboxWidth="120"
-                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                  DisplayMemberPath="Name"
-                                  Command="{Binding Command}"/>
+            <DockPanel>
+                <TextBlock Text="Единица измерения" Style="{StaticResource Common}"/>
+                <ComboBox Width="150"
+                                  SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  HorizontalAlignment="Right"                                  
+                                  DisplayMemberPath="MeasUnitName.Value"
+                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="DropDownOpened">
+                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="DropDownClosed">
+                            <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+            </DockPanel>
             <!--#endregion-->
             <!--#region Величина -->
             <uc:Parameter DataContext="{Binding PhysValue}"
@@ -385,13 +290,34 @@
                                           ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.MeasTypesNamesNames.Data}"
                                           Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <!--#endregion-->
+                    <!--#region Активность быстрых измерений -->
+                    <DockPanel DataContext="{Binding FastChange.Activity}">
+                        <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
+                        <CheckBox IsChecked="{Binding WriteValue}"
+                                  HorizontalAlignment="Right"
+                                  Command="{Binding Command}"/>
+                    </DockPanel>
+                    <!--#endregion-->
+                    <uc:Parameter DataContext="{Binding FastChange.Threshold}"
+                                  Command="{Binding Command}"/>
                     <!--#region Выходная ЕИ -->
-                    <uc:CompoboxParameter DataContext="{Binding OutMeasNum}"
-                                          Command="{Binding Command}"
-                                          CompoboxWidth="150"
-                                          Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                          ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                          DisplayMemberPath="Name"/>
+                    <DockPanel>
+                        <TextBlock Text="Выходная ЕИ" Style="{StaticResource Common}"/>                        
+                        <ComboBox Width="150"
+                                  SelectedItem="{Binding OutMeasNum,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  HorizontalAlignment="Right"                                  
+                                  DisplayMemberPath="MeasUnitName.Value"
+                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DropDownOpened">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>                                    
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="DropDownClosed">
+                                    <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>
                     <!--#endregion-->
                     <!--#region Активность -->
                     <DockPanel DataContext="{Binding IsActive}">
@@ -466,20 +392,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--#endregion-->
-                        <!--#region Физическая величина -->
-                        <DataGridTemplateColumn MaxWidth="190">
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="Физическая величина"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <uc:MenuItemParameterText Command="{Binding Command}" DataContext="{Binding StandPhysValue}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <!--#endregion-->
+                        <!--#endregion-->                       
                         <!--#region Результат -->
                         <DataGridTemplateColumn MaxWidth="190">
                             <DataGridTemplateColumn.Header>
@@ -506,6 +419,19 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!--#endregion-->
+                        <!--#region Физическая величина -->
+                        <DataGridTemplateColumn MaxWidth="190">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="Физическая величина"
+                                           TextWrapping="Wrap"/>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <uc:MenuItemParameterText Command="{Binding Command}" DataContext="{Binding StandPhysValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
                         <!--#region Единица измерения -->
                         <DataGridTemplateColumn MaxWidth="110">
                             <DataGridTemplateColumn.Header>
@@ -514,13 +440,21 @@
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                                                  HorizontalContentAlignment="Left"
-                                                                  CompoboxWidth="100"
-                                                                  DataContext="{Binding StandMeasUnitNum}"
-                                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                                  ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                                                  DisplayMemberPath="Name"/>
+                                    <ComboBox   Width="150"
+                                                SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                HorizontalAlignment="Right"
+                                                HorizontalContentAlignment="Right"
+                                                DisplayMemberPath="MeasUnitName.Value"
+                                                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="DropDownOpened">
+                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="DropDownClosed">
+                                                <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -542,18 +476,30 @@
                 </DataGrid>
             </TabItem>
             <!--#endregion-->
-            <!--#region Полиномы -->
-            <TabItem Header="ПОЛИНОМЫ">
+            <!--#region КАЛИБРОВОЧНАЯ КРИВАЯ -->
+            <TabItem Header="КАЛИБРОВОЧНАЯ КРИВАЯ">
                 <StackPanel DataContext="{Binding CalibrCurve}">
                     <!--#region Общие настройки -->
                     <ListBox HorizontalContentAlignment="Stretch" >
                         <!--#region ЕИ -->
-                        <uc:CompoboxParameter DataContext="{Binding MeasUnitNum}"
-                                          Command="{Binding Command}"
-                                          CompoboxWidth="150"
-                                          Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                          ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                          DisplayMemberPath="Name"/>
+                        <DockPanel>
+                            <TextBlock Text="Единица измерения" Style="{StaticResource Common}"/>
+                            <ComboBox Width="150"
+                                  SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  HorizontalAlignment="Right"                                  
+                                  DisplayMemberPath="MeasUnitName.Value"
+                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownOpened">
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="DropDownClosed">
+                                        <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        </DockPanel>
+                        <!--#endregion-->
                         <!--#endregion-->
                         <!--#region Тип калибровки -->
                         <uc:CompoboxParameter DataContext="{Binding Type}"
@@ -820,24 +766,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <!--#endregion-->
-            <!--#region БЫСТРЫЕ ИЗМЕНЕНИЯ -->
-            <TabItem Header="БЫСТРЫЕ ИЗМЕНЕНИЯ">
-                <ListBox DataContext="{Binding FastChange}"
-                         HorizontalContentAlignment="Stretch">
-                    <!--#region Активность -->
-                    <DockPanel DataContext="{Binding Activity}">
-                        <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
-                        <CheckBox IsChecked="{Binding WriteValue}"
-                                  HorizontalAlignment="Right"
-                                  Command="{Binding Command}"/>
-                    </DockPanel>
-                    <!--#endregion-->
-                    <uc:Parameter DataContext="{Binding Threshold}"
-                                  Command="{Binding Command}"/>
-                </ListBox>
-            </TabItem>
-            <!--#endregion-->
+            <!--#endregion-->           
         </TabControl>
     </DataTemplate>
     

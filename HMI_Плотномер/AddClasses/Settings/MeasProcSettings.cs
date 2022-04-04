@@ -54,8 +54,8 @@ namespace IDensity.AddClasses.Settings
             MeasType.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"type={MeasType.WriteValue}");
             // Подписка на изменение настроек быстрых измерений
             FastChange.NeedWriteEvent+= OnWriteCommandExecuted;
-            // Подписка на изменение выходной ЕИ
-            OutMeasNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"ei={OutMeasNum.WriteValue}");
+            //// Подписка на изменение выходной ЕИ
+            //OutMeasNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"ei={OutMeasNum.WriteValue}");
             // Настройка таймера
             singleMeasTimer.Elapsed += (o, e) =>
             {                
@@ -170,11 +170,22 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Выходная ЕИ
         /// </summary>
-        public Parameter<ushort> OutMeasNum { get; } = new Parameter<ushort>("OutMeasNum", "Выходная ЕИ", 0, ushort.MaxValue, 0, "");
+        //public Parameter<ushort> OutMeasNum { get; } = new Parameter<ushort>("OutMeasNum", "Выходная ЕИ", 0, ushort.MaxValue, 0, "");
+        private MeasUnitSettings _outMeasNum;
+        public MeasUnitSettings OutMeasNum
+        {
+            get => _outMeasNum;
+            set => Set(ref _outMeasNum, value);
+        }
+        private RelayCommand _outMeasNumWriteCommand;
+
+        public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnWriteCommandExecuted($"ei={OutMeasNum.Id.Value}"), o => true));
+
         #endregion
         #region Активность
         public Parameter<bool> IsActive { get; } = new Parameter<bool>("MeasProcActive", "Активность измерительного процесса", false, true, 0, "hold");
         #endregion
+
         #region Настройки единичного измерения
         Timer singleMeasTimer = new Timer();
         #region Время единичного измерния
@@ -263,6 +274,7 @@ namespace IDensity.AddClasses.Settings
 
 
         #endregion
+
         #region Расчет к-тов полинома
         RelayCommand _calculatePolinomCommand;
         public RelayCommand CalculatePolinomCommand => _calculatePolinomCommand ?? (_calculatePolinomCommand = new RelayCommand(par => 
@@ -346,7 +358,7 @@ namespace IDensity.AddClasses.Settings
 
         public RelayCommand WriteCalibrCoeefsCommand => _writeCalibrCoeefsCommand ?? (_writeCalibrCoeefsCommand = new RelayCommand(par => 
         {
-            var arg = $"calib_curve={CalibrCurve.Type.Value},{CalibrCurve.MeasUnitNum.Value}";
+            var arg = $"calib_curve={CalibrCurve.Type.Value},{CalibrCurve.MeasUnit.Id.Value}";
             for (int i = 0; i < 6; i++)
             {
                 arg += "," + (i < CalculatedCoeefs.Count ? ((float)CalculatedCoeefs[i].Coeff).ToStringPoint() : "0");

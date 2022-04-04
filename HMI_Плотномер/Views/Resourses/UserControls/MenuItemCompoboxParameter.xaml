@@ -20,6 +20,10 @@
                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=Command}"
                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=CommanDParameter}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="DropDownOpened">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=DropOpenedCommand}"
+                                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MenuItemCompoboxParameter}, Path=DropOpenedCommandParameter}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
         </ComboBox>
         <DockPanel.ToolTip>

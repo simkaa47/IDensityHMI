@@ -69,7 +69,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for Index.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IndexProperty =
-            DependencyProperty.Register("Index", typeof(int), typeof(MenuItemCompoboxParameter), new PropertyMetadata(0));
+            DependencyProperty.Register("Index", typeof(int), typeof(MenuItemCompoboxParameter), new PropertyMetadata(null));
 
 
         #endregion
@@ -86,6 +86,45 @@ namespace IDensity.Views.Resourses.UserControls
             DependencyProperty.Register("DisplayMemberPath", typeof(string), typeof(MenuItemCompoboxParameter), new PropertyMetadata());
 
 
+        #endregion
+
+        #region Команда
+        public ICommand DropOpenedCommand
+        {
+            get { return (ICommand)GetValue(DropOpenedCommandProperty); }
+            set { SetValue(DropOpenedCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Command.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropOpenedCommandProperty =
+            DependencyProperty.Register(nameof(DropOpenedCommand), typeof(ICommand), typeof(MenuItemCompoboxParameter), new PropertyMetadata(null, OnValuePropertyChanged, OnCoerceValue), OnValidateValue);
+
+        private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
+        private static object OnCoerceValue(DependencyObject d, object baseValue)
+        {
+            return baseValue;
+        }
+
+        private static bool OnValidateValue(object o)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Параметр команды
+        public object DropOpenedCommandParameter
+        {
+            get { return (object)GetValue(DropOpenedCommandParameterProperty); }
+            set { SetValue(DropOpenedCommandParameterProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CommanDParameter.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropOpenedCommandParameterProperty =
+            DependencyProperty.Register("DropOpenedCommandParameter", typeof(object), typeof(MenuItemCompoboxParameter));
         #endregion
 
         public MenuItemCompoboxParameter()
