@@ -397,7 +397,7 @@ namespace IDensity.Models
         #region Записать активности измерительных процессов
         void SetMeasProcActivity()
         {
-            string cmd = "SETT,meas_prc_ndx=";
+            string cmd = "*SETT,meas_prc_ndx=";
             for (int i = 0; i < MeasProcNum; i++)
             {
                 if (MeasProcSettings[i].IsActive.WriteValue) cmd += $"{i},";

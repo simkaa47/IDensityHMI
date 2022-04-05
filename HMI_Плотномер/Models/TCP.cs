@@ -211,7 +211,7 @@ namespace IDensity.Models
         #region Запрос текущего значения даты времени
         void GetCurDateTime()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DTG#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,DTG#"));
             if (str.Length < 23) return;
             str = str.Substring(5, 17);
             var dt = new DateTime();
@@ -222,7 +222,7 @@ namespace IDensity.Models
         #region Получить данные периферийных модулей
         void GetPeriphTelemetry()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,PPG#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,PPG#"));
             str = str.TrimEnd(new char[] { '#' }).Substring(5);
             float temp = 0;
             var nums = str.Split(new char[] { ',' })
@@ -249,7 +249,7 @@ namespace IDensity.Models
         #region Запрос текущего значения измерения
         void GetCurMeas()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,AMC#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,AMC#"));
             
             float temp = 0;
             var nums = str.Split(new char[] { ',','#' }, StringSplitOptions.RemoveEmptyEntries)
@@ -286,7 +286,7 @@ namespace IDensity.Models
         #region Запрос статусов устройств
         void GetDeviceStatus()
         {
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,DSR#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,DSR#"));
             ushort temp = 0;
             var strNums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => ushort.TryParse(s, NumberStyles.HexNumber,null, out temp)).Select(s => temp).ToArray();
             if (strNums.Length != 4) return;
@@ -326,7 +326,7 @@ namespace IDensity.Models
         void ReadActivity()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,65536#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,65536#"));
             var temp = 0;
             var mask = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(s => int.TryParse(s, out temp))
@@ -355,7 +355,7 @@ namespace IDensity.Models
         public void GetMeasProcessData(int index)
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes($"CMND,MPR,{index}#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
             if (arr == null || arr.Length != 108) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             model.MeasProcSettings[index].Num = (ushort)arr[0];
@@ -493,7 +493,7 @@ namespace IDensity.Models
         void GetSettings1()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,1#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,1#"));
             var list = GetNumber("adc_mode", 1, 1);
             if (list == null) return;
             model.AdcBoardSettings.AdcMode.Value = (ushort)list[0][0];
@@ -540,7 +540,7 @@ namespace IDensity.Models
         void GetSettings2()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,2#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,2#"));
             var list = GetNumber("adc_proc_cntr", 3, MainModel.CountCounters, str);
             if (list == null) return;
             for (int i = 0; i < MainModel.CountCounters; i++)
@@ -566,7 +566,7 @@ namespace IDensity.Models
         void GetSettings4()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,4#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,4#"));
             var indexOfEqual = str.LastIndexOf('=');
             if (indexOfEqual < 1) return;            
             var strArr = str.Substring(indexOfEqual+1).
@@ -595,7 +595,7 @@ namespace IDensity.Models
         void GetSettings7()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,7#"));
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,7#"));
             var list = GetNumber("serial_baudrate", 1,1, str);
             if (list==null) return;
             model.PortBaudrate.Value = (uint)list[0][0];
@@ -634,7 +634,7 @@ namespace IDensity.Models
         void GetSettings8()
         {
             model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("CMND,FSR,8#"));            
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,8#"));            
             // Номер порта
             var list = GetNumber("udp_sett", 5, 1, str);
             model.UdpAddrString = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
@@ -685,14 +685,14 @@ namespace IDensity.Models
         #region Включить-выключить HV
         public void SwitchHv(int value)
         {
-            commands.Enqueue(new TcpWriteCommand(SendTlg, Encoding.ASCII.GetBytes($"CMND,HVO,{value.ToString()}")));
+            commands.Enqueue(new TcpWriteCommand(SendTlg, Encoding.ASCII.GetBytes($"*CMND,HVO,{value.ToString()}#")));
         }
         #endregion
 
         #region Запуск-останов циклических измерений
         public void SwitchMeas(int value)
         {
-            commands.Enqueue(new TcpWriteCommand(SendTlg, Encoding.ASCII.GetBytes($"CMND,AMM,{value.ToString()}")));
+            commands.Enqueue(new TcpWriteCommand(SendTlg, Encoding.ASCII.GetBytes($"*CMND,AMM,{value.ToString()}#")));
         }
         #endregion
 
@@ -712,21 +712,21 @@ namespace IDensity.Models
         #region Изменить режим работы последовательного порта
         public void ChangeSerialSelect(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,serial_select={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"*SETT,serial_select={value}#")));
         }
         #endregion
 
         #region Изменить скорость последовательного порта
         public void ChangeBaudrate(uint value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"SETT,serial_baudrate={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"*SETT,serial_baudrate={value}#")));
         }
         #endregion
 
         #region Установить RTC
         public void SetRtc(DateTime dt)
         {
-            var str = $"SETT,rtc_set={dt.Day},{dt.Month},{dt.Year%100},{dt.Hour},{dt.Minute},{dt.Second}#";
+            var str = $"*SETT,rtc_set={dt.Day},{dt.Month},{dt.Year%100},{dt.Hour},{dt.Minute},{dt.Second}#";
             commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -734,7 +734,7 @@ namespace IDensity.Models
         #region Уставка HV
         public void SetHv(ushort value)
         {
-            var str = $"SETT,hv_target={value*20}#";
+            var str = $"*SETT,hv_target={value*20}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf);model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -742,7 +742,7 @@ namespace IDensity.Models
         #region Управление питанием аналоговых модулей
         public void SwitchAm(int groupNum, int moduleNum, bool value)
         {
-            var str = $"CMND,AMP,{groupNum},{moduleNum},{(value ? 1 : 0)}";
+            var str = $"*CMND,AMP,{groupNum},{moduleNum},{(value ? 1 : 0)}#";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -750,7 +750,7 @@ namespace IDensity.Models
         #region Отправить значение тестовой величины
         public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
         {
-            var str = $"CMND,AMV,{groupNum},{value}#";
+            var str = $"*CMND,AMV,{groupNum},{value}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false;}, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -758,7 +758,7 @@ namespace IDensity.Models
         #region Отправить настройки аналоговых выходов
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
-            var str = $"SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.MeasUnit.Id.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
+            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.MeasUnit.Id.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); } , Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -766,7 +766,7 @@ namespace IDensity.Models
         #region Отправить настройки аналоговых входов
         public void SendAnalogInSwttings(int groupNum, int moduleNum, AnalogInput value)
         {
-            var str = $"SETT,am_in_sett={groupNum},{value.Activity.Value}#";
+            var str = $"*SETT,am_in_sett={groupNum},{value.Activity.Value}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion        
@@ -778,7 +778,7 @@ namespace IDensity.Models
         /// <param name="index">Номер набора стандартизации</param>
         public void MakeStand(int measProcNum, int standNum)
         {
-            var str = $"CMND,ASM,{measProcNum},{standNum}";
+            var str = $"*CMND,ASM,{measProcNum},{standNum}";
             commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
@@ -793,7 +793,7 @@ namespace IDensity.Models
         #region Команда "Записать настройки счечиков"
         public void WriteCounterSettings(CountDiapasone diapasone)
         {
-            var str = $"SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
+            var str = $"*SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings2(); }, Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion        
@@ -802,7 +802,7 @@ namespace IDensity.Models
         public void SetUdpAddr(byte[] addr, int portNum)
         {
             if (addr.Length != 4) return;
-            var str = $"SETT,udp_sett=";
+            var str = $"*SETT,udp_sett=";
             for (int i = 0; i < 4; i++) str = str + $"{addr[i]},";
             str += portNum.ToString();
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(str + "#")));
@@ -813,32 +813,32 @@ namespace IDensity.Models
         #region Команды изменения настроек платы АЦП
         public void SetAdcMode(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_mode={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*SETT,adc_mode={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
         }
         public void SetAdcProcMode(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_proc_mode={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*SETT,adc_proc_mode={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
         }
         public void SetAdcSyncMode(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_mode={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*SETT,adc_sync_mode={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings2(), null));
         }
         public void SetAdcSyncLevel(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,adc_sync_level={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*SETT,adc_sync_level={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
         }
         public void SetAdcTimerMax(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,timer_max={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*SETT,timer_max={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings1(), null));
         }
         public void SetPreampGain(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"SETT,preamp_gain={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*SETT,preamp_gain={value}#")));
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings7(), null));
         }
 
@@ -847,15 +847,15 @@ namespace IDensity.Models
         #region Команда "Запуск-останов платы АЦП"
         public void SwitchAdcBoard(ushort value)
         {
-            var str = $"CMND,ADC,{value}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+            var str = $"*CMND,ADC,{value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
         #region Команда "Запуск/останов выдачи данных АЦП "
         public void StartStopAdcData(ushort value)
         {
-            var str = $"CMND,DAT,{value}#";
+            var str = $"*CMND,DAT,{value}";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
@@ -863,15 +863,15 @@ namespace IDensity.Models
         #region Команда "Произвести еденичное измеренине"
         public void MakeSingleMeasure(int time, ushort measProcNdx, ushort index)
         {
-            var str = $"CMND,AMS,{time},{measProcNdx},{index}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+            var str = $"*CMND,AMS,{time},{measProcNdx},{index}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
         
         #region Команда "Записать настройки едениц измерерия"
         public void SetMeasUnitsSettings(MeasUnitSettings settings)
         {
-            var str = $"SETT,meas_unit={settings.Id.WriteValue}" +
+            var str = $"*SETT,meas_unit={settings.Id.WriteValue}" +
                 $",{settings.MeasUnitClassNum.WriteValue}," +
                 $"{settings.Type.WriteValue}," +
                 $"{settings.A.WriteValue.ToStringPoint()}," +
@@ -885,7 +885,7 @@ namespace IDensity.Models
         #region Команда "Переключить реле"
         public void SwitchRelay(ushort value)
         {
-            var str = $"CMND,RLS,{value}#";
+            var str = $"*CMND,RLS,{value}#";
             commands.Enqueue(new TcpWriteCommand((buf) =>SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -893,7 +893,7 @@ namespace IDensity.Models
         #region Команда "Перезагрузитьь плату"
         public void RstBoard()
         {
-            var str = $"CMND,RST#";
+            var str = $"*CMND,RST#";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion

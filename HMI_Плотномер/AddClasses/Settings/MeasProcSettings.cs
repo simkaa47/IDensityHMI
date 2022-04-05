@@ -371,7 +371,7 @@ namespace IDensity.AddClasses.Settings
 
         void OnWriteCommandExecuted(string argument)
         {
-            NeedWriteEvent?.Invoke($"SETT,meas_proc={Num},{argument}#", Num);
+            NeedWriteEvent?.Invoke($"*SETT,meas_proc={Num},{argument}#", Num);
         }
         /// <summary>
         /// Необходимо записать настройки измерительных процессов

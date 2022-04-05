@@ -335,7 +335,22 @@
                 <DataGrid AutoGenerateColumns="False" FontSize="14" FontWeight="Bold"                           
                           ItemsSource="{Binding MeasStandSettings}"                          
                           CanUserAddRows="False">
-                    <DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Id}" Value="2"></Condition>
+                                        <Condition Binding="{Binding ElementName=CalibrType, Path=Index, Converter={StaticResource NotEqual}, ConverterParameter=2}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed"/>                                       
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>                        
                         <DataGridTemplateColumn MaxWidth="100">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock Text="Тип"
@@ -503,6 +518,7 @@
                         <!--#endregion-->
                         <!--#region Тип калибровки -->
                         <uc:CompoboxParameter DataContext="{Binding Type}"
+                                              x:Name="CalibrType"
                                           Command="{Binding Command}"
                                           CompoboxWidth="150"
                                           Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
