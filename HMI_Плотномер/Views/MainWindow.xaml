@@ -1107,6 +1107,10 @@
                                         <ListBoxItem Content="{Binding mainModel.Tcp.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
                                         <ListBoxItem Content="{Binding mainModel.Tcp.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Номер порта"></ListBoxItem>
                                         <ListBoxItem Content="{Binding mainModel.Tcp.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Пауза между запросами, мс."></ListBoxItem>
+                                        <DockPanel>
+                                            <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
+                                            <CheckBox IsChecked="{Binding mainModel.Tcp.CycicRequest}" HorizontalAlignment="Right"/>
+                                        </DockPanel>
                                         <!--#region IP адрес udp приемника -->
                                         <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <DockPanel>

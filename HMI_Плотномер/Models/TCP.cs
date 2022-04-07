@@ -53,6 +53,17 @@ namespace IDensity.Models
         }
 
         #endregion
+
+        #region Циклический опрос
+        private bool _cycicRequest;
+
+        public bool CycicRequest
+        {
+            get { return _cycicRequest; }
+            set { Set(ref _cycicRequest, value); }
+        }
+
+        #endregion
         #endregion
 
         #region Поля       
@@ -127,11 +138,14 @@ namespace IDensity.Models
                     Connect();
                     return;
                 }
-                GetDeviceStatus();
-                GetCurDateTime();
-                GetCurMeas();
-                GetPeriphTelemetry();                
-                GetSetiings();
+                if (CycicRequest)
+                {
+                    GetDeviceStatus();
+                    GetCurDateTime();
+                    GetCurMeas();
+                    GetPeriphTelemetry();
+                    GetSetiings(); 
+                }
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
