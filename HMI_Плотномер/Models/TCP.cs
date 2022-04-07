@@ -100,19 +100,21 @@ namespace IDensity.Models
         #endregion
 
         #region Дисконнект
-        public void Disconnect()
+        void CloseConnection()
         {
             if (client != null)
-            {
-               
+            {               
                 TcpEvent?.Invoke($"{IP}:{PortNum}: соединение завершено пользователем");
                 client.Close();
-                client.Dispose();
-                
+                client.Dispose();                
             }
-
         }
-        #endregion        
+        #endregion
+
+        public void Disconnect()
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => CloseConnection(), null));
+        }
 
         #region основной метод для получения данных из tcp соединения
         public void GetData(MainModel model)
@@ -138,7 +140,7 @@ namespace IDensity.Models
                 }
                 errCommCount = 0;
                 model.Connecting.Value = client.Connected;
-                Disconnect();
+                CloseConnection();
             }
             catch (Exception ex)
             {
@@ -146,7 +148,7 @@ namespace IDensity.Models
                 {                    
                     commands?.Clear();
                     model.Connecting.Value = false;
-                    Disconnect();
+                    CloseConnection();
                     Thread.Sleep(1000);
                     errCommCount = 0;
                 }
@@ -842,6 +844,13 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) => GetSettings7(), null));
         }
 
+        #endregion
+
+        #region Очистить спектр
+        public void ClearSpectr()
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes($"*CMND,CRS#")));
+        }
         #endregion
 
         #region Команда "Запуск-останов платы АЦП"

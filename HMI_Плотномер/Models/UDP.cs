@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDensity.AddClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,11 +10,22 @@ using System.Windows;
 
 namespace IDensity.Models
 {
+    
     /// <summary>
     /// В этом классе происходит парсинг пакетов, приходящих по UDP
     /// </summary>
-    class UDP
+    class UDP:PropertyChangedBase
     {
+        // 0 - Осциллограмма, 1 - неполный спектр, 2 - полный спектр, 3 - счетчики
+        private int _mode;
+
+        public int Mode
+        {
+            get { return _mode; }
+            set { Set(ref _mode, value); }
+        }
+
+
         #region UDP клиент
         UdpClient client;
         int localPort = 49051;
@@ -52,6 +64,7 @@ namespace IDensity.Models
                     {
                         byte[] data = client.Receive(ref remoteIp);
                         ParseData(data);
+                       
                     }
                 }
                 catch (Exception ex)
@@ -71,7 +84,7 @@ namespace IDensity.Models
             client?.Close();
         }
 
-        
+        int nextPacketNum = 1;
 
         void ParseData(byte[] data) 
         {
@@ -81,20 +94,29 @@ namespace IDensity.Models
             if (list.Count != 2) return;
             int count = list[0];// общее количество пакетов
             int packetNum = list[1];// номер пакета в серии
+            if (packetNum != nextPacketNum)
+            {
+                nextPacketNum = 1;
+                return;
+            }
+            nextPacketNum = (nextPacketNum + 1) > count ? 1 : nextPacketNum+1;
             string header = Encoding.ASCII.GetString(data, 0, 5);
             switch (header)
             {
                 case "*AOLV":
+                    Mode = 0;
                     AddToCollection(2, data.Length);
                     // если посдледний пакет, то можно соообщить о том что он собран
                     if (packetNum >= count) UpdateOscillEvent?.Invoke(CurOscillList);
                     break;
                 case "*AML1":
                 case "*AML2":
+                    Mode = header=="*AML1"?1:2;
                     AddToCollection(2, packetNum == count ? data.Length : data.Length - 10);
-                    if (packetNum >= count) UpdateAmplitudesEvent?.Invoke(CurOscillList);
+                    if (packetNum >= count) UpdateOscillEvent?.Invoke(CurOscillList);
                     break;
                 case "*AML3":
+                    Mode = 3;
                     AddToCollection(4, data.Length );
                     if (packetNum >= count) UpdateAmplitudesEvent?.Invoke(CurOscillList);
                     break;

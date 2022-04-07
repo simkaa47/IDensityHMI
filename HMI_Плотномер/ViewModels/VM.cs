@@ -142,13 +142,7 @@ namespace IDensity.ViewModels
             if (execPar != null && ushort.TryParse(execPar.ToString(), out num))
             {
                 mainModel.SwitchAdcBoard(num);
-                if (num != 0 && Udp == null) {
-                    Udp = new UDP();
-                    Udp.UpdateOscillEvent += UpdateAdcTrend;
-                    Udp.UpdateAmplitudesEvent += UpdateMaxAmpsData;
-                }
-
-
+                Udp.Start();
             }
         }, canEcecPar => true));
         #endregion
@@ -159,6 +153,7 @@ namespace IDensity.ViewModels
         {
             ushort num = 0;
             if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) mainModel.StartStopAdcData(num);
+            Udp.Start();
         }, canEcecPar => true));
         #endregion
 
@@ -188,8 +183,71 @@ namespace IDensity.ViewModels
         public RelayCommand UpdateAvialablemeasUnitCommand => _updateAvialablemeasUnitCommand ?? (_updateAvialablemeasUnitCommand = new RelayCommand(par =>
         {
             OnPropertyChanged(nameof(AvialableMeasUnitSettings));
-        }, o => true)); 
+        }, o => true));
         #endregion
+
+        #region Показать осциллограмму
+        RelayCommand _showOscillCommand;
+        public RelayCommand ShowOscillCommand => _showOscillCommand ?? (_showOscillCommand = new RelayCommand(par => 
+        {
+            mainModel.StartStopAdcData(0);
+            mainModel.SwitchAdcBoard(0);
+            mainModel.SetAdcMode(0);
+            mainModel.StartStopAdcData(1);
+            mainModel.SwitchAdcBoard(1);
+            Udp.Start();
+
+        }, o => mainModel.Connecting.Value));
+        #endregion
+
+        #region Показать спектр
+        RelayCommand _showSpectrCommand;
+        public RelayCommand ShowSpectrCommand => _showSpectrCommand ?? (_showSpectrCommand = new RelayCommand(par =>
+        {
+            mainModel.StartStopAdcData(0);
+            Udp.Start();
+            mainModel.SwitchAdcBoard(0);
+            mainModel.SetAdcMode(1);
+            mainModel.SetAdcProcMode(1);
+            mainModel.StartStopAdcData(1);
+            mainModel.SwitchAdcBoard(1);
+
+        }, o => mainModel.Connecting.Value));
+        #endregion
+
+        #region Очистить спектр
+        RelayCommand _clearSpectrCommand;
+        public RelayCommand ClearSpectrCommand => _clearSpectrCommand ?? (_clearSpectrCommand = new RelayCommand(par =>
+        {
+            mainModel.ClearSpectr();
+            mainModel.SwitchAdcBoard(1);
+
+        }, o => mainModel.Connecting.Value));
+        #endregion
+
+        #region выбранный диапазон счетчика
+        private CountDiapasone _selectedCountDiapasone;
+
+        public CountDiapasone SelectedCountDiapasone
+        {
+            get { return _selectedCountDiapasone; }
+            set { Set(ref _selectedCountDiapasone, value); }
+        }
+        #endregion
+
+        #region Запуск-останов логирования спектра
+        RelayCommand _startStopSpectrLogCommand;
+        public RelayCommand StartStopSpectrLogCommand => _startStopSpectrLogCommand ?? (_startStopSpectrLogCommand = new RelayCommand(par => 
+        {
+            if (!IsSpectrLogging)
+            {
+                if (!File.Exists(SpetrLogPath)) MessageBox.Show($"Путь {SpetrLogPath} некорректный!");
+                else IsSpectrLogging = true;
+            }
+            else IsSpectrLogging = false;
+        }, o => true));
+        #endregion
+
 
         #endregion
         public MainModel mainModel { get; } = new MainModel();
@@ -208,14 +266,35 @@ namespace IDensity.ViewModels
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
-            //MeasUnitSDescribe();           
-
+            UdpInit();
         }
 
 
         #endregion
 
-        UDP Udp { get; set; }        
+        private UDP _udp;
+
+        public UDP Udp
+        {
+            get { return _udp; }
+            set { Set(ref _udp, value); }
+        }
+
+        void UdpInit()
+        {
+            Udp = new UDP();
+            Udp.UpdateOscillEvent += (collection) =>
+            {
+                UpdateAdcTrend(collection);
+                if (Udp.Mode == 2 && IsSpectrLogging)
+                {
+                    var parameters = $"";
+                    SpectrLogService.WriteToFile(SpetrLogPath, parameters, collection);
+                }
+            };
+            Udp.UpdateAmplitudesEvent += UpdateMaxAmpsData;
+        }
+        
 
         #region Единичное измерение
         #region Время еденичного измерения
@@ -676,6 +755,54 @@ namespace IDensity.ViewModels
         #endregion
         #endregion
 
+        #region Логирование спектра
+        private string _spetrLogPath;
+
+        public string SpetrLogPath
+        {
+            get { return _spetrLogPath; }
+            set { Set(ref _spetrLogPath, value); }
+        }
+
+
+        #region Флаг выполнения
+        private bool _isSpectrLogging;
+        /// <summary>
+        /// Выполняется логирование спектра
+        /// </summary>
+        public bool IsSpectrLogging
+        {
+            get { return _isSpectrLogging; }
+            set { Set(ref _isSpectrLogging, value); }
+        }
+
+        #endregion
+        /// <summary>
+        /// Сервис логгирования спектра
+        /// </summary>
+        private SpectrLogService _logService;
+        /// <summary>
+        /// Сервис логирования спектра
+        /// </summary>
+        public SpectrLogService SpectrLogService
+        {
+            get 
+            {
+                if (_logService == null)
+                {
+                    _logService = new SpectrLogService();
+                    _logService.SpectrErrorEvent += (msg) =>
+                      {
+                          MessageBox.Show(msg);
+                          IsSpectrLogging = false;
+                      };
+                }
+                return _logService; 
+            }
+            
+        }
+        #endregion
+
         #region Запись в файл
         async void WriteArchivalTrendToText()
         {
@@ -785,6 +912,7 @@ namespace IDensity.ViewModels
             }
         } 
         #endregion
+
         #region Флаг загрузки данных событий из БД
         private bool _historyItemDownloading;
         /// <summary>
@@ -797,6 +925,7 @@ namespace IDensity.ViewModels
         }
 
         #endregion
+
         #region Метод загрузки событий из базы данных
         async void AddHistoryItemsFromDb()
         {
@@ -828,8 +957,7 @@ namespace IDensity.ViewModels
             }
         }
         #endregion
-
-        
+               
 
         #region Метод загрузки события в базу данных и коллекцию
         void AddHistoryItem(EventDevice device)
@@ -886,9 +1014,6 @@ namespace IDensity.ViewModels
             get { return _selectDatesCommand ?? (_selectDatesCommand = new RelayCommand(obj => UpadateDates(obj), obj => true)); }
             
         }
-
-
-
         #endregion
 
     }

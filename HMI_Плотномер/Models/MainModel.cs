@@ -535,7 +535,12 @@ namespace IDensity.Models
         }
         public void SetAdcSyncLevel(ushort value)
         {
-            if (CommMode.EthEnable) Tcp.SetAdcSyncLevel(value);
+            if (CommMode.EthEnable)
+            {
+                Tcp.SwitchAdcBoard(0);
+                Tcp.SetAdcSyncLevel(value);
+                Tcp.SwitchAdcBoard(1);
+            }
         }
         public void SetAdcTimerMax(ushort value)
         {
@@ -552,6 +557,13 @@ namespace IDensity.Models
         {
             if (CommMode.EthEnable) Tcp.SwitchAdcBoard(value);
             else if (CommMode.RsEnable) rs.SwitchAdcBoard(value);
+        }
+        #endregion
+
+        #region Очистить спектр
+        public void ClearSpectr()
+        {
+            if (CommMode.EthEnable) Tcp.ClearSpectr();
         }
         #endregion
 

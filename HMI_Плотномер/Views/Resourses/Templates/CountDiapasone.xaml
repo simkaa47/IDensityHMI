@@ -4,17 +4,33 @@
                     xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
                     xmlns:add="clr-namespace:IDensity.AddClasses"
                     xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
-    <DataTemplate DataType="{x:Type add:CountDiapasone}">
-        <Menu>
-            <MenuItem Header="{Binding Num.Value}" HeaderStringFormat="Счетчик №{0}">
-                <MenuItem DataContext="{Binding Start}" Header="{Binding Description}" >
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <MenuItem DataContext="{Binding Finish}" Header="{Binding Description}" >
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-            </MenuItem>
-        </Menu>
-        
-    </DataTemplate>
+    <ControlTemplate TargetType="UserControl" x:Key="CountersTemplate">
+        <StackPanel>
+            <DataGrid CanUserAddRows="False"
+                                      FontSize="16"
+                                      FontWeight="Bold"
+                                      SelectedItem="{Binding SelectedCountDiapasone}"
+                                      CanUserDeleteRows="False"
+                                      AutoGenerateColumns="False"
+                                      ItemsSource="{Binding mainModel.CountDiapasones}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№" IsReadOnly="True" Binding="{Binding Num.Value}"/>
+                    <DataGridTemplateColumn Header="Старт">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <uc:MenuItemParameterText DataContext="{Binding Start}" Command="{Binding Command}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Финиш">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <uc:MenuItemParameterText DataContext="{Binding Finish}" Command="{Binding Command}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </ControlTemplate>
 </ResourceDictionary>

@@ -1,0 +1,63 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:oxy="http://oxyplot.org/wpf"
+                    xmlns:vm="clr-namespace:IDensity.ViewModels"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
+    <ControlTemplate x:Key="AdcTrend" TargetType="UserControl" >
+        <Grid>
+            <!--#region Тренд в режиме осциллографа-->
+            <oxy:Plot PlotMargins="30,0,0,30"  
+                                      Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=3}"
+                                      Grid.Row="1"
+                                      PlotType="XY"                                         
+                                      PlotAreaBorderThickness="0" 
+                                      TextColor="WhiteSmoke"                               
+                                      Background="DarkSlateGray"   
+                                      PlotAreaBackground="DarkGray">
+
+                <oxy:Plot.Annotations>
+                    <oxy:LineAnnotation Type="Vertical" X="{Binding SelectedCountDiapasone.Start.Value}" Color="Blue" Text="Старт" StrokeThickness="4" Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=2}"/>
+                    <oxy:LineAnnotation Type="Vertical" X="{Binding SelectedCountDiapasone.Finish.Value}" Color="Red" Text="Финиш" StrokeThickness="4" Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=2}"/>
+                </oxy:Plot.Annotations>
+                <oxy:Plot.Axes>
+                    <oxy:LinearAxis  
+                                        TextColor="WhiteSmoke"
+                                        FontSize="14"
+                                        MajorGridlineColor="WhiteSmoke"
+                                        MajorGridlineStyle="Dot"
+                                        Position ="Left" />
+                </oxy:Plot.Axes>
+                <oxy:LineSeries  LineStyle="Dash"                                           
+                                               ItemsSource="{Binding AdcDataTrend}"
+                                               DataFieldX="X" DataFieldY="Y"                                           
+                                               Color="Black"/>
+            </oxy:Plot>
+            <!--#endregion-->
+            <!--#region Гистограмма в режиме максимальных амплитуд -->
+            <oxy:Plot Grid.Row="1"
+                                      TextColor="WhiteSmoke"
+                                      PlotAreaBorderColor="WhiteSmoke"
+                                      SelectionColor="WhiteSmoke"
+                                      LegendTextColor="WhiteSmoke"
+                                      Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=3}"
+                                      Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
+                                      PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
+                <oxy:Plot.Axes>
+                    <oxy:LinearAxis Title="Значение"                                                    
+                                                    Position="Left"
+                                                    AbsoluteMinimum="0"/>
+                    <oxy:LinearAxis Title="Номер" 
+                                                    Position="Bottom"
+                                                    AbsoluteMinimum="0"/>
+                </oxy:Plot.Axes>
+                <oxy:LinearBarSeries Color="Red"                                                   
+                                                     BarWidth="40"
+                                                     ItemsSource="{Binding MaxAmplitudesData}"
+                                                     DataFieldX="X"
+                                                     DataFieldY="Y"/>
+
+            </oxy:Plot>
+            <!--#endregion-->
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

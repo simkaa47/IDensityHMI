@@ -60,7 +60,10 @@ namespace IDensity
         {
             FileDialogOpen(LogPath);
         }
-       
-        
+
+        private void SpectrLogPathShow(object sender, RoutedEventArgs e)
+        {
+            FileDialogOpen(SpectrLogPath);
+        }
     }
 }

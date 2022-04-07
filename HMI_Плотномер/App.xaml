@@ -31,7 +31,9 @@
                 <ResourceDictionary Source="Views/Resourses/Templates/MeasProcess.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/CountDiapasone.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/Analogs.xaml"/>
-                <ResourceDictionary Source="Views/Resourses/Templates/CountDiapasones.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Templates/CountDiapasone.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Templates/TrendAdc.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
         

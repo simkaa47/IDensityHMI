@@ -118,14 +118,7 @@
         <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка Измерение -->
-            <TabItem Header="ИЗМЕРЕНИЕ">
-                <TabItem.Resources>                    
-                    <ResourceDictionary>
-                        <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="Resourses/Templates/Trends.xaml"/>
-                        </ResourceDictionary.MergedDictionaries>
-                    </ResourceDictionary>
-                </TabItem.Resources>
+            <TabItem Header="ИЗМЕРЕНИЕ">               
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
@@ -156,8 +149,7 @@
                                     <ColumnDefinition></ColumnDefinition>
                                     <ColumnDefinition></ColumnDefinition>
                                     <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>                                
-                                <!--<oxy:Plot  Grid.ColumnSpan="3" Tag="{Binding PlotCollection}" Template="{StaticResource Trend}"></oxy:Plot>-->
+                                </Grid.ColumnDefinitions>
                                 <uc:TrendControl Grid.Row="2"
                                                  Grid.ColumnSpan="6" 
                                                  DataSource="{Binding PlotCollection}"
@@ -352,7 +344,6 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <!--#region Тренд -->
-                                <!--<oxy:Plot  Grid.Row="2" Grid.ColumnSpan="6" Tag="{Binding ArchivalDataPotnts}" Template="{StaticResource Trend}"></oxy:Plot>-->
                                 <uc:TrendControl Grid.Row="2"
                                                  Grid.ColumnSpan="6" 
                                                  DataSource="{Binding ArchivalDataPotnts}"
@@ -528,33 +519,7 @@
                     <!--#endregion-->
                     <!--#region Счетчики -->
                     <TabItem Header="СЧЕТЧИКИ">
-                        <StackPanel>
-                            <DataGrid CanUserAddRows="False"
-                                      FontSize="16"
-                                      FontWeight="Bold"
-                                      CanUserDeleteRows="False"
-                                      AutoGenerateColumns="False"
-                                      ItemsSource="{Binding mainModel.CountDiapasones}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="№" IsReadOnly="True" Binding="{Binding Num.Value}"/>
-                                    <DataGridTemplateColumn Header="Старт">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <uc:MenuItemParameterText DataContext="{Binding Start}" Command="{Binding Command}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Финиш">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <uc:MenuItemParameterText DataContext="{Binding Finish}" Command="{Binding Command}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-
-                            </DataGrid>
-                        </StackPanel>
+                        <UserControl Template="{StaticResource CountersTemplate}"/>
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Аналоги -->
@@ -893,40 +858,31 @@
                     <!--#region Настройки платы HV -->
                     <TabItem Header="ПЛАТА HV" >
                         <ListBox HorizontalContentAlignment="Stretch" >
-                            <!--#region Уставка напряжения -->                           
-                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.VoltageSV}">
-                                <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SetHvCommand}" />
-                            </ListBoxItem>
+                            <!--#region Уставка напряжения -->
+                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageSV}" 
+                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SetHvCommand}" />
                             <!--#endregion-->
                             <!--#region Входное напряжение -->
-                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}">
-                                <uc:Parameter/>
-                            </ListBoxItem>
+                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}"/>
                             <!--#endregion-->
                             <!--#region Выходное напряжение -->
-                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.VoltageCurOut}">
-                                <uc:Parameter/>
-                            </ListBoxItem>
+                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurOut}"/>
                             <!--#endregion-->
                             <!--#region Индикатор связи -->
-                            <ListBoxItem DataContext="{Binding mainModel.TelemetryHV.HvCommState}">
-                                <UserControl Template="{StaticResource BitIndicator}"/>
-                            </ListBoxItem>
+                            <UserControl DataContext="{Binding mainModel.TelemetryHV.HvCommState}" 
+                                             Template="{StaticResource BitIndicator}"/>
                             <!--#endregion-->
                             <!--#region Кнопка включения-выключения HV -->
-                            <ListBoxItem>
-                                <DockPanel>                                    
-                                    <TextBlock Style="{StaticResource Common}" 
+                            <DockPanel>
+                                <TextBlock Style="{StaticResource Common}" 
                                                Text="Управление Высоким напряжением"/>
-                                    <Button Width="220" Height="Auto" HorizontalAlignment="Right"
+                                <Button Width="220" Height="Auto" HorizontalAlignment="Right"
                                             Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFFF0000}"
                                             Command="{Binding SwitchHvCommand}">
-                                        <TextBlock TextWrapping="Wrap" 
-                                                   Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource HvButn}}"
-                                                   ></TextBlock>
-                                    </Button>
-                                </DockPanel>                                
-                            </ListBoxItem>
+                                    <TextBlock TextWrapping="Wrap" 
+                                                   Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource HvButn}}"/>
+                                </Button>
+                            </DockPanel>
                             <!--#endregion-->
                         </ListBox>
                     </TabItem>
@@ -960,31 +916,7 @@
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <UserControl Template="{StaticResource BitIndicator}" DataContext="{Binding mainModel.AdcBoard.CommState}"/>
                                 </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region IP адрес udp приемника -->
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <DockPanel>
-                                        <TextBlock Text="Адрес приемника данных по UDP(IP, порт)"
-                                               VerticalAlignment="Center"
-                                               Style="{StaticResource Common}"/>
-                                        <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Right">
-                                            <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
-                                                 MinWidth="100"
-                                                 HorizontalContentAlignment="Center"
-                                                 VerticalContentAlignment="Center"/>
-                                            <TextBox Text="{Binding mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged}"
-                                                 MinWidth="100"
-                                                 HorizontalContentAlignment="Center"
-                                                 VerticalContentAlignment="Center"/>
-                                            <Button Width="50"
-                                                Margin="5,0,5,0"
-                                                Command="{Binding SetUpsAddrCommand}"
-                                                Content="-->"/>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </ListBoxItem>
-                                <!--#endregion-->
+                                <!--#endregion-->                                
                                 <!--#region Режим работы АЦП -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch" DataContext="{Binding mainModel.AdcBoardSettings.AdcMode}">
                                     <uc:CompoboxParameter ItemSource="{StaticResource AdcModes}"
@@ -1016,10 +948,12 @@
 
                                 </ListBoxItem>
                                 <!--#endregion-->
+                                <!--#region к-т предусиления -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch"
                                              DataContext="{Binding mainModel.AdcBoardSettings.PreampGain}">
                                     <uc:Parameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetPreampGainChangeCommand}"/>
                                 </ListBoxItem>
+                                <!--#endregion-->
                                 <!--#region Таймнр выдачи данных -->
                                 <ListBoxItem HorizontalContentAlignment="Stretch" 
                                          DataContext="{Binding mainModel.AdcBoardSettings.TimerMax}">
@@ -1066,54 +1000,10 @@
                                 </ListBoxItem>
                                 <!--#endregion-->
                             </ListBox>
-                            <!--#region Тренд в режиме осциллографа-->
-                            <oxy:Plot PlotMargins="30,0,0,30"  
-                                      Visibility="{Binding mainModel.AdcBoardSettings.AdcMode.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}"
-                                      Grid.Row="1"
-                                      PlotType="XY"                                         
-                                      PlotAreaBorderThickness="0" 
-                                      TextColor="WhiteSmoke"                               
-                                      Background="DarkSlateGray"   
-                                      PlotAreaBackground="DarkGray">
-
-                                <oxy:Plot.Axes>
-                                    <oxy:LinearAxis  
-                                        TextColor="WhiteSmoke"
-                                        FontSize="14"
-                                        MajorGridlineColor="WhiteSmoke"
-                                        MajorGridlineStyle="Dot"
-                                        Position ="Left" />
-                                </oxy:Plot.Axes>
-                                <oxy:LineSeries  LineStyle="Dash"                                           
-                                               ItemsSource="{Binding AdcDataTrend}"
-                                               DataFieldX="X" DataFieldY="Y"                                           
-                                               Color="Black"/>  
-                            </oxy:Plot>
-                            <!--#endregion-->
-                            <!--#region Гистограмма в режиме максимальных амплитуд -->
-                            <oxy:Plot Grid.Row="1"
-                                      TextColor="WhiteSmoke"
-                                      PlotAreaBorderColor="WhiteSmoke"
-                                      SelectionColor="WhiteSmoke"
-                                      LegendTextColor="WhiteSmoke"
-                                      Visibility="{Binding mainModel.AdcBoardSettings.AdcMode.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}"
-                                      Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
-                                      PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
-                                <oxy:Plot.Axes>
-                                    <oxy:LinearAxis Title="Значение"                                                    
-                                                    Position="Left"
-                                                    AbsoluteMinimum="0"/>
-                                    <oxy:LinearAxis Title="Номер" 
-                                                    Position="Bottom"
-                                                    AbsoluteMinimum="0"/>
-                                </oxy:Plot.Axes>
-                                <oxy:LinearBarSeries Color="Red"                                                   
-                                                     BarWidth="40"
-                                                     ItemsSource="{Binding MaxAmplitudesData}"
-                                                     DataFieldX="X"
-                                                     DataFieldY="Y"/>
-                                
-                            </oxy:Plot>
+                            <!--#region График -->
+                            <UserControl Grid.Row="1"
+                                 Template="{StaticResource AdcTrend}">
+                            </UserControl>
                             <!--#endregion-->
 
                         </Grid>
@@ -1217,6 +1107,30 @@
                                         <ListBoxItem Content="{Binding mainModel.Tcp.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
                                         <ListBoxItem Content="{Binding mainModel.Tcp.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Номер порта"></ListBoxItem>
                                         <ListBoxItem Content="{Binding mainModel.Tcp.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Пауза между запросами, мс."></ListBoxItem>
+                                        <!--#region IP адрес udp приемника -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <DockPanel>
+                                                <TextBlock Text="Адрес приемника данных по UDP(IP, порт)"
+                                               VerticalAlignment="Center"
+                                               Style="{StaticResource Common}"/>
+                                                <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+                                                    <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                                 MinWidth="100"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"/>
+                                                    <TextBox Text="{Binding mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged}"
+                                                 MinWidth="100"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"/>
+                                                    <Button Width="50"
+                                                Margin="5,0,5,0"
+                                                Command="{Binding SetUpsAddrCommand}"
+                                                Content="-->"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
                                     </ListBox>
                                 </GroupBox>
                                 <!--#endregion-->
@@ -1240,6 +1154,7 @@
                                                                   Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeSerialSelectCommand}"
                                                                   CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=Index}"/>
                                         </ListBoxItem>
+                                        
                                         <!--#endregion-->                                        
                                     </ListBox>
                                 </GroupBox>
@@ -1376,7 +1291,120 @@
                     <!--#endregion-->
                 </TabControl>
             </TabItem>
-            <!--#endregion-->            
+            <!--#endregion-->
+            <!--#region Управление -->
+            <TabItem Header="УПРАВЛЕНИЕ">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.4*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--#region Параметры -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <!--#region Первая группа параметров-->
+                        <ListBox Grid.Column="0" HorizontalContentAlignment="Stretch">
+                            <!--#region Уровень синхронизации -->
+                            <uc:Parameter  DataContext="{Binding mainModel.AdcBoardSettings.AdcSyncLevel}" 
+                                               Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetAdcSyncLevelChangeCommand}"/>
+                            <!--#endregion-->
+                            <!--#region к-т предусиления -->
+                            <uc:Parameter  DataContext="{Binding mainModel.AdcBoardSettings.PreampGain}" 
+                                           Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetPreampGainChangeCommand}"/>
+                            <!--#endregion-->
+                            <!--#region Таймнр выдачи данных -->
+                            <uc:Parameter DataContext="{Binding mainModel.AdcBoardSettings.TimerMax}" 
+                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetTimerMaxChangeCommand}"/>
+                            <!--#endregion-->
+                        </ListBox>
+                        <!--#endregion-->
+                        <!--#region Вторая группа параметров -->
+                        <ListBox Grid.Column="1" HorizontalContentAlignment="Stretch">
+                            <!--#region Уставка напряжения -->
+                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageSV}"  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SetHvCommand}" /> 
+                            <!--#endregion-->
+                            <!--#region Выходное напряжение -->
+                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurOut}"/>
+                            <!--#endregion-->
+                            <!--#region Кнопка включения-выключения HV -->
+                            <DockPanel>
+                                <TextBlock Style="{StaticResource Common}" 
+                                               Text="Управление Высоким напряжением"/>
+                                <Button Width="220" Height="Auto" HorizontalAlignment="Right"
+                                            Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFFF0000}"
+                                            Command="{Binding SwitchHvCommand}">
+                                    <TextBlock TextWrapping="Wrap" 
+                                                   Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource HvButn}}"/>
+                                </Button>
+                            </DockPanel>
+                            <!--#endregion-->
+                        </ListBox>
+                        <!--#endregion-->
+                    </Grid>
+                    <!--#endregion-->
+                    <!--#region Кнопки -->
+                    
+                    <UniformGrid Grid.Column="1"
+                                 Rows="3">
+                        <!--#region Показать осциллограмму -->
+                        <Button Height="Auto"
+                                Margin="5"
+                                Command="{Binding ShowOscillCommand}"
+                                Content="ПОКАЗАТЬ ОСЦИЛЛОГРАММУ"/>
+                        <!--#endregion-->
+                        <!--#region Показать спектр -->
+                        <Button Height="Auto"
+                                Margin="5"
+                                Command="{Binding ShowSpectrCommand}"
+                                Content="ПОКАЗАТЬ СПЕКТР"/>
+                        <!--#endregion-->
+                        <!--#region Очистить спектр -->
+                        <Button Height="Auto"
+                                Margin="5"
+                                Command="{Binding ClearSpectrCommand}"
+                                Content="ОЧИСТИТЬ СПЕКТР"/>
+                        <!--#endregion-->
+                    </UniformGrid>
+                    <!--#endregion-->
+                    <!--#region График -->
+                    <UserControl Grid.Row="1"
+                                 Template="{StaticResource AdcTrend}">                        
+                    </UserControl>
+                    <!--#endregion-->
+                    <!--#region Счетчик -->
+                    <StackPanel Grid.Row="1" Grid.Column="1">
+                        <UserControl  Template="{StaticResource CountersTemplate}"/>
+                        <GroupBox Header="ЗАПИСЬ СПЕКТРА">
+                            <ListBox HorizontalContentAlignment="Stretch">
+                                <!--#region Путь -->
+                                <DockPanel >
+                                    <TextBlock x:Name="SpectrLogPath" 
+                                               Text="{Binding SpetrLogPath, TargetNullValue=Нажмите Browse чтобы указать путь, Mode=TwoWay}"
+                                               Foreground="WhiteSmoke"
+                                               Background="Transparent"/>
+                                    <Button Width="100"
+                                            Click="SpectrLogPathShow"
+                                            Content="Browse"
+                                            HorizontalAlignment="Right"/>
+                                </DockPanel>
+                                <!--#endregion-->
+                                <Button Content="Запись"
+                                        Command="{Binding StartStopSpectrLogCommand}"
+                                        Background="{Binding IsSpectrLogging, Converter={StaticResource ColorToBool}, ConverterParameter=ffff0000}"></Button>
+                            </ListBox>
+                        </GroupBox>
+                    </StackPanel>
+                    <!--#endregion-->
+                </Grid>
+            </TabItem>
+            <!--#endregion-->
             <!--#region События -->
             <TabItem Header="СОБЫТИЯ">
                 <TabControl TabStripPlacement="Top">

@@ -12,6 +12,7 @@
     <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
     <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
     <conv:EqualityToVisibilityConverter x:Key="VisibleIfEqual"/>
+    <conv:NotEqualityToVisibilityConverter x:Key="VisibleIfNotEqual"/>
     <conv:StringByIndexConverter x:Key="StringByIndex"/>
     <conv:GetNameFromEnumCustom x:Key="EnumCustomConverter"/>
 </ResourceDictionary>
