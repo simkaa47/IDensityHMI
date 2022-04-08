@@ -1381,7 +1381,12 @@
                     <UserControl Grid.Row="1"
                                  Template="{StaticResource AdcTrend}">                        
                     </UserControl>
-                    <!--#endregion-->
+                    <!--<uc:TrendAdc Grid.Row="1"
+                                 Mode="{Binding Udp.Mode}"
+                                 Collection="{Binding AdcDataTrend}"
+                                 LowAnnotation="{Binding SelectedCountDiapasone.Start.Value}"
+                                 HighLineAnnotation="{Binding SelectedCountDiapasone.Finish.Value}"/>
+                    --><!--#endregion-->
                     <!--#region Счетчик -->
                     <StackPanel Grid.Row="1" Grid.Column="1">
                         <UserControl  Template="{StaticResource CountersTemplate}"/>

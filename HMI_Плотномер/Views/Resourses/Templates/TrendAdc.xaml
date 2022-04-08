@@ -15,9 +15,9 @@
                                       Background="DarkSlateGray"   
                                       PlotAreaBackground="DarkGray">
 
-                <oxy:Plot.Annotations>
-                    <oxy:LineAnnotation Type="Vertical" X="{Binding SelectedCountDiapasone.Start.Value}" Color="Blue" Text="Старт" StrokeThickness="4" Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=2}"/>
-                    <oxy:LineAnnotation Type="Vertical" X="{Binding SelectedCountDiapasone.Finish.Value}" Color="Red" Text="Финиш" StrokeThickness="4" Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=2}"/>
+                <oxy:Plot.Annotations>                    
+                    <oxy:LineAnnotation Name="LowLine"  Type="Vertical" X="{Binding SelectedCountDiapasone.Start.Value}" Color="Blue" Text="Старт" StrokeThickness="4" />
+                    <oxy:LineAnnotation Name="HighLine"  Type="Vertical" X="{Binding SelectedCountDiapasone.Finish.Value}" Color="Red" Text="Финиш" StrokeThickness="4"/>                    
                 </oxy:Plot.Annotations>
                 <oxy:Plot.Axes>
                     <oxy:LinearAxis  
@@ -25,12 +25,13 @@
                                         FontSize="14"
                                         MajorGridlineColor="WhiteSmoke"
                                         MajorGridlineStyle="Dot"
-                                        Position ="Left" />
-                </oxy:Plot.Axes>
-                <oxy:LineSeries  LineStyle="Dash"                                           
+                                        Position ="Left">                        
+                    </oxy:LinearAxis>
+                </oxy:Plot.Axes>                
+                <oxy:LineSeries                LineStyle="Dash"                                           
                                                ItemsSource="{Binding AdcDataTrend}"
                                                DataFieldX="X" DataFieldY="Y"                                           
-                                               Color="Black"/>
+                                               Color="Black"/>                
             </oxy:Plot>
             <!--#endregion-->
             <!--#region Гистограмма в режиме максимальных амплитуд -->
@@ -57,7 +58,18 @@
                                                      DataFieldY="Y"/>
 
             </oxy:Plot>
-            <!--#endregion-->
+            <!--#endregion-->           
         </Grid>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Udp.Mode}" Value="0">
+                <Setter TargetName="LowLine" Property="StrokeThickness" Value="0"/>
+                <Setter TargetName="HighLine" Property="StrokeThickness" Value="0"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedCountDiapasone}" Value="{x:Null}">
+                <Setter TargetName="LowLine" Property="StrokeThickness" Value="0"/>
+                <Setter TargetName="HighLine" Property="StrokeThickness" Value="0"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+        
     </ControlTemplate>
 </ResourceDictionary>
