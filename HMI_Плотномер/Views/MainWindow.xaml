@@ -40,14 +40,14 @@
             </Grid.ColumnDefinitions>
             <!--#region Эмблема заказчика -->
             <Border Grid.Column="0" Margin="5">
-                <TextBlock Text="Место для эмблемы заказчика" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                <Image Source="Resourses/Pictures/konvels_logo_white.png"/>
             </Border>
             <!--#endregion-->
             <!--#region Серийный номер -->
             <Border Grid.Column="1"  Margin="5">
                 <UniformGrid Rows="2">
                     <TextBlock Text="Серийный номер:" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                    <TextBlock Text="000000" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock Text="000001" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </UniformGrid>
             </Border>
             <!--#endregion-->
