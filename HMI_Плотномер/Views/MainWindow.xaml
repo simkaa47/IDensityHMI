@@ -1030,7 +1030,7 @@
                             <!--#region Синхронизация с временем ПК -->
                             <ListBoxItem>
                                 <DockPanel>
-                                    <TextBlock Text="{Binding CurPcDateTime}"></TextBlock>
+                                    <TextBlock Text="Синхронизировать с временем ПК"></TextBlock>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Margin="1,0,1,0"  Width="{Binding ElementName=Dt, Path=ActualWidth}" 
                                                        Text="{Binding CurPcDateTime, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
