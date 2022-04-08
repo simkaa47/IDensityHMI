@@ -257,8 +257,7 @@ namespace IDensity.ViewModels
         {
             mainModel.ModelProcess();
             mainModel.UpdateDataEvent += AddDataToCollection;
-            timer.Elapsed += (s, e) => CurPcDateTime = DateTime.Now;
-            timer.Elapsed += (s, e) => UpdateSingleMeasTime();
+            timer.Elapsed += (s, e) => CurPcDateTime = DateTime.Now;            
             timer.Start();
             Events = new Events(mainModel);
             GetEventHistory();
