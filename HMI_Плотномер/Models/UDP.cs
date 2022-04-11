@@ -112,7 +112,7 @@ namespace IDensity.Models
                 case "*AML1":
                 case "*AML2":
                     Mode = header=="*AML1"?1:2;
-                    AddToCollection(2, packetNum == count ? data.Length : data.Length - 10);
+                    AddToCollection(2, Math.Min(1034,data.Length));
                     if (packetNum >= count) UpdateOscillEvent?.Invoke(CurOscillList);
                     break;
                 case "*AML3":

@@ -21,7 +21,7 @@ namespace IDensity.AddClasses.Settings
         void DescribeOnCommands()
         {            
             StandDuration.CommandEcecutedEvent += o => CallWriteEvent("duration", StandDuration.WriteValue);
-            LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:ss"));
+            LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:yy"));
             StandResult.CommandEcecutedEvent += o => CallWriteEvent("result", StandResult.WriteValue);
             StandPhysValue.CommandEcecutedEvent += o => CallWriteEvent("value", StandPhysValue.WriteValue);
             HalfLifeCorr.CommandEcecutedEvent += o => CallWriteEvent("halfLifeValue", HalfLifeCorr.WriteValue);
@@ -44,7 +44,7 @@ namespace IDensity.AddClasses.Settings
                         arg = arg.Replace(par, StandDuration.Value.ToString());
                         break;
                     case "date":
-                        arg = arg.Replace(par, LastStandDate.Value.ToString("dd:MM:ss"));
+                        arg = arg.Replace(par, LastStandDate.Value.ToString("dd:MM:yy"));
                         break;
                     case "result":
                         arg = arg.Replace(par, StandResult.Value.ToStringPoint());

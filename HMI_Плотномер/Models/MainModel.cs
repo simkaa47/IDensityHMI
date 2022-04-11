@@ -50,8 +50,9 @@ namespace IDensity.Models
             {
                 diap.NeedWriteEvent += WriteCounterSettings;
             }
+            HalfLife.CommandEcecutedEvent += (o) => WriteCommonSettings($"half_life={HalfLife.WriteValue.ToStringPoint()}");
         }
-
+        public Parameter<float> HalfLife { get; } = new Parameter<float>("HalfLife", "Значение полураспада", float.MinValue, float.MaxValue, 0, "");
 
         #region События
         #region Обновились данные
@@ -363,6 +364,11 @@ namespace IDensity.Models
         #endregion
 
         #region Команды
+        void WriteCommonSettings(string arg)
+        {
+            if (CommMode.EthEnable) Tcp.WriteCommonSettings(arg);
+        }
+
         #region Старт-стоп циклических измерений        
         public  void SwitchMeas()
         {

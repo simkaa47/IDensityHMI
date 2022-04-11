@@ -144,8 +144,9 @@ namespace IDensity.Models
                     GetCurDateTime();
                     GetCurMeas();
                     GetPeriphTelemetry();
-                    GetSetiings(); 
+                    
                 }
+                GetSetiings();
                 while (commands.Count > 0)
                 {
                     var command = commands.Dequeue();
@@ -154,7 +155,7 @@ namespace IDensity.Models
                 }
                 errCommCount = 0;
                 model.Connecting.Value = client.Connected;
-                CloseConnection();
+                if(CycicRequest)CloseConnection();
             }
             catch (Exception ex)
             {
@@ -641,7 +642,10 @@ namespace IDensity.Models
             model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1]; 
             list = GetNumber("preamp_gain", 1, 1, str);
             if (list == null) return;
-            model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];           
+            model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];
+            list = GetNumber("half_life", 1, 1, str);
+            if (list == null) return;
+            model.HalfLife.Value = list[0][0];
             model.SettingsReaded = true;
         }
         #endregion
@@ -921,6 +925,13 @@ namespace IDensity.Models
         }
         #endregion
 
+        public void WriteCommonSettings(string arg)
+        {
+            var str = $"*SETT={arg}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
+        }
+
+
         #endregion
 
         #region Очистка буфера
@@ -933,6 +944,7 @@ namespace IDensity.Models
         }
         #endregion
 
+        
         #endregion
 
 
