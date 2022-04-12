@@ -522,6 +522,13 @@
                         <UserControl Template="{StaticResource CountersTemplate}"/>
                     </TabItem>
                     <!--#endregion-->
+                    <!--#region Общие настройки -->
+                    <TabItem Header="ОБЩИЕ НАСТРОЙКИ">
+                        <ListBox HorizontalContentAlignment="Stretch">
+                            <uc:Parameter DataContext="{Binding mainModel.HalfLife}" Command="{Binding Command}"/>
+                        </ListBox>
+                    </TabItem>
+                    <!--#endregion-->
                     <!--#region Аналоги -->
                     <TabItem Header="АНАЛОГОВЫЕ МОДУЛИ">
                         <TabItem.Resources>

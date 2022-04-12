@@ -287,7 +287,7 @@ namespace IDensity.ViewModels
                 UpdateAdcTrend(collection);
                 if (Udp.Mode == 2 && IsSpectrLogging)
                 {
-                    var parameters = $"hv={mainModel.TelemetryHV.VoltageCurOut},syn_level={mainModel.AdcBoardSettings.AdcSyncLevel.Value},preamp_gain={mainModel.AdcBoardSettings.PreampGain.Value}";
+                    var parameters = $"hv={mainModel.TelemetryHV.VoltageCurOut.Value},syn_level={mainModel.AdcBoardSettings.AdcSyncLevel.Value},preamp_gain={mainModel.AdcBoardSettings.PreampGain.Value}";
                     SpectrLogService.WriteToFile(SpetrLogPath, parameters, collection);
                     IsSpectrLogging = false;
                 }

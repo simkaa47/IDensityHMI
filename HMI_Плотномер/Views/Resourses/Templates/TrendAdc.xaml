@@ -28,7 +28,7 @@
                                         Position ="Left">                        
                     </oxy:LinearAxis>
                 </oxy:Plot.Axes>                
-                <oxy:LineSeries                LineStyle="Dash"                                           
+                <oxy:LineSeries                                            
                                                ItemsSource="{Binding AdcDataTrend}"
                                                DataFieldX="X" DataFieldY="Y"                                           
                                                Color="Black"/>                

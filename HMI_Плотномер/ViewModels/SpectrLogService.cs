@@ -30,7 +30,7 @@ namespace IDensity.ViewModels
         {
             try
             {
-                StringBuilder builder = new StringBuilder($"{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss:f") }" + _parameters + "\t");
+                StringBuilder builder = new StringBuilder($"{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss:f")+"\t" }" + _parameters + "\t");
                 foreach (var point in _collection)
                 {
                     builder.Append(point.Y + ";");

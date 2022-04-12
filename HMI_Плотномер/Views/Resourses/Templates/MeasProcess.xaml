@@ -392,7 +392,8 @@
                                 <DataTemplate>
                                     <DockPanel>
                                         <wpftool:DateTimePicker Width="120"
-                                                            Value="{Binding LastStandDate.WriteValue}"
+                                                                 
+                                                            Value="{Binding LastStandDate.WriteValue, UpdateSourceTrigger=PropertyChanged}"
                                                             HorizontalAlignment="Left"           
                                                             FontWeight="Bold"
                                                             Format="Custom"             
