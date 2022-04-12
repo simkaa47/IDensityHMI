@@ -139,6 +139,7 @@ namespace IDensity.Models
                 commands.Clear();
                 client.Disconnect();
                 model.Connecting.Value = false;
+                Thread.Sleep(1000);
             }
         }
         #endregion
