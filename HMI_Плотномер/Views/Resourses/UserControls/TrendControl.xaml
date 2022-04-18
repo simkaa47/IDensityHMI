@@ -9,8 +9,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <oxy:Plot PlotMargins="30,0,0,30"                  
-                      PlotType="XY" 
-                      PlotAreaBorderThickness="0" 
+                      PlotType="XY"                   
+                      PlotAreaBorderThickness="0"
                       TextColor="WhiteSmoke"                       
                       x:Name="plot" 
                       IsLegendVisible="True"
@@ -20,20 +20,22 @@
             <oxy:Plot.Axes>
                 <oxy:LinearAxis  
                         TextColor="WhiteSmoke" 
-                        FontWeight="Bold" 
-                        FontSize="14"
+                        FontWeight="Bold"
+                        
+                        FontSize="14"                       
                         MajorGridlineColor="WhiteSmoke"
                         MajorGridlineStyle="Dot"
                         Position ="Left" />
                 <oxy:DateTimeAxis FontWeight="Bold"
-                                      MajorGridlineColor="WhiteSmoke"
-                                      MajorGridlineStyle="Dot"
-                                      FontSize="14"/>
+                                  MaximumRange="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=MaximumRange}"
+                                  MajorGridlineColor="WhiteSmoke"
+                                  MajorGridlineStyle="Dot"
+                                  FontSize="14"/>
             </oxy:Plot.Axes>
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility1}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle1, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="time" DataFieldY="y1" Color="Red"/>
+                                           DataFieldX="time" DataFieldY="y1"  Color="Red"/>
             
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility2}"

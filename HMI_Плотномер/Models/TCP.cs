@@ -21,7 +21,7 @@ namespace IDensity.Models
 
         #region Свойства
         #region IP адрес платы
-        string _ip = "192.168.1.177";
+        string _ip = "192.168.10.151";
         /// <summary>
         /// IP адрес платы
         /// </summary>
@@ -100,7 +100,8 @@ namespace IDensity.Models
         {
             commands?.Clear();
             client = new TcpClient();
-            client.ReceiveTimeout = 2000;
+            client.ReceiveTimeout = 1000;
+            client.SendTimeout = 1000;            
             TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
             client.Connect(IP, PortNum);
             
@@ -384,9 +385,9 @@ namespace IDensity.Models
             RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 86);
             RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 88);
             RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 95);
-            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[100];
+            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = (ushort)arr[105];
+            model.MeasProcSettings[index].MeasDuration.Value = arr[105]/10;
             model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
             model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[107]];
             model.SettingsReaded = true;
@@ -646,9 +647,47 @@ namespace IDensity.Models
             list = GetNumber("half_life", 1, 1, str);
             if (list == null) return;
             model.HalfLife.Value = list[0][0];
+            model.DeviceName.Value = GetStringById("name", str);
+            model.IsotopName.Value = GetStringById("isotope", str);
+            ushort.TryParse(GetStringById("pipe_diameter", str), out ushort temp);
+            model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
+            model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
+            model.SerialNumber.Value = GetStringById("SN", str);
+            model.OrderNumber.Value = GetStringById("ORDER", str);
+            model.DeviceType.Value = GetStringById("TYPE", str);
+            model.FwVersion.Value = GetStringById("FW_VER", str);
+            model.FwVersion.Value = GetStringById("FW_VER", str);
+            model.CustNumber.Value = GetStringById("CUSTOMER_NUMBER", str); ; 
             model.SettingsReaded = true;
+            
         }
         #endregion
+
+        string GetStringById(string id, string source)
+        {
+            var indexfirst = source.IndexOf(id);
+            if (indexfirst != -1) return source.Substring(indexfirst+id.Length+1).
+                    Split(new char[] {',','#'}).
+                    FirstOrDefault();
+            return string.Empty;
+        }
+
+        DateTime GetDate(string strDate)
+        {
+            int temp = 0;
+            var nums = strDate.Split(":", StringSplitOptions.RemoveEmptyEntries).
+                Where(s => int.TryParse(s, out temp)).
+                Select(s => temp).
+                ToList();
+            if (nums.Count != 3) return DateTime.MinValue;
+            int day = (ushort)nums[0];
+            day = day > 0 && day <= 31 ? day : 1;
+            int month = (ushort)nums[1];
+            month = month > 0 && month <= 12 ? month : 1;
+            int year = ((ushort)nums[2]) + 2000;
+            return new DateTime(year, month, day);
+
+        }
 
         #region Настройки №8
         void GetSettings8()
@@ -659,6 +698,11 @@ namespace IDensity.Models
             var list = GetNumber("udp_sett", 5, 1, str);
             model.UdpAddrString = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
             model.PortUdp = (int)list[0][4];
+            list = GetNumber("tcp_sett", 12, 1, str);
+            if (list == null) return;
+            model.IP = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
+            model.Mask = $"{list[0][4]}.{list[0][5]}.{list[0][6]}.{list[0][7]}";
+            model.GateWay = $"{list[0][8]}.{list[0][9]}.{list[0][10]}.{list[0][11]}";
             model.SettingsReaded = true;
         }
         #endregion
@@ -697,6 +741,7 @@ namespace IDensity.Models
             }
             return list;
         }
+        #endregion
         #endregion
 
         #region Команды
@@ -925,9 +970,17 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region КОманда "Установить IP адрес платы"
+        public void SetIPAddr(string ip,string mask, string gate)
+        {
+            var str = $"*SETT,tcp_sett={ip.Replace(".", ",")},{mask.Replace(".", ",")},{gate.Replace(".", ",")}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
         public void WriteCommonSettings(string arg)
         {
-            var str = $"*SETT={arg}#";
+            var str = $"*SETT,{arg}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
 
@@ -945,7 +998,7 @@ namespace IDensity.Models
         #endregion
 
         
-        #endregion
+        
 
 
 

@@ -24,5 +24,8 @@ namespace IDensity.Views.Resourses.UserControls
         }
 
         public string StringFormat { get; set; }
+        
+
+
     }
 }

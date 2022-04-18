@@ -40,11 +40,17 @@ namespace IDensity.AddClasses
         public bool ValidationOk { get => _validationOk; set => Set(ref _validationOk, value);  } 
 
         #region Идетификатор параметра
-        public string Id { get; } 
+        public string Id { get; }
         #endregion
-        public Parameter(string id, string description, T minValue, T maxValue, int regNum, string regType)
+        public Parameter(string id, string description, T minValue, T maxValue, int regNum, string regType) : this(id, description, minValue, maxValue, regNum, regType, false)
+        { 
+        
+        }
+
+        public Parameter(string id, string description, T minValue, T maxValue, int regNum, string regType, bool isReadOnly)
         {
             this.Id = id;
+            this.OnlyRead = isReadOnly;
             this.Description = description;
             this.MinValue = minValue;
             this.MaxValue = maxValue;

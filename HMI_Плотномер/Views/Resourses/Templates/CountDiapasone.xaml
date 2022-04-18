@@ -13,6 +13,11 @@
                                       CanUserDeleteRows="False"
                                       AutoGenerateColumns="False"
                                       ItemsSource="{Binding mainModel.CountDiapasones}">
+                <DataGrid.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </DataGrid.ItemsPanel>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" IsReadOnly="True" Binding="{Binding Num.Value}"/>
                     <DataGridTemplateColumn Header="Старт">

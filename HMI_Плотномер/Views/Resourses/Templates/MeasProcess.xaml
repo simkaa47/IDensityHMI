@@ -277,6 +277,7 @@
                     <!--#endregion-->                    
                     <!--#region Длительность измерения -->
                     <uc:Parameter DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.MeasProcSettings[0].MeasDuration}"
+                                  StringFormat="f1"
                                   Command="{Binding Command}"/>
                     <!--#endregion-->
                     <!--#region Глубина усреднения -->
@@ -285,7 +286,8 @@
                     <!--#endregion-->
                     <!--#region Тип измерения -->
                     <uc:CompoboxParameter DataContext="{Binding MeasType}"
-                                          CompoboxWidth="150"  
+                                          CompoboxWidth="150"
+                                          Command="{Binding Command}"
                                           DisplayMemberPath="Name"
                                           ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.MeasTypesNamesNames.Data}"
                                           Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

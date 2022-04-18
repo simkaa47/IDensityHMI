@@ -42,7 +42,7 @@ namespace IDensity.AddClasses.Settings
             // Подписка на собтия записи данных калибровочгных кривых
             CalibrCurve.NeedWriteEvent += OnWriteCommandExecuted;
             //Действие по изменению продолжительности и глубины измерения
-            MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue}");
+            MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue*10}");
             MeasDeep.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"aver_depth={MeasDeep.WriteValue}");
             // Действия по изменению настроек плотности
             DensityLiq.NeedWriteEvent+=(s)=> OnWriteCommandExecuted($"dens_liq={s}");
@@ -158,7 +158,7 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Длительность измерения
         /// </summary>
-        public Parameter<ushort> MeasDuration { get; } = new Parameter<ushort>("MeasDuration", "Длительность измерения, x0.1 c.", 0, ushort.MaxValue, 0, "");
+        public Parameter<float> MeasDuration { get; } = new Parameter<float>("MeasDuration", "Длительность измерения, c", 0, 1000, 0, "");
         #endregion
         #region Глубина усреднения
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using OxyPlot.Axes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,6 +24,22 @@ namespace IDensity.Views.Resourses.UserControls
         {
             InitializeComponent();
         }
+
+
+
+
+        public double MaximumRange
+        {
+            get { return (double)GetValue(MaximumRangeProperty); }
+            set { SetValue(MaximumRangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MaximumRange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaximumRangeProperty =
+            DependencyProperty.Register("MaximumRange", typeof(double), typeof(TrendControl), new PropertyMetadata(double.MaxValue));
+
+
+
 
         #region Источник для трендов
         public IEnumerable<TimePoint> DataSource

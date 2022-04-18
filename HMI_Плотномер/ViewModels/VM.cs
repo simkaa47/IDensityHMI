@@ -248,6 +248,15 @@ namespace IDensity.ViewModels
         }, o => true));
         #endregion
 
+        #region запись параметров Ethernet параметров платы
+        RelayCommand _writeEthParamsCommand;
+        public RelayCommand WriteEthParamsCommand => _writeEthParamsCommand ?? (_writeEthParamsCommand = new RelayCommand(par => 
+        {
+            if (mainModel.CommMode.EthEnable) mainModel.Tcp.SetIPAddr(mainModel.IP, mainModel.Mask, mainModel.GateWay);
+        }, 
+            o => mainModel.Connecting.Value));
+        #endregion
+
 
         #endregion
         public MainModel mainModel { get; } = new MainModel();
@@ -278,6 +287,8 @@ namespace IDensity.ViewModels
             get { return _udp; }
             set { Set(ref _udp, value); }
         }
+
+        
 
         void UdpInit()
         {
@@ -333,8 +344,8 @@ namespace IDensity.ViewModels
         #region Настройки тренда
         GraphSettings _trendSettings;
         public GraphSettings TrendSettings { get => _trendSettings ?? (_trendSettings = ClassInit<GraphSettings>()); }
-        #endregion
-
+        #endregion        
+        
         ObservableCollection<TimePoint> _plotCollection;
         public ObservableCollection<TimePoint> PlotCollection
         {
@@ -513,8 +524,7 @@ namespace IDensity.ViewModels
         #region Добавление данных в график
         void AddDataToCollection()
         {
-            App.Current?.Dispatcher?.Invoke(
-                () =>
+            App.Current?.Dispatcher?.Invoke(() =>
                 {
                     var tp = new TimePoint
                     {
@@ -531,12 +541,9 @@ namespace IDensity.ViewModels
                         y10 = mainModel.TempTelemetry.TempInternal.Value
                     };
                     PlotCollection.Add(tp);
-                    while (PlotCollection.Count>0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)))
-                    {
-                        PlotCollection.RemoveAt(0);
-                    }
-                    SqlMethods.WritetoDb<TimePoint>(tp);
-                }); ;
+                    if (PlotCollection.Count > 100000) PlotCollection.RemoveAt(0);// Чтобы не было много элементов ОП
+                    SqlMethods.WritetoDb<TimePoint>(tp);                    
+                }); 
 
         }
         #endregion
@@ -872,6 +879,8 @@ namespace IDensity.ViewModels
             
         }
         #endregion
+
+       
 
     }
 }

@@ -6,6 +6,7 @@ using IDensity.Models.XML;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -35,10 +36,58 @@ namespace IDensity.Models
         /// <summary>
         /// Количество измерительных процессов
         /// </summary>
-        public const int MeasProcNum = 8; 
+        public const int MeasProcNum = 8;
         #endregion
 
-        
+        Stopwatch stopWatch = new Stopwatch();
+
+        #region Значения TCP сервера
+        #region IP адрес платы
+        string _ip = "192.168.10.151";
+        /// <summary>
+        /// IP адрес платы
+        /// </summary>
+        public string IP
+        {
+            get => _ip;
+            set
+            {
+                if (MainModel.CheckIp(value)) Set(ref _ip, value);
+            }
+        }
+        #endregion
+
+        #region Маска
+        string _mask = "255.255.255.0";
+        /// <summary>
+        /// IP адрес платы
+        /// </summary>
+        public string Mask
+        {
+            get => _mask;
+            set
+            {
+                if (MainModel.CheckIp(value)) Set(ref _mask, value);
+            }
+        }
+        #endregion
+
+        #region GateWay
+        string _gateway = "192.168.10.1";
+        /// <summary>
+        /// IP адрес платы
+        /// </summary>
+        public string GateWay
+        {
+            get => _gateway;
+            set
+            {
+                if (MainModel.CheckIp(value)) Set(ref _gateway, value);
+            }
+        }
+        #endregion
+        #endregion
+
         public MainModel()
         {
             Init();// Инициализация параметров  
@@ -51,8 +100,13 @@ namespace IDensity.Models
                 diap.NeedWriteEvent += WriteCounterSettings;
             }
             HalfLife.CommandEcecutedEvent += (o) => WriteCommonSettings($"half_life={HalfLife.WriteValue.ToStringPoint()}");
+            DeviceName.CommandEcecutedEvent += (o) => WriteCommonSettings($"name={DeviceName.WriteValue.Substring(0,Math.Min(DeviceName.WriteValue.Length,10))}");
+            IsotopName.CommandEcecutedEvent += (o) => WriteCommonSettings($"isotope={IsotopName.WriteValue.Substring(0, Math.Min(IsotopName.WriteValue.Length, 10))}");
+            DiameterPipe.CommandEcecutedEvent+=(o)=> WriteCommonSettings($"pipe_diameter={DiameterPipe.WriteValue}");
+            SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
+            SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
         }
-        public Parameter<float> HalfLife { get; } = new Parameter<float>("HalfLife", "Значение полураспада", float.MinValue, float.MaxValue, 0, "");
+        
 
         #region События
         #region Обновились данные
@@ -290,6 +344,48 @@ namespace IDensity.Models
 
         #endregion
 
+        #region Значение полураспада
+        public Parameter<float> HalfLife { get; } = new Parameter<float>("HalfLife", "Значение полураспада", float.MinValue, float.MaxValue, 0, "");
+        #endregion
+
+        #region Название прибора
+        public Parameter<string> DeviceName { get; } = new Parameter<string>("DeviceName", "Название прибора", string.Empty, "zzzzzzzzzzz", 0, "");
+        #endregion
+
+        #region Имя изотопа
+        public Parameter<string> IsotopName { get; } = new Parameter<string>("IsotopName", "Название изотопа", string.Empty, "zzzzzzzzzzz", 0, "");
+        #endregion
+        #region Диаметр трубы
+        public Parameter<ushort> DiameterPipe { get; } = new Parameter<ushort>("DiameterPipe", "Диаметр трубы", 0, ushort.MaxValue, 0, "");
+        #endregion
+
+        #region Время установки источника
+        public Parameter<DateTime> SourceInstallDate { get; } = new Parameter<DateTime>("SourceInstallDate", "Дата установки источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        #endregion
+
+        #region Время установки источника
+        public Parameter<DateTime> SourceExpirationDate { get; } = new Parameter<DateTime>("SourceExpirationDate", "Дата истечения срока источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        #endregion
+
+        #region Серийный номер источника
+        public Parameter<string> SerialNumber { get; } = new Parameter<string>("SerialNumber", "Серийный номер", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        #endregion
+
+        #region Номер заказа
+        public Parameter<string> OrderNumber { get; } = new Parameter<string>("DeviceOrder", "Номер заказа", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        #endregion
+
+        #region Тип устройства
+        public Parameter<string> DeviceType { get; } = new Parameter<string>("DeviceType", "Тип устройства", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        #endregion
+
+        #region Версия firmware
+        public Parameter<string> FwVersion { get; } = new Parameter<string>("FwVersion", "Версия FW", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        #endregion
+
+        #region Номер заказчика
+        public Parameter<string> CustNumber { get; } = new Parameter<string>("CustNumber", "Номер заказчика", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        #endregion
 
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
@@ -306,13 +402,19 @@ namespace IDensity.Models
 
         void MainProcess()
         {
+            stopWatch.Start();
             while (true)
             {
+                
                 if (CommMode.RsEnable) rs?.GetData(this);
                 else if (CommMode.EthEnable) Tcp?.GetData(this);
                 else Connecting.Value = false;
-                if (CycleMeasStatus.Value && Connecting.Value)
+                if (CycleMeasStatus.Value && Connecting.Value && stopWatch.ElapsedMilliseconds>1000)
+                {
                     UpdateDataEvent?.Invoke();
+                    stopWatch.Restart();
+                }
+               
             }
         }
 
