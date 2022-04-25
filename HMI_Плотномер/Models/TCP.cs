@@ -767,6 +767,7 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetMeasProcessData(measProcNum); ReadActivity(); }, Encoding.ASCII.GetBytes(tcpArg)));
         }
         #endregion     
+
         #region Записать активности измерительных процессов
         public void SetMeasProcActivity(string cmd)
         {
