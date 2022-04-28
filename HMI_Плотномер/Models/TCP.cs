@@ -100,8 +100,8 @@ namespace IDensity.Models
         {
             commands?.Clear();
             client = new TcpClient();
-            client.ReceiveTimeout = 1000;
-            client.SendTimeout = 1000;            
+            client.ReceiveTimeout = 500;
+            client.SendTimeout = 500;            
             TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
             client.Connect(IP, PortNum);
             
@@ -156,7 +156,7 @@ namespace IDensity.Models
                 }
                 errCommCount = 0;
                 model.Connecting.Value = client.Connected;
-                if(CycicRequest)CloseConnection();
+                //if(CycicRequest)CloseConnection();
             }
             catch (Exception ex)
             {
@@ -208,23 +208,7 @@ namespace IDensity.Models
             return Encoding.ASCII.GetString(inBuf, 0, num);// Получаем строку из байт;            
         }
 
-        #endregion
-
-        #region Получить ответ в байтах
-        int AskResponseBytes(byte[] buffer)
-        {
-            stream.Write(buffer, 0, buffer.Length);
-            int num = 0;
-            do
-            {
-                num = stream.Read(inBuf, 0, inBuf.Length);
-
-            } while (stream.DataAvailable);
-            Thread.Sleep(Pause);
-            model.Connecting.Value = true;
-            return num;
-        }
-        #endregion
+        #endregion        
 
         #region Запрос текущего значения даты времени
         void GetCurDateTime()
@@ -375,21 +359,21 @@ namespace IDensity.Models
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
-            if (arr == null || arr.Length != 108) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 118) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             model.MeasProcSettings[index].Num = (ushort)arr[0];
             model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 84);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 86);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 88);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 95);
-            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 94);
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 96);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 98);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 105);
+            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[112];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = arr[105]/10;
-            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
-            model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[107]];
+            model.MeasProcSettings[index].MeasDuration.Value = arr[115]/10;
+            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[116];
+            model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[117]];
             model.SettingsReaded = true;
         }
 
@@ -487,8 +471,8 @@ namespace IDensity.Models
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            model.MeasProcSettings[num].FastChange.Activity.Value = arr[103] > 0;
-            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[104];
+            model.MeasProcSettings[num].FastChange.Activity.Value = arr[113] > 0;
+            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[114];
         }
 
         #endregion
@@ -686,7 +670,6 @@ namespace IDensity.Models
             month = month > 0 && month <= 12 ? month : 1;
             int year = ((ushort)nums[2]) + 2000;
             return new DateTime(year, month, day);
-
         }
 
         #region Настройки №8
@@ -979,6 +962,49 @@ namespace IDensity.Models
         }
         #endregion
 
+        #region Команды записи на Sd карту
+        #region Запустить запустить логирование на SD
+        public void SwithSdCardLog(int param)
+        {
+            var str = $"*CMND,FMS,{param}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
+        #region Запрос числа записей результатов измерения
+        public void GetSdCardWritesAmount()
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) =>
+            {
+                var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FMG#"));
+                Thread.Sleep(1000);
+
+            }, null));
+        }
+        #endregion
+        #region Запрос записей результатов измерений
+        public void GetSdCardWrites(int start, int finish)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) =>
+            {
+                var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,FMR,{start},{finish}#"));
+                Thread.Sleep(1000);
+            }, null));
+        }
+        #endregion
+
+        #region Удаление записей результатов измереия
+        public void DelSdCardWrites(int start, int finish)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) =>
+            {
+                var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,FMD,{start},{finish}#"));
+                Thread.Sleep(1000);
+            }, null));
+        }
+        #endregion
+        #endregion
+
         public void WriteCommonSettings(string arg)
         {
             var str = $"*SETT,{arg}#";
@@ -997,12 +1023,6 @@ namespace IDensity.Models
             }
         }
         #endregion
-
-        
-        
-
-
-
 
     }
 }

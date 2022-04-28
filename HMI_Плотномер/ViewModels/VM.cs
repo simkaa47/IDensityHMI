@@ -19,6 +19,7 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Windows.Controls;
 using IDensity.AddClasses.Standartisation;
+using IDensity.Models.SdCard;
 
 namespace IDensity.ViewModels
 {
@@ -257,6 +258,46 @@ namespace IDensity.ViewModels
             o => mainModel.Connecting.Value));
         #endregion
 
+        #region Запуск - останов записи на карту
+        RelayCommand _switchSdCardLogCommand;
+        public RelayCommand SwitchSdCardLogCommand => _switchSdCardLogCommand ?? (_switchSdCardLogCommand = new RelayCommand(par =>
+        {
+            var parameter = SdCard.IsWriting ? 0 : 1;
+            if (mainModel.CommMode.EthEnable)
+            {
+                mainModel.Tcp.SwithSdCardLog((ushort)parameter);
+                SdCard.IsWriting = !SdCard.IsWriting;
+            }
+
+        }, o => mainModel.Connecting.Value));
+        #endregion
+
+        #region Запрос числа записей на SD
+        RelayCommand _getSdCardWritesAmountCommand;
+        public RelayCommand GetSdCardWritesAmountCommand => _getSdCardWritesAmountCommand ?? (_getSdCardWritesAmountCommand = new RelayCommand(par =>
+        {
+            if (mainModel.CommMode.EthEnable) mainModel.Tcp.GetSdCardWritesAmount();
+
+        }, o => mainModel.Connecting.Value));
+        #endregion
+
+        #region Запрос записей на SD карте
+        RelayCommand _getSdCardWritesCommand;
+        public RelayCommand GetSdCardWritesCommand => _getSdCardWritesCommand ?? (_getSdCardWritesCommand = new RelayCommand(par =>
+        {
+            if (mainModel.CommMode.EthEnable) mainModel.Tcp.GetSdCardWrites(SdCard.StartReadNum, SdCard.FinishReadNum);
+        }, o => mainModel.Connecting.Value));
+
+        #endregion
+
+        #region Удавление записей на SD карте
+        RelayCommand _delSdCardWritesCommand;
+        public RelayCommand DelSdCardWritesCommand => _delSdCardWritesCommand ?? (_delSdCardWritesCommand = new RelayCommand(par =>
+        {
+            if (mainModel.CommMode.EthEnable) mainModel.Tcp.DelSdCardWrites(SdCard.StartDelNum, SdCard.FinishDelNum);
+        }, o => mainModel.Connecting.Value));
+
+        #endregion
 
         #endregion
         public MainModel mainModel { get; } = new MainModel();
@@ -275,6 +316,7 @@ namespace IDensity.ViewModels
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
             UdpInit();
+            SdCard = new SdCard(mainModel);
         }
 
 
@@ -447,56 +489,7 @@ namespace IDensity.ViewModels
         #region Названия стандартизаций
         public DataBaseCollection<EnumCustom> StandNames { get; } = new DataBaseCollection<EnumCustom>("StandNames", new EnumCustom());
         #endregion
-        #endregion
-
-        #region Стандартизация
-        #region Выбранный диапазон
-        private StandData _selectedStandData;
-
-        public StandData SelectedStandData
-        {
-            get { return _selectedStandData ?? (_selectedStandData = mainModel.StandSettings[0]); }
-            set { Set(ref _selectedStandData, value); }
-        }
-        #endregion
-
-        #region Номер стандартизации
-        private int _standSelNum;
-        public int StandSelNum
-        {
-            get { return _standSelNum; }
-            set 
-            {
-                if (Set(ref _standSelNum, value) && value < MainModel.CountStand)
-                {
-                    SelectedStandData = mainModel.StandSettings[value];
-                }
-            }
-        }
-
-        #endregion
-
-        #region Флаг стандартизации
-        private bool _isStandartisation;
-        /// <summary>
-        /// Производится стандартизация
-        /// </summary>
-        public bool IsStandartisation
-        {
-            get { return _isStandartisation; }
-            set { Set(ref _isStandartisation, value); }
-        }
-
-        #endregion
-
-        #region Таймер стандартизации
-        /// <summary>
-        /// Таймер стандартизации
-        /// </summary>
-        System.Timers.Timer standTimer;
-        #endregion
-
-        #endregion
+        #endregion        
 
         #region Вывести данные из БД
         async void ShowArchivalTrend()
@@ -541,7 +534,12 @@ namespace IDensity.ViewModels
                         y10 = mainModel.TempTelemetry.TempInternal.Value
                     };
                     PlotCollection.Add(tp);
-                    if (PlotCollection.Count > 100000) PlotCollection.RemoveAt(0);// Чтобы не было много элементов ОП
+                    int i = 0;
+                    while (PlotCollection.Count > 0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i<5)
+                    {
+                        PlotCollection.RemoveAt(0);
+                        i++;
+                    }
                     SqlMethods.WritetoDb<TimePoint>(tp);                    
                 }); 
 
@@ -696,6 +694,10 @@ namespace IDensity.ViewModels
                 
             }
         }
+        #endregion
+
+        #region Запись на Sd карту
+        public SdCard SdCard { get; }
         #endregion
 
         #region События

@@ -144,8 +144,7 @@
                             <TabItem Header="Текущий тренд">
                                 <!--#region Текущий тренд -->
                                 <Grid>
-                                    <uc:TrendControl DataSource="{Binding PlotCollection}"
-                                                 MaximumRange="{Binding TrendSettings.PlotTime, Converter={StaticResource MathMultiplyConverter}, ConverterParameter=0.001}"
+                                    <uc:TrendControl DataSource="{Binding PlotCollection}"                                                 
                                                  LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                  LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
                                                  LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
