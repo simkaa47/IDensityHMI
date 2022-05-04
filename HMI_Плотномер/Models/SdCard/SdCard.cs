@@ -106,8 +106,38 @@ namespace IDensity.Models.SdCard
             set => Set(ref _finishDelNum, value);
         }
         #endregion
-        
 
+
+        #region Коллекция имен файлов
+        /// <summary>
+        /// Коллекция имен файлов
+        /// </summary>
+        private List<string> _FileNames;
+        /// <summary>
+        /// Коллекция имен файлов
+        /// </summary>
+        public List<string> FileNames
+        {
+            get => _FileNames;
+            set => Set(ref _FileNames, value);
+        }
+        #endregion
+
+
+        #region Временная строка
+        /// <summary>
+        /// Временная строка
+        /// </summary>
+        private string _tempStr;
+        /// <summary>
+        /// Временная строка
+        /// </summary>
+        public string TempStr
+        {
+            get => _tempStr;
+            set => Set(ref _tempStr, value);
+        }
+        #endregion
 
 
 

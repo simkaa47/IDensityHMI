@@ -1,7 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
-using IDensity.AddClasses.Standartisation;
 using IDensity.Models.XML;
 using System;
 using System.Collections.Generic;
@@ -102,7 +101,7 @@ namespace IDensity.Models
             HalfLife.CommandEcecutedEvent += (o) => WriteCommonSettings($"half_life={HalfLife.WriteValue.ToStringPoint()}");
             DeviceName.CommandEcecutedEvent += (o) => WriteCommonSettings($"name={DeviceName.WriteValue.Substring(0,Math.Min(DeviceName.WriteValue.Length,10))}");
             IsotopName.CommandEcecutedEvent += (o) => WriteCommonSettings($"isotope={IsotopName.WriteValue.Substring(0, Math.Min(IsotopName.WriteValue.Length, 10))}");
-            DiameterPipe.CommandEcecutedEvent+=(o)=> WriteCommonSettings($"pipe_diameter={DiameterPipe.WriteValue}");
+            DiameterPipe.CommandEcecutedEvent+=(o)=> WriteCommonSettings($"pipe_diameter={(ushort)(DiameterPipe.WriteValue*10)}");
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
         }
@@ -239,12 +238,7 @@ namespace IDensity.Models
                 return _analogGroups;
             }
         }
-        #endregion               
-
-        #region Данные стандартизаций
-
-        public StandData[] StandSettings { get; } = Enumerable.Range(0, 12).Select(i => new StandData()).ToArray();
-        #endregion
+        #endregion 
 
         #region Данные счетчиков        
         public CountDiapasone[] CountDiapasones { get; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
@@ -356,7 +350,7 @@ namespace IDensity.Models
         public Parameter<string> IsotopName { get; } = new Parameter<string>("IsotopName", "Название изотопа", string.Empty, "zzzzzzzzzzz", 0, "");
         #endregion
         #region Диаметр трубы
-        public Parameter<ushort> DiameterPipe { get; } = new Parameter<ushort>("DiameterPipe", "Диаметр трубы", 0, ushort.MaxValue, 0, "");
+        public Parameter<float> DiameterPipe { get; } = new Parameter<float>("DiameterPipe", "Диаметр трубы", 0, ushort.MaxValue, 0, "");
         #endregion
 
         #region Время установки источника
@@ -599,8 +593,7 @@ namespace IDensity.Models
         #region Команда принудиельного запроса набора стандартизации после стандартизации
         public void GetStdSelection(ushort index)
         {
-            if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);
-            else if (CommMode.RsEnable) rs.GetStdSelection(index);
+            if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);           
         }
         #endregion
 

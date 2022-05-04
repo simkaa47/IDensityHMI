@@ -8,7 +8,6 @@ using EasyModbus;
 using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
-using IDensity.AddClasses.Standartisation;
 
 namespace IDensity.Models
 {
@@ -324,7 +323,7 @@ namespace IDensity.Models
                 GetSerialSettings();
                 GetHvTarget();
                 GetAnalogOutSettings();
-                GetAllStandSettings();
+                //GetAllStandSettings();
                 GetAnalogInSettings();
                 GetCounterSettingsAll();                
                 GetUdpAddr();
@@ -388,43 +387,7 @@ namespace IDensity.Models
             }
             model.SettingsReaded = true;
         }
-        #endregion
-
-        #region Настройки стандартизации
-        /// <summary>
-        /// Получить данные всех наборов стандартизаций
-        /// </summary>
-        void GetAllStandSettings()
-        {
-            for (ushort i = 0; i < MainModel.CountStand; i++)
-            {
-                GetStandSetiings(i);
-            }
-        }
-        void GetStandSetiings(ushort num)
-        {
-            model.SettingsReaded = false;
-            client.WriteSingleRegister(StandData.NumSelection.RegNum, num);
-            for (int i = 0; i < 2; i++)
-            {
-                ReadHoldRegs(model.StandSettings[0].Duration.RegNum + i * 12, 12);
-            }
-            model.StandSettings[num].Duration.Value = holdRegs[model.StandSettings[0].Duration.RegNum];
-            model.StandSettings[num].Type.Value = holdRegs[model.StandSettings[0].Type.RegNum];
-            model.StandSettings[num].Value.Value = GetFloatFromUshorts(holdRegs, model.StandSettings[0].Value.RegNum);
-            for (int j = 0; j < 8; j++)
-            {
-                model.StandSettings[num].Results[j].Value = GetFloatFromUshorts(holdRegs, model.StandSettings[num].Results[j].RegNum + j * 2);
-            }
-            var year = holdRegs[model.StandSettings[0].Date.RegNum+2] + 2000;
-            var month = (int)holdRegs[model.StandSettings[0].Date.RegNum + 1];
-            month = month > 0 && month <= 12 ? month : 1;
-            var day = (int)holdRegs[model.StandSettings[0].Date.RegNum];
-            day = day > 0 && day <= 31 ? day : 1;
-            model.StandSettings[num].Date.Value = new DateTime(year, month, day);
-            model.SettingsReaded = true;
-        }
-        #endregion
+        #endregion        
 
         #region Настройки счетчиков
         void GetCounterSettingsAll()
@@ -631,56 +594,7 @@ namespace IDensity.Models
 
             }, 0, 0));
         }
-        #endregion
-
-        #region Записать настройки набора стандартизации
-        public void WriteStdSettings(ushort index, StandData stand)
-        {
-            commands.Enqueue(new Command((p1, p2) =>
-            {
-                client.WriteSingleRegister(StandData.NumSelection.RegNum, index);
-                holdRegs[model.StandSettings[0].Duration.RegNum] = stand.Duration.Value;
-                holdRegs[model.StandSettings[0].Type.RegNum] = stand.Type.Value;
-                GetUshortsFromFloat(holdRegs, model.StandSettings[0].Value.RegNum, stand.Value.Value);
-                for (int i = 0; i < 8; i++)
-                {
-                    GetUshortsFromFloat(holdRegs, model.StandSettings[0].Results[i].RegNum+i*2, stand.Results[i].Value);
-                }
-                // Записываем регисры
-                for (int i = 0; i < 2; i++)
-                {
-                    WriteRegs(model.StandSettings[0].Duration.RegNum + i * 12, 12);
-                }
-                GetStandSetiings(index);
-            }, 0, 0));
-        }
-        #endregion
-
-        #region Команда "Произвести стандартизацию"
-        /// <summary>
-        /// Произвести стандартизацию
-        /// </summary>
-        /// <param name="index">Номер набора стандартизации</param>
-        public void MakeStand(int index)
-        {
-            commands.Enqueue(new Command((p1, p2) =>
-            {
-                client.WriteSingleRegister(StandData.NumSelection.RegNum, index);
-                client.WriteSingleRegister(StandData.StandCommandRegNum, index);
-            }, 0, 0));
-            
-        }
-        #endregion
-
-        #region Команда принудиельного запроса набора стандартизации после стандартизации
-        public void GetStdSelection(ushort index)
-        {
-            commands.Enqueue(new Command((p1, p2) =>
-            {
-                GetStandSetiings(index);
-            }, 0, 0));
-        }
-        #endregion
+        #endregion               
 
         #region Команда "Записать настройки счечиков"
         public void WriteCounterSettings(CountDiapasone diapasone)

@@ -9,13 +9,14 @@ namespace IDensity.AddClasses.Settings
     /// </summary>
     class CalibCurveCrcValue:PropertyChangedBase
     {
-        const string TcpArg = "date,weak,value";
+        const string TcpArg = "date,weak,value,diameter";
         public CalibCurveCrcValue(int id)
         {
             this.Id = id;
             Date.CommandEcecutedEvent += o => CallWriteEvent("date", Date.WriteValue.ToString("dd:MM:yy"));
             Weak.CommandEcecutedEvent += o => CallWriteEvent("weak", Weak.WriteValue);
             CounterValue.CommandEcecutedEvent += o => CallWriteEvent("value", CounterValue.WriteValue);
+            CalibCurveSrcDiameter.CommandEcecutedEvent += o => CallWriteEvent("diameter", (ushort)CalibCurveSrcDiameter.WriteValue*10);
         }
         #region Id
         private int _id;
@@ -44,6 +45,9 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         public Parameter<float> CounterValue { get; } = new Parameter<float>("CalibCurveCrcValue", "Значение счетчика", 0, float.MaxValue, 0, "");
         #endregion
+        #region Значение диаметра трубы
+        public Parameter<float> CalibCurveSrcDiameter { get; } = new Parameter<float>("CalibCurveSrcDiameter", "Диаметр трубы, мм", 0, float.MaxValue, 0, "");
+        #endregion
         #region Флаг участия в расчете к-тов
         private bool _selected;
         public bool Selected
@@ -65,10 +69,13 @@ namespace IDensity.AddClasses.Settings
                         arg = arg.Replace(par, Date.Value.ToString("dd:MM:yy"));
                         break;
                     case "weak":
-                        arg = arg.Replace(par, Weak.Value.ToString().Replace(",", "."));
+                        arg = arg.Replace(par, Weak.Value.ToStringPoint());
                         break;
                     case "value":
-                        arg = arg.Replace(par, CounterValue.Value.ToString().Replace(",", "."));
+                        arg = arg.Replace(par, CounterValue.Value.ToStringPoint());
+                        break;
+                    case "diameter":
+                        arg = arg.Replace(par, CalibCurveSrcDiameter.Value.ToString());
                         break;
                     default:
                         break;

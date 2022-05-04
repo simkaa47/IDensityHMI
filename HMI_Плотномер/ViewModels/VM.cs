@@ -18,7 +18,6 @@ using IDensity.AddClasses.EventHistory;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Windows.Controls;
-using IDensity.AddClasses.Standartisation;
 using IDensity.Models.SdCard;
 
 namespace IDensity.ViewModels
@@ -298,6 +297,19 @@ namespace IDensity.ViewModels
         }, o => mainModel.Connecting.Value));
 
         #endregion
+
+
+        #region Команда запроса имен файлов на SD карте
+        /// <summary>
+        /// Команда запроса имен файлов на SD карте
+        /// </summary>
+        RelayCommand _getFilesSdCommand;
+        /// <summary>
+        /// Команда запроса имен файлов на SD карте
+        /// </summary>
+        public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar => mainModel.Tcp.GetSdFileNames(), canExecPar => true));
+        #endregion
+
 
         #endregion
         public MainModel mainModel { get; } = new MainModel();

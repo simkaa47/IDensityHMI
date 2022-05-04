@@ -130,30 +130,8 @@
             </MenuItem>
         </Menu>
     </DataTemplate>
-    <!--#endregion-->    
-    <!--#region Шаблон под класс данных источника калибровочной кривой -->
-    <DataTemplate DataType="{x:Type sett:CalibCurveCrcValue}" x:Key="MenuItemCalibSrcData">
-        <Menu>
-            <MenuItem Header="{Binding Id}" HeaderStringFormat="Точка №{0}" >
-                <!--#region Дата измерения -->
-                <MenuItem DataContext="{Binding Date}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Значение счетчика -->
-                <MenuItem DataContext="{Binding CounterValue}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Ослабление -->
-                <MenuItem DataContext="{Binding Weak}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-            </MenuItem>
-        </Menu>
-    </DataTemplate>
-    <!--#endregion-->
+    <!--#endregion-->   
+    
     <!--#region Стиль для вкладок -->
     <Style TargetType="TabItem" x:Key="MeasProcTabItemStyle">
         <Setter Property="Template">
@@ -642,6 +620,18 @@
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemParameterText DataContext="{Binding CounterValue}" Command="{Binding Command}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region Диаметр трубы -->
+                                        <DataGridTemplateColumn Width="200">
+                                            <DataGridTemplateColumn.Header>
+                                                <TextBlock Text="Диаметр трубы, мм" TextWrapping="Wrap"/>
+                                            </DataGridTemplateColumn.Header>
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <uc:MenuItemParameterText DataContext="{Binding CalibCurveSrcDiameter}" Command="{Binding Command}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>

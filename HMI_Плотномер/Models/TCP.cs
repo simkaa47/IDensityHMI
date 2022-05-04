@@ -1,7 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
-using IDensity.AddClasses.Standartisation;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -407,7 +406,7 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeCalibrCurveFromArr(float[] arr, int num)
         {
-            var offset = 76;
+            var offset = 86;
             model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
             model.MeasProcSettings[num].CalibrCurve.MeasUnit = model.MeasUnitSettings[(ushort)arr[offset+1]];
             for (int i = 0; i < 6; i++)
@@ -434,6 +433,7 @@ namespace IDensity.Models
                 model.MeasProcSettings[num].SingleMeasResults[j].Date.Value = new DateTime(year, month, day);
                 model.MeasProcSettings[num].SingleMeasResults[j].Weak.Value = arr[i + 3];
                 model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];
+                model.MeasProcSettings[num].SingleMeasResults[j].CalibCurveSrcDiameter.Value = arr[i + 4]/10;
             }
         }
         /// <summary>
@@ -633,7 +633,8 @@ namespace IDensity.Models
             model.HalfLife.Value = list[0][0];
             model.DeviceName.Value = GetStringById("name", str);
             model.IsotopName.Value = GetStringById("isotope", str);
-            ushort.TryParse(GetStringById("pipe_diameter", str), out ushort temp);
+            float.TryParse(GetStringById("pipe_diameter", str), out float temp) ;
+            model.DiameterPipe.Value = temp / 10;
             model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
             model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
             model.SerialNumber.Value = GetStringById("SN", str);
@@ -1003,6 +1004,17 @@ namespace IDensity.Models
             }, null));
         }
         #endregion
+
+        public void GetSdFileNames()
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) =>
+            {
+                var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FML#"));
+                
+                Thread.Sleep(1000);
+
+            }, null));
+        }
         #endregion
 
         public void WriteCommonSettings(string arg)
@@ -1013,6 +1025,17 @@ namespace IDensity.Models
 
 
         #endregion
+
+        public void GetResponce(string cmnd, Action<string> action)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) =>
+            {
+                var str = AskResponse(Encoding.ASCII.GetBytes(cmnd));
+                action.Invoke(str);
+                Thread.Sleep(1000);
+
+            }, null));
+        }
 
         #region Очистка буфера
         void StreamClear()

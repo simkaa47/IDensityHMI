@@ -1371,23 +1371,48 @@
 
                         </TabItem>
                         <!--#endregion-->
-                        <!--#region Параметры -->
+                    <!--#region Параметры -->
                     <TabItem Header="ПАРАМЕТРЫ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                            <TabItem.Resources>
-                                <add:ParamList x:Key="paramsList"/>
-                            </TabItem.Resources>
-                            <DataGrid ItemsSource="{Binding Source={StaticResource paramsList}, Path=ParameterList}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Мин. величина" Binding="{Binding MinValue}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Макс. величина" Binding="{Binding MaxValue}"></DataGridTextColumn>
-                                    
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </TabItem>
-                        <!--#endregion-->
-                    </TabControl>
+                        <TabItem.Resources>
+                            <add:ParamList x:Key="paramsList"/>
+                        </TabItem.Resources>
+                        <DataGrid ItemsSource="{Binding Source={StaticResource paramsList}, Path=ParameterList}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Мин. величина" Binding="{Binding MinValue}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Макс. величина" Binding="{Binding MaxValue}"></DataGridTextColumn>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Логирование на SD карту -->
+                    <TabItem Header="SD КАРТА">
+                        <ListBox HorizontalContentAlignment="Stretch">
+                            <ListBox.Resources>
+                                <Style TargetType="Button" x:Key="Control" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+                                    <Setter Property="Margin" Value="2"/>
+                                    <Setter Property="Height" Value="80"/>
+                                </Style>
+                            </ListBox.Resources>
+                            <UniformGrid Columns="2">
+                                <!--#region Запуск логирования -->
+                                <Button Style="{StaticResource Control}"
+                                        Command="{Binding SwitchSdCardLogCommand}"
+                                        Background="{Binding SdCard.IsWriting, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
+                                        Content="ЗАПУСК ЛОГИРОВАНИЯ"/>
+                                <!--#endregion-->
+                                <!--#region Запрос имен файлов -->
+                                <Button Style="{StaticResource Control}"
+                                        Command="{Binding GetFilesSdCommand}"
+                                        Content="ЗАПРОС ИМЕН ФАЙЛОВ"/>
+                                <!--#endregion-->
+                            </UniformGrid>
+                        </ListBox>
+                    </TabItem>
+                    <!--#endregion-->
+                </TabControl>
                 </TabItem>
                 <!--#endregion-->
                 <!--#region Управление -->
