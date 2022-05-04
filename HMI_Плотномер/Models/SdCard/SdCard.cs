@@ -112,11 +112,11 @@ namespace IDensity.Models.SdCard
         /// <summary>
         /// Коллекция имен файлов
         /// </summary>
-        private List<string> _FileNames;
+        private List<SdFileInfo> _FileNames;
         /// <summary>
         /// Коллекция имен файлов
         /// </summary>
-        public List<string> FileNames
+        public List<SdFileInfo> FileNames
         {
             get => _FileNames;
             set => Set(ref _FileNames, value);
@@ -124,20 +124,7 @@ namespace IDensity.Models.SdCard
         #endregion
 
 
-        #region Временная строка
-        /// <summary>
-        /// Временная строка
-        /// </summary>
-        private string _tempStr;
-        /// <summary>
-        /// Временная строка
-        /// </summary>
-        public string TempStr
-        {
-            get => _tempStr;
-            set => Set(ref _tempStr, value);
-        }
-        #endregion
+       
 
 
 

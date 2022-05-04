@@ -1395,6 +1395,12 @@
                                     <Setter Property="Margin" Value="2"/>
                                     <Setter Property="Height" Value="80"/>
                                 </Style>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Foreground" Value="WhiteSmoke"/>
+                                </Style>
+                                <Style TargetType="GridViewColumnHeader">
+                                    <Setter Property="Foreground" Value="WhiteSmoke"/>
+                                </Style>
                             </ListBox.Resources>
                             <UniformGrid Columns="2">
                                 <!--#region Запуск логирования -->
@@ -1409,6 +1415,14 @@
                                         Content="ЗАПРОС ИМЕН ФАЙЛОВ"/>
                                 <!--#endregion-->
                             </UniformGrid>
+                            <DataGrid ItemsSource="{Binding SdCard.FileNames}"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Имя файла" Binding="{Binding Name}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Кол-во записей" Binding="{Binding WriteNumber}" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </ListBox>
                     </TabItem>
                     <!--#endregion-->

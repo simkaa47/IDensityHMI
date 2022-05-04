@@ -309,9 +309,20 @@ namespace IDensity.ViewModels
         /// </summary>
         public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar =>
         {
-            mainModel.Tcp.GetResponce("CMND,FML#", (str) => 
-            { 
-                
+            //mainModel.Tcp.GetSdFileNames();
+            mainModel.Tcp.GetResponce("*CMND,FML#", (str) =>
+            {
+                var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (fileInfos.Count % 2 != 1) return;
+                SdCard.FileNames = new List<SdFileInfo>();
+                for (int i = 1; i < fileInfos.Count; i+=2)
+                {
+                    SdCard.FileNames.Add(new SdFileInfo()
+                    {
+                        Name = fileInfos[i],
+                        WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
+                    }); 
+                }
             });
         }, canExecPar => true));
         #endregion
