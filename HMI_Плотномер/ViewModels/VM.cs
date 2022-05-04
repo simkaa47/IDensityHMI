@@ -307,7 +307,13 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Команда запроса имен файлов на SD карте
         /// </summary>
-        public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar => mainModel.Tcp.GetSdFileNames(), canExecPar => true));
+        public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar =>
+        {
+            mainModel.Tcp.GetResponce("CMND,FML#", (str) => 
+            { 
+                
+            });
+        }, canExecPar => true));
         #endregion
 
 
