@@ -423,9 +423,9 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeSingleMeasData(float[] arr, int num)
         {
-            for (int i = 26; i < MeasProcSettings.SingleMeasResCount*5+26; i+=5)
+            for (int i = 26; i < MeasProcSettings.SingleMeasResCount*6+26; i+=6)
             {
-                var j = (i - 26) / 5;
+                var j = (i - 26) / 6;
                 int day = (ushort)arr[i];
                 day = day > 0 && day <= 31 ? day : 1;
                 int month = (ushort)arr[i+1];
@@ -434,7 +434,7 @@ namespace IDensity.Models
                 model.MeasProcSettings[num].SingleMeasResults[j].Date.Value = new DateTime(year, month, day);
                 model.MeasProcSettings[num].SingleMeasResults[j].Weak.Value = arr[i + 3];
                 model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];
-                model.MeasProcSettings[num].SingleMeasResults[j].CalibCurveSrcDiameter.Value = arr[i + 4]/10;
+                model.MeasProcSettings[num].SingleMeasResults[j].CalibCurveSrcDiameter.Value = arr[i + 5]/10;
             }
         }
         /// <summary>
