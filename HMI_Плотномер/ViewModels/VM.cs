@@ -18,7 +18,7 @@ using IDensity.AddClasses.EventHistory;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Windows.Controls;
-using IDensity.Models.SdCard;
+
 
 namespace IDensity.ViewModels
 {
@@ -261,11 +261,10 @@ namespace IDensity.ViewModels
         RelayCommand _switchSdCardLogCommand;
         public RelayCommand SwitchSdCardLogCommand => _switchSdCardLogCommand ?? (_switchSdCardLogCommand = new RelayCommand(par =>
         {
-            var parameter = SdCard.IsWriting ? 0 : 1;
+            var parameter = mainModel.SdCard.IsWriting ? 0 : 1;
             if (mainModel.CommMode.EthEnable)
             {
-                mainModel.Tcp.SwithSdCardLog((ushort)parameter);
-                SdCard.IsWriting = !SdCard.IsWriting;
+                mainModel.Tcp.SwithSdCardLog((ushort)parameter);                
             }
 
         }, o => mainModel.Connecting.Value));
@@ -284,7 +283,24 @@ namespace IDensity.ViewModels
         RelayCommand _getSdCardWritesCommand;
         public RelayCommand GetSdCardWritesCommand => _getSdCardWritesCommand ?? (_getSdCardWritesCommand = new RelayCommand(par =>
         {
-            if (mainModel.CommMode.EthEnable) mainModel.Tcp.GetSdCardWrites(SdCard.StartReadNum, SdCard.FinishReadNum);
+            if (mainModel.CommMode.EthEnable)
+            {
+                mainModel.Tcp.GetResponce("*CMND,FMR,meas_results_05052022_103500.txt,1,2#", (str) =>
+                {
+                    var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    if (fileInfos.Count % 2 != 1) return;
+                    var fileNames = new List<SdFileInfo>();
+                    for (int i = 1; i < fileInfos.Count; i += 2)
+                    {
+                        fileNames.Add(new SdFileInfo()
+                        {
+                            Name = fileInfos[i],
+                            WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
+                        });
+                    }
+                    mainModel.SdCard.FileNames = fileNames;
+                });
+            } mainModel.Tcp.GetSdCardWrites(mainModel.SdCard.StartReadNum, mainModel.SdCard.FinishReadNum);
         }, o => mainModel.Connecting.Value));
 
         #endregion
@@ -293,7 +309,7 @@ namespace IDensity.ViewModels
         RelayCommand _delSdCardWritesCommand;
         public RelayCommand DelSdCardWritesCommand => _delSdCardWritesCommand ?? (_delSdCardWritesCommand = new RelayCommand(par =>
         {
-            if (mainModel.CommMode.EthEnable) mainModel.Tcp.DelSdCardWrites(SdCard.StartDelNum, SdCard.FinishDelNum);
+            if (mainModel.CommMode.EthEnable) mainModel.Tcp.DelSdCardWrites(mainModel.SdCard.StartDelNum, mainModel.SdCard.FinishDelNum);
         }, o => mainModel.Connecting.Value));
 
         #endregion
@@ -308,21 +324,21 @@ namespace IDensity.ViewModels
         /// Команда запроса имен файлов на SD карте
         /// </summary>
         public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar =>
-        {
-            //mainModel.Tcp.GetSdFileNames();
+        {            
             mainModel.Tcp.GetResponce("*CMND,FML#", (str) =>
             {
                 var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (fileInfos.Count % 2 != 1) return;
-                SdCard.FileNames = new List<SdFileInfo>();
+                var fileNames = new List<SdFileInfo>();
                 for (int i = 1; i < fileInfos.Count; i+=2)
                 {
-                    SdCard.FileNames.Add(new SdFileInfo()
+                    fileNames.Add(new SdFileInfo()
                     {
                         Name = fileInfos[i],
                         WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
                     }); 
                 }
+                mainModel.SdCard.FileNames = fileNames;
             });
         }, canExecPar => true));
         #endregion
@@ -344,8 +360,7 @@ namespace IDensity.ViewModels
             _selectedEventItems.Filter += OnEventsFiltered;
             _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
             GetMeasDates();
-            UdpInit();
-            SdCard = new SdCard(mainModel);
+            UdpInit();            
         }
 
 
@@ -723,11 +738,7 @@ namespace IDensity.ViewModels
                 
             }
         }
-        #endregion
-
-        #region Запись на Sd карту
-        public SdCard SdCard { get; }
-        #endregion
+        #endregion        
 
         #region События
         #region Фильтрация событий

@@ -309,6 +309,7 @@ namespace IDensity.Models
                 GetSettings1();
                 GetSettings4();
                 GetSettings8();
+                GetSdLogStatus();
             }             
         }
         #region Настройки измерительных процессов
@@ -726,10 +727,21 @@ namespace IDensity.Models
             return list;
         }
         #endregion
+
+        #region Получить статус логирования
+        void GetSdLogStatus()
+        {
+            model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FMS#"));
+            var nums = GetNumericsFromString(str, new char[] { ',', '#' });
+            if (nums == null || nums.Length != 1) return;
+            model.SdCard.IsWriting = nums[0] > 0 ? true : false;
+            model.SettingsReaded = true;
+        }
+        #endregion
         #endregion
 
         #region Команды
-
 
         #region Включить-выключить HV
         public void SwitchHv(int value)
@@ -968,7 +980,7 @@ namespace IDensity.Models
         public void SwithSdCardLog(int param)
         {
             var str = $"*CMND,FMS,{param}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSdLogStatus(); } , Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
@@ -988,7 +1000,7 @@ namespace IDensity.Models
         {
             commands.Enqueue(new TcpWriteCommand((buf) =>
             {
-                var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,FMR,{start},{finish}#"));
+                var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,FMR,meas_results_05052022_103500.txt,1,2#"));
                 Thread.Sleep(1000);
             }, null));
         }
@@ -1030,9 +1042,10 @@ namespace IDensity.Models
         {
             commands.Enqueue(new TcpWriteCommand((buf) =>
             {
+                client.ReceiveTimeout = 10000;
                 var str = AskResponse(Encoding.ASCII.GetBytes(cmnd));
                 action.Invoke(str);
-                Thread.Sleep(1000);
+                client.ReceiveTimeout = 2000;
 
             }, null));
         }

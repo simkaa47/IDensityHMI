@@ -1406,7 +1406,7 @@
                                 <!--#region Запуск логирования -->
                                 <Button Style="{StaticResource Control}"
                                         Command="{Binding SwitchSdCardLogCommand}"
-                                        Background="{Binding SdCard.IsWriting, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
+                                        Background="{Binding mainModel.SdCard.IsWriting, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
                                         Content="ЗАПУСК ЛОГИРОВАНИЯ"/>
                                 <!--#endregion-->
                                 <!--#region Запрос имен файлов -->
@@ -1415,12 +1415,19 @@
                                         Content="ЗАПРОС ИМЕН ФАЙЛОВ"/>
                                 <!--#endregion-->
                             </UniformGrid>
-                            <DataGrid ItemsSource="{Binding SdCard.FileNames}"
+                            <DataGrid ItemsSource="{Binding mainModel.SdCard.FileNames}"
                                       CanUserAddRows="False"
                                       CanUserDeleteRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Имя файла" Binding="{Binding Name}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Кол-во записей" Binding="{Binding WriteNumber}" IsReadOnly="True"/>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.GetSdCardWritesCommand}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ListBox>

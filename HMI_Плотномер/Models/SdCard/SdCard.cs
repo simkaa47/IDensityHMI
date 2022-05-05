@@ -3,15 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDensity.Models.SdCard
+namespace IDensity.Models
 {
     class SdCard:PropertyChangedBase
-    {
-        public SdCard(MainModel _model)
-        {
-            model = _model;
-        }
-        MainModel model;
+    {        
+        
         #region Флаг активности записи на карту
         /// <summary>
         /// Флаг активности записи на карту
@@ -123,8 +119,24 @@ namespace IDensity.Models.SdCard
         }
         #endregion
 
+        #region Выбранный файл
+        /// <summary>
+        /// Выбранный файл
+        /// </summary>
+        private SdFileInfo _selectedFileInfo;
+        /// <summary>
+        /// Выбранный файл
+        /// </summary>
+        public SdFileInfo SelectedFileInfo
+        {
+            get => _selectedFileInfo;
+            set => Set(ref _selectedFileInfo, value);
+        }
+        #endregion
 
-       
+
+
+
 
 
 

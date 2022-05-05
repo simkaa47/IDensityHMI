@@ -104,6 +104,7 @@ namespace IDensity.Models
             DiameterPipe.CommandEcecutedEvent+=(o)=> WriteCommonSettings($"pipe_diameter={(ushort)(DiameterPipe.WriteValue*10)}");
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
+            SdCard = new SdCard();
         }
         
 
@@ -384,6 +385,10 @@ namespace IDensity.Models
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
         #endregion 
+
+        #region Запись на Sd карту
+        public SdCard SdCard { get; }
+        #endregion
         #endregion
 
         public RS485 rs { get; private set; }
