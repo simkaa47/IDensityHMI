@@ -151,7 +151,7 @@ namespace IDensity.Models
 
         void GetRequest()
         {
-            _model.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.Start}#", (str) =>
+            _model.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.finish}#", (str) =>
             {
                 if (str == "")
                 {

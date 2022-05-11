@@ -1429,7 +1429,7 @@
                                 <!--#region Очистить список файлов -->
                                 <Button Content="ОЧИСТИТЬ СПИСОК ФАЙЛОВ"
                                         Style="{StaticResource Control}"
-                                        Command="{Binding clearSdFileListCommand}"/>
+                                        Command="{Binding ClearSdFileListCommand}"/>
                                 <!--#endregion-->
                             </UniformGrid>
                             <DataGrid Grid.Row="1"
