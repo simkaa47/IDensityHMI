@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,71 @@ namespace IDensity.Models
                   if (IsReading) GetRequest();
               };
         }
-        
+
+        #region Команды
+        #region Очистить список файлов
+        /// <summary>
+        /// Очистить список файлов
+        /// </summary>
+        RelayCommand _clearSdFileListCommand;
+        /// <summary>
+        /// Очистить список файлов
+        /// </summary>
+        public RelayCommand ClearSdFileListCommand => _clearSdFileListCommand ?? (_clearSdFileListCommand = new RelayCommand(execPar => FileNames = new List<SdFileInfo>(), canExecPar => true));
+        #endregion
+
+        #region Команда запроса имен файлов на SD карте
+        /// <summary>
+        /// Команда запроса имен файлов на SD карте
+        /// </summary>
+        RelayCommand _getFilesSdCommand;
+        /// <summary>
+        /// Команда запроса имен файлов на SD карте
+        /// </summary>
+        public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar =>
+        {
+            _model.Tcp.GetResponce("*CMND,FML#", (str) =>
+            {
+                var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (fileInfos.Count % 2 != 0) return;
+                var fileNames = new List<SdFileInfo>();
+                for (int i = 2; i < fileInfos.Count; i += 2)
+                {
+                    fileNames.Add(new SdFileInfo()
+                    {
+                        Name = fileInfos[i],
+                        WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
+                    });
+                }
+                _model.SdCard.FileNames = fileNames;
+            });
+        }, canExecPar => true));
+        #endregion
+
+        #region Запрос записей на SD карте
+        RelayCommand _getSdCardWritesCommand;
+        public RelayCommand GetSdCardWritesCommand => _getSdCardWritesCommand ?? (_getSdCardWritesCommand = new RelayCommand(par =>
+        {
+           GetWrites();
+        }, o => true));
+
+        #endregion
+
+        #region Запуск - останов записи на карту
+        RelayCommand _switchSdCardLogCommand;
+        public RelayCommand SwitchSdCardLogCommand => _switchSdCardLogCommand ?? (_switchSdCardLogCommand = new RelayCommand(par =>
+        {
+            var parameter = IsWriting ? 0 : 1;
+            if (_model.CommMode.EthEnable)
+            {
+                _model.Tcp.SwithSdCardLog((ushort)parameter);
+            }
+
+        }, o => _model.Connecting.Value));
+        #endregion        
+
+        #endregion
+
         #region Флаг активности записи на карту
         /// <summary>
         /// Флаг активности записи на карту
@@ -33,55 +98,7 @@ namespace IDensity.Models
             get => _isWriting;
             set => Set(ref _isWriting, value);
         }
-        #endregion
-
-
-        #region Кол-во записей на карте
-        /// <summary>
-        /// Кол-во записей на карте
-        /// </summary>
-        private int _countWrites;
-        /// <summary>
-        /// Кол-во записей на карте
-        /// </summary>
-        public int CountWrites
-        {
-            get => _countWrites;
-            set => Set(ref _countWrites, value);
-        }
-        #endregion       
-
-
-        #region Стартовый номер записи для удаления
-        /// <summary>
-        /// Стартовый номер записи для удаления
-        /// </summary>
-        private int _startDelNum;
-        /// <summary>
-        /// Стартовый номер записи для удаления
-        /// </summary>
-        public int StartDelNum
-        {
-            get => _startDelNum;
-            set => Set(ref _startDelNum, value);
-        }
-        #endregion
-
-
-        #region Финишный номер для удаления
-        /// <summary>
-        /// Финишный номер для удаления
-        /// </summary>
-        private int _finishDelNum;
-        /// <summary>
-        /// Финишный номер для удаления
-        /// </summary>
-        public int FinishDelNum
-        {
-            get => _finishDelNum;
-            set => Set(ref _finishDelNum, value);
-        }
-        #endregion
+        #endregion              
 
 
         #region Коллекция имен файлов

@@ -1388,7 +1388,7 @@
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Логирование на SD карту -->
-                    <TabItem Header="SD КАРТА">
+                    <TabItem Header="SD КАРТА" DataContext="{Binding mainModel.SdCard}">
                         <Grid>
                             <Grid.Resources>
                                 <Style TargetType="Button" x:Key="Control" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
@@ -1418,7 +1418,7 @@
                                 <!--#region Запуск логирования -->
                                 <Button Style="{StaticResource Control}"
                                         Command="{Binding SwitchSdCardLogCommand}"
-                                        Background="{Binding mainModel.SdCard.IsWriting, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
+                                        Background="{Binding IsWriting, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
                                         Content="ЗАПУСК ЛОГИРОВАНИЯ"/>
                                 <!--#endregion-->
                                 <!--#region Запрос имен файлов -->
@@ -1433,27 +1433,27 @@
                                 <!--#endregion-->
                             </UniformGrid>
                             <DataGrid Grid.Row="1"
-                                        ItemsSource="{Binding mainModel.SdCard.FileNames}"
-                                      SelectedItem="{Binding mainModel.SdCard.SelectedFileInfo}"
+                                        ItemsSource="{Binding FileNames}"
+                                      SelectedItem="{Binding SelectedFileInfo}"
                                       CanUserAddRows="False"
                                       CanUserDeleteRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Имя файла" Binding="{Binding Name}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Кол-во записей" Binding="{Binding WriteNumber}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Стартовый номер для чтения" Binding="{Binding Start}"/>
-                                    <DataGridTextColumn Header="Конечный номер для чтения" Binding="{Binding finish}"/>
+                                    <DataGridTextColumn Header="Стартовый номер для чтения" Binding="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <DataGridTextColumn Header="Конечный номер для чтения" Binding="{Binding finish, UpdateSourceTrigger=PropertyChanged}"/>
                                     <DataGridTemplateColumn Header="Прочитать">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Content="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.SdCard.IsReading, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}" 
-                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.GetSdCardWritesCommand}"/>
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.SdCard.GetSdCardWritesCommand}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <ListView Grid.Row="2"                                      
-                                      ItemsSource="{Binding mainModel.SdCard.SdCardMeasDatas}">
+                                      ItemsSource="{Binding SdCardMeasDatas}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Строка" DisplayMemberBinding="{Binding Temp}"/>

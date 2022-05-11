@@ -99,8 +99,8 @@ namespace IDensity.Models
         {
             commands?.Clear();
             client = new TcpClient();
-            client.ReceiveTimeout = 500;
-            client.SendTimeout = 500;            
+            client.ReceiveTimeout = 2000;
+            client.SendTimeout = 2000;            
             TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
             client.Connect(IP, PortNum);
             
@@ -138,6 +138,12 @@ namespace IDensity.Models
                     Connect();
                     return;
                 }
+                while (commands.Count > 0)
+                {
+                    var command = commands.Dequeue();
+                    command.Action?.Invoke(command.Parameter);
+                    Thread.Sleep(Pause);
+                }
                 if (CycicRequest)
                 {
                     GetDeviceStatus();
@@ -147,12 +153,7 @@ namespace IDensity.Models
                     
                 }
                 GetSetiings();
-                while (commands.Count > 0)
-                {
-                    var command = commands.Dequeue();
-                    command.Action?.Invoke(command.Parameter);
-                    Thread.Sleep(Pause);
-                }
+                
                 errCommCount = 0;
                 model.Connecting.Value = client.Connected;
                 //if(CycicRequest)CloseConnection();
@@ -1036,7 +1037,11 @@ namespace IDensity.Models
 
 
         #endregion
-
+        /// <summary>
+        /// Метод выполнить запрос и выполнить делегат 
+        /// </summary>
+        /// <param name="cmnd"></param>
+        /// <param name="action"></param>
         public void GetResponce(string cmnd, Action<string> action)
         {
             commands.Enqueue(new TcpWriteCommand((buf) =>
