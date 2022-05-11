@@ -32,7 +32,7 @@ namespace IDensity.AddClasses.Settings
                     var str = "calib_src=";
                     for (int j = 0; j < SingleMeasResCount; j++)
                     {
-                        if (j != i) str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()},{SingleMeasResults[j].CalibCurveSrcDiameter.Value}";
+                        if (j != i) str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()}";
                         else str += arg;
                         if (j < SingleMeasResCount - 1) str += ",";
                     }

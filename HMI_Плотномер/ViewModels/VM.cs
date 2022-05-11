@@ -268,39 +268,13 @@ namespace IDensity.ViewModels
             }
 
         }, o => mainModel.Connecting.Value));
-        #endregion
-
-        #region Запрос числа записей на SD
-        RelayCommand _getSdCardWritesAmountCommand;
-        public RelayCommand GetSdCardWritesAmountCommand => _getSdCardWritesAmountCommand ?? (_getSdCardWritesAmountCommand = new RelayCommand(par =>
-        {
-            if (mainModel.CommMode.EthEnable) mainModel.Tcp.GetSdCardWritesAmount();
-
-        }, o => mainModel.Connecting.Value));
-        #endregion
+        #endregion        
 
         #region Запрос записей на SD карте
         RelayCommand _getSdCardWritesCommand;
         public RelayCommand GetSdCardWritesCommand => _getSdCardWritesCommand ?? (_getSdCardWritesCommand = new RelayCommand(par =>
         {
-            if (mainModel.CommMode.EthEnable)
-            {
-                mainModel.Tcp.GetResponce("*CMND,FMR,meas_results_05052022_103500.txt,1,2#", (str) =>
-                {
-                    var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                    if (fileInfos.Count % 2 != 1) return;
-                    var fileNames = new List<SdFileInfo>();
-                    for (int i = 1; i < fileInfos.Count; i += 2)
-                    {
-                        fileNames.Add(new SdFileInfo()
-                        {
-                            Name = fileInfos[i],
-                            WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
-                        });
-                    }
-                    mainModel.SdCard.FileNames = fileNames;
-                });
-            } mainModel.Tcp.GetSdCardWrites(mainModel.SdCard.StartReadNum, mainModel.SdCard.FinishReadNum);
+            mainModel.SdCard.GetWrites();
         }, o => mainModel.Connecting.Value));
 
         #endregion
@@ -315,6 +289,19 @@ namespace IDensity.ViewModels
         #endregion
 
 
+        #region Очистить список файлов
+        /// <summary>
+        /// Очистить список файлов
+        /// </summary>
+        RelayCommand _clearSdFileListCommand;
+        /// <summary>
+        /// Очистить список файлов
+        /// </summary>
+        public RelayCommand ClearSdFileListCommand => _clearSdFileListCommand ?? (_clearSdFileListCommand = new RelayCommand(execPar => mainModel.SdCard.FileNames = new List<SdFileInfo>(), canExecPar => true));
+        #endregion
+
+
+
         #region Команда запроса имен файлов на SD карте
         /// <summary>
         /// Команда запроса имен файлов на SD карте
@@ -327,10 +314,10 @@ namespace IDensity.ViewModels
         {            
             mainModel.Tcp.GetResponce("*CMND,FML#", (str) =>
             {
-                var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (fileInfos.Count % 2 != 1) return;
+               var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (fileInfos.Count % 2 != 0) return;
                 var fileNames = new List<SdFileInfo>();
-                for (int i = 1; i < fileInfos.Count; i+=2)
+                for (int i = 2; i < fileInfos.Count; i+=2)
                 {
                     fileNames.Add(new SdFileInfo()
                     {

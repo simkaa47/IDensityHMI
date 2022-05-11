@@ -104,7 +104,7 @@ namespace IDensity.Models
             DiameterPipe.CommandEcecutedEvent+=(o)=> WriteCommonSettings($"pipe_diameter={(ushort)(DiameterPipe.WriteValue*10)}");
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
-            SdCard = new SdCard();
+            SdCard = new SdCard(this);
         }
         
 

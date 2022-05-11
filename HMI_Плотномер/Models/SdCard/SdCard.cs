@@ -1,12 +1,24 @@
 ﻿using IDensity.AddClasses;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace IDensity.Models
 {
     class SdCard:PropertyChangedBase
-    {        
+    {
+        MainModel _model;
+        public SdCard(MainModel model)
+        {
+            _model = model;
+            model.Tcp.TcpEvent += (s) =>
+              {
+                  if (IsReading) GetRequest();
+              };
+        }
         
         #region Флаг активности записи на карту
         /// <summary>
@@ -37,39 +49,7 @@ namespace IDensity.Models
             get => _countWrites;
             set => Set(ref _countWrites, value);
         }
-        #endregion
-
-
-        #region Стартовый номер записи для чтения
-        /// <summary>
-        /// Стартовый номер записи для чтения
-        /// </summary>
-        private int _startReadNum;
-        /// <summary>
-        /// Стартовый номер записи для чтения
-        /// </summary>
-        public int StartReadNum
-        {
-            get => _startReadNum;
-            set => Set(ref _startReadNum, value);
-        }
-        #endregion
-
-
-        #region Финишный номер записи для чтения
-        /// <summary>
-        /// Финишный номер записи для чтения
-        /// </summary>
-        private int _finishReadNum;
-        /// <summary>
-        /// Финишный номер записи для чтения
-        /// </summary>
-        public int FinishReadNum
-        {
-            get => _finishReadNum;
-            set => Set(ref _finishReadNum, value);
-        }
-        #endregion
+        #endregion       
 
 
         #region Стартовый номер записи для удаления
@@ -134,14 +114,63 @@ namespace IDensity.Models
         }
         #endregion
 
+        SdFileInfo readFile;
+
+        public ObservableCollection<SdCardMeasData> SdCardMeasDatas { get; } = new ObservableCollection<SdCardMeasData>();
+
+        #region Флаг чтения
+        /// <summary>
+        /// Флаг чтения
+        /// </summary>
+        private bool _isReading;
+        /// <summary>
+        /// Флаг чтения
+        /// </summary>
+        public bool IsReading
+        {
+            get => _isReading;
+            set => Set(ref _isReading, value);
+        }
+        #endregion
 
 
+        public void GetWrites()
+        {
+            if (_model.CommMode.EthEnable && !IsReading)
+            {
+                if (SelectedFileInfo != null)
+                {
+                    IsReading = true;
+                    SdCardMeasDatas.Clear();
+                    readFile = SelectedFileInfo;
+                    GetRequest();
+                }
+            }
+            else IsReading = false;
+        }
 
+        void GetRequest()
+        {
+            _model.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.Start}#", (str) =>
+            {
+                if (str == "")
+                {
+                    if(IsReading)GetRequest();
+                    return;
+                } 
+                Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(new SdCardMeasData() { Temp = str }));
+                if (readFile.Start >= readFile.finish)
+                {
+                    IsReading = false;
+                }
+                if (IsReading)
+                {
+                    readFile.Start++;
+                    GetRequest();
+                }
 
-
-
-
-
+            });
+        }
     }
     
 }

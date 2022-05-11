@@ -122,4 +122,9 @@
         <sys1:String>Усредн.</sys1:String>
         
     </x:Array>
+    <col1:ArrayList   x:Key="SdBtnStatus">
+        <sys1:String>Записать.</sys1:String>
+        <sys1:String>Отмена</sys1:String>
+
+    </col1:ArrayList>
 </ResourceDictionary>

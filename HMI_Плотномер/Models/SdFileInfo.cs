@@ -40,6 +40,44 @@ namespace IDensity.Models
         #endregion
 
 
+        #region Стартовый номер для записи 
+        /// <summary>
+        /// Стартовый номер для записи 
+        /// </summary>
+        private int _start;
+        /// <summary>
+        /// Стартовый номер для записи 
+        /// </summary>
+        public int Start
+        {
+            get => _start;
+            set 
+            {
+                if(value>=0 && value<=WriteNumber) Set(ref _start, value);
+            } 
+        }
+        #endregion
+
+
+        #region Конечный номер для чтения
+        /// <summary>
+        /// Конечный номер для чтения
+        /// </summary>
+        private int _finish;
+        /// <summary>
+        /// Конечный номер для чтения
+        /// </summary>
+        public int finish
+        {
+            get => _finish;
+            set 
+            {
+                if (value >= 0 && value <= WriteNumber && value>= Start) Set(ref _finish, value);
+            } 
+        }
+        #endregion
+
+
     }
         
 }

@@ -151,7 +151,7 @@ namespace IDensity.Models
                 {
                     var command = commands.Dequeue();
                     command.Action?.Invoke(command.Parameter);
-                    Thread.Sleep(200);
+                    Thread.Sleep(Pause);
                 }
                 errCommCount = 0;
                 model.Connecting.Value = client.Connected;
@@ -359,21 +359,21 @@ namespace IDensity.Models
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
-            if (arr == null || arr.Length != 118) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 109) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             model.MeasProcSettings[index].Num = (ushort)arr[0];
             model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 94);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 96);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 98);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 105);
-            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[112];
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 84);
+            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 86);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 88);
+            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 95);
+            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = arr[115]/10;
-            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[116];
-            model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[117]];
+            model.MeasProcSettings[index].MeasDuration.Value = arr[105]/10;
+            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
+            model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[107]];
             model.SettingsReaded = true;
         }
 
@@ -407,7 +407,7 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeCalibrCurveFromArr(float[] arr, int num)
         {
-            var offset = 86;
+            var offset = 76;
             model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
             model.MeasProcSettings[num].CalibrCurve.MeasUnit = model.MeasUnitSettings[(ushort)arr[offset+1]];
             for (int i = 0; i < 6; i++)
@@ -423,9 +423,9 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeSingleMeasData(float[] arr, int num)
         {
-            for (int i = 26; i < MeasProcSettings.SingleMeasResCount*6+26; i+=6)
+            for (int i = 26; i < MeasProcSettings.SingleMeasResCount*5+26; i+=5)
             {
-                var j = (i - 26) / 6;
+                var j = (i - 26) / 5;
                 int day = (ushort)arr[i];
                 day = day > 0 && day <= 31 ? day : 1;
                 int month = (ushort)arr[i+1];
@@ -433,8 +433,7 @@ namespace IDensity.Models
                 int year = ((ushort)arr[i+2]) + 2000;
                 model.MeasProcSettings[num].SingleMeasResults[j].Date.Value = new DateTime(year, month, day);
                 model.MeasProcSettings[num].SingleMeasResults[j].Weak.Value = arr[i + 3];
-                model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];
-                model.MeasProcSettings[num].SingleMeasResults[j].CalibCurveSrcDiameter.Value = arr[i + 5]/10;
+                model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];                
             }
         }
         /// <summary>
@@ -472,8 +471,8 @@ namespace IDensity.Models
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            model.MeasProcSettings[num].FastChange.Activity.Value = arr[113] > 0;
-            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[114];
+            model.MeasProcSettings[num].FastChange.Activity.Value = arr[103] > 0;
+            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[104];
         }
 
         #endregion

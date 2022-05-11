@@ -1389,20 +1389,32 @@
                     <!--#endregion-->
                     <!--#region Логирование на SD карту -->
                     <TabItem Header="SD КАРТА">
-                        <ListBox HorizontalContentAlignment="Stretch">
-                            <ListBox.Resources>
+                        <Grid>
+                            <Grid.Resources>
                                 <Style TargetType="Button" x:Key="Control" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
                                     <Setter Property="Margin" Value="2"/>
-                                    <Setter Property="Height" Value="80"/>
+                                    <Setter Property="Height" Value="Auto"/>
                                 </Style>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="Foreground" Value="WhiteSmoke"/>
                                 </Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
                                 <Style TargetType="GridViewColumnHeader">
-                                    <Setter Property="Foreground" Value="WhiteSmoke"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                                <TextBlock Text="{TemplateBinding Content}" Style="{StaticResource Common}"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
                                 </Style>
-                            </ListBox.Resources>
-                            <UniformGrid Columns="2">
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.15*"/>
+                                <RowDefinition Height="0.5*"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <UniformGrid Columns="3">
                                 <!--#region Запуск логирования -->
                                 <Button Style="{StaticResource Control}"
                                         Command="{Binding SwitchSdCardLogCommand}"
@@ -1414,23 +1426,41 @@
                                         Command="{Binding GetFilesSdCommand}"
                                         Content="ЗАПРОС ИМЕН ФАЙЛОВ"/>
                                 <!--#endregion-->
+                                <!--#region Очистить список файлов -->
+                                <Button Content="ОЧИСТИТЬ СПИСОК ФАЙЛОВ"
+                                        Style="{StaticResource Control}"
+                                        Command="{Binding clearSdFileListCommand}"/>
+                                <!--#endregion-->
                             </UniformGrid>
-                            <DataGrid ItemsSource="{Binding mainModel.SdCard.FileNames}"
+                            <DataGrid Grid.Row="1"
+                                        ItemsSource="{Binding mainModel.SdCard.FileNames}"
+                                      SelectedItem="{Binding mainModel.SdCard.SelectedFileInfo}"
                                       CanUserAddRows="False"
                                       CanUserDeleteRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Имя файла" Binding="{Binding Name}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Кол-во записей" Binding="{Binding WriteNumber}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Стартовый номер для чтения" Binding="{Binding Start}"/>
+                                    <DataGridTextColumn Header="Конечный номер для чтения" Binding="{Binding finish}"/>
+                                    <DataGridTemplateColumn Header="Прочитать">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.GetSdCardWritesCommand}"/>
+                                                <Button Content="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.SdCard.IsReading, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}" 
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.GetSdCardWritesCommand}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </ListBox>
+                            <ListView Grid.Row="2"                                      
+                                      ItemsSource="{Binding mainModel.SdCard.SdCardMeasDatas}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Строка" DisplayMemberBinding="{Binding Temp}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>                        
                     </TabItem>
                     <!--#endregion-->
                 </TabControl>
