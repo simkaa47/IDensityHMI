@@ -17,9 +17,13 @@ namespace IDensity.Models
             _model = model;
             model.Tcp.TcpEvent += (s) =>
               {
-                  if (IsReading) GetRequest();
+                  if (IsReading) GetWritesRequest();
               };
         }
+        /// <summary>
+        /// Временная коллекция списка файлов
+        /// </summary>
+        List<SdFileInfo> fileNames;
 
         #region Команды
         #region Очистить список файлов
@@ -47,7 +51,7 @@ namespace IDensity.Models
             {
                 var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (fileInfos.Count % 2 != 0) return;
-                var fileNames = new List<SdFileInfo>();
+                fileNames = new List<SdFileInfo>();
                 for (int i = 2; i < fileInfos.Count; i += 2)
                 {
                     fileNames.Add(new SdFileInfo()
@@ -56,7 +60,7 @@ namespace IDensity.Models
                         WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
                     });
                 }
-                _model.SdCard.FileNames = fileNames;
+                if(str.Contains("111111111"))_model.SdCard.FileNames = fileNames;
             });
         }, canExecPar => true));
         #endregion
@@ -160,19 +164,19 @@ namespace IDensity.Models
                     IsReading = true;
                     SdCardMeasDatas.Clear();
                     readFile = SelectedFileInfo;
-                    GetRequest();
+                    GetWritesRequest();
                 }
             }
             else IsReading = false;
         }
 
-        void GetRequest()
+        void GetWritesRequest()
         {
             _model.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.finish}#", (str) =>
             {
                 if (str == "")
                 {
-                    if(IsReading)GetRequest();
+                    if(IsReading)GetWritesRequest();
                     return;
                 } 
                 Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(new SdCardMeasData() { Temp = str }));
@@ -183,7 +187,7 @@ namespace IDensity.Models
                 if (IsReading)
                 {
                     readFile.Start++;
-                    GetRequest();
+                    GetWritesRequest();
                 }
 
             });

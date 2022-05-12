@@ -1038,7 +1038,7 @@ namespace IDensity.Models
 
         #endregion
         /// <summary>
-        /// Метод выполнить запрос и выполнить делегат 
+        /// Выполнить запрос и выполнить делегат 
         /// </summary>
         /// <param name="cmnd"></param>
         /// <param name="action"></param>
@@ -1048,8 +1048,26 @@ namespace IDensity.Models
             {
                 client.ReceiveTimeout = 10000;
                 var str = AskResponse(Encoding.ASCII.GetBytes(cmnd));
-                action.Invoke(str);
+                action?.Invoke(str);
                 client.ReceiveTimeout = 2000;
+
+            }, null));
+        }
+
+        void ListenAndExecute(Action<string> action)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) =>
+            {
+                int num = 0;
+                int offset = 0;
+                do
+                {
+                    num = stream.Read(inBuf, offset, inBuf.Length);
+                    Thread.Sleep(Pause);
+                    offset += num;
+
+                } while (stream.DataAvailable);
+                action?.Invoke(Encoding.ASCII.GetString(inBuf, 0, num));
 
             }, null));
         }
