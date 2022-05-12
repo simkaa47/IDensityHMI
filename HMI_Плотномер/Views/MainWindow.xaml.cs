@@ -65,5 +65,10 @@ namespace IDensity
         {
             FileDialogOpen(SpectrLogPath);
         }
+
+        private void SdCardWritePathShow(object sender, RoutedEventArgs e)
+        {
+            FileDialogOpen(SdCardWritePath);
+        }
     }
 }

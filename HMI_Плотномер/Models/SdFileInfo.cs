@@ -8,6 +8,22 @@ namespace IDensity.Models
     class SdFileInfo : PropertyChangedBase
     {
 
+        #region Номер
+        /// <summary>
+        /// Номер
+        /// </summary>
+        private int _id;
+        /// <summary>
+        /// Номер
+        /// </summary>
+        public int Id
+        {
+            get => _id;
+            set => Set(ref _id, value);
+        }
+        #endregion
+
+
         #region Имя файла
         /// <summary>
         /// Имя файла

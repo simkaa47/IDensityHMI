@@ -47,7 +47,7 @@ namespace IDensity.Models
             get { return _pause; }
             set 
             {
-                if (value >= 100) Set(ref _pause, value);
+                if (value >= 10) Set(ref _pause, value);
             }
         }
 
@@ -84,7 +84,7 @@ namespace IDensity.Models
         /// <summary>
         /// Буффер входящих данных
         /// </summary>
-        byte[] inBuf = new byte[2000];
+        byte[] inBuf = new byte[10000];
         #endregion
 
         #region Stream
@@ -198,14 +198,14 @@ namespace IDensity.Models
             int offset = 0;
             do
             {
-                num = stream.Read(inBuf, offset, inBuf.Length);
+                num = stream.Read(inBuf, offset, inBuf.Length - offset);
                 Thread.Sleep(Pause);
                 offset += num;
 
-            } while (stream.DataAvailable);
+            } while (stream.DataAvailable && (inBuf.Length - offset)>0);
             model.Connecting.Value = true;
            
-            return Encoding.ASCII.GetString(inBuf, 0, num);// Получаем строку из байт;            
+            return Encoding.ASCII.GetString(inBuf, 0, offset);// Получаем строку из байт;            
         }
 
         #endregion        
@@ -1054,7 +1054,7 @@ namespace IDensity.Models
             }, null));
         }
 
-        void ListenAndExecute(Action<string> action)
+        public void ListenAndExecute(Action<string> action)
         {
             commands.Enqueue(new TcpWriteCommand((buf) =>
             {

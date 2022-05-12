@@ -3,6 +3,7 @@ using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -24,6 +25,23 @@ namespace IDensity.Models
         /// Временная коллекция списка файлов
         /// </summary>
         List<SdFileInfo> fileNames;
+
+
+        #region Путь к файлу записи
+        /// <summary>
+        /// Путь к файлу записи
+        /// </summary>
+        private string _writeToFilePath;
+        /// <summary>
+        /// Путь к файлу записи
+        /// </summary>
+        public string WriteToFilePath
+        {
+            get => _writeToFilePath;
+            set => Set(ref _writeToFilePath, value);
+        }
+        #endregion
+
 
         #region Команды
         #region Очистить список файлов
@@ -49,18 +67,8 @@ namespace IDensity.Models
         {
             _model.Tcp.GetResponce("*CMND,FML#", (str) =>
             {
-                var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (fileInfos.Count % 2 != 0) return;
                 fileNames = new List<SdFileInfo>();
-                for (int i = 2; i < fileInfos.Count; i += 2)
-                {
-                    fileNames.Add(new SdFileInfo()
-                    {
-                        Name = fileInfos[i],
-                        WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
-                    });
-                }
-                if(str.Contains("111111111"))_model.SdCard.FileNames = fileNames;
+                ParseFileNames(str);
             });
         }, canExecPar => true));
         #endregion
@@ -152,8 +160,22 @@ namespace IDensity.Models
             get => _isReading;
             set => Set(ref _isReading, value);
         }
-        #endregion
+        #endregion        
 
+        #region Флаг записи в файл
+        /// <summary>
+        /// Флаг записи в файл
+        /// </summary>
+        private bool _isWritingToFile;
+        /// <summary>
+        /// Флаг записи в файл
+        /// </summary>
+        public bool IsWritingToFile
+        {
+            get => _isWritingToFile;
+            set => Set(ref _isWritingToFile, WriteToFilePath!=null?value:false);
+        }
+        #endregion  
 
         public void GetWrites()
         {
@@ -178,20 +200,92 @@ namespace IDensity.Models
                 {
                     if(IsReading)GetWritesRequest();
                     return;
-                } 
-                Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(new SdCardMeasData() { Temp = str }));
+                }
+                Write(str); 
                 if (readFile.Start >= readFile.finish)
                 {
                     IsReading = false;
                 }
                 if (IsReading)
                 {
-                    readFile.Start++;
+                    readFile.Start += ((readFile.finish - readFile.Start > 1 ? 2 : 1));
                     GetWritesRequest();
                 }
 
             });
+            
         }
+        void GetNextFileListTelegrams()
+        {
+            _model.Tcp.ListenAndExecute((str) =>
+            {
+                if (str.Length > 8)
+                {
+                    ParseFileNames(str);
+                }
+            });
+        }
+
+        void ParseFileNames(string str)
+        {
+            var fileInfos = str.Split(new char[] { '#', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (fileInfos.Count % 2 != 0) return;
+            for (int i = 2; i < fileInfos.Count; i += 2)
+            {
+                if (!fileInfos[i].Contains(".txt")) continue;
+                fileNames.Add(new SdFileInfo()
+                {
+                    Id = fileNames.Count + 1,
+                    Name = fileInfos[i],
+                    WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
+                });
+            }
+            if (str.Contains("111111111")) _model.SdCard.FileNames = fileNames;
+            else GetNextFileListTelegrams();
+        }
+
+        async void WriteToFile(string str)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(WriteToFilePath, true))
+                {
+                    await writer.WriteLineAsync(str);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                IsWritingToFile = false;
+            }
+        }
+
+        void Write(string answer)
+        {
+            var index = answer.IndexOf("txt,");
+            if (index >= 0)
+            {
+                string clearString = answer.Substring(index + 4);
+                var strings = clearString.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
+                if (strings.Length % 26 == 0)
+                {
+                    for (int i = 0; i < strings.Length/26; i++)
+                    {
+                        StringBuilder builder = new StringBuilder(strings[i * 26]);
+                        for (int j = i*26+1; j < i*26+26; j++)
+                        {
+                            builder.Append(","+strings[j]);
+                        }                        
+                        var result = builder.ToString();
+                        if(IsWritingToFile)WriteToFile(result);
+                        Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(new SdCardMeasData() { Temp = result }));
+                    }
+                }
+               
+            }
+        }
+
+        
     }
     
 }

@@ -1410,8 +1410,9 @@
                                 </Style>
                             </Grid.Resources>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="0.15*"/>
+                                <RowDefinition Height="0.15*"/>                                
                                 <RowDefinition Height="0.5*"/>
+                                <RowDefinition Height="0.1*"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <UniformGrid Columns="3">
@@ -1438,6 +1439,7 @@
                                       CanUserAddRows="False"
                                       CanUserDeleteRows="False">
                                 <DataGrid.Columns>
+                                    <DataGridTextColumn Header="№" Binding="{Binding Id}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Имя файла" Binding="{Binding Name}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Кол-во записей" Binding="{Binding WriteNumber}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Стартовый номер для чтения" Binding="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
@@ -1452,7 +1454,27 @@
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <ListView Grid.Row="2"                                      
+                            <DockPanel Grid.Row="2">
+                                <TextBlock x:Name="SdCardWritePath" 
+                                               Text="{Binding WriteToFilePath, TargetNullValue=Нажмите Browse чтобы указать путь, Mode=TwoWay}"
+                                               Foreground="WhiteSmoke"
+                                               Background="Transparent"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Width="100"
+                                            Click="SdCardWritePathShow"
+                                            Content="Browse"
+                                            HorizontalAlignment="Right"/>
+                                    <ToggleButton Width="100"
+                                                  Margin="5"
+                                                  Content="ЗАПИСЬ"
+                                                  IsChecked="{Binding IsWritingToFile}"
+                                                  Background="{Binding IsWritingToFile, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
+                                                  Style="{StaticResource MaterialDesignRaisedButton}" />
+                                </StackPanel>
+                                
+                            </DockPanel>
+                            
+                            <ListView Grid.Row="3" 
                                       ItemsSource="{Binding SdCardMeasDatas}">
                                 <ListView.View>
                                     <GridView>
@@ -1460,6 +1482,7 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+
                         </Grid>                        
                     </TabItem>
                     <!--#endregion-->
