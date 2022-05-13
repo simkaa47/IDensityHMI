@@ -54,8 +54,8 @@ namespace IDensity.AddClasses.Settings
             MeasType.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"type={MeasType.WriteValue}");
             // Подписка на изменение настроек быстрых измерений
             FastChange.NeedWriteEvent+= OnWriteCommandExecuted;
-            //// Подписка на изменение выходной ЕИ
-            //OutMeasNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"ei={OutMeasNum.WriteValue}");
+            //Подписка на измерение диаметра трубы
+            PipeDiameter.CommandEcecutedEvent+=(o)=>OnWriteCommandExecuted($"pipe_diam={(ushort)(PipeDiameter.WriteValue*10)}");
             // Настройка таймера
             singleMeasTimer.Elapsed += (o, e) =>
             {                
@@ -181,6 +181,9 @@ namespace IDensity.AddClasses.Settings
 
         public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnWriteCommandExecuted($"ei={OutMeasNum.Id.Value}"), o => true));
 
+        #endregion
+        #region Диаметрт трубы
+        public Parameter<float> PipeDiameter { get; } = new Parameter<float>("PipeDiameter", "Диаметр трубы, мм", 0, float.MaxValue, 0, "");
         #endregion
         #region Активность
         public Parameter<bool> IsActive { get; } = new Parameter<bool>("MeasProcActive", "Активность измерительного процесса", false, true, 0, "hold");

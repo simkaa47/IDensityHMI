@@ -323,6 +323,7 @@ namespace IDensity.Models
                 GetMeasProcessData(i);
             ReadActivity();
         }
+        #region Прочитать активности измерительных процессов
         /// <summary>
         /// Прочитать активности измерительных процессов
         /// </summary>
@@ -339,7 +340,7 @@ namespace IDensity.Models
             for (int i = 0; i < MainModel.MeasProcNum; i++)
             {
                 if (i < 2) model.MeasResults[i].IsActive = false;
-                model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2,i)) > 0;
+                model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2, i)) > 0;
                 if (model.MeasProcSettings[i].IsActive.Value && max <= 2)
                 {
                     model.MeasResults[max].IsActive = true;
@@ -347,10 +348,13 @@ namespace IDensity.Models
                     max++;
                 }
             }
-            
+
             model.SettingsReaded = true;
 
         }
+        #endregion
+
+        #region Прочитать набор измерительных процессов по номеру
         /// <summary>
         /// Прочитать набор измерительных процессов по номеру
         /// </summary>
@@ -359,7 +363,7 @@ namespace IDensity.Models
         {
             model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
-            var arr = GetNumericsFromString(str, new char[] { ',', '=', '#',':' });
+            var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
             if (arr == null || arr.Length != 109) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             model.MeasProcSettings[index].Num = (ushort)arr[0];
             model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
@@ -372,12 +376,15 @@ namespace IDensity.Models
             RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 95);
             model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = arr[105]/10;
+            model.MeasProcSettings[index].MeasDuration.Value = arr[105] / 10;
             model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
             model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[107]];
+            model.MeasProcSettings[index].PipeDiameter.Value = arr[108] / 10;
             model.SettingsReaded = true;
         }
+        #endregion
 
+        #region Функция распознавания данных стандартизации изм. процессов из массива
         /// <summary>
         /// Функция распознавания данных стандартизации изм. процессов из массива
         /// </summary>
@@ -400,7 +407,9 @@ namespace IDensity.Models
                 model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
                 model.MeasProcSettings[num].MeasStandSettings[i].HalfLifeCorr.Value = arr[9 + i * 8];
             }
-        }
+        } 
+        #endregion
+
         /// <summary>
         /// Функция распознавания данных калибр. кривой изм. процессов из массива
         /// </summary>

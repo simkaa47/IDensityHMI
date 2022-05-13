@@ -632,6 +632,10 @@ namespace IDensity.ViewModels
                 await Task.Run(() =>
                 {
                     StringBuilder builder = new StringBuilder();
+                    builder.Append("Дата Время" + "\t" + "Процесс 0: счетчик" + "\t" + "Процесс 0: мгновенная ФВ" + "\t"
+                             + "Процесс 0: усредненная ФВ" + "\t" + "Процесс 1: счетчик" + "\t"
+                             + "Процесс 1: мгновенная ФВ" + "\t" + "Процесс 1: усредненная ФВ" + "\t"
+                             + "Ток AI0, мкA" + "\t" + "Ток AI1, мкA" + "\t" + "Значение HV out, V" + "\t" + "Температура" + "\n");
                     foreach (var item in ArchivalDataPotnts)
                     {
                         builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000") + "\t"

@@ -15,76 +15,7 @@
                 <Setter Property="IsSubmenuOpen" Value="False"/>
             </Trigger>
         </Style.Triggers>
-    </Style>
-    <!--#region Шаблон настроек плотности -->
-    <ControlTemplate TargetType="MenuItem" x:Key="DensitySett">
-        <MenuItem Header="{TemplateBinding Header}" Template="{StaticResource SubMenuHeaderTemplate}" Style="{StaticResource WithoutMenu}">
-            <!--#region ЕИ -->
-            <MenuItem DataContext="{Binding MeasValueNum}" Header="{Binding Description}">
-                <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                              CompoboxWidth="150"
-                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                              ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                              DisplayMemberPath="Name"/>
-            </MenuItem>
-            <!--#endregion-->
-            <!--#region Физическая величина-->
-            <MenuItem DataContext="{Binding PhysValue}" Header="{Binding Description}">
-                <uc:MenuItemParameterText Command="{Binding Command}"/>
-            </MenuItem>
-            <!--#endregion-->            
-        </MenuItem>
-    </ControlTemplate>
-    <!--#endregion-->
-    <!--#region Шаблон настроек компенсации -->
-    <ControlTemplate TargetType="MenuItem" x:Key="Compensation">
-        <MenuItem Header="{TemplateBinding Header}" Template="{StaticResource SubMenuHeaderTemplate}" Style="{StaticResource WithoutMenu}">
-            <!--#region Активность компенсации -->
-            <DockPanel DataContext="{Binding Activity}">
-                <TextBlock Text="{Binding Description}" VerticalAlignment="Center"/>
-                <CheckBox Style="{StaticResource MaterialDesignActionAccentCheckBox}"
-                          Margin="20,0,0,0"
-                          IsChecked="{Binding WriteValue}" 
-                          HorizontalAlignment="Right"
-                          Command="{Binding Command}"/>
-            </DockPanel>
-            <!--#endregion-->
-            <!--#region Номер ЕИ -->
-            <MenuItem DataContext="{Binding MeasUnitNum}" Header="{Binding Description}" >
-                <uc:MenuItemCompoboxParameter Command="{Binding Command}"  
-                                              CompoboxWidth="150"
-                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                              ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                              DisplayMemberPath="Name"/>
-            </MenuItem>
-            <!--#endregion-->
-            <!--#region Источник компенсации -->
-            <MenuItem DataContext="{Binding Sourse}" Header="{Binding Description}">
-                <uc:MenuItemCompoboxParameter Command="{Binding Command}"
-                                              CompoboxWidth="150"  
-                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                              ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CompensationSrcNames.Data}" 
-                                              DisplayMemberPath="Name"/>
-            </MenuItem>
-            <!--#endregion-->
-            <!--#region A -->
-            <MenuItem DataContext="{Binding A}" Header="{Binding Description}">
-                <uc:MenuItemParameterText Command="{Binding Command}"/>
-            </MenuItem>
-            <!--#endregion-->
-            <!--#region B -->
-            <MenuItem DataContext="{Binding B}" Header="{Binding Description}">
-                <uc:MenuItemParameterText Command="{Binding Command}"/>
-            </MenuItem>
-            <!--#endregion-->
-            <!--#region C -->
-            <MenuItem DataContext="{Binding C}" Header="{Binding Description}">
-                <uc:MenuItemParameterText Command="{Binding Command}"/>
-            </MenuItem>
-            <!--#endregion-->
-        </MenuItem>
-    </ControlTemplate>
-    <!--#endregion-->
+    </Style> 
     <!--#region  Шаблон для настроек стандартизаций -->
     <DataTemplate DataType="{x:Type sett:StandSettings}" x:Key="MenuStandSettings">
         <Menu>
@@ -130,8 +61,7 @@
             </MenuItem>
         </Menu>
     </DataTemplate>
-    <!--#endregion-->   
-    
+    <!--#endregion-->       
     <!--#region Стиль для вкладок -->
     <Style TargetType="TabItem" x:Key="MeasProcTabItemStyle">
         <Setter Property="Template">
@@ -298,6 +228,9 @@
                             </i:Interaction.Triggers>
                         </ComboBox>
                     </DockPanel>
+                    <!--#endregion-->
+                    <!--#region Диаметр трубы -->
+                    <uc:Parameter DataContext="{Binding PipeDiameter}" Command="{Binding Command}"/>
                     <!--#endregion-->
                     <!--#region Активность -->
                     <DockPanel DataContext="{Binding IsActive}">
@@ -496,7 +429,6 @@
                             </ComboBox>
                         </DockPanel>
                         <!--#endregion-->
-                        <!--#endregion-->
                         <!--#region Тип калибровки -->
                         <uc:CompoboxParameter DataContext="{Binding Type}"
                                               x:Name="CalibrType"
@@ -623,19 +555,7 @@
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Диаметр трубы -->
-                                        <DataGridTemplateColumn Width="200">
-                                            <DataGridTemplateColumn.Header>
-                                                <TextBlock Text="Диаметр трубы, мм" TextWrapping="Wrap"/>
-                                            </DataGridTemplateColumn.Header>
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding CalibCurveSrcDiameter}" Command="{Binding Command}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
+                                        <!--#endregion-->                                        
                                         <DataGridCheckBoxColumn Binding="{Binding Selected}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
