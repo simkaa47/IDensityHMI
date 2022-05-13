@@ -69,7 +69,11 @@ namespace IDensity.Models
             get => _start;
             set 
             {
-                if(value>=0 && value<=WriteNumber && value<=finish) Set(ref _start, value);
+                if (value >= 0 && value <= WriteNumber)
+                {
+                    if (value > finish) finish = value;
+                    Set(ref _start, value);
+                } 
             } 
         }
         #endregion
@@ -88,7 +92,11 @@ namespace IDensity.Models
             get => _finish;
             set 
             {
-                if (value >= 0 && value <= WriteNumber && value>= Start) Set(ref _finish, value);
+                if (value >= 0 && value <= WriteNumber)
+                {
+                    if (value < Start) Start = value;
+                    Set(ref _finish, value);
+                }
             } 
         }
         #endregion

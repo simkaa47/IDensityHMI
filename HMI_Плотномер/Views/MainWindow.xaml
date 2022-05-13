@@ -1470,18 +1470,18 @@
                                       ItemsSource="{Binding SdCardMeasDatas}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time}"/>
+                                        <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time, StringFormat=dd.MM.yyyy hh:mm:ss}"/>
                                         <GridViewColumn Header="№ проц. 1" DisplayMemberBinding="{Binding MeasResults[0].ProcNum}" Width="60"/>
                                         <GridViewColumn Header="Счетчик 1" DisplayMemberBinding="{Binding MeasResults[0].CounterValue}" Width="80"/>
-                                        <GridViewColumn Header="Мгнов. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhysValueCur}" Width="80"/>
-                                        <GridViewColumn Header="Усред. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhusValueAvg}" Width="80"/>
+                                        <GridViewColumn Header="Мгнов. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhysValueCur, StringFormat=f1}" Width="80"/>
+                                        <GridViewColumn Header="Усред. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhusValueAvg, StringFormat=f1}" Width="80"/>
                                         <GridViewColumn Header="Акт. проц. 1" DisplayMemberBinding="{Binding MeasResults[0].IsActive}" Width="60"/>
                                         <GridViewColumn Header="№ проц. 2" DisplayMemberBinding="{Binding MeasResults[1].ProcNum}" Width="60"/>
                                         <GridViewColumn Header="Счетчик 2" DisplayMemberBinding="{Binding MeasResults[1].CounterValue}" Width="80"/>
-                                        <GridViewColumn Header="Мгнов. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhysValueCur}" Width="80"/>
-                                        <GridViewColumn Header="Усред. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhusValueAvg}" Width="80"/>
+                                        <GridViewColumn Header="Мгнов. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhysValueCur, StringFormat=f1}" Width="80"/>
+                                        <GridViewColumn Header="Усред. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhusValueAvg, StringFormat=f1}" Width="80"/>
                                         <GridViewColumn Header="Акт. проц. 2" DisplayMemberBinding="{Binding MeasResults[1].IsActive}" Width="60"/>
-                                        <GridViewColumn Header="t внутр, С" DisplayMemberBinding="{Binding TempInt}" Width="60"/>
+                                        <GridViewColumn Header="t внутр, С" DisplayMemberBinding="{Binding TempInt, StringFormat=f1}" Width="60"/>
                                         <GridViewColumn Header="HV in, В" DisplayMemberBinding="{Binding HvInput}" Width="60"/>
                                         <GridViewColumn Header="HV out, В" DisplayMemberBinding="{Binding HvOutU}" Width="60"/>
                                         <GridViewColumn Header="HV ток" DisplayMemberBinding="{Binding HvCurrent}" Width="60"/>

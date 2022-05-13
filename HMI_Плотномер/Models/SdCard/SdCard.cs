@@ -3,6 +3,7 @@ using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -288,8 +289,8 @@ namespace IDensity.Models
         {
             if (strs.Length <= finish) return null;
             if ((finish - start)!=25) return null;
-            SdCardMeasData result = new SdCardMeasData();
-            float tempFloat = 0;
+            SdCardMeasData result = new SdCardMeasData();            
+            ushort tempUshort = 0;
             DateTime tempDateTime = new DateTime();
             result.Time = DateTime.TryParse($"{strs[start]} {strs[start+1]}", out tempDateTime) ? tempDateTime : default(DateTime);
             for (int i = 0; i < 2; i++)
@@ -299,8 +300,17 @@ namespace IDensity.Models
                 result.MeasResults[i].PhysValueCur = strs[start + i * 5 + 4].StringToFloat();
                 result.MeasResults[i].PhusValueAvg = strs[start + i * 5 + 5].StringToFloat();
                 result.MeasResults[i].IsActive = strs[start + i * 5 + 6].StringToFloat() != 0;
-
+                result.AnalogData[i].Dac = (int)strs[start + i * 4 + 16].StringToFloat();
+                result.AnalogData[i].Rx = (int)strs[start + i * 4 + 17].StringToFloat();
+                result.AnalogData[i].test = (int)strs[start + i * 4 + 18].StringToFloat();
+                result.AnalogData[i].Adc = (int)strs[start + i * 4 + 19].StringToFloat();
             }
+            result.TempInt = strs[start + 12].StringToFloat();
+            result.HvInput = strs[start + 13].StringToFloat();
+            result.HvOutU = strs[start + 14].StringToFloat();
+            result.HvCurrent = strs[start + 15].StringToFloat();
+            result.CommState = (ushort)(ushort.TryParse(strs[start + 24], NumberStyles.HexNumber, null, out tempUshort) ? tempUshort : 0);
+            result.PhysParamState = (ushort)(ushort.TryParse(strs[start + 25], NumberStyles.HexNumber, null, out tempUshort) ? tempUshort : 0);
             return result;
             
         }
