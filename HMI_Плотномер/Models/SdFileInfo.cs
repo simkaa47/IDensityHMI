@@ -69,7 +69,7 @@ namespace IDensity.Models
             get => _start;
             set 
             {
-                if(value>=0 && value<=WriteNumber) Set(ref _start, value);
+                if(value>=0 && value<=WriteNumber && value<=finish) Set(ref _start, value);
             } 
         }
         #endregion

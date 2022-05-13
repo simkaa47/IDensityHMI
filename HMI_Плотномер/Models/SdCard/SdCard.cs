@@ -278,14 +278,32 @@ namespace IDensity.Models
                         }                        
                         var result = builder.ToString();
                         if(IsWritingToFile)WriteToFile(result);
-                        Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(new SdCardMeasData() { Temp = result }));
+                        Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(ParseResults(strings,i*26,i*26+25)));
                     }
-                }
-               
+                }               
             }
         }
 
-        
+        SdCardMeasData ParseResults(string[] strs, int start, int finish)
+        {
+            if (strs.Length <= finish) return null;
+            if ((finish - start)!=25) return null;
+            SdCardMeasData result = new SdCardMeasData();
+            float tempFloat = 0;
+            DateTime tempDateTime = new DateTime();
+            result.Time = DateTime.TryParse($"{strs[start]} {strs[start+1]}", out tempDateTime) ? tempDateTime : default(DateTime);
+            for (int i = 0; i < 2; i++)
+            {
+                result.MeasResults[i].ProcNum = (int)strs[start + i * 5 + 2].StringToFloat();
+                result.MeasResults[i].CounterValue = (int)strs[start + i * 5 + 3].StringToFloat();
+                result.MeasResults[i].PhysValueCur = strs[start + i * 5 + 4].StringToFloat();
+                result.MeasResults[i].PhusValueAvg = strs[start + i * 5 + 5].StringToFloat();
+                result.MeasResults[i].IsActive = strs[start + i * 5 + 6].StringToFloat() != 0;
+
+            }
+            return result;
+            
+        }
     }
     
 }

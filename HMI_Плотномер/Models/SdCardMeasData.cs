@@ -1,6 +1,7 @@
 ﻿using IDensity.AddClasses;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace IDensity.Models
@@ -8,140 +9,127 @@ namespace IDensity.Models
     class SdCardMeasData:PropertyChangedBase
     {
 
-        #region Temp
+
+
+        #region Дата и время измерения
         /// <summary>
-        /// Temp
+        /// Дата и время измерения
         /// </summary>
-        private string _temp;
+        private DateTime _time;
         /// <summary>
-        /// Temp
+        /// Дата и время измерения
         /// </summary>
-        public string Temp
+        public DateTime Time
         {
-            get => _temp;
-            set => Set(ref _temp, value);
+            get => _time;
+            set => Set(ref _time, value);
         }
         #endregion
 
-        //#region Дата и время измерения
-        ///// <summary>
-        ///// Дата и время измерения
-        ///// </summary>
-        //private DateTime _time;
-        ///// <summary>
-        ///// Дата и время измерения
-        ///// </summary>
-        //public DateTime Time
-        //{
-        //    get => _time;
-        //    set => Set(ref _time, value);
-        //}
-        //#endregion
+        #region Данные измерений
+        /// <summary>
+        /// Данные измерений
+        /// </summary>
+        public SdMeasResult[] MeasResults { get; } = Enumerable.Range(0,2).Select(i=>new SdMeasResult()).ToArray();
+        #endregion
 
-        //#region Данные измерений
-        ///// <summary>
-        ///// Данные измерений
-        ///// </summary>
-        //public SdMeasResult[] MeasResults { get; } = new SdMeasResult[2];
-        //#endregion
+        #region Температура внутреннего датчика
+        /// <summary>
+        /// Температура внутреннего датчика
+        /// </summary>
+        private float _tempInt;
+        /// <summary>
+        /// Температура внутреннего датчика
+        /// </summary>
+        public float TempInt
+        {
+            get => _tempInt;
+            set => Set(ref _tempInt, value);
+        }
+        #endregion
 
-        //#region Температура внутреннего датчика
-        ///// <summary>
-        ///// Температура внутреннего датчика
-        ///// </summary>
-        //private float _tempInt;
-        ///// <summary>
-        ///// Температура внутреннего датчика
-        ///// </summary>
-        //public float TempInt
-        //{
-        //    get => _tempInt;
-        //    set => Set(ref _tempInt, value);
-        //}
-        //#endregion
+        #region HV - входное напряжение, вольт
+        /// <summary>
+        /// HV - входное напряжение, вольт
+        /// </summary>
+        private float _hvInput;
+        /// <summary>
+        /// HV - входное напряжение, вольт
+        /// </summary>
+        public float HvInput
+        {
+            get => _hvInput;
+            set => Set(ref _hvInput, value);
+        }
+        #endregion
 
-        //#region HV - входное напряжение, вольт
-        ///// <summary>
-        ///// HV - входное напряжение, вольт
-        ///// </summary>
-        //private float _hvInput;
-        ///// <summary>
-        ///// HV - входное напряжение, вольт
-        ///// </summary>
-        //public float HvInput
-        //{
-        //    get => _hvInput;
-        //    set => Set(ref _hvInput, value);
-        //}
-        //#endregion
+        #region HV - выходное напряжение, вольт
+        /// <summary>
+        /// HV - выходное напряжение, вольт
+        /// </summary>
+        private float _hvOutU;
+        /// <summary>
+        /// HV - выходное напряжение, вольт
+        /// </summary>
+        public float HvOutU
+        {
+            get => _hvOutU;
+            set => Set(ref _hvOutU, value);
+        }
+        #endregion
 
-        //#region HV - выходное напряжение, вольт
-        ///// <summary>
-        ///// HV - выходное напряжение, вольт
-        ///// </summary>
-        //private float _hvOutU;
-        ///// <summary>
-        ///// HV - выходное напряжение, вольт
-        ///// </summary>
-        //public float HvOutU
-        //{
-        //    get => _hvOutU;
-        //    set => Set(ref _hvOutU, value);
-        //}
-        //#endregion
+        #region HV - ток
+        /// <summary>
+        /// HV - ток
+        /// </summary>
+        private float _hvCurrent;
+        /// <summary>
+        /// HV - ток
+        /// </summary>
+        public float HvCurrent
+        {
+            get => _hvCurrent;
+            set => Set(ref _hvCurrent, value);
+        }
+        #endregion
 
-        //#region HV - ток
-        ///// <summary>
-        ///// HV - ток
-        ///// </summary>
-        //private float _hvCurrent;
-        ///// <summary>
-        ///// HV - ток
-        ///// </summary>
-        //public float HvCurrent
-        //{
-        //    get => _hvCurrent;
-        //    set => Set(ref _hvCurrent, value);
-        //}
-        //#endregion
+        #region Телеметрия аналогов
+        /// <summary>
+        /// Телеметрия аналогов
+        /// </summary>
+        public SdAnalogData[] AnalogData { get; } = Enumerable.Range(0, 2).Select(i => new SdAnalogData()).ToArray();
 
-        //#region Телеметрия аналогов
-        ///// <summary>
-        ///// Телеметрия аналогов
-        ///// </summary>
-        //public SdAnalogData[] AnalogData { get; } = new SdAnalogData[2];
+        #endregion
 
-        //#endregion
+        #region Значение состояний физических параметров
+        /// <summary>
+        /// Значение состояний физических параметров
+        /// </summary>
+        private ushort _physParamState;
+        /// <summary>
+        /// Значение состояний физических параметров
+        /// </summary>
+        public ushort PhysParamState
+        {
+            get => _physParamState;
+            set => Set(ref _physParamState, value);
+        }
+        #endregion
 
-        //#region Значение состояний физических параметров
-        ///// <summary>
-        ///// Значение состояний физических параметров
-        ///// </summary>
-        //private ushort _physParamState;
-        ///// <summary>
-        ///// Значение состояний физических параметров
-        ///// </summary>
-        //public ushort PhysParamState
-        //{
-        //    get => _physParamState;
-        //    set => Set(ref _physParamState, value);
-        //}
-        //#endregion
-
-        //#region Значение состояний связи
-        ///// <summary>
-        ///// Значение состояний связи
-        ///// </summary>
-        //private ushort _commState;
-        ///// <summary>
-        ///// Значение состояний связи
-        ///// </summary>
-        //public ushort CommState
-        //{
-        //    get => _commState;
-        //    set => Set(ref _commState, value);
-        //}
-        //#endregion
+        #region Значение состояний связи
+        /// <summary>
+        /// Значение состояний связи
+        /// </summary>
+        private ushort _commState;
+        /// <summary>
+        /// Значение состояний связи
+        /// </summary>
+        public ushort CommState
+        {
+            get => _commState;
+            set => Set(ref _commState, value);
+        }
+        #endregion
 
     }
     class SdMeasResult : PropertyChangedBase
@@ -285,6 +273,7 @@ namespace IDensity.Models
             set => Set(ref _adc, value);
         }
         #endregion
+
 
     }
 

@@ -46,7 +46,7 @@
                 <Border Grid.Column="1"  Margin="5">
                     <UniformGrid Rows="2">
                         <TextBlock Text="Серийный номер:" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                        <TextBlock Text="000001" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                        <TextBlock Text="{Binding mainModel.SerialNumber.Value}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                     </UniformGrid>
                 </Border>
                 <!--#endregion-->
@@ -523,7 +523,7 @@
                                 <uc:Parameter DataContext="{Binding mainModel.HalfLife}" Command="{Binding Command}"/>
                                 <uc:Parameter DataContext="{Binding mainModel.DeviceName}" Command="{Binding Command}"/>
                                 <uc:Parameter DataContext="{Binding mainModel.IsotopName}" Command="{Binding Command}"/>
-                                <uc:Parameter DataContext="{Binding mainModel.DiameterPipe}" Command="{Binding Command}"/>
+                                <!--<uc:Parameter DataContext="{Binding mainModel.DiameterPipe}" Command="{Binding Command}"/>-->
                                 <DockPanel DataContext="{Binding mainModel.SourceInstallDate}">
                                 <TextBlock Text="{Binding Description}"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -1399,15 +1399,7 @@
                                     <Setter Property="Foreground" Value="WhiteSmoke"/>
                                 </Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                                <Style TargetType="GridViewColumnHeader">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                                                <TextBlock Text="{TemplateBinding Content}" Style="{StaticResource Common}"/>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
+                                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewColumnHeaderStyle}"/>
                             </Grid.Resources>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.15*"/>                                
@@ -1478,7 +1470,31 @@
                                       ItemsSource="{Binding SdCardMeasDatas}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Строка" DisplayMemberBinding="{Binding Temp}"/>
+                                        <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time}"/>
+                                        <GridViewColumn Header="№ проц. 1" DisplayMemberBinding="{Binding MeasResults[0].ProcNum}" Width="60"/>
+                                        <GridViewColumn Header="Счетчик 1" DisplayMemberBinding="{Binding MeasResults[0].CounterValue}" Width="80"/>
+                                        <GridViewColumn Header="Мгнов. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhysValueCur}" Width="80"/>
+                                        <GridViewColumn Header="Усред. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhusValueAvg}" Width="80"/>
+                                        <GridViewColumn Header="Акт. проц. 1" DisplayMemberBinding="{Binding MeasResults[0].IsActive}" Width="60"/>
+                                        <GridViewColumn Header="№ проц. 2" DisplayMemberBinding="{Binding MeasResults[1].ProcNum}" Width="60"/>
+                                        <GridViewColumn Header="Счетчик 2" DisplayMemberBinding="{Binding MeasResults[1].CounterValue}" Width="80"/>
+                                        <GridViewColumn Header="Мгнов. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhysValueCur}" Width="80"/>
+                                        <GridViewColumn Header="Усред. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhusValueAvg}" Width="80"/>
+                                        <GridViewColumn Header="Акт. проц. 2" DisplayMemberBinding="{Binding MeasResults[1].IsActive}" Width="60"/>
+                                        <GridViewColumn Header="t внутр, С" DisplayMemberBinding="{Binding TempInt}" Width="60"/>
+                                        <GridViewColumn Header="HV in, В" DisplayMemberBinding="{Binding HvInput}" Width="60"/>
+                                        <GridViewColumn Header="HV out, В" DisplayMemberBinding="{Binding HvOutU}" Width="60"/>
+                                        <GridViewColumn Header="HV ток" DisplayMemberBinding="{Binding HvCurrent}" Width="60"/>
+                                        <GridViewColumn Header="AO0, ЦАП" DisplayMemberBinding="{Binding AnalogData[0].Dac}" Width="60"/>
+                                        <GridViewColumn Header="AO0, RX" DisplayMemberBinding="{Binding AnalogData[0].Rx}" Width="60"/>
+                                        <GridViewColumn Header="AO0, test" DisplayMemberBinding="{Binding AnalogData[0].test}" Width="60"/>
+                                        <GridViewColumn Header="AI0, ток, мкА" DisplayMemberBinding="{Binding AnalogData[0].Adc}" Width="60"/>
+                                        <GridViewColumn Header="AO1, ЦАП" DisplayMemberBinding="{Binding AnalogData[1].Dac}" Width="60"/>
+                                        <GridViewColumn Header="AO1, RX" DisplayMemberBinding="{Binding AnalogData[1].Rx}" Width="60"/>
+                                        <GridViewColumn Header="AO1, test" DisplayMemberBinding="{Binding AnalogData[1].test}" Width="60"/>
+                                        <GridViewColumn Header="AI1, ток, мкА" DisplayMemberBinding="{Binding AnalogData[1].Adc}" Width="60"/>
+                                        <GridViewColumn Header="Физ. пар. сост." DisplayMemberBinding="{Binding PhysParamState}" Width="60"/>
+                                        <GridViewColumn Header="Сост. связи" DisplayMemberBinding="{Binding CommState}" Width="60"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
