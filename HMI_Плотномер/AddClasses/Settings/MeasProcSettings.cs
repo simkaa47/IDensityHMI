@@ -372,6 +372,25 @@ namespace IDensity.AddClasses.Settings
 
         #endregion
 
+
+        #region Команда - скопировать настройки на другой измерительный процесс
+        /// <summary>
+        /// Команда - скопировать настройки на другой измерительный процесс
+        /// </summary>
+        RelayCommand _copyAllCommand;
+        /// <summary>
+        /// Команда - скопировать настройки на другой измерительный процесс
+        /// </summary>
+        public RelayCommand CopyAllCommand => _copyAllCommand ?? (_copyAllCommand = new RelayCommand(execPar => 
+        {
+            int par = (int)execPar;
+            var arg = CopyAll(par);
+            if(par!=Num) NeedWriteEvent?.Invoke($"*SETT,meas_proc={par},{arg}#", (ushort)par);
+
+        }, canExecPar => true));
+        #endregion
+
+
         void OnWriteCommandExecuted(string argument)
         {
             NeedWriteEvent?.Invoke($"*SETT,meas_proc={Num},{argument}#", Num);
@@ -399,6 +418,24 @@ namespace IDensity.AddClasses.Settings
         /// Закончилось ЕИ
         /// </summary>
         public event Action<ushort> SingleMeasEventFinishedEvent;
+
+        public string CopyAll(int number)
+        {
+            var str = $"cntr={MeasProcCounterNum.Value},";
+            foreach (var std in MeasStandSettings)
+            {
+                str += std.Copy()+",";
+            }
+            str += CalibrCurve.Copy() + ",";
+            str += "calib_src=";
+            for (int j = 0; j < SingleMeasResCount; j++)
+            {
+                str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()},";
+                
+            }
+            str = str.Remove(str.Length - 1);
+            return str;
+        }
 
     }
 }

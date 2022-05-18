@@ -270,18 +270,22 @@ namespace IDensity.Models
                 var strings = clearString.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries);
                 if (strings.Length % 26 == 0)
                 {
-                    for (int i = 0; i < strings.Length/26; i++)
+                    for (int i = 0; i < strings.Length / 26; i++)
                     {
                         StringBuilder builder = new StringBuilder(strings[i * 26]);
-                        for (int j = i*26+1; j < i*26+26; j++)
+                        for (int j = i * 26 + 1; j < i * 26 + 26; j++)
                         {
-                            builder.Append(","+strings[j]);
-                        }                        
+                            builder.Append("," + strings[j]);
+                        }
                         var result = builder.ToString();
-                        if(IsWritingToFile)WriteToFile(result);
-                        Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(ParseResults(strings,i*26,i*26+25)));
+                        if (IsWritingToFile) WriteToFile(result);
+                        Application.Current.Dispatcher.Invoke(() => SdCardMeasDatas.Add(ParseResults(strings, i * 26, i * 26 + 25)));
                     }
-                }               
+                }
+            }
+            else
+            {
+                var jshdkj = "";
             }
         }
 

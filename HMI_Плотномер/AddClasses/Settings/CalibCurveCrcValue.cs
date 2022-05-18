@@ -82,6 +82,8 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать данные еденичных измерений
         /// </summary>
         public event Action<string, int> NeedWriteEvent;
+
+        
     }
    
 

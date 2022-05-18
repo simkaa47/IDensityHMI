@@ -643,8 +643,7 @@ namespace IDensity.Models
             model.HalfLife.Value = list[0][0];
             model.DeviceName.Value = GetStringById("name", str);
             model.IsotopName.Value = GetStringById("isotope", str);
-            float.TryParse(GetStringById("pipe_diameter", str), out float temp) ;
-            model.DiameterPipe.Value = temp / 10;
+            float.TryParse(GetStringById("pipe_diameter", str), out float temp) ;            
             model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
             model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
             model.SerialNumber.Value = GetStringById("SN", str);
@@ -992,18 +991,7 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSdLogStatus(); } , Encoding.ASCII.GetBytes(str)));
         }
         #endregion
-
-        #region Запрос числа записей результатов измерения
-        public void GetSdCardWritesAmount()
-        {
-            commands.Enqueue(new TcpWriteCommand((buf) =>
-            {
-                var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FMG#"));
-                Thread.Sleep(1000);
-
-            }, null));
-        }
-        #endregion
+        
         #region Запрос записей результатов измерений
         public void GetSdCardWrites(int start, int finish)
         {

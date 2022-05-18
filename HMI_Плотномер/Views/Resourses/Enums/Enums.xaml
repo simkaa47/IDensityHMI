@@ -125,6 +125,15 @@
     <col1:ArrayList   x:Key="SdBtnStatus">
         <sys1:String>Записать.</sys1:String>
         <sys1:String>Отмена</sys1:String>
-
+    </col1:ArrayList>
+    <col1:ArrayList x:Key="MeasProcNums">
+        <sys1:Int32>0</sys1:Int32>
+        <sys1:Int32>1</sys1:Int32>
+        <sys1:Int32>2</sys1:Int32>
+        <sys1:Int32>3</sys1:Int32>
+        <sys1:Int32>4</sys1:Int32>
+        <sys1:Int32>5</sys1:Int32>
+        <sys1:Int32>6</sys1:Int32>
+        <sys1:Int32>7</sys1:Int32>
     </col1:ArrayList>
 </ResourceDictionary>

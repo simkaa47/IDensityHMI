@@ -100,10 +100,9 @@ namespace IDensity.Models
             }
             HalfLife.CommandEcecutedEvent += (o) => WriteCommonSettings($"half_life={HalfLife.WriteValue.ToStringPoint()}");
             DeviceName.CommandEcecutedEvent += (o) => WriteCommonSettings($"name={DeviceName.WriteValue.Substring(0,Math.Min(DeviceName.WriteValue.Length,10))}");
-            IsotopName.CommandEcecutedEvent += (o) => WriteCommonSettings($"isotope={IsotopName.WriteValue.Substring(0, Math.Min(IsotopName.WriteValue.Length, 10))}");
-            DiameterPipe.CommandEcecutedEvent+=(o)=> WriteCommonSettings($"pipe_diameter={(ushort)(DiameterPipe.WriteValue*10)}");
+            IsotopName.CommandEcecutedEvent += (o) => WriteCommonSettings($"isotope={IsotopName.WriteValue.Substring(0, Math.Min(IsotopName.WriteValue.Length, 10))}");            
             SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
-            SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
+            SourceExpirationDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceExpirationDate.WriteValue.ToString("dd:MM:yy")}");
             SdCard = new SdCard(this);
         }
         
@@ -349,16 +348,13 @@ namespace IDensity.Models
 
         #region Имя изотопа
         public Parameter<string> IsotopName { get; } = new Parameter<string>("IsotopName", "Название изотопа", string.Empty, "zzzzzzzzzzz", 0, "");
-        #endregion
-        #region Диаметр трубы
-        public Parameter<float> DiameterPipe { get; } = new Parameter<float>("DiameterPipe", "Диаметр трубы", 0, ushort.MaxValue, 0, "");
-        #endregion
+        #endregion        
 
         #region Время установки источника
         public Parameter<DateTime> SourceInstallDate { get; } = new Parameter<DateTime>("SourceInstallDate", "Дата установки источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
         #endregion
 
-        #region Время установки источника
+        #region Время истечения источника
         public Parameter<DateTime> SourceExpirationDate { get; } = new Parameter<DateTime>("SourceExpirationDate", "Дата истечения срока источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
         #endregion
 

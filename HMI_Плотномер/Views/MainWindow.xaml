@@ -1087,187 +1087,189 @@
                             </ListBox>
                         </TabItem>
                         <!--#endregion-->
-                        <TabItem Header="КОММУНИКАЦИЯ">
-                            <Grid>
-                                <ListBox HorizontalContentAlignment="Stretch" >
-                                    <ListBox.Resources>
-                                        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                                    </ListBox.Resources>
-                                    <!--#region Способ связи с платой -->
-                                    <GroupBox  Header="Способ связи с платой">
-                                        <StackPanel>
-                                            <RadioButton GroupName="comm" Command="{Binding TcpDisconnectCommand}"  IsChecked="{Binding mainModel.CommMode.RsEnable}"  Content="RS-485(Modbus RTU)"/>
-                                            <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.EthEnable}" Content="Ethernet (TCP)"/>
-                                            <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.HartEnable}" Content="HART"  IsEnabled="False"/>
-                                        </StackPanel>
-                                    </GroupBox>
-                                    <!--#endregion-->
+                    <!--#region Коммуникация -->
+                    <TabItem Header="КОММУНИКАЦИЯ">
+                        <Grid>
+                            <ListBox HorizontalContentAlignment="Stretch" >
+                                <ListBox.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+                                </ListBox.Resources>
+                                <!--#region Способ связи с платой -->
+                                <GroupBox  Header="Способ связи с платой">
+                                    <StackPanel>
+                                        <RadioButton GroupName="comm" Command="{Binding TcpDisconnectCommand}"  IsChecked="{Binding mainModel.CommMode.RsEnable}"  Content="RS-485(Modbus RTU)"/>
+                                        <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.EthEnable}" Content="Ethernet (TCP)"/>
+                                        <RadioButton GroupName="comm"  IsChecked="{Binding mainModel.CommMode.HartEnable}" Content="HART"  IsEnabled="False"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <!--#endregion-->
+                                <!--#region Параметры RS485 -->
+                                <GroupBox  Header="Настройки RS-485" HorizontalAlignment="Stretch">
                                     <!--#region Параметры RS485 -->
-                                    <GroupBox  Header="Настройки RS-485" HorizontalAlignment="Stretch">
-                                        <!--#region Параметры RS485 -->
-                                        <ListBox>
-                                            <!--#region Имя COM порта -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <Grid>
-                                                    <TextBlock Style="{StaticResource Common}" Text="Имя COM порта" HorizontalAlignment="Left"></TextBlock>
-                                                    <ComboBox Width="80" HorizontalAlignment="Right" ItemsSource="{Binding ComPorts}" SelectedItem="{Binding mainModel.rs.ComName}">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="DropDownOpened">
-                                                                <i:InvokeCommandAction Command="{Binding UpdateComPortListCommand}"/>
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </ComboBox>
-                                                </Grid>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                            <!--#region Скорость передачи даных, бит/c -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <Grid>
-                                                    <TextBlock Style="{StaticResource Common}" Text="Скорость передачи даных, бит/c" HorizontalAlignment="Left"></TextBlock>
-                                                    <ComboBox  Width="80"   ItemsSource="{StaticResource PortSpeedsInt}"  SelectedItem="{Binding mainModel.rs.BaudRate}"  HorizontalAlignment="Right"/>
-                                                </Grid>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                            <!--#region Паритет-->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <Grid>
-                                                    <TextBlock Style="{StaticResource Common}" Text="Паритет" HorizontalAlignment="Left"></TextBlock>
-                                                    <ComboBox    Width="80"  ItemsSource="{StaticResource parityes}"    SelectedItem="{Binding mainModel.rs.Par}" HorizontalAlignment="Right"></ComboBox>
-                                                </Grid>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                            <!--#region Адрес устройства в сети Modbus -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <Grid>
-                                                    <TextBlock Style="{StaticResource Common}" Text="Адрес устройства в сети Modbus" HorizontalAlignment="Left"></TextBlock>
-                                                    <TextBox Text="{Binding mainModel.rs.MbAddr}" HorizontalContentAlignment="Center" Width="80" HorizontalAlignment="Right"></TextBox>
-                                                </Grid>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                        </ListBox>
+                                    <ListBox>
+                                        <!--#region Имя COM порта -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Style="{StaticResource Common}" Text="Имя COM порта" HorizontalAlignment="Left"></TextBlock>
+                                                <ComboBox Width="80" HorizontalAlignment="Right" ItemsSource="{Binding ComPorts}" SelectedItem="{Binding mainModel.rs.ComName}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="DropDownOpened">
+                                                            <i:InvokeCommandAction Command="{Binding UpdateComPortListCommand}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ComboBox>
+                                            </Grid>
+                                        </ListBoxItem>
                                         <!--#endregion-->
-                                    </GroupBox>
+                                        <!--#region Скорость передачи даных, бит/c -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Style="{StaticResource Common}" Text="Скорость передачи даных, бит/c" HorizontalAlignment="Left"></TextBlock>
+                                                <ComboBox  Width="80"   ItemsSource="{StaticResource PortSpeedsInt}"  SelectedItem="{Binding mainModel.rs.BaudRate}"  HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Паритет-->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Style="{StaticResource Common}" Text="Паритет" HorizontalAlignment="Left"></TextBlock>
+                                                <ComboBox    Width="80"  ItemsSource="{StaticResource parityes}"    SelectedItem="{Binding mainModel.rs.Par}" HorizontalAlignment="Right"></ComboBox>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Адрес устройства в сети Modbus -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <Grid>
+                                                <TextBlock Style="{StaticResource Common}" Text="Адрес устройства в сети Modbus" HorizontalAlignment="Left"></TextBlock>
+                                                <TextBox Text="{Binding mainModel.rs.MbAddr}" HorizontalContentAlignment="Center" Width="80" HorizontalAlignment="Right"></TextBox>
+                                            </Grid>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                    </ListBox>
                                     <!--#endregion-->
-                                    <!--#region Параметры  Ethernet-->
-                                    <GroupBox Header="Настройки Ethernet(TCP) соединения">
-                                        <ListBox HorizontalContentAlignment="Stretch">
-                                            <ListBoxItem Content="{Binding mainModel.Tcp.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
-                                            <ListBoxItem Content="{Binding mainModel.Tcp.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Номер порта"></ListBoxItem>
-                                            <ListBoxItem Content="{Binding mainModel.Tcp.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Пауза между запросами, мс."></ListBoxItem>
+                                </GroupBox>
+                                <!--#endregion-->
+                                <!--#region Параметры  Ethernet-->
+                                <GroupBox Header="Настройки Ethernet(TCP) соединения">
+                                    <ListBox HorizontalContentAlignment="Stretch">
+                                        <ListBoxItem Content="{Binding mainModel.Tcp.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
+                                        <ListBoxItem Content="{Binding mainModel.Tcp.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Номер порта"></ListBoxItem>
+                                        <ListBoxItem Content="{Binding mainModel.Tcp.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Пауза между запросами, мс."></ListBoxItem>
+                                        <DockPanel>
+                                            <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
+                                            <CheckBox IsChecked="{Binding mainModel.Tcp.CycicRequest}" HorizontalAlignment="Right"/>
+                                        </DockPanel>
+                                        <!--#region IP адрес udp приемника -->
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <DockPanel>
-                                                <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
-                                                <CheckBox IsChecked="{Binding mainModel.Tcp.CycicRequest}" HorizontalAlignment="Right"/>
-                                            </DockPanel>
-                                            <!--#region IP адрес udp приемника -->
-                                            <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <DockPanel>
-                                                    <TextBlock Text="Адрес приемника данных по UDP(IP, порт)"
+                                                <TextBlock Text="Адрес приемника данных по UDP(IP, порт)"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource Common}"/>
-                                                    <StackPanel Orientation="Horizontal"
+                                                <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Right">
-                                                        <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                                    <TextBox Text="{Binding mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
                                                  MinWidth="100"
                                                  HorizontalContentAlignment="Center"
                                                  VerticalContentAlignment="Center"/>
-                                                        <TextBox Text="{Binding mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged}"
+                                                    <TextBox Text="{Binding mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged}"
                                                  MinWidth="100"
                                                  HorizontalContentAlignment="Center"
                                                  VerticalContentAlignment="Center"/>
-                                                        <Button Width="50"
+                                                    <Button Width="50"
                                                 Margin="5,0,5,0"
                                                 Command="{Binding SetUpsAddrCommand}"
                                                 Content="-->"/>
-                                                    </StackPanel>
-                                                </DockPanel>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                        </ListBox>
-                                    </GroupBox>
-                                    <!--#endregion-->
-                                    <!--#region Настройки Ethernet порта в плате -->
-                                    <GroupBox Header="НАСТРОЙКИ ETHERNET ПОРТА (В ПЛАТЕ)">
-                                        <ListBox HorizontalContentAlignment="Stretch">
-                                            <DockPanel>
-                                                <TextBlock Text="Ip адрес"/>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                    <TextBox Width="110"
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                    </ListBox>
+                                </GroupBox>
+                                <!--#endregion-->
+                                <!--#region Настройки Ethernet порта в плате -->
+                                <GroupBox Header="НАСТРОЙКИ ETHERNET ПОРТА (В ПЛАТЕ)">
+                                    <ListBox HorizontalContentAlignment="Stretch">
+                                        <DockPanel>
+                                            <TextBlock Text="Ip адрес"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBox Width="110"
                                                          HorizontalContentAlignment="Center"
                                                          VerticalContentAlignment="Center"
                                                          Text="{Binding mainModel.IP}"/>
-                                                    <Button Width="50"
+                                                <Button Width="50"
                                                         Command="{Binding WriteEthParamsCommand}"
                                                         Margin="4,0,0,0"
                                                         Content="-->"/>
-                                                </StackPanel>
-                                            </DockPanel>
-                                            <DockPanel>
-                                                <TextBlock Text="Маска подсети"/>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                    <TextBox Width="110"
+                                            </StackPanel>
+                                        </DockPanel>
+                                        <DockPanel>
+                                            <TextBlock Text="Маска подсети"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBox Width="110"
                                                          HorizontalContentAlignment="Center"
                                                          VerticalContentAlignment="Center"
                                                          Text="{Binding mainModel.Mask}"/>
-                                                    <Button Width="50"
+                                                <Button Width="50"
                                                         Command="{Binding WriteEthParamsCommand}"
                                                         Margin="4,0,0,0"
                                                         Content="-->"/>
-                                                </StackPanel>
-                                            </DockPanel>
-                                            <DockPanel>
-                                                <TextBlock Text="Сетевой шлюз"/>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                    <TextBox Width="110"
+                                            </StackPanel>
+                                        </DockPanel>
+                                        <DockPanel>
+                                            <TextBlock Text="Сетевой шлюз"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBox Width="110"
                                                          HorizontalContentAlignment="Center"
                                                          VerticalContentAlignment="Center"
                                                          Text="{Binding mainModel.GateWay}"/>
-                                                    <Button Width="50"
+                                                <Button Width="50"
                                                         Command="{Binding WriteEthParamsCommand}"
                                                         Margin="4,0,0,0"
                                                         Content="-->"/>
-                                                </StackPanel>
-                                            </DockPanel>
-                                        </ListBox>
-                                    </GroupBox>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </ListBox>
+                                </GroupBox>
 
-                                    <!--#endregion-->
-                                    <!--#region Настройки последовательного порта плотномера -->
-                                    <GroupBox Header="Настройки последовательного порта плотномера">
-                                        <ListBox HorizontalContentAlignment="Stretch">
-                                            <!--#region Баудрейт -->
-                                            <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}">
-                                                <uc:CompoboxParameter CompoboxWidth="80"
+                                <!--#endregion-->
+                                <!--#region Настройки последовательного порта плотномера -->
+                                <GroupBox Header="Настройки последовательного порта плотномера">
+                                    <ListBox HorizontalContentAlignment="Stretch">
+                                        <!--#region Баудрейт -->
+                                        <ListBoxItem DataContext="{Binding mainModel.PortBaudrate}">
+                                            <uc:CompoboxParameter CompoboxWidth="80"
                                                                   ItemSource="{StaticResource PortSpeeds}"
                                                                   SelectedItem="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                                   Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeBaudrateCommand}"
                                                                   CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem}"/>
-                                            </ListBoxItem>
-                                            <!--#endregion-->
-                                            <!--#region Режим работы -->
-                                            <ListBoxItem DataContext="{Binding mainModel.PortSelectMode}">
-                                                <uc:CompoboxParameter CompoboxWidth="80"
+                                        </ListBoxItem>
+                                        <!--#endregion-->
+                                        <!--#region Режим работы -->
+                                        <ListBoxItem DataContext="{Binding mainModel.PortSelectMode}">
+                                            <uc:CompoboxParameter CompoboxWidth="80"
                                                                   ItemSource="{StaticResource PortModes}"
                                                                   Index="{Binding Value}"
                                                                   Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ChangeSerialSelectCommand}"
                                                                   CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=Index}"/>
-                                            </ListBoxItem>
+                                        </ListBoxItem>
 
-                                            <!--#endregion-->
-                                        </ListBox>
-                                    </GroupBox>
-                                    <!--#endregion-->
-                                    <!--#region Кнопка перезагрузить плату -->
-                                    <Button Width="200"
+                                        <!--#endregion-->
+                                    </ListBox>
+                                </GroupBox>
+                                <!--#endregion-->
+                                <!--#region Кнопка перезагрузить плату -->
+                                <Button Width="200"
                                                 Height="60"
                                                 HorizontalAlignment="Left"
                                                 Command="{Binding RstBoardCommand}">
-                                        <TextBlock Text="ПЕРЕЗАГРУЗИТЬ ПЛАТУ"/>
-                                    </Button>
-                                    <!--#endregion-->
-                                </ListBox>
-                            </Grid>
-                        </TabItem>
-                        <!--#region События -->
+                                    <TextBlock Text="ПЕРЕЗАГРУЗИТЬ ПЛАТУ"/>
+                                </Button>
+                                <!--#endregion-->
+                            </ListBox>
+                        </Grid>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region События -->
                     <TabItem Header="СОБЫТИЯ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                             <DataGrid ItemsSource="{Binding Events.EventDevices}" 
                                         AutoGenerateColumns="False"                                        

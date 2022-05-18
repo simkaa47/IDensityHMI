@@ -178,6 +178,9 @@
             </TabControl.ItemsPanel>
             <!--#region Основное -->
             <TabItem Header="ОСНОВНОЕ">
+                <TabItem.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+                </TabItem.Resources>
                 <ListBox HorizontalContentAlignment="Stretch">                    
                     <!--#region Номер счетчика -->
                     <uc:Parameter DataContext="{Binding MeasProcCounterNum}"
@@ -238,6 +241,27 @@
                         <CheckBox Command="{Binding Command}"  
                                   IsChecked="{Binding WriteValue}"
                                   HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <!--#endregion-->
+                    <!--#region Скопировать на другой изм. процесс -->
+                    <DockPanel>
+                        <TextBlock Text="Скопировать на другой измерительный процесс"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <ComboBox Name="MeasNumSelector"  ItemsSource="{StaticResource  MeasProcNums}"
+                                       SelectedIndex="0">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style>
+                                        <Setter Property="ComboBoxItem.Background" Value="Black"/>
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                            </ComboBox>
+                            <Button Width="100" 
+                                    Margin="5" 
+                                    Content="Copy" 
+                                    Command="{Binding CopyAllCommand}"
+                                    CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
+                        </StackPanel>
+
                     </DockPanel>
                     <!--#endregion-->
                 </ListBox>

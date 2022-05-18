@@ -60,5 +60,14 @@ namespace IDensity.AddClasses
         /// Необходимо записать настройки стандартизаций
         /// </summary>
         public event Action<string> NeedWriteEvent;
+        public string Copy()
+        { 
+            var arg = $"calib_curve={Type.WriteValue},{MeasUnit.Id.Value}";
+            foreach (var coeff in Coeffs)
+            {
+                arg += ","+ coeff.Value.ToStringPoint();
+            }
+            return arg;
+        }
     }
 }
