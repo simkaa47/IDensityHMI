@@ -34,5 +34,10 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать настройки стандартизаций
         /// </summary>
         public event Action<string> NeedWriteEvent;
+
+        public string Copy()
+        {
+            return $"fast_chg={(Activity.Value ? 1 : 0)},{Threshold.Value.ToString()}";
+        }
     }
 }

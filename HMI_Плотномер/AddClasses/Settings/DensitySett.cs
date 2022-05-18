@@ -44,5 +44,10 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать настройки стандартизаций
         /// </summary>
         public event Action<string> NeedWriteEvent;
+
+        public string Copy()
+        {
+            return $"{MeasUnit.Id.Value},{PhysValue.Value.ToStringPoint()}";
+        }
     }
 }

@@ -68,5 +68,10 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать настройки стандартизаций
         /// </summary>
         public event Action<string> NeedWriteEvent;
+
+        public string Copy()
+        {
+            return $"{(Activity.Value ? 1 : 0)},{MeasUnitNum.Value},{Sourse.Value},{A.Value.ToStringPoint()},{B.Value.ToStringPoint()},{C.Value.ToStringPoint()},{D.Value.ToStringPoint()}";
+        }
     }
 }

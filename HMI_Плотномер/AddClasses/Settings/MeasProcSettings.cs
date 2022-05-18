@@ -433,7 +433,12 @@ namespace IDensity.AddClasses.Settings
                 str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()},";
                 
             }
-            str = str.Remove(str.Length - 1);
+            str += $"dens_liq={DensityLiq.Copy()},dens_solid={DensitySol.Copy()},";
+            str += $"comp_temp={TempCompensation.Copy()},comp_steam={SteamCompensation.Copy()},";
+            str += $"aver_depth={MeasDeep.Value},";
+            str += $"type={MeasType.Value},";
+            str += FastChange.Copy()+",";
+            str += $"pipe_diam={(ushort)(PipeDiameter.Value * 10)}";
             return str;
         }
 
