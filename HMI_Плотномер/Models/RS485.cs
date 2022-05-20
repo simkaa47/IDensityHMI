@@ -14,22 +14,22 @@ namespace IDensity.Models
     /// <summary>
     /// Представляет набор свойств и методов, необходимых для связи с платой по RS485 (Modbus RTU)
     /// </summary>
-    class RS485: PropertyChangedBase
+    class RS485 : PropertyChangedBase
     {
 
 
         #region Перечисления номеров holding регистров, представляющих команды
         enum Holds
-        { 
+        {
             SwitchMeas = 1,// включение измерения
             SingleMeasDuration = 2,// длительность ед. измерения
             SingleMeasStart = 3, // старт ед. измерения
             SwitchHv = 4,   // включение hv
-            SwitchPwrAm  = 7,    // стартовый номер регистра управления питанием аналоговых модулей
+            SwitchPwrAm = 7,    // стартовый номер регистра управления питанием аналоговых модулей
             TestValueDac = 12,  // тестовая величина для отправки на ЦАП
             SendTestValue = 13, // отправка тестового значения на ЦАП
             AdcSett = 45, // начальный номер регистров, отвечающих за настройки АЦП
-            DacSett=51, // начальный номер регистров, отвечающих за настройки ЦАП
+            DacSett = 51, // начальный номер регистров, отвечающих за настройки ЦАП
             UdpAddr = 109, // начальный номер регистров, отвечающих за IP адрес UDP приемника
             StartAdc = 118,// старт-стоп платы АЦП
             StartAdcData = 119// старт-стоп выдачи данных АЦП
@@ -39,6 +39,7 @@ namespace IDensity.Models
         #region Свойства
         #region Адрес в сети Modbus
         byte _mbAddr = 1;
+        
         public byte MbAddr
         {
             get => _mbAddr;

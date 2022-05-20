@@ -256,24 +256,63 @@ namespace IDensity.ViewModels
         }, 
             o => mainModel.Connecting.Value));
         #endregion
-  
+
+        #region Найти максимум спектра и перезаписать границы для выбранного диапазона счетчиков
+
+        #region ПОиск максимума спектра и перезаписать границы для выбранного диапазона счетчиков
+        /// <summary>
+        /// ПОиск максимума спектра и перезаписать границы для выбранного диапазона счетчиков
+        /// </summary>
+        RelayCommand _tuneCounterDiapasoneCommand;
+        /// <summary>
+        /// ПОиск максимума спектра и перезаписать границы для выбранного диапазона счетчиков
+        /// </summary>
+        public RelayCommand TuneCounterDiapasoneCommand => _tuneCounterDiapasoneCommand ?? (_tuneCounterDiapasoneCommand = new RelayCommand(execPar =>
+        {
+            if (Udp.Mode == 2 && AdcDataTrend!=null && AdcDataTrend.Count > Udp.SpectrMaxLimit)
+            {
+                var max = AdcDataTrend[Udp.SpectrMinLimit];
+                for (int i = Udp.SpectrMinLimit + 1; i < Udp.SpectrMaxLimit; i++)
+                {
+                    if (AdcDataTrend[i].Y > max.Y) max = AdcDataTrend[i];
+                }
+                var index = max.X;
+                index = Math.Max(0, index - Udp.SpectrFilterDeep / 2);
+                var minLimit = Math.Clamp(index - index * Udp.LeftCounterCoeff, 0, 4095);
+                var maxLimit = Math.Clamp(index + index * Udp.RightCounterCoeff, 0, 4095);
+                if (SelectedCountDiapasone != null)
+                {
+                    var diap = SelectedCountDiapasone.Clone() as CountDiapasone;
+                    diap.Start.Value = (ushort)minLimit;
+                    diap.Finish.Value = (ushort)maxLimit;
+                    mainModel.WriteCounterSettings(diap);
+                }                
+            }   
+        }, canExecPar => true));
+        #endregion
+
+        #endregion
+
         #endregion
         public MainModel mainModel { get; } = new MainModel();
 
         #region Конструктор
         public VM()
         {
-            mainModel.ModelProcess();
-            mainModel.UpdateDataEvent += AddDataToCollection;
-            timer.Elapsed += (s, e) => CurPcDateTime = DateTime.Now;            
-            timer.Start();
-            Events = new Events(mainModel);
-            GetEventHistory();
-            Events.EventExecute += AddHistoryItem;
-            _selectedEventItems.Filter += OnEventsFiltered;
-            _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
-            GetMeasDates();
-            UdpInit();            
+            if ((Application.Current is App))
+            {
+                mainModel.ModelProcess();
+                mainModel.UpdateDataEvent += AddDataToCollection;
+                timer.Elapsed += (s, e) => CurPcDateTime = DateTime.Now;
+                timer.Start();
+                Events = new Events(mainModel);
+                GetEventHistory();
+                Events.EventExecute += AddHistoryItem;
+                _selectedEventItems.Filter += OnEventsFiltered;
+                _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
+                GetMeasDates();
+                UdpInit();
+            }                
         }
 
 
@@ -291,7 +330,8 @@ namespace IDensity.ViewModels
 
         void UdpInit()
         {
-            Udp = new UDP();
+            Udp = ClassInit<UDP>();
+            Udp.Start();
             Udp.UpdateOscillEvent += (collection) =>
             {
                 UpdateAdcTrend(collection);
@@ -532,8 +572,8 @@ namespace IDensity.ViewModels
         #region Данные UDP
         DateTime lastUpdateTime = DateTime.Now;
         #region Данные тренда
-        IEnumerable<Point> _adcDataTrend;
-        public IEnumerable<Point> AdcDataTrend
+        List<Point> _adcDataTrend;
+        public List<Point> AdcDataTrend
         {
             get => _adcDataTrend;
             set
@@ -554,11 +594,11 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Данные гистограммы в режиме максимальных амплитуд
-        IEnumerable<Point> _maxAmplitudesData;
+        List<Point> _maxAmplitudesData;
         /// <summary>
         /// Данные гистограммы в режиме максимальных амплитуд
         /// </summary>
-        public IEnumerable<Point> MaxAmplitudesData
+        public List<Point> MaxAmplitudesData
         {
             get => _maxAmplitudesData;
             set => Set(ref _maxAmplitudesData, value);

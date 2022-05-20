@@ -38,16 +38,113 @@ namespace IDensity.Models
         #region Событие "Готовы данные для тренда в режиме осциллографа"
         public event Action<List<Point>> UpdateOscillEvent;
         #endregion
+
         #region Событие "Готовы данные в режиме макс амплитуд"
         public event Action<List<Point>> UpdateAmplitudesEvent;
         #endregion
+
+        #region Глубина скользящего среднего для спектра
+        /// <summary>
+        /// Глубина скользящего среднего для спектра
+        /// </summary>
+        private int _spectrFilterDeep=1;
+        /// <summary>
+        /// Глубина скользящего среднего для спектра
+        /// </summary>
+        public int SpectrFilterDeep
+        {
+            get => _spectrFilterDeep;
+            set
+            {
+                if (value > 0) Set(ref _spectrFilterDeep, value);
+            } 
+        }
+        #endregion       
+
+        #region Минимальный предел для поиска максимума спектра
+        /// <summary>
+        /// Минимальный предел для поиска максимума спектра
+        /// </summary>
+        private int _spectrMinLimit;
+        /// <summary>
+        /// Минимальный предел для поиска максимума спектра
+        /// </summary>
+        public int SpectrMinLimit
+        {
+            get => _spectrMinLimit;
+            set
+            {
+                if (value > 0 && value < 4096)
+                {
+                    if (value > SpectrMaxLimit) SpectrMaxLimit = value;
+                    Set(ref _spectrMinLimit, value);
+                }
+            }
+        }
+        #endregion
+
+        #region Максимальный предел для поиска масксимума спектра
+        /// <summary>
+        /// Максимальный предел для поиска масксимума спектра
+        /// </summary>
+        private int _spectrMaxLimit;
+        /// <summary>
+        /// Максимальный предел для поиска масксимума спектра
+        /// </summary>
+        public int SpectrMaxLimit
+        {
+            get => _spectrMaxLimit;
+            set
+            {
+                if (value > 0 && value < 4096)
+                {
+                    if (value < SpectrMinLimit) SpectrMinLimit = value;
+                    Set(ref _spectrMaxLimit, value);
+                }
+            }
+        }
+        #endregion
+
+
+        #region Смещение левого предела диапазона счетчика отностительно индекса максмума спетра
+        /// <summary>
+        /// Смещение левого предела диапазона счетчика отностительно индекса максмума спетра
+        /// </summary>
+        private double _leftCounterCoeff;
+        /// <summary>
+        /// Смещение левого предела диапазона счетчика отностительно индекса максмума спетра
+        /// </summary>
+        public double LeftCounterCoeff
+        {
+            get => _leftCounterCoeff;
+            set { if (value >= 0 && value <= 1) Set(ref _leftCounterCoeff, value); }
+        }
+        #endregion
+
+        #region Смещение правого предела диапазона счетчикаотносительно иедекса максимума спекра
+        /// <summary>
+        /// Смещение правого предела диапазона счетчикаотносительно иедекса максимума спекра
+        /// </summary>
+        private double _rightCounterCoeff;
+        /// <summary>
+        /// Смещение правого предела диапазона счетчикаотносительно иедекса максимума спекра
+        /// </summary>
+        public double RightCounterCoeff
+        {
+            get => _rightCounterCoeff;
+            set { if(value >= 0 && value <= 1) Set(ref _rightCounterCoeff, value); } 
+        }
+        #endregion
+
+
+
         int index = 0;
         List<Point> CurOscillList = new List<Point>();
 
         #region Конструктор
         public UDP()
         {
-            Start();
+            
         }
         #endregion
 
@@ -111,9 +208,13 @@ namespace IDensity.Models
                     break;
                 case "*AML1":
                 case "*AML2":
-                    Mode = header=="*AML1"?1:2;
+                    Mode = (header=="*AML1")?1:2;
                     AddToCollection(2, Math.Min(1034,data.Length));
-                    if (packetNum >= count) UpdateOscillEvent?.Invoke(CurOscillList);
+                    if (packetNum >= count)
+                    { 
+                        if(Mode==2) UpdateOscillEvent?.Invoke(FilterSpectr(CurOscillList));
+                        else UpdateOscillEvent?.Invoke(CurOscillList);
+                    } 
                     break;
                 case "*AML3":
                     Mode = 3;
@@ -140,6 +241,26 @@ namespace IDensity.Models
                     CurOscillList.Add(new Point(index, temp));
                     index++;
                 }                
+            }
+
+            List<Point> FilterSpectr(List<Point> unFilter)
+            {
+                List<Point> filtered = new List<Point>();
+                double sum = 0; ;
+                for (int i = 0; i < unFilter.Count; i++)
+                {
+                    sum += unFilter[i].Y;
+                    if (i  < SpectrFilterDeep)
+                    {                        
+                        filtered.Add(new Point(unFilter[i].X, sum / (i+1)));
+                    }
+                    else
+                    {
+                        sum -= unFilter[i - SpectrFilterDeep].Y;
+                        filtered.Add(new Point(unFilter[i].X, sum / SpectrFilterDeep));
+                    }
+                }
+                return filtered;
             }
 
         }

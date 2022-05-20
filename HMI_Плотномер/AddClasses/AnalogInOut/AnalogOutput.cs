@@ -15,7 +15,7 @@ namespace IDensity.AddClasses
             AmTestValue.CommandEcecutedEvent += (par) => 
             {
                 AmTestValue.Value = AmTestValue.WriteValue;
-                SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, (ushort)(AmTestValue.WriteValue * 10));
+                SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, (ushort)(AmTestValue.WriteValue));
             };
         }
         #endregion
