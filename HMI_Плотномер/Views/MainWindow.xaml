@@ -1538,7 +1538,16 @@
                                 <uc:Parameter DataContext="{Binding mainModel.AdcBoardSettings.TimerMax}" 
                                           Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.AdcBoardSettings.SetTimerMaxChangeCommand}"/>
                                 <!--#endregion-->
-                            </ListBox>
+                            <!--#region Глубина усреднения -->
+                            <DockPanel>
+                                <TextBlock Text="Глубина усреднения спектра" Style="{StaticResource Common}"/>
+                                <TextBox Text="{Binding Udp.SpectrFilterDeep, UpdateSourceTrigger=PropertyChanged}" 
+                                         Width="80" Height="30" 
+                                         HorizontalAlignment="Right"
+                                         VerticalContentAlignment="Center"/>
+                            </DockPanel>
+                            <!--#endregion-->
+                        </ListBox>
                             <!--#endregion-->
                             <!--#region Вторая группа параметров -->
                             <ListBox Grid.Column="1" HorizontalContentAlignment="Stretch">
@@ -1560,7 +1569,40 @@
                                     </Button>
                                 </DockPanel>
                                 <!--#endregion-->
-                            </ListBox>
+                            <!--#region Минимальный и мааксимальный пределы поиска спектра -->
+                            <DockPanel>
+                                <TextBlock Text="Диапазон поика максимума спектра, мин|макс"
+                                           Style="{StaticResource Common}"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBox Text="{Binding Udp.SpectrMinLimit, UpdateSourceTrigger=LostFocus}" 
+                                         Width="80" Height="30" 
+                                         HorizontalAlignment="Right"
+                                         VerticalContentAlignment="Center"/>
+                                    <TextBox Text="{Binding Udp.SpectrMaxLimit, UpdateSourceTrigger=LostFocus}" 
+                                         Width="80" Height="30" 
+                                         HorizontalAlignment="Right"
+                                         VerticalContentAlignment="Center"/>
+                                </StackPanel>
+                            </DockPanel>
+                            <DockPanel>
+                                <Button Width="450"
+                                    Command="{Binding TuneCounterDiapasoneCommand}"
+                                    HorizontalAlignment="Left" 
+                                    Content="Расчет пределов счетчика с указанными отклонениями"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBox Text="{Binding Udp.LeftCounterCoeff, StringFormat=f2, UpdateSourceTrigger=LostFocus}" 
+                                         Width="80" Height="30" 
+                                         HorizontalAlignment="Right"
+                                         VerticalContentAlignment="Center"/>
+                                    <TextBox Text="{Binding Udp.RightCounterCoeff, StringFormat=f2, UpdateSourceTrigger=LostFocus}" 
+                                         Width="80" Height="30" 
+                                         HorizontalAlignment="Right"
+                                         VerticalContentAlignment="Center"/>
+                                </StackPanel>
+                            </DockPanel>
+                            
+                            <!--#endregion-->
+                        </ListBox>
                             <!--#endregion-->
                         </Grid>
                         <!--#endregion-->
@@ -1591,13 +1633,7 @@
                         <!--#region График -->
                         <UserControl Grid.Row="1"
                                  Template="{StaticResource AdcTrend}">
-                        </UserControl>
-                        <!--<uc:TrendAdc Grid.Row="1"
-                                 Mode="{Binding Udp.Mode}"
-                                 Collection="{Binding AdcDataTrend}"
-                                 LowAnnotation="{Binding SelectedCountDiapasone.Start.Value}"
-                                 HighLineAnnotation="{Binding SelectedCountDiapasone.Finish.Value}"/>
-                    -->
+                        </UserControl>                        
                         <!--#endregion-->
                         <!--#region Счетчик -->
                         <StackPanel Grid.Row="1" Grid.Column="1">

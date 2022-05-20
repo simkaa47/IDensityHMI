@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml;
@@ -65,6 +66,7 @@ namespace IDensity.Models.XML
                 case "byte": return byte.Parse(par);
                 case "single":
                 case "float": return float.Parse(par.Replace(",", "."), CultureInfo.InvariantCulture);
+                case "double": return float.Parse(par.Replace(",", "."), CultureInfo.InvariantCulture);
                 default: return par;
             }
         }
@@ -111,15 +113,11 @@ namespace IDensity.Models.XML
                 var props = typeof(T).GetProperties();
                 XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
                 for (int i = 0; i < nodeList.Count; i++)
-                {
-                    bool isEqual = true;
+                {                    
                     foreach (var prop in props)
-                    {
-                        var xmlValue = nodeList.Item(i).Attributes[prop.Name].Value;
-                        var parValue = type.GetProperty(prop.Name).GetValue(param).ToString();
-                        if (prop.Name != changedProperty) isEqual = isEqual && (xmlValue == parValue);
-                    }
-                    if (isEqual) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
+                    {                        
+                        if (prop.Name != changedProperty) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
+                    }                   
                 }
                 xDoc.Save(Path);
             }            

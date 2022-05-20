@@ -7,12 +7,13 @@
     <ControlTemplate TargetType="UserControl" x:Key="CountersTemplate">
         <StackPanel>
             <DataGrid CanUserAddRows="False"
-                                      FontSize="16"
-                                      FontWeight="Bold"
-                                      SelectedItem="{Binding SelectedCountDiapasone}"
-                                      CanUserDeleteRows="False"
-                                      AutoGenerateColumns="False"
-                                      ItemsSource="{Binding mainModel.CountDiapasones}">
+                      FontSize="16"
+                      FontWeight="Bold"
+                      SelectedItem="{Binding SelectedCountDiapasone}"
+                      CanUserDeleteRows="False"
+                      SelectedIndex="0"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding mainModel.CountDiapasones}">
                 <DataGrid.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel/>
