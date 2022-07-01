@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IDensity.Models
 {
-    class TCP : PropertyChangedBase
+    public class TCP : PropertyChangedBase
     {
         #region События
         public event Action<string> TcpEvent;

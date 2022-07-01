@@ -14,7 +14,7 @@ namespace IDensity.Models
     /// <summary>
     /// В этом классе происходит парсинг пакетов, приходящих по UDP
     /// </summary>
-    class UDP:PropertyChangedBase
+    public class UDP:PropertyChangedBase
     {
         // 0 - Осциллограмма, 1 - неполный спектр, 2 - полный спектр, 3 - счетчики
         private int _mode;

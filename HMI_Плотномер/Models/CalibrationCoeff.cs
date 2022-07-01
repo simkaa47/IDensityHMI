@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.Models
 {
-    internal class CalibrationCoeff 
+    public class CalibrationCoeff 
     {
         public CalibrationCoeff(int deg, double coeff)
         {

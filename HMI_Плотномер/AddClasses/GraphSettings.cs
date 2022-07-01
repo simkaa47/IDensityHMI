@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class GraphSettings:PropertyChangedBase
+    public class GraphSettings:PropertyChangedBase
     {
         #region Временной интервал отображаемых данных
         int _plotTime = 1;

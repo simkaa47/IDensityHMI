@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace IDensity.AddClasses.EventHistory
 {
-    class EventDevice: PropertyChangedBase
+    public class EventDevice: PropertyChangedBase
     {
         public event Action<EventDevice> EventExecuted;
         public enum EventTypes

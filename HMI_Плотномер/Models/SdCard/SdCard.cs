@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace IDensity.Models
 {
-    class SdCard:PropertyChangedBase
+    public class SdCard:PropertyChangedBase
     {
         MainModel _model;
         public SdCard(MainModel model)

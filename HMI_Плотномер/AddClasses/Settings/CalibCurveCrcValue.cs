@@ -7,7 +7,7 @@ namespace IDensity.AddClasses.Settings
     /// <summary>
     /// Данные, из которых получена калибровочная кривая
     /// </summary>
-    class CalibCurveCrcValue:PropertyChangedBase
+    public class CalibCurveCrcValue:PropertyChangedBase
     {
         const string TcpArg = "date,weak,value";
         public CalibCurveCrcValue(int id)

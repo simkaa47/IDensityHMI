@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.ViewModels.Commands
 {
-    class RelayCommand : Command
+    public class RelayCommand : Command
     {
         private readonly Action<object> _Execute;
         private readonly Func<object, bool> _CanExecute;

@@ -1,7 +1,7 @@
 ﻿
 namespace IDensity.AddClasses.EventHistory
 {
-    class HistoryEventItem: HistoryItemBase
+    public class HistoryEventItem: HistoryItemBase
     {        
         
         #region Ссылка на описание события

@@ -1,0 +1,101 @@
+﻿<Window x:Class="IDensity.Views.SettingsMaster.ConnectionMaster.ConnectionWindowMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ms="clr-namespace:IDensity.ViewModels.MasrerSettings"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mcuc="clr-namespace:IDensity.Views.SettingsMaster.ConnectionMaster.UserControls"
+        xmlns:conv="clr-namespace:IDensity.Views.SettingsMaster.ConnectionMaster.Converters"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cm="clr-namespace:IDensity.Views.SettingsMaster.ConnectionMaster"
+        xmlns:local="clr-namespace:IDensity.Views.SettingsMaster.ConnectionMaster"
+        mc:Ignorable="d"       
+        d:DataContext="{d:DesignInstance Type=ms:MasterConnectViewModel}"
+        Title="Мастер подключения к плотномеру, начало" Height="450" Width="800" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="50,0,50,0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="160"/>
+        </Style>
+    </Window.Resources>
+    <Grid>        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Мастер покдлючения к плотномеру"
+                   FontSize="20"
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center"/>
+        <Grid Grid.Row="1" Margin="20">
+            <!--#region Стартовый фрейм -->
+            <mcuc:StartConnectionMaster Visibility="{Binding State, Converter=
+                {StaticResource VisibleIfEqual}, 
+            ConverterParameter={x:Static cm:StateConnectionMaster.Start} }"/>
+            <!--#endregion-->
+            <!--#region Доступные интерфейсы -->
+            <mcuc:ConnMasterAvialableInterfacesControl Visibility="{Binding State, Converter=
+                                                                    {StaticResource VisibleIfEqual}, 
+                                                                    ConverterParameter={x:Static cm:StateConnectionMaster.SearchInterfaces} }"/>
+            <!--#endregion-->
+            <!--#region Не найдено доступных интерфейсов -->
+            <mcuc:MasterConnNoInterfacesControl Visibility="{Binding State, Converter=
+                                                {StaticResource VisibleIfEqual}, 
+                                                ConverterParameter={x:Static cm:StateConnectionMaster.NoInterfaces}}"/>
+            <!--#endregion-->
+            <!--#region Фрейм сканирования  -->
+            <mcuc:ScaningIpControl Visibility="{Binding State, Converter=
+                                                {StaticResource VisibleIfEqual}, 
+                                                ConverterParameter={x:Static cm:StateConnectionMaster.ScaningIP}}"/>
+            <!--#endregion-->
+            <!--#region Фрейм ожидания подключения -->
+            <mcuc:WaitConnectionControl Visibility="{Binding State, Converter=
+                                                {StaticResource VisibleIfEqual}, 
+                                                ConverterParameter={x:Static cm:StateConnectionMaster.WaitingForConnect}}"/>
+            <!--#endregion-->
+            <!--#region Фрейм - соединение установлено -->
+            <mcuc:ConnectionReady Visibility="{Binding State, Converter=
+                                            {StaticResource VisibleIfEqual}, 
+                                                ConverterParameter={x:Static cm:StateConnectionMaster.ConnectionReady} }"/>
+            <!--#endregion-->
+            <!--#region Фрейм выхода из мастера -->
+            <mcuc:ExitConnMasterControl  Visibility="{Binding State, Converter=
+                                        {StaticResource VisibleIfEqual}, 
+                                        ConverterParameter={x:Static cm:StateConnectionMaster.Exit} }"/>
+            <!--#endregion-->
+
+            <!--#region Фрейм ошибки подключения -->
+            <mcuc:ConnectFaultControl Visibility="{Binding State, Converter=
+                                        {StaticResource VisibleIfEqual}, 
+                                        ConverterParameter={x:Static cm:StateConnectionMaster.FailureSearch} }"/>
+            <!--#endregion-->
+
+
+        </Grid>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
+            <!--#region Кнопка "Отмена" -->
+            <Button Content="Отмена" Click="Cancel_Click" 
+                    Visibility="{Binding State, Converter=
+                        {StaticResource VisibleIfNotEqual}, 
+                        ConverterParameter={x:Static cm:StateConnectionMaster.Exit} }"/>
+            <!--#endregion-->
+            <!--#region Кнопка "Выход" -->
+            <Button Content="Выход" 
+                    Click="Cancel_Click" 
+                    Visibility="{Binding State, Converter=
+                                {StaticResource VisibleIfEqual}, 
+                                ConverterParameter={x:Static cm:StateConnectionMaster.Exit}}" />
+            <!--#endregion-->
+            <!--#region Кнопка  "Далее" -->
+            <Button Content="Далее" 
+                    Visibility="{Binding State, Converter=
+                        {StaticResource VisibleIfNotEqual}, 
+                        ConverterParameter={x:Static cm:StateConnectionMaster.Exit}}"
+                    Command="{Binding NextCommand}"
+                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+            <!--#endregion-->
+        </StackPanel>
+    </Grid>
+</Window>

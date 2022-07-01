@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class MeasResult:PropertyChangedBase
+    public class MeasResult:PropertyChangedBase
     {
         public MeasResult()
         {

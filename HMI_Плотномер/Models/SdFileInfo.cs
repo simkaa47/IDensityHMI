@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDensity.Models
 {
-    class SdFileInfo : PropertyChangedBase
+    public class SdFileInfo : PropertyChangedBase
     {
 
         #region Номер

@@ -7,7 +7,7 @@ namespace IDensity.AddClasses
     /// <summary>
     /// Определяет настройку диапазона счетчиков
     /// </summary>
-    class CountDiapasone:ICloneable
+    public class CountDiapasone:ICloneable
     {
         public CountDiapasone()
         {

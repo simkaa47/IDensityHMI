@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    abstract class PropertyChangedBase : INotifyPropertyChanged
+    public abstract class PropertyChangedBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

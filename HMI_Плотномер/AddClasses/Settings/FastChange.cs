@@ -7,7 +7,7 @@ namespace IDensity.AddClasses.Settings
     /// <summary>
     /// Данные отслеживания быстрых изменений
     /// </summary>
-    class FastChange:PropertyChangedBase
+    public class FastChange:PropertyChangedBase
     {
         public FastChange()
         {

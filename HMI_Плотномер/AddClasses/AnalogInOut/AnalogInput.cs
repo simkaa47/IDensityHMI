@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class AnalogInput:AnalogData
+    public class AnalogInput:AnalogData
     {
         public AnalogInput(int groupNum) : base(groupNum) 
         {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.AddClasses.Settings
 {
-    class Compensation :PropertyChangedBase
+    public class Compensation :PropertyChangedBase
     {
         public Compensation()
         {

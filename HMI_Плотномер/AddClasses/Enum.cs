@@ -8,7 +8,7 @@ namespace IDensity.AddClasses
     /// <summary>
     /// Универсальный класс перечислений
     /// </summary>
-    class EnumCustom : PropertyChangedBase, IDataBased
+    public class EnumCustom : PropertyChangedBase, IDataBased
     {
         #region Id
         long _id;

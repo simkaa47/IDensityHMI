@@ -18,14 +18,14 @@ using IDensity.AddClasses.EventHistory;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Windows.Controls;
-
+using IDensity.ViewModels.MasrerSettings;
 
 namespace IDensity.ViewModels
 {
     /// <summary>
     /// Общая ViewModel для окна
     /// </summary>
-    class VM : PropertyChangedBase
+    public class VM : PropertyChangedBase
     {
         #region Пользователи
 
@@ -312,10 +312,11 @@ namespace IDensity.ViewModels
                 _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
                 GetMeasDates();
                 UdpInit();
+                MasterSettingsViewModel = new MasterSettingsViewModel(this);
             }                
         }
 
-
+        public MasterSettingsViewModel MasterSettingsViewModel { get;}
         #endregion
 
         private UDP _udp;

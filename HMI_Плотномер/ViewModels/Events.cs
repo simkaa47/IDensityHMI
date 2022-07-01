@@ -10,7 +10,7 @@ using System.Text;
 
 namespace IDensity.ViewModels
 {
-    class Events
+    public class Events
     {
         #region Произошло событие
         public event Action<EventDevice> EventExecute;

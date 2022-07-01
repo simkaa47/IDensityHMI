@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace IDensity.AddClasses.Settings
 {
-    class MeasProcSettings:PropertyChangedBase
+    public class MeasProcSettings:PropertyChangedBase
     {
         public MeasProcSettings(int num)
         {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class HvTelemetry
+    public class HvTelemetry
     {
         #region Входное напряжение, вольт
         #region Уставка напряжения

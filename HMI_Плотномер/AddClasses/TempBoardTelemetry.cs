@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class TempBoardTelemetry
+    public class TempBoardTelemetry
     {
         #region Температура с внешнего датчика, С
         public Parameter<float> TempInternal { get; } = new Parameter<float>("TempInternal", "Температура с внешнего датчика, С", 0, float.PositiveInfinity, 8, "read")

@@ -15,7 +15,7 @@ namespace IDensity.AddClasses
     /// Хранит информацию о том или ином параметре: адрес Modbus, описание
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    class Parameter<T> : PropertyChangedBase, IDataErrorInfo, ICloneable where T : IComparable
+    public class Parameter<T> : PropertyChangedBase, IDataErrorInfo, ICloneable where T : IComparable
     {
         #region Событие ошибки работы с ДБ
         /// <summary>

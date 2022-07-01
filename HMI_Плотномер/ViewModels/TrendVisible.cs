@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDensity.ViewModels
 {
-    class TrendVisible: PropertyChangedBase
+    public class TrendVisible: PropertyChangedBase
     {
         #region Видимость тренда 1
         private bool _visLine1;

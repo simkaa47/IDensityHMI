@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.Models
 {
-    class SdCardMeasData:PropertyChangedBase
+    public class SdCardMeasData:PropertyChangedBase
     {
 
 
@@ -132,7 +132,7 @@ namespace IDensity.Models
         #endregion
 
     }
-    class SdMeasResult : PropertyChangedBase
+    public class SdMeasResult : PropertyChangedBase
     {
         #region Номер процесса
         /// <summary>
@@ -211,7 +211,7 @@ namespace IDensity.Models
         
     }
 
-    class SdAnalogData : PropertyChangedBase
+    public class SdAnalogData : PropertyChangedBase
     {
 
         #region Аналоговый выход - значение ЦАП

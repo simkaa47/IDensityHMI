@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDensity.AddClasses.AdcBoardSettings
 {
-    class AdcBoardSettings : ICloneable
+    public class AdcBoardSettings : ICloneable
     {
         #region Режим работы АЦП
         public Parameter<ushort> AdcMode { get; set; } = new Parameter<ushort>("AdcMode", "Режим работы АЦП", 0, 1, 111, "hold");

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.Models.SQL
 {
-    interface IDataBased
+    public interface IDataBased
     {
         public long Id { get; set; }
     }

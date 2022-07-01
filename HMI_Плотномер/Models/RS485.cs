@@ -14,7 +14,7 @@ namespace IDensity.Models
     /// <summary>
     /// Представляет набор свойств и методов, необходимых для связи с платой по RS485 (Modbus RTU)
     /// </summary>
-    class RS485 : PropertyChangedBase
+    public class RS485 : PropertyChangedBase
     {
 
 

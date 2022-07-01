@@ -8,7 +8,7 @@ namespace IDensity.Models
     /// <summary>
     /// Класс, хранящий в себе настройки связи с платой плотномера
     /// </summary>
-    class CommMode : PropertyChangedBase
+    public class CommMode : PropertyChangedBase
     {
         #region RS485
         bool _rsEnable;

@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace IDensity.ViewModels.Commands
 {
-    abstract class Command : ICommand
+    public abstract class Command : ICommand
     {
         public event EventHandler CanExecuteChanged
         {

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class CalibrData:PropertyChangedBase
+    public class CalibrData:PropertyChangedBase
     {
         public CalibrData()
         {

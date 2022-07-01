@@ -6,7 +6,7 @@ using System.Timers;
 
 namespace IDensity.AddClasses.Settings
 {
-    class StandSettings:PropertyChangedBase
+    public class StandSettings:PropertyChangedBase
     {
         Timer standTimer = new Timer();
         const string TcpArg = "std=id,stdMeasUnit,duration,date,result,value,halfLifeValue";

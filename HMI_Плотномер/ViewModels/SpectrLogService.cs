@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace IDensity.ViewModels
 {
-    class SpectrLogService:PropertyChangedBase
+    public class SpectrLogService:PropertyChangedBase
     {
         string _path = "";
         string _parameters;

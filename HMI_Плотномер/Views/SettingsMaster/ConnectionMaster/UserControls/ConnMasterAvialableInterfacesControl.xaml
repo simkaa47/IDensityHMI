@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="IDensity.Views.SettingsMaster.ConnectionMaster.UserControls.ConnMasterAvialableInterfacesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IDensity.Views.SettingsMaster.ConnectionMaster.UserControls"
+             xmlns:vm="clr-namespace:IDensity.ViewModels.MasrerSettings"
+             d:DataContext="{d:DesignInstance Type=vm:MasterConnectViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Выберите соответсвующие сетевые адаптеры, для того, чтобы сканировать подсеть на предмет наличия плотномера IDensity"
+                   Grid.Row="0"
+                   Style="{StaticResource MasterConnect}"/>
+        <DataGrid Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ItemsSource="{Binding Adapters}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Тип интерфейса" Binding="{Binding InterfaceType}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="IP" Binding="{Binding Ip}" IsReadOnly="True"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource MaterialDesignDarkCheckBox}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

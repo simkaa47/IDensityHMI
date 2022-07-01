@@ -15,7 +15,7 @@ using System.Windows;
 
 namespace IDensity.Models
 {
-    class MainModel : PropertyChangedBase
+    public class MainModel : PropertyChangedBase
     {
         #region Количество наборов стандартизаций
         /// <summary>

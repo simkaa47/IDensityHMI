@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class AnalogOutput : AnalogData
+    public class AnalogOutput : AnalogData
     {
         #region КОнтструтор
         public AnalogOutput(int groupNum) : base(groupNum)

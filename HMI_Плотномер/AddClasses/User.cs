@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    class User: PropertyChangedBase, IDataBased
+    public class User: PropertyChangedBase, IDataBased
     {
         public long Id { get; set; }
         #region Логин пользователя

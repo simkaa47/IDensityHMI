@@ -7,7 +7,7 @@ namespace IDensity.AddClasses.EventHistory
     /// <summary>
     /// Базовый класс для элемента истории событий
     /// </summary>
-    abstract class HistoryItemBase
+    public abstract class HistoryItemBase
     {
         #region Имя пользователя
         /// <summary>

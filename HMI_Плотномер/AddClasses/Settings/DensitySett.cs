@@ -8,7 +8,7 @@ namespace IDensity.AddClasses.Settings
     /// <summary>
     /// Определяет настройки плотности
     /// </summary>
-    class DensitySett:PropertyChangedBase
+    public class DensitySett:PropertyChangedBase
     {
         #region ЕИ
         MeasUnitSettings _measUnit = new MeasUnitSettings();

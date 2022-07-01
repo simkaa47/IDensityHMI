@@ -8,7 +8,7 @@ namespace IDensity.AddClasses
     /// <summary>
     /// Класс настроек едениц измерения
     /// </summary>
-    class MeasUnitSettings
+    public class MeasUnitSettings
     {
         #region Номер еденицы измерения
         public Parameter<ushort> Id { get; set; } = new Parameter<ushort>("MeasUnitSettNum", "Номер еденицы измерения", 0, 10, 0, "");
