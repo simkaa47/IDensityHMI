@@ -404,7 +404,7 @@ namespace IDensity.Models
                 if (CommMode.RsEnable) rs?.GetData(this);
                 else if (CommMode.EthEnable) Tcp?.GetData(this);
                 else Connecting.Value = false;
-                if (CycleMeasStatus.Value && Connecting.Value && stopWatch.ElapsedMilliseconds>1000)
+                if (Connecting.Value && stopWatch.ElapsedMilliseconds>1000)
                 {
                     UpdateDataEvent?.Invoke();
                     stopWatch.Restart();

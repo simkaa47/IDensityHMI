@@ -45,7 +45,23 @@ namespace IDensity.AddClasses
                 if (value <= PlotLowLimit) PlotLowLimit = value - 1;                
                 Set(ref _plotHighlimit, value);
             }
-        } 
+        }
         #endregion
+
+        #region Настройка записи в график, если не в режиме измерения
+        /// <summary>
+        /// Настройка записи в график, если не в режиме измерения
+        /// </summary>
+        private bool _writeIfNoMeasState;
+        /// <summary>
+        /// Настройка записи в график, если не в режиме измерения
+        /// </summary>
+        public bool WriteIfNoMeasState
+        {
+            get => _writeIfNoMeasState;
+            set => Set(ref _writeIfNoMeasState, value);
+        }
+        #endregion
+
     }
 }

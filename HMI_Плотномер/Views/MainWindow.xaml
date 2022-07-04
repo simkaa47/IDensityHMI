@@ -175,7 +175,13 @@
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
                                 </TabItem.Resources>
                                 <ListBox HorizontalContentAlignment="Stretch">
-                                    <!--#region Временоой интервал -->
+                                <!--#region запись в график вне режима измерения -->
+                                <DockPanel>
+                                    <TextBlock Text="Запись данных в график вне режима измекрения"/>
+                                    <CheckBox IsChecked="{Binding TrendSettings.WriteIfNoMeasState}" HorizontalAlignment="Right"/>
+                                </DockPanel>
+                                <!--#endregion-->
+                                <!--#region Временоой интервал -->
                                     <ListBoxItem Template="{StaticResource TextBoxParameter}" Tag="Максимальное время отображения, мин" 
                                              Content="{Binding TrendSettings.PlotTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     </ListBoxItem>

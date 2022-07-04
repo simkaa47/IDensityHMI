@@ -515,6 +515,7 @@ namespace IDensity.ViewModels
         #region Добавление данных в график
         void AddDataToCollection()
         {
+            if (!(mainModel.CycleMeasStatus.Value || TrendSettings.WriteIfNoMeasState)) return;
             App.Current?.Dispatcher?.Invoke(() =>
                 {
                     var tp = new TimePoint
