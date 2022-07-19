@@ -6,15 +6,15 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 
-namespace IDensity.Models.XML
+namespace IDensity.Services.XML
 {
     /// <summary>
     /// Набор статических методов для чтеня, записи, удаления, редактирования данных в XML документе
     /// </summary>
     class XmlMethods
-    {        
+    {
         #region Событие
-        static public event Action<string> XmlErrorEvent = (message)=> MessageBox.Show(message);
+        static public event Action<string> XmlErrorEvent = (message) => MessageBox.Show(message);
         #endregion
 
         #region Путь
@@ -26,7 +26,7 @@ namespace IDensity.Models.XML
         /// Чтение данных по дескриптору
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public static List<T>GetParam<T>()
+        public static List<T> GetParam<T>()
         {
             var paramList = new List<T>();
             try
@@ -35,7 +35,7 @@ namespace IDensity.Models.XML
                 xDoc.Load(Path);// загружаем данные
                 Type type = typeof(T);
                 var props = typeof(T).GetProperties();
-                
+
                 XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
                 for (int i = 0; i < nodeList.Count; i++)
                 {
@@ -51,7 +51,7 @@ namespace IDensity.Models.XML
             {
                 XmlErrorEvent?.Invoke(ex.Message);
             }
-            return paramList;           
+            return paramList;
 
         }
         #endregion
@@ -74,7 +74,7 @@ namespace IDensity.Models.XML
 
         #region Добавление записи
         public static void AddToXml<T>(T param)
-        {           
+        {
             try
             {
                 var xDoc = new XmlDocument();// создаем документ
@@ -104,7 +104,7 @@ namespace IDensity.Models.XML
         #region Редактирование записи
         public static void EditParam<T>(T param, string changedProperty)
         {
-           
+
             try
             {
                 var xDoc = new XmlDocument();
@@ -113,18 +113,18 @@ namespace IDensity.Models.XML
                 var props = typeof(T).GetProperties();
                 XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
                 for (int i = 0; i < nodeList.Count; i++)
-                {                    
+                {
                     foreach (var prop in props)
-                    {                        
+                    {
                         if (prop.Name != changedProperty) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
-                    }                   
+                    }
                 }
                 xDoc.Save(Path);
-            }            
+            }
             catch (Exception ex)
             {
                 XmlErrorEvent?.Invoke(ex.Message);
-            }            
+            }
         }
         #endregion
     }

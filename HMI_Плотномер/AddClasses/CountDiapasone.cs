@@ -7,26 +7,16 @@ namespace IDensity.AddClasses
     /// <summary>
     /// Определяет настройку диапазона счетчиков
     /// </summary>
-    public class CountDiapasone:ICloneable
+    public class CountDiapasone:PropertyChangedBase, ICloneable
     {
         public CountDiapasone()
         {
-            Start.CommandEcecutedEvent += (o) =>
-              {
-                  var diap = Clone() as CountDiapasone;
-                  diap.Start.Value = Start.WriteValue;
-                  NeedWriteEvent?.Invoke(diap);
-              };
-            Finish.CommandEcecutedEvent += (o) =>
-            {
-                var diap = Clone() as CountDiapasone;
-                diap.Finish.Value = Finish.WriteValue;
-                NeedWriteEvent?.Invoke(diap);
-            };
+            
         }
         #region Номер набора
         public Parameter<ushort> Num { get; set; } = new Parameter<ushort>("CountSelectionNum", "Номер набора", 0, 4095, 91, "hold");
         #endregion
+
         #region Начальный номер счетчика
         public Parameter<ushort> Start { get; set; } = new Parameter<ushort>("CountDiapasoneStart", "Начальный номер счетчика", 0, 4095, 92, "hold");
         #endregion
@@ -46,9 +36,6 @@ namespace IDensity.AddClasses
                 Finish = this.Finish.Clone() as Parameter<ushort>
             };
         }
-        /// <summary>
-        /// Необходимо записать настройки измерительных процессов
-        /// </summary>
-        public event Action<CountDiapasone> NeedWriteEvent;
+        
     }
 }

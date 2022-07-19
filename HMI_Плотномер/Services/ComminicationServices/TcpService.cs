@@ -1,6 +1,6 @@
 ﻿using IDensity.AddClasses;
-using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
+using IDensity.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,66 +8,24 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace IDensity.Models
+namespace IDensity.Services.ComminicationServices
 {
-    public class TCP : PropertyChangedBase
+    public class TcpService : PropertyChangedBase
     {
+
+        public TcpService(MainModel model)
+        {
+            this._model = model;
+        }
+
         #region События
         public event Action<string> TcpEvent;
-        #endregion
-
-        #region Свойства
-        #region IP адрес платы
-        string _ip = "192.168.10.151";
-        /// <summary>
-        /// IP адрес платы
-        /// </summary>
-        public string IP
-        {
-            get => _ip;
-            set
-            {
-                if (MainModel.CheckIp(value)) Set(ref _ip, value);
-            }
-        }
-        #endregion
-
-        #region Номер порта
-        int _portNum;
-        public int PortNum { get => _portNum; set => Set(ref _portNum, value); }
-        #endregion
-
-        #region Пауза между запросами
-        private int _pause;
-
-        public int Pause
-        {
-            get { return _pause; }
-            set 
-            {
-                if (value >= 10) Set(ref _pause, value);
-            }
-        }
-
-        #endregion
-
-        #region Циклический опрос
-        private bool _cycicRequest;
-
-        public bool CycicRequest
-        {
-            get { return _cycicRequest; }
-            set { Set(ref _cycicRequest, value); }
-        }
-
-        #endregion
-        #endregion
+        #endregion        
 
         #region Поля       
 
-        MainModel model;
+        MainModel _model;
 
         int indexAm = 0;
 
@@ -98,13 +56,15 @@ namespace IDensity.Models
         void Connect()
         {
             commands?.Clear();
+            var ip = _model.TcpConnectData.IP;
+            var port = _model.TcpConnectData.PortNum;
             client = new TcpClient();
             client.ReceiveTimeout = 2000;
-            client.SendTimeout = 2000;            
-            TcpEvent?.Invoke(($"Выполняется подключение к {IP}:{PortNum}"));
-            client.Connect(IP, PortNum);
-            
-            TcpEvent?.Invoke(($"Произведено подключение к {IP}:{PortNum}"));
+            client.SendTimeout = 2000;
+            TcpEvent?.Invoke($"Выполняется подключение к {ip}:{port}");
+            client.Connect(ip, port);
+
+            TcpEvent?.Invoke($"Произведено подключение к {ip}:{port}");
             stream = client.GetStream();
 
         }
@@ -113,11 +73,13 @@ namespace IDensity.Models
         #region Дисконнект
         void CloseConnection()
         {
+            var ip = _model.TcpConnectData.IP;
+            var port = _model.TcpConnectData.PortNum;
             if (client != null)
-            {               
-                TcpEvent?.Invoke($"{IP}:{PortNum}: соединение завершено пользователем");
+            {
+                TcpEvent?.Invoke($"{ip}:{port}: соединение завершено пользователем");
                 client.Close();
-                client.Dispose();                
+                client.Dispose();
             }
         }
         #endregion
@@ -128,11 +90,10 @@ namespace IDensity.Models
         }
 
         #region основной метод для получения данных из tcp соединения
-        public void GetData(MainModel model)
+        public void GetData()
         {
             try
-            {
-                this.model = model;
+            {                
                 if (client == null || !client.Connected)
                 {
                     Connect();
@@ -142,33 +103,33 @@ namespace IDensity.Models
                 {
                     var command = commands.Dequeue();
                     command.Action?.Invoke(command.Parameter);
-                    Thread.Sleep(Pause);
+                    Thread.Sleep(_model.TcpConnectData.Pause);
                 }
-                if (CycicRequest)
+                if (_model.TcpConnectData.CycicRequest)
                 {
                     GetDeviceStatus();
                     GetCurDateTime();
                     GetCurMeas();
                     GetPeriphTelemetry();
-                    
+
                 }
                 GetSetiings();
-                
+
                 errCommCount = 0;
-                model.Connecting.Value = client.Connected;
+                _model.Connecting.Value = client.Connected;
                 //if(CycicRequest)CloseConnection();
             }
             catch (Exception ex)
             {
                 if (++errCommCount >= 3)
-                {                    
+                {
                     commands?.Clear();
-                    model.Connecting.Value = false;
+                    _model.Connecting.Value = false;
                     CloseConnection();
                     Thread.Sleep(1000);
                     errCommCount = 0;
                 }
-                else Thread.Sleep(Pause);
+                else Thread.Sleep(_model.TcpConnectData.Pause);
                 TcpEvent?.Invoke(ex.Message);
             }
 
@@ -180,7 +141,7 @@ namespace IDensity.Models
         {
             StreamClear();
             stream?.Write(buffer, 0, buffer.Length);
-            Thread.Sleep(Pause);
+            Thread.Sleep(_model.TcpConnectData.Pause);
         }
         #endregion
 
@@ -199,12 +160,12 @@ namespace IDensity.Models
             do
             {
                 num = stream.Read(inBuf, offset, inBuf.Length - offset);
-                Thread.Sleep(Pause);
+                Thread.Sleep(_model.TcpConnectData.Pause);
                 offset += num;
 
-            } while (stream.DataAvailable && (inBuf.Length - offset)>0);
-            model.Connecting.Value = true;
-           
+            } while (stream.DataAvailable && inBuf.Length - offset > 0);
+            _model.Connecting.Value = true;
+
             return Encoding.ASCII.GetString(inBuf, 0, offset);// Получаем строку из байт;            
         }
 
@@ -217,7 +178,7 @@ namespace IDensity.Models
             if (str.Length < 23) return;
             str = str.Substring(5, 17);
             var dt = new DateTime();
-            if (DateTime.TryParse(str, out dt)) model.Rtc.Value = dt;
+            if (DateTime.TryParse(str, out dt)) _model.Rtc.Value = dt;
         }
         #endregion
 
@@ -233,16 +194,16 @@ namespace IDensity.Models
                 ToArray();
             if (nums.Length == 12)
             {
-                model.TempTelemetry.TempInternal.Value = nums[0]/10;
-                model.TelemetryHV.VoltageCurIn.Value = nums[1];
-                model.TelemetryHV.VoltageCurOut.Value = (ushort)nums[2];
-                model.TelemetryHV.HvOn.Value = model.TelemetryHV.VoltageCurOut.Value > 100;
+                _model.TempTelemetry.TempInternal.Value = nums[0] / 10;
+                _model.TelemetryHV.VoltageCurIn.Value = nums[1];
+                _model.TelemetryHV.VoltageCurOut.Value = (ushort)nums[2];
+                _model.TelemetryHV.HvOn.Value = _model.TelemetryHV.VoltageCurOut.Value > 100;
                 for (int i = 0; i < 2; i++)
                 {
-                    model.AnalogGroups[i].AO.VoltageDac.Value = (ushort)nums[4 + i*4];
-                    model.AnalogGroups[i].AO.VoltageTest.Value = (ushort)nums[4 + i * 4 + 1];
-                    model.AnalogGroups[i].AO.AdcValue.Value = (ushort)nums[4 + i * 4 + 2];
-                    model.AnalogGroups[i].AI.AdcValue.Value = (ushort)nums[4 + i * 4 + 3];
+                    _model.AnalogGroups[i].AO.VoltageDac.Value = (ushort)nums[4 + i * 4];
+                    _model.AnalogGroups[i].AO.VoltageTest.Value = (ushort)nums[4 + i * 4 + 1];
+                    _model.AnalogGroups[i].AO.AdcValue.Value = (ushort)nums[4 + i * 4 + 2];
+                    _model.AnalogGroups[i].AI.AdcValue.Value = (ushort)nums[4 + i * 4 + 3];
                 }
             }
         }
@@ -252,34 +213,34 @@ namespace IDensity.Models
         void GetCurMeas()
         {
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,AMC#"));
-            
+
             float temp = 0;
-            var nums = str.Split(new char[] { ',','#' }, StringSplitOptions.RemoveEmptyEntries)
+            var nums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(str => float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out temp)).
                 Select(str => temp).
                 ToArray();
-            if (nums.Length>0 && nums.Length%5==0)
+            if (nums.Length > 0 && nums.Length % 5 == 0)
             {
-                model.CycleMeasStatus.Value = nums[4] > 0 ? true : false;
-                for (int i = 0; i < nums.Length; i+=5)
+                _model.CycleMeasStatus.Value = nums[4] > 0 ? true : false;
+                for (int i = 0; i < nums.Length; i += 5)
                 {
                     var actve = nums[i + 4] > 0;
-                    int j = i/5;
-                    model.MeasResults[j].MeasProcessNum.Value = (ushort)nums[i];
-                    model.MeasResults[j].CounterValue.Value = actve ? nums[i + 1] : 0;
-                    model.MeasResults[j].PhysValueCur.Value = actve ? nums[i + 2] : 0;
-                    model.MeasResults[j].PhysValueAvg.Value = actve ? nums[i + 3] : 0;
-                  //  model.SetMeasResultData();
+                    int j = i / 5;
+                    _model.MeasResults[j].MeasProcessNum.Value = (ushort)nums[i];
+                    _model.MeasResults[j].CounterValue.Value = actve ? nums[i + 1] : 0;
+                    _model.MeasResults[j].PhysValueCur.Value = actve ? nums[i + 2] : 0;
+                    _model.MeasResults[j].PhysValueAvg.Value = actve ? nums[i + 3] : 0;
+                    //  model.SetMeasResultData();
                 }
-                
+
 
             }
             else
             {
-                model.CycleMeasStatus.Value = false;
+                _model.CycleMeasStatus.Value = false;
                 for (int i = 0; i < 2; i++)
                 {
-                    model.MeasResults[i].ClearResult();
+                    _model.MeasResults[i].ClearResult();
                 }
             }
         }
@@ -290,19 +251,19 @@ namespace IDensity.Models
         {
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,DSR#"));
             ushort temp = 0;
-            var strNums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => ushort.TryParse(s, NumberStyles.HexNumber,null, out temp)).Select(s => temp).ToArray();
+            var strNums = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries).Where(s => ushort.TryParse(s, NumberStyles.HexNumber, null, out temp)).Select(s => temp).ToArray();
             if (strNums.Length != 4) return;
-            model.CommStates.Value = strNums[0];            
-            model.AnalogStateGroups[0].Value = strNums[2];
-            model.AnalogStateGroups[1].Value = strNums[3];
-            model.GetDeviceData();            
+            _model.CommStates.Value = strNums[0];
+            _model.AnalogStateGroups[0].Value = strNums[2];
+            _model.AnalogStateGroups[1].Value = strNums[3];
+            _model.GetDeviceData();
         }
         #endregion
 
         #region Получить данные настроек
         void GetSetiings()
         {
-            if (!model.SettingsReaded)
+            if (!_model.SettingsReaded)
             {
                 GetMeasProcessDataAll();// Получить данные процеса измерений
                 GetSettings2();
@@ -311,7 +272,7 @@ namespace IDensity.Models
                 GetSettings4();
                 GetSettings8();
                 GetSdLogStatus();
-            }             
+            }
         }
         #region Настройки измерительных процессов
         /// <summary>
@@ -329,7 +290,7 @@ namespace IDensity.Models
         /// </summary>
         void ReadActivity()
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,65536#"));
             var temp = 0;
             var mask = str.Split(new char[] { ',', '#' }, StringSplitOptions.RemoveEmptyEntries)
@@ -339,17 +300,17 @@ namespace IDensity.Models
             int max = 0;
             for (int i = 0; i < MainModel.MeasProcNum; i++)
             {
-                if (i < 2) model.MeasResults[i].IsActive = false;
-                model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2, i)) > 0;
-                if (model.MeasProcSettings[i].IsActive.Value && max <= 2)
+                if (i < 2) _model.MeasResults[i].IsActive = false;
+                _model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2, i)) > 0;
+                if (_model.MeasProcSettings[i].IsActive.Value && max <= 2)
                 {
-                    model.MeasResults[max].IsActive = true;
-                    model.MeasResults[max].Settings = model.MeasProcSettings[i];
+                    _model.MeasResults[max].IsActive = true;
+                    _model.MeasResults[max].Settings = _model.MeasProcSettings[i];
                     max++;
                 }
             }
 
-            model.SettingsReaded = true;
+            _model.SettingsReaded = true;
 
         }
         #endregion
@@ -361,26 +322,26 @@ namespace IDensity.Models
         /// <param name="index"></param>
         public void GetMeasProcessData(int index)
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
             if (arr == null || arr.Length != 109) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
-            model.MeasProcSettings[index].Num = (ushort)arr[0];
-            model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
+            _model.MeasProcSettings[index].Num = (ushort)arr[0];
+            _model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensityLiq, 84);
-            RecognizeDensityFromArr(arr, model.MeasProcSettings[index].DensitySol, 86);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].TempCompensation, 88);
-            RecognizeCompensationFromArr(arr, model.MeasProcSettings[index].SteamCompensation, 95);
-            model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
+            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensityLiq, 84);
+            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensitySol, 86);
+            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].TempCompensation, 88);
+            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].SteamCompensation, 95);
+            _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
             RecognizeFastChangeSett(arr, index);
-            model.MeasProcSettings[index].MeasDuration.Value = arr[105] / 10;
-            model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
-            model.MeasProcSettings[index].OutMeasNum = model.MeasUnitSettings[(ushort)arr[107]];
-            model.MeasProcSettings[index].PipeDiameter.Value = arr[108] / 10;
-            model.SettingsReaded = true;
+            _model.MeasProcSettings[index].MeasDuration.Value = arr[105] / 10;
+            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
+            _model.MeasProcSettings[index].OutMeasNum = _model.MeasUnitSettings[(ushort)arr[107]];
+            _model.MeasProcSettings[index].PipeDiameter.Value = arr[108] / 10;
+            _model.SettingsReaded = true;
         }
         #endregion
 
@@ -394,20 +355,20 @@ namespace IDensity.Models
         {
             for (int i = 0; i < MeasProcSettings.StandCount; i++)
             {
-                model.MeasProcSettings[num].MeasStandSettings[i].Id = i;
-                model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)arr[2 + i * 8];
+                _model.MeasProcSettings[num].MeasStandSettings[i].Id = i;
+                _model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)arr[2 + i * 8];
                 int day = (ushort)arr[3 + i * 8];
                 day = day > 0 && day <= 31 ? day : 1;
                 int month = (ushort)arr[4 + i * 8];
                 month = month > 0 && month <= 12 ? month : 1;
-                int year = ((ushort)arr[5 + i * 8]) + 2000;
-                model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);
-                model.MeasProcSettings[num].MeasStandSettings[i].MeasUnit = model.MeasUnitSettings[(ushort)arr[6 + i * 8]];
-                model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 8];
-                model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
-                model.MeasProcSettings[num].MeasStandSettings[i].HalfLifeCorr.Value = arr[9 + i * 8];
+                int year = (ushort)arr[5 + i * 8] + 2000;
+                _model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);
+                _model.MeasProcSettings[num].MeasStandSettings[i].MeasUnit = _model.MeasUnitSettings[(ushort)arr[6 + i * 8]];
+                _model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 8];
+                _model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
+                _model.MeasProcSettings[num].MeasStandSettings[i].HalfLifeCorr.Value = arr[9 + i * 8];
             }
-        } 
+        }
         #endregion
 
         /// <summary>
@@ -418,11 +379,11 @@ namespace IDensity.Models
         void RecognizeCalibrCurveFromArr(float[] arr, int num)
         {
             var offset = 76;
-            model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
-            model.MeasProcSettings[num].CalibrCurve.MeasUnit = model.MeasUnitSettings[(ushort)arr[offset+1]];
+            _model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
+            _model.MeasProcSettings[num].CalibrCurve.MeasUnit = _model.MeasUnitSettings[(ushort)arr[offset + 1]];
             for (int i = 0; i < 6; i++)
             {
-                model.MeasProcSettings[num].CalibrCurve.Coeffs[i].Value = arr[offset + 2 + i];
+                _model.MeasProcSettings[num].CalibrCurve.Coeffs[i].Value = arr[offset + 2 + i];
             }
         }
 
@@ -433,17 +394,17 @@ namespace IDensity.Models
         /// <param name="num">Номер изм. процесса</param>
         void RecognizeSingleMeasData(float[] arr, int num)
         {
-            for (int i = 26; i < MeasProcSettings.SingleMeasResCount*5+26; i+=5)
+            for (int i = 26; i < MeasProcSettings.SingleMeasResCount * 5 + 26; i += 5)
             {
                 var j = (i - 26) / 5;
                 int day = (ushort)arr[i];
                 day = day > 0 && day <= 31 ? day : 1;
-                int month = (ushort)arr[i+1];
+                int month = (ushort)arr[i + 1];
                 month = month > 0 && month <= 12 ? month : 1;
-                int year = ((ushort)arr[i+2]) + 2000;
-                model.MeasProcSettings[num].SingleMeasResults[j].Date.Value = new DateTime(year, month, day);
-                model.MeasProcSettings[num].SingleMeasResults[j].Weak.Value = arr[i + 3];
-                model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];                
+                int year = (ushort)arr[i + 2] + 2000;
+                _model.MeasProcSettings[num].SingleMeasResults[j].Date.Value = new DateTime(year, month, day);
+                _model.MeasProcSettings[num].SingleMeasResults[j].Weak.Value = arr[i + 3];
+                _model.MeasProcSettings[num].SingleMeasResults[j].CounterValue.Value = arr[i + 4];
             }
         }
         /// <summary>
@@ -454,8 +415,8 @@ namespace IDensity.Models
         /// <param name="density">Класс, в который</param>
         void RecognizeDensityFromArr(float[] arr, DensitySett density, int offset)
         {
-            density.MeasUnit = model.MeasUnitSettings[(ushort)arr[offset]];
-            density.PhysValue.Value = arr[offset+1];
+            density.MeasUnit = _model.MeasUnitSettings[(ushort)arr[offset]];
+            density.PhysValue.Value = arr[offset + 1];
         }
 
         /// <summary>
@@ -481,8 +442,8 @@ namespace IDensity.Models
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            model.MeasProcSettings[num].FastChange.Activity.Value = arr[103] > 0;
-            model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[104];
+            _model.MeasProcSettings[num].FastChange.Activity.Value = arr[103] > 0;
+            _model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[104];
         }
 
         #endregion
@@ -504,20 +465,20 @@ namespace IDensity.Models
         #region Настройки №1
         void GetSettings1()
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,1#"));
             var list = GetNumber("adc_mode", 1, 1);
             if (list == null) return;
-            model.AdcBoardSettings.AdcMode.Value = (ushort)list[0][0];
+            _model.AdcBoardSettings.AdcMode.Value = (ushort)list[0][0];
             list = GetNumber("adc_sync_mode", 1, 1);
             if (list == null) return;
-            model.AdcBoardSettings.AdcSyncMode.Value = (ushort)list[0][0];
+            _model.AdcBoardSettings.AdcSyncMode.Value = (ushort)list[0][0];
             list = GetNumber("adc_sync_level", 1, 1);
             if (list == null) return;
-            model.AdcBoardSettings.AdcSyncLevel.Value = (ushort)list[0][0];
+            _model.AdcBoardSettings.AdcSyncLevel.Value = (ushort)list[0][0];
             list = GetNumber("timer_max", 1, 1);
             if (list == null) return;
-            model.AdcBoardSettings.TimerMax.Value = (ushort)list[0][0];
+            _model.AdcBoardSettings.TimerMax.Value = (ushort)list[0][0];
             // локальная функция
             List<List<float>> GetNumber(string id, int parNum, int count)
             {
@@ -544,124 +505,124 @@ namespace IDensity.Models
                 }
                 return list;
             }
-            model.SettingsReaded = true;
+            _model.SettingsReaded = true;
         }
         #endregion
 
         #region Настройки № 2
         void GetSettings2()
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,2#"));
             var list = GetNumber("adc_proc_cntr", 3, MainModel.CountCounters, str);
             if (list == null) return;
             for (int i = 0; i < MainModel.CountCounters; i++)
             {
-                model.CountDiapasones[i].Num.Value = (ushort)list[i][0];
-                model.CountDiapasones[i].Start.Value = (ushort)list[i][1];
-                model.CountDiapasones[i].Finish.Value = (ushort)list[i][2];
+                _model.CountDiapasones[i].Num.Value = (ushort)list[i][0];
+                _model.CountDiapasones[i].Start.Value = (ushort)list[i][1];
+                _model.CountDiapasones[i].Finish.Value = (ushort)list[i][2];
             }
             list = GetNumber("adc_proc_mode", 1, 1, str);
             if (list == null) return;
-            model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
-            list = GetNumber("adc_single_meas_time", 1, 1,str);
+            _model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
+            list = GetNumber("adc_single_meas_time", 1, 1, str);
             if (list == null) return;
-            foreach (var mp in model.MeasProcSettings)
+            foreach (var mp in _model.MeasProcSettings)
             {
                 mp.SingleMeasTime.Value = (ushort)list[0][0];
-            }           
-            model.SettingsReaded = true;
+            }
+            _model.SettingsReaded = true;
         }
         #endregion        
 
         #region Настройки 4
         void GetSettings4()
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,4#"));
             var indexOfEqual = str.LastIndexOf('=');
-            if (indexOfEqual < 1) return;            
-            var strArr = str.Substring(indexOfEqual+1).
+            if (indexOfEqual < 1) return;
+            var strArr = str.Substring(indexOfEqual + 1).
                 Split(new char[] { '#', ',', '=' })
                 .ToArray();
             float temp = 0;
             if (strArr.Length <= 126) throw new Exception("Сигнатура ответа на запрос CMND,FSR,4# не соответствует ожидаемому!");
-            for (int i = 0; i < 126; i+=6)
+            for (int i = 0; i < 126; i += 6)
             {
                 var id = i / 6;
-                model.MeasUnitSettings[id].Id.Value = float.TryParse(strArr[i], out temp) ? (ushort)temp : default(ushort);
-                model.MeasUnitSettings[id].MeasUnitClassNum.Value = float.TryParse(strArr[i+1], out temp) ? (ushort)temp : default(ushort);
-                model.MeasUnitSettings[id].Type.Value = float.TryParse(strArr[i + 2], out temp) ? (ushort)temp : default(ushort);
-                model.MeasUnitSettings[id].A.Value = float.TryParse(strArr[i+3].Replace(".",","), out temp) ? temp : default(float);
-                model.MeasUnitSettings[id].B.Value = float.TryParse(strArr[i + 4].Replace(".", ","), out temp) ? temp : default(float);
-                model.MeasUnitSettings[id].MeasUnitName.Value = strArr[i + 5];
+                _model.MeasUnitSettings[id].Id.Value = float.TryParse(strArr[i], out temp) ? (ushort)temp : default;
+                _model.MeasUnitSettings[id].MeasUnitClassNum.Value = float.TryParse(strArr[i + 1], out temp) ? (ushort)temp : default;
+                _model.MeasUnitSettings[id].Type.Value = float.TryParse(strArr[i + 2], out temp) ? (ushort)temp : default;
+                _model.MeasUnitSettings[id].A.Value = float.TryParse(strArr[i + 3].Replace(".", ","), out temp) ? temp : default;
+                _model.MeasUnitSettings[id].B.Value = float.TryParse(strArr[i + 4].Replace(".", ","), out temp) ? temp : default;
+                _model.MeasUnitSettings[id].MeasUnitName.Value = strArr[i + 5];
             }
 
-            model.SettingsReaded = true;
+            _model.SettingsReaded = true;
         }
-        
+
 
         #endregion
 
         #region Настройки № 7
         void GetSettings7()
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,7#"));
-            var list = GetNumber("serial_baudrate", 1,1, str);
-            if (list==null) return;
-            model.PortBaudrate.Value = (uint)list[0][0];
+            var list = GetNumber("serial_baudrate", 1, 1, str);
+            if (list == null) return;
+            _model.PortBaudrate.Value = (uint)list[0][0];
             list = GetNumber("hv_target", 1, 1, str);
             if (list == null) return;
-            model.TelemetryHV.VoltageSV.Value = (ushort)(list[0][0]*0.05);
-            list = GetNumber("serial_select", 1,1,str);
-            if (list==null) return;
-            model.PortSelectMode.Value = (ushort)list[0][0];
+            _model.TelemetryHV.VoltageSV.Value = (ushort)(list[0][0] * 0.05);
+            list = GetNumber("serial_select", 1, 1, str);
+            if (list == null) return;
+            _model.PortSelectMode.Value = (ushort)list[0][0];
             list = GetNumber("am_out_sett", 10, 2, str);
             if (list == null) return;
             for (int i = 0; i < 2; i++)
             {
-                model.AnalogGroups[i].AO.Activity.Value = (ushort)list[i][1];
-                model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];
-                model.AnalogGroups[i].AO.MeasUnit = model.MeasUnitSettings[(ushort)list[i][3]];
-                model.AnalogGroups[i].AO.AnalogMeasProcNdx.Value = (ushort)list[i][4];
-                model.AnalogGroups[i].AO.VarNdx.Value = (ushort)list[i][5];
-                model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][6];
-                model.AnalogGroups[i].AO.DacHighLimit.Value = list[i][7];
-                model.AnalogGroups[i].AO.DacLowLimitMa.Value = list[i][8];
-                model.AnalogGroups[i].AO.DacHighLimitMa.Value = list[i][9];
+                _model.AnalogGroups[i].AO.Activity.Value = (ushort)list[i][1];
+                _model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];
+                _model.AnalogGroups[i].AO.MeasUnit = _model.MeasUnitSettings[(ushort)list[i][3]];
+                _model.AnalogGroups[i].AO.AnalogMeasProcNdx.Value = (ushort)list[i][4];
+                _model.AnalogGroups[i].AO.VarNdx.Value = (ushort)list[i][5];
+                _model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][6];
+                _model.AnalogGroups[i].AO.DacHighLimit.Value = list[i][7];
+                _model.AnalogGroups[i].AO.DacLowLimitMa.Value = list[i][8];
+                _model.AnalogGroups[i].AO.DacHighLimitMa.Value = list[i][9];
             }
             list = GetNumber("am_in_sett", 2, 2, str);
             if (list == null) return;
-            model.AnalogGroups[0].AI.Activity.Value = (ushort)list[0][1];
-            model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1]; 
+            _model.AnalogGroups[0].AI.Activity.Value = (ushort)list[0][1];
+            _model.AnalogGroups[1].AI.Activity.Value = (ushort)list[1][1];
             list = GetNumber("preamp_gain", 1, 1, str);
             if (list == null) return;
-            model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];
+            _model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];
             list = GetNumber("half_life", 1, 1, str);
             if (list == null) return;
-            model.HalfLife.Value = list[0][0];
-            model.DeviceName.Value = GetStringById("name", str);
-            model.IsotopName.Value = GetStringById("isotope", str);
-            float.TryParse(GetStringById("pipe_diameter", str), out float temp) ;            
-            model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
-            model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
-            model.SerialNumber.Value = GetStringById("SN", str);
-            model.OrderNumber.Value = GetStringById("ORDER", str);
-            model.DeviceType.Value = GetStringById("TYPE", str);
-            model.FwVersion.Value = GetStringById("FW_VER", str);
-            model.FwVersion.Value = GetStringById("FW_VER", str);
-            model.CustNumber.Value = GetStringById("CUSTOMER_NUMBER", str); ; 
-            model.SettingsReaded = true;
-            
+            _model.HalfLife.Value = list[0][0];
+            _model.DeviceName.Value = GetStringById("name", str);
+            _model.IsotopName.Value = GetStringById("isotope", str);
+            float.TryParse(GetStringById("pipe_diameter", str), out float temp);
+            _model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
+            _model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
+            _model.SerialNumber.Value = GetStringById("SN", str);
+            _model.OrderNumber.Value = GetStringById("ORDER", str);
+            _model.DeviceType.Value = GetStringById("TYPE", str);
+            _model.FwVersion.Value = GetStringById("FW_VER", str);
+            _model.FwVersion.Value = GetStringById("FW_VER", str);
+            _model.CustNumber.Value = GetStringById("CUSTOMER_NUMBER", str); ;
+            _model.SettingsReaded = true;
+
         }
         #endregion
 
         string GetStringById(string id, string source)
         {
             var indexfirst = source.IndexOf(id);
-            if (indexfirst != -1) return source.Substring(indexfirst+id.Length+1).
-                    Split(new char[] {',','#'}).
+            if (indexfirst != -1) return source.Substring(indexfirst + id.Length + 1).
+                    Split(new char[] { ',', '#' }).
                     FirstOrDefault();
             return string.Empty;
         }
@@ -678,25 +639,25 @@ namespace IDensity.Models
             day = day > 0 && day <= 31 ? day : 1;
             int month = (ushort)nums[1];
             month = month > 0 && month <= 12 ? month : 1;
-            int year = ((ushort)nums[2]) + 2000;
+            int year = (ushort)nums[2] + 2000;
             return new DateTime(year, month, day);
         }
 
         #region Настройки №8
         void GetSettings8()
         {
-            model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,8#"));            
+            _model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,8#"));
             // Номер порта
             var list = GetNumber("udp_sett", 5, 1, str);
-            model.UdpAddrString = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
-            model.PortUdp = (int)list[0][4];
+            _model.UdpAddrString = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
+            _model.PortUdp = (int)list[0][4];
             list = GetNumber("tcp_sett", 12, 1, str);
             if (list == null) return;
-            model.IP = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
-            model.Mask = $"{list[0][4]}.{list[0][5]}.{list[0][6]}.{list[0][7]}";
-            model.GateWay = $"{list[0][8]}.{list[0][9]}.{list[0][10]}.{list[0][11]}";
-            model.SettingsReaded = true;
+            _model.IP = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
+            _model.Mask = $"{list[0][4]}.{list[0][5]}.{list[0][6]}.{list[0][7]}";
+            _model.GateWay = $"{list[0][8]}.{list[0][9]}.{list[0][10]}.{list[0][11]}";
+            _model.SettingsReaded = true;
         }
         #endregion
 
@@ -739,12 +700,12 @@ namespace IDensity.Models
         #region Получить статус логирования
         void GetSdLogStatus()
         {
-            model.SettingsReaded = false;
+            _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FMS#"));
             var nums = GetNumericsFromString(str, new char[] { ',', '#' });
             if (nums == null || nums.Length != 1) return;
-            model.SdCard.IsWriting = nums[0] > 0 ? true : false;
-            model.SettingsReaded = true;
+            _model.IsSdWriting = nums[0] > 0 ? true : false;
+            _model.SettingsReaded = true;
         }
         #endregion
         #endregion
@@ -782,30 +743,30 @@ namespace IDensity.Models
         #region Изменить режим работы последовательного порта
         public void ChangeSerialSelect(ushort value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"*SETT,serial_select={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"*SETT,serial_select={value}#")));
         }
         #endregion
 
         #region Изменить скорость последовательного порта
         public void ChangeBaudrate(uint value)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"*SETT,serial_baudrate={value}#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes($"*SETT,serial_baudrate={value}#")));
         }
         #endregion
 
         #region Установить RTC
         public void SetRtc(DateTime dt)
         {
-            var str = $"*SETT,rtc_set={dt.Day},{dt.Month},{dt.Year%100},{dt.Hour},{dt.Minute},{dt.Second}#";
-            commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+            var str = $"*SETT,rtc_set={dt.Day},{dt.Month},{dt.Year % 100},{dt.Hour},{dt.Minute},{dt.Second}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
         #region Уставка HV
         public void SetHv(ushort value)
         {
-            var str = $"*SETT,hv_target={value*20}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf);model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+            var str = $"*SETT,hv_target={value * 20}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
@@ -821,7 +782,7 @@ namespace IDensity.Models
         public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
         {
             var str = $"*CMND,AMV,{groupNum},{value}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false;}, Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
@@ -829,7 +790,7 @@ namespace IDensity.Models
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
             var str = $"*SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.MeasUnit.Id.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); } , Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
@@ -837,7 +798,7 @@ namespace IDensity.Models
         public void SendAnalogInSwttings(int groupNum, int moduleNum, AnalogInput value)
         {
             var str = $"*SETT,am_in_sett={groupNum},{value.Activity.Value}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion        
 
@@ -849,14 +810,14 @@ namespace IDensity.Models
         public void MakeStand(int measProcNum, int standNum)
         {
             var str = $"*CMND,ASM,{measProcNum},{standNum}";
-            commands.Enqueue(new TcpWriteCommand((buf) =>  SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion
 
         #region Команда принудиельного запроса набора стандартизации после стандартизации
         public void GetMeasSettingsExternal(int index)
         {
-            commands.Enqueue(new TcpWriteCommand((buf) => GetMeasProcessData(index) , null));
+            commands.Enqueue(new TcpWriteCommand((buf) => GetMeasProcessData(index), null));
         }
         #endregion
 
@@ -944,7 +905,7 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
-        
+
         #region Команда "Записать настройки едениц измерерия"
         public void SetMeasUnitsSettings(MeasUnitSettings settings)
         {
@@ -963,7 +924,7 @@ namespace IDensity.Models
         public void SwitchRelay(ushort value)
         {
             var str = $"*CMND,RLS,{value}#";
-            commands.Enqueue(new TcpWriteCommand((buf) =>SendTlg(buf), Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
@@ -976,7 +937,7 @@ namespace IDensity.Models
         #endregion
 
         #region КОманда "Установить IP адрес платы"
-        public void SetIPAddr(string ip,string mask, string gate)
+        public void SetIPAddr(string ip, string mask, string gate)
         {
             var str = $"*SETT,tcp_sett={ip.Replace(".", ",")},{mask.Replace(".", ",")},{gate.Replace(".", ",")}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(str)));
@@ -988,10 +949,10 @@ namespace IDensity.Models
         public void SwithSdCardLog(int param)
         {
             var str = $"*CMND,FMS,{param}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSdLogStatus(); } , Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSdLogStatus(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
-        
+
         #region Запрос записей результатов измерений
         public void GetSdCardWrites(int start, int finish)
         {
@@ -1019,7 +980,7 @@ namespace IDensity.Models
             commands.Enqueue(new TcpWriteCommand((buf) =>
             {
                 var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FML#"));
-                
+
                 Thread.Sleep(1000);
 
             }, null));
@@ -1060,7 +1021,7 @@ namespace IDensity.Models
                 do
                 {
                     num = stream.Read(inBuf, offset, inBuf.Length);
-                    Thread.Sleep(Pause);
+                    Thread.Sleep(_model.TcpConnectData.Pause);
                     offset += num;
 
                 } while (stream.DataAvailable);

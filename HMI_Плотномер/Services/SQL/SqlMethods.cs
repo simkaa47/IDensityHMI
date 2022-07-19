@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace IDensity.Models.SQL
+namespace IDensity.Services.SQL
 {
     /// <summary>
     /// Представляет собой набор статических методов для записи классов в таблицу
@@ -32,8 +32,8 @@ namespace IDensity.Models.SQL
                 Type type = typeof(T);
                 using (var connection = new SqliteConnection(ConnectionString))
                 {
-                    CreateTable<T>(type.Name+"s");// Если базы данных не существует, создаем ее
-                    InsertToTable<T>(cell);
+                    CreateTable<T>(type.Name + "s");// Если базы данных не существует, создаем ее
+                    InsertToTable(cell);
                 }
             }
             catch (Exception ex)
@@ -100,11 +100,11 @@ namespace IDensity.Models.SQL
         static void SqlExecuteCmd(SqliteCommand command)
         {
             using (SqliteConnection connection = new SqliteConnection(ConnectionString))
-            {                
-                    connection.Open();
-                    command.Connection = connection;
-                    command.ExecuteNonQuery();              
-               
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.ExecuteNonQuery();
+
             }
         }
         #endregion
@@ -112,7 +112,7 @@ namespace IDensity.Models.SQL
         #region Добвление в таблицу
         static void InsertToTable<T>(T cell)
         {
-            string tableName = typeof(T).Name+"s";
+            string tableName = typeof(T).Name + "s";
             SqliteCommand command = new SqliteCommand();
             Type myType = cell.GetType();
             string cmd = $"INSERT INTO {tableName}(";
@@ -160,7 +160,7 @@ namespace IDensity.Models.SQL
                 }
             }
             return list;
-        } 
+        }
         #endregion
 
         #region Преобразование из строки в зависимости от типа

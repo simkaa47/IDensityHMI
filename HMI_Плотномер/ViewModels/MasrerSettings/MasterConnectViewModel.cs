@@ -257,7 +257,7 @@ namespace IDensity.ViewModels.MasrerSettings
         async void WaitConnectingAsync()
         {
             IsProcessing = true;
-            VM.mainModel.Tcp.IP = SelectedIP;
+            VM.mainModel.TcpConnectData.IP = SelectedIP;
             CancelScan();
             CancelWaitConnectTokenSource = new CancellationTokenSource();
             await Task.Run(()=>

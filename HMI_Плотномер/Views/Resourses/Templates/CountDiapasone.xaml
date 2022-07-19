@@ -13,7 +13,7 @@
                       CanUserDeleteRows="False"
                       SelectedIndex="0"
                       AutoGenerateColumns="False"
-                      ItemsSource="{Binding mainModel.CountDiapasones}">
+                      ItemsSource="{Binding VM.mainModel.CountDiapasones}">
                 <DataGrid.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel/>
@@ -24,7 +24,8 @@
                     <DataGridTemplateColumn Header="Старт">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <uc:MenuItemParameterText DataContext="{Binding Start}" Command="{Binding Command}"/>
+                                <uc:MenuItemParameterText DataContext="{Binding Start}" 
+                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

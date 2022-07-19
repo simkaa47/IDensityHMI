@@ -1,7 +1,8 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
-using IDensity.Models.XML;
+using IDensity.Services.ComminicationServices;
+using IDensity.Services.XML;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,9 +37,7 @@ namespace IDensity.Models
         /// Количество измерительных процессов
         /// </summary>
         public const int MeasProcNum = 8;
-        #endregion
-
-        Stopwatch stopWatch = new Stopwatch();
+        #endregion        
 
         #region Значения TCP сервера
         #region IP адрес платы
@@ -91,27 +90,18 @@ namespace IDensity.Models
         {
             Init();// Инициализация параметров  
             MeasProccessInit();
-            AdcSettingsEventDescribe();
-            MeasUnitSettingsDescribe();
-            // Дествия по изменению счетчиков
-            foreach (var diap in CountDiapasones)
-            {
-                diap.NeedWriteEvent += WriteCounterSettings;
-            }
-            HalfLife.CommandEcecutedEvent += (o) => WriteCommonSettings($"half_life={HalfLife.WriteValue.ToStringPoint()}");
-            DeviceName.CommandEcecutedEvent += (o) => WriteCommonSettings($"name={DeviceName.WriteValue.Substring(0,Math.Min(DeviceName.WriteValue.Length,10))}");
-            IsotopName.CommandEcecutedEvent += (o) => WriteCommonSettings($"isotope={IsotopName.WriteValue.Substring(0, Math.Min(IsotopName.WriteValue.Length, 10))}");            
-            SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
-            SourceExpirationDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceExpirationDate.WriteValue.ToString("dd:MM:yy")}");
-            SdCard = new SdCard(this);
+            //AdcSettingsEventDescribe();
+            //MeasUnitSettingsDescribe();            
+            //HalfLife.CommandEcecutedEvent += (o) => WriteCommonSettings($"half_life={HalfLife.WriteValue.ToStringPoint()}");
+            //DeviceName.CommandEcecutedEvent += (o) => WriteCommonSettings($"name={DeviceName.WriteValue.Substring(0,Math.Min(DeviceName.WriteValue.Length,10))}");
+            //IsotopName.CommandEcecutedEvent += (o) => WriteCommonSettings($"isotope={IsotopName.WriteValue.Substring(0, Math.Min(IsotopName.WriteValue.Length, 10))}");            
+            //SourceInstallDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_inst_date={SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
+            //SourceExpirationDate.CommandEcecutedEvent += (o) => WriteCommonSettings($"src_exp_date={SourceExpirationDate.WriteValue.ToString("dd:MM:yy")}");
+            //SdCard = new SdCard(this);
         }
-        
 
-        #region События
-        #region Обновились данные
-        public event Action UpdateDataEvent;
-        #endregion
-        #endregion
+
+
 
         #region Спсоб соединения с платой
         public CommMode CommMode { get; private set; }
@@ -177,7 +167,23 @@ namespace IDensity.Models
 
 
 
-        #endregion        
+        #endregion
+
+        #region Флаг записи на SD карту
+        /// <summary>
+        /// Флаг записи на SD карту
+        /// </summary>
+        private bool _isSdWriting;
+        /// <summary>
+        /// Флаг записи на SD карту
+        /// </summary>
+        public bool IsSdWriting
+        {
+            get => _isSdWriting;
+            set => Set(ref _isSdWriting, value);
+        }
+        #endregion
+
 
         #region Настройки в плате
         #region Данные измерительных процессов
@@ -197,12 +203,12 @@ namespace IDensity.Models
                     .Select(i =>
                     {
                         var mp = new MeasProcSettings(i);
-                        mp.NeedWriteEvent += WriteMeasProcSettings;
-                        mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
-                        mp.NeedMakeStand += MakeStand;
-                        mp.StandFinishEvent += (num) => Tcp.GetMeasSettingsExternal(num);
-                        mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
-                        mp.SingleMeasEventFinishedEvent += (num) => Tcp.GetMeasSettingsExternal(num);
+                        //mp.NeedWriteEvent += WriteMeasProcSettings;
+                        //mp.IsActive.CommandEcecutedEvent += (s) => SetMeasProcActivity();
+                        //mp.NeedMakeStand += MakeStand;
+                        //mp.StandFinishEvent += (num) => Tcp.GetMeasSettingsExternal(num);
+                        //mp.NeedMakeSingleMeasEvent += MakeSingleMeasure;
+                        //mp.SingleMeasEventFinishedEvent += (num) => Tcp.GetMeasSettingsExternal(num);
                         return mp;
                     })
                     .ToArray();
@@ -226,11 +232,11 @@ namespace IDensity.Models
                         Select(z =>
                         {
                             var gr = new AnalogGroup(z);
-                            gr.AI.SwitchPwrEvent += SwitchAm;
-                            gr.AI.ChangeSettCallEvent += ChangeAdcAct;
-                            gr.AO.SwitchPwrEvent += SwitchAm;
-                            gr.AO.SetTestValueCallEvent += SetTestValueAm;
-                            gr.AO.ChangeSettCallEvent += ChangeDacAct;
+                            //gr.AI.SwitchPwrEvent += SwitchAm;
+                            //gr.AI.ChangeSettCallEvent += ChangeAdcAct;
+                            //gr.AO.SwitchPwrEvent += SwitchAm;
+                            //gr.AO.SetTestValueCallEvent += SetTestValueAm;
+                            //gr.AO.ChangeSettCallEvent += ChangeDacAct;
                             return gr;
                         }).ToArray();
 
@@ -260,7 +266,7 @@ namespace IDensity.Models
         {
             foreach (var sett in MeasUnitSettings)
             {
-                sett.Writing += SetMeasUnitsSettings;
+                //sett.Writing += SetMeasUnitsSettings;
             }
         }
         #endregion        
@@ -322,16 +328,16 @@ namespace IDensity.Models
         /// <summary>
         /// Подписка на события класса AdcBoardSettings
         /// </summary>
-        void AdcSettingsEventDescribe()
-        {
-            AdcBoardSettings.SettingsChangedEvent += SetAdcBoardSettings;
-            AdcBoardSettings.AdcModeChangedEvent += SetAdcMode;
-            AdcBoardSettings.AdcProcModeChangedEvent += SetAdcProcMode;
-            AdcBoardSettings.AdcSyncLevelChangedEvent += SetAdcSyncLevel;
-            AdcBoardSettings.AdcSyncModeChangedEvent += SetAdcSyncMode;
-            AdcBoardSettings.PreampGainChangedEvent += SetPreampGain;
-            AdcBoardSettings.TimerMaxChangedEvent += SetAdcTimerMax;
-        }
+        //void AdcSettingsEventDescribe()
+        //{
+        //    AdcBoardSettings.SettingsChangedEvent += SetAdcBoardSettings;
+        //    AdcBoardSettings.AdcModeChangedEvent += SetAdcMode;
+        //    AdcBoardSettings.AdcProcModeChangedEvent += SetAdcProcMode;
+        //    AdcBoardSettings.AdcSyncLevelChangedEvent += SetAdcSyncLevel;
+        //    AdcBoardSettings.AdcSyncModeChangedEvent += SetAdcSyncMode;
+        //    AdcBoardSettings.PreampGainChangedEvent += SetPreampGain;
+        //    AdcBoardSettings.TimerMaxChangedEvent += SetAdcTimerMax;
+        //}
         #endregion
         #endregion
 
@@ -381,51 +387,25 @@ namespace IDensity.Models
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
         #endregion 
-
-        #region Запись на Sd карту
-        public SdCard SdCard { get; }
+        
         #endregion
-        #endregion
+        
+        public TcpConnectData TcpConnectData { get; private set; }      
 
-        public RS485 rs { get; private set; }
-        public TCP Tcp { get; private set; }
-
-        public async void ModelProcess()
-        {
-            await Task.Run(() => MainProcess());
-        }
-
-        void MainProcess()
-        {
-            stopWatch.Start();
-            while (true)
-            {
-                
-                if (CommMode.RsEnable) rs?.GetData(this);
-                else if (CommMode.EthEnable) Tcp?.GetData(this);
-                else Connecting.Value = false;
-                if (Connecting.Value && stopWatch.ElapsedMilliseconds>1000)
-                {
-                    UpdateDataEvent?.Invoke();
-                    stopWatch.Restart();
-                }
-               
-            }
-        }
+        
 
         #region Инициализация
         void Init()
         {
-            rs = ClassInit<RS485>();
-            Tcp = ClassInit<TCP>();
+            TcpConnectData = ClassInit<TcpConnectData>();
             CommMode = ClassInit<CommMode>();
-            CycleMeasStatus.PropertyChanged += (obj, args) =>
-            {
-                if (args.PropertyName == "Value")
-                {                    
-                    UpdateDataEvent?.Invoke();                    
-                }
-            };
+            //CycleMeasStatus.PropertyChanged += (obj, args) =>
+            //{
+            //    if (args.PropertyName == "Value")
+            //    {                    
+            //        UpdateDataEvent?.Invoke();                    
+            //    }
+            //};
             Connecting.PropertyChanged += (obj, args) => SettingsReaded = false;
            
         }
@@ -461,123 +441,67 @@ namespace IDensity.Models
         #endregion
 
         #region Команды
-        void WriteCommonSettings(string arg)
-        {
-            if (CommMode.EthEnable) Tcp.WriteCommonSettings(arg);
-        }
-
-        #region Старт-стоп циклических измерений        
-        public  void SwitchMeas()
-        {
-            var value = CycleMeasStatus.Value ? 0 : 1;            
-
-            if (CommMode.EthEnable) Tcp.SwitchMeas(value);
-            else if (CommMode.RsEnable) rs.SwitchMeas(value);
-        }
-        #endregion
-
-        #region Включитть-выключить HV 
-        public void SwitchHv()
-        {
-            var value = TelemetryHV.HvOn.Value ? 0 : 1;
-            if (CommMode.EthEnable) Tcp.SwitchHv(value);
-            else if (CommMode.RsEnable) rs.SwitchHv(value);
-        }
-        #endregion
+        //void WriteCommonSettings(string arg)
+        //{
+        //    if (CommMode.EthEnable) Tcp.WriteCommonSettings(arg);
+        //}                
     
         #region Настройки измерительных процессов
 
         #region Записать данные измерительных процессов
-        public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
-        {
-           if (CommMode.EthEnable) Tcp.WriteMeasProcSettings(tcpArg, measProcNum);
-        }
+        //public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
+        //{
+        //   if (CommMode.EthEnable) Tcp.WriteMeasProcSettings(tcpArg, measProcNum);
+        //}
 
         #endregion
         
         #endregion
 
         #region Записать активности измерительных процессов
-        void SetMeasProcActivity()
-        {
-            string cmd = "*SETT,meas_prc_ndx=";
-            for (int i = 0; i < MeasProcNum; i++)
-            {
-                if (MeasProcSettings[i].IsActive.WriteValue) cmd += $"{i},";
-            }
-            cmd = cmd.Remove(cmd.Length - 1) + "#";
-            if (CommMode.EthEnable) Tcp.SetMeasProcActivity(cmd);
-        }
+        //void SetMeasProcActivity()
+        //{
+        //    string cmd = "*SETT,meas_prc_ndx=";
+        //    for (int i = 0; i < MeasProcNum; i++)
+        //    {
+        //        if (MeasProcSettings[i].IsActive.WriteValue) cmd += $"{i},";
+        //    }
+        //    cmd = cmd.Remove(cmd.Length - 1) + "#";
+        //    if (CommMode.EthEnable) Tcp.SetMeasProcActivity(cmd);
+        //}
 
-        #endregion
-
-        #region Команды настроек последовательного порта
-        #region Записать бадрейт
-        public void ChangeBaudrate(uint value)
-        {
-            if (CommMode.EthEnable) Tcp.ChangeBaudrate(value);
-            else if ((CommMode.RsEnable)) rs.ChangeBaudrate(value);
-        }
-        #endregion       
-
-        #region Изменить режим работы последовательного порта
-        public void ChangeSerialSelect(int value)
-        {
-            ushort temp = (ushort)(value > 0 ? 1 : 0);
-            if (CommMode.EthEnable) Tcp.ChangeSerialSelect(temp);
-            else if ((CommMode.RsEnable)) rs.ChangeSerialSelect(temp);
-            
-        }
-        #endregion
-        #endregion
-
-        #region Установить дату-время
-        public void SetRtc(DateTime dt)
-        {
-            if (CommMode.EthEnable) Tcp.SetRtc(dt);
-            else if (CommMode.RsEnable) rs.SetRtc(dt);
-        }
-
-        #endregion
-
-        #region Установить напряжение HV
-        public void SetHv(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetHv(value);
-            else if (CommMode.RsEnable) rs.SetHv(value);
-        }
         #endregion
 
         #region Управление питанием аналоговых модулей
-        void SwitchAm(int groupNum, int moduleNum, bool value)
-        {
-            if (CommMode.EthEnable) Tcp.SwitchAm(groupNum, moduleNum, value);
-            else if (CommMode.RsEnable) rs.SwitchAm(groupNum, moduleNum, value);
-        }
+        //void SwitchAm(int groupNum, int moduleNum, bool value)
+        //{
+        //    if (CommMode.EthEnable) Tcp.SwitchAm(groupNum, moduleNum, value);
+        //    else if (CommMode.RsEnable) rs.SwitchAm(groupNum, moduleNum, value);
+        //}
         #endregion
 
         #region Отправить значение тестовой величины
-        void SetTestValueAm(int groupNum, int moduleNum, ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetTestValueAm(groupNum, moduleNum, value);
-            else if (CommMode.RsEnable) rs.SetTestValueAm(groupNum, moduleNum, value);
-        }
+        //void SetTestValueAm(int groupNum, int moduleNum, ushort value)
+        //{
+        //    if (CommMode.EthEnable) Tcp.SetTestValueAm(groupNum, moduleNum, value);
+        //    else if (CommMode.RsEnable) rs.SetTestValueAm(groupNum, moduleNum, value);
+        //}
         #endregion
 
         #region Команда "Изменить активность аналогового выхода"
-        void ChangeDacAct(int groupNum, int moduleNum, AnalogOutput value)
-        {
-            if (CommMode.EthEnable) Tcp.SendAnalogOutSwttings(groupNum, moduleNum, value);
-            else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
-        }
+        //void ChangeDacAct(int groupNum, int moduleNum, AnalogOutput value)
+        //{
+        //    if (CommMode.EthEnable) Tcp.SendAnalogOutSwttings(groupNum, moduleNum, value);
+        //    else if (CommMode.RsEnable) rs.SendAnalogOutSwttings(groupNum, moduleNum, value);
+        //}
         #endregion
 
         #region Команда "Изменить активность аналогового входа"
-        void ChangeAdcAct(int groupNum, int moduleNum, AnalogInput value)
-        {
-            if (CommMode.EthEnable) Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);
-            else if (CommMode.RsEnable) rs.SendAnalogInSwttings(groupNum, moduleNum, value);
-        }
+        //void ChangeAdcAct(int groupNum, int moduleNum, AnalogInput value)
+        //{
+        //    if (CommMode.EthEnable) Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);
+        //    else if (CommMode.RsEnable) rs.SendAnalogInSwttings(groupNum, moduleNum, value);
+        //}
         #endregion        
 
         #region Команда "Произвести стандартизацию"
@@ -585,119 +509,50 @@ namespace IDensity.Models
         /// Произвести стандартизацию
         /// </summary>
         /// <param name="index">Номер набора стандартизации</param>
-        public void MakeStand(ushort measProcNum, ushort standNum)
-        {
-            if (CommMode.EthEnable) Tcp.MakeStand(measProcNum, standNum);            
-        }
+        //public void MakeStand(ushort measProcNum, ushort standNum)
+        //{
+        //    if (CommMode.EthEnable) Tcp.MakeStand(measProcNum, standNum);            
+        //}
         #endregion
 
         #region Команда принудиельного запроса набора стандартизации после стандартизации
-        public void GetStdSelection(ushort index)
-        {
-            if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);           
-        }
+        //public void GetStdSelection(ushort index)
+        //{
+        //    if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);           
+        //}
         #endregion
 
-        #region Команда "Записать настройки счечиков"
-        public void WriteCounterSettings(CountDiapasone diapasone)
-        {
-            if (diapasone.Num.Value < MainModel.CountStand)
-            {
-                if (CommMode.EthEnable) Tcp.WriteCounterSettings(diapasone);
-                else if (CommMode.RsEnable) rs.WriteCounterSettings(diapasone);
-            }
-        }
-        #endregion        
+               
 
-        #region Команда "Поменять UDP адрес источника"
-        public void SetUdpAddr(byte[] addr,int portNum)
-        {
-           if (CommMode.EthEnable) Tcp.SetUdpAddr(addr, portNum);
-           //else if (CommMode.RsEnable) rs.SetUdpAddr(addr);
-        }
-
-        #endregion
+        
 
         #region Команды изменения настроек платы АЦП
-        public void SetAdcBoardSettings(AdcBoardSettings settings)
-        {            
-            if(CommMode.RsEnable) rs.SetAdcBoardSettings(settings);
-        }
-        public void SetAdcMode(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetAdcMode(value);
-        }
-        public void SetAdcProcMode(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetAdcProcMode(value);
-        }
-        public void SetAdcSyncMode(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetAdcSyncMode(value);
-        }
-        public void SetAdcSyncLevel(ushort value)
-        {
-            if (CommMode.EthEnable)
-            {
-                Tcp.SwitchAdcBoard(0);
-                Tcp.SetAdcSyncLevel(value);
-                Tcp.SwitchAdcBoard(1);
-            }
-        }
-        public void SetAdcTimerMax(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetAdcTimerMax(value);
-        }
-        public void SetPreampGain(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SetPreampGain(value);
-        }
-        #endregion
-
-        #region Команда "Запуск-останов платы АЦП"
-        public void SwitchAdcBoard(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.SwitchAdcBoard(value);
-            else if (CommMode.RsEnable) rs.SwitchAdcBoard(value);
-        }
-        #endregion
-
-        #region Очистить спектр
-        public void ClearSpectr()
-        {
-            if (CommMode.EthEnable) Tcp.ClearSpectr();
-        }
-        #endregion
-
-        #region Команда "Запуск/останов выдачи данных АЦП "
-        public void StartStopAdcData(ushort value)
-        {
-            if (CommMode.EthEnable) Tcp.StartStopAdcData(value);
-            else if (CommMode.RsEnable) rs.StartStopAdcData(value);
-        }
-        #endregion
-
+        //public void SetAdcBoardSettings(AdcBoardSettings settings)
+        //{            
+        //    if(CommMode.RsEnable) rs.SetAdcBoardSettings(settings);
+        //}
+        
         #region Команда "Произвести еденичное измеренине"
         public void MakeSingleMeasure(int time, ushort measProcNdx, ushort index)
         {
-            if (CommMode.EthEnable) Tcp.MakeSingleMeasure((ushort)time, measProcNdx, index);
+            //if (CommMode.EthEnable) Tcp.MakeSingleMeasure((ushort)time, measProcNdx, index);
             //else if (CommMode.RsEnable) rs.MakeSingleMeasure((ushort)time);
         }
         #endregion
 
         #region Команда "Записать настройки едениц измерерия"
-        public void SetMeasUnitsSettings(MeasUnitSettings settings)
-        {
-            if (CommMode.EthEnable) Tcp.SetMeasUnitsSettings(settings);
-            else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
-        }
+        //public void SetMeasUnitsSettings(MeasUnitSettings settings)
+        //{
+        //    if (CommMode.EthEnable) Tcp.SetMeasUnitsSettings(settings);
+        //    else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
+        //}
 
         #endregion
 
         #region Команда "Переключить реле"
         public void SwitchRelay(ushort value)
         {
-            if (CommMode.EthEnable) Tcp.SwitchRelay(value);
+            //if (CommMode.EthEnable) Tcp.SwitchRelay(value);
             //else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
         }
         #endregion
@@ -705,10 +560,10 @@ namespace IDensity.Models
         #region Команда "Перезагрузить плату"
         public void RstBoard()
         {
-            if (CommMode.EthEnable) Tcp.RstBoard();
+            //if (CommMode.EthEnable) Tcp.RstBoard();
         }
         #endregion
         #endregion
-
+        #endregion
     }
 }

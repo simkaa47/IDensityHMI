@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.ViewModels;
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,16 @@ using System.Windows;
 
 namespace IDensity.Models
 {
-    public class SdCard:PropertyChangedBase
-    {
-        MainModel _model;
-        public SdCard(MainModel model)
+    public class SdCardVm:PropertyChangedBase
+    {        
+        public SdCardVm(VM vM)
         {
-            _model = model;
-            model.Tcp.TcpEvent += (s) =>
+            VM = vM;            
+            VM.CommService.Tcp.TcpEvent += (s) =>
               {
                   if (IsReading) GetWritesRequest();
               };
+            
         }
         /// <summary>
         /// Временная коллекция списка файлов
@@ -66,7 +67,7 @@ namespace IDensity.Models
         /// </summary>
         public RelayCommand GetFilesSdCommand => _getFilesSdCommand ?? (_getFilesSdCommand = new RelayCommand(execPar =>
         {
-            _model.Tcp.GetResponce("*CMND,FML#", (str) =>
+            VM.CommService.Tcp.GetResponce("*CMND,FML#", (str) =>
             {
                 fileNames = new List<SdFileInfo>();
                 ParseFileNames(str);
@@ -87,32 +88,13 @@ namespace IDensity.Models
         RelayCommand _switchSdCardLogCommand;
         public RelayCommand SwitchSdCardLogCommand => _switchSdCardLogCommand ?? (_switchSdCardLogCommand = new RelayCommand(par =>
         {
-            var parameter = IsWriting ? 0 : 1;
-            if (_model.CommMode.EthEnable)
-            {
-                _model.Tcp.SwithSdCardLog((ushort)parameter);
-            }
+            var parameter = VM.mainModel.IsSdWriting ? 0 : 1;
+            VM.CommService.Tcp.SwithSdCardLog((ushort)parameter);
 
-        }, o => _model.Connecting.Value));
+        }, o => VM.mainModel.Connecting.Value));
         #endregion        
 
-        #endregion
-
-        #region Флаг активности записи на карту
-        /// <summary>
-        /// Флаг активности записи на карту
-        /// </summary>
-        private bool _isWriting;
-        /// <summary>
-        /// Флаг активности записи на карту
-        /// </summary>
-        public bool IsWriting
-        {
-            get => _isWriting;
-            set => Set(ref _isWriting, value);
-        }
-        #endregion              
-
+        #endregion                    
 
         #region Коллекция имен файлов
         /// <summary>
@@ -176,26 +158,24 @@ namespace IDensity.Models
             get => _isWritingToFile;
             set => Set(ref _isWritingToFile, WriteToFilePath!=null?value:false);
         }
-        #endregion  
+        public VM VM { get; }
+        #endregion
 
         public void GetWrites()
         {
-            if (_model.CommMode.EthEnable && !IsReading)
+            if (SelectedFileInfo != null)
             {
-                if (SelectedFileInfo != null)
-                {
-                    IsReading = true;
-                    SdCardMeasDatas.Clear();
-                    readFile = SelectedFileInfo;
-                    GetWritesRequest();
-                }
+                IsReading = true;
+                SdCardMeasDatas.Clear();
+                readFile = SelectedFileInfo;
+                GetWritesRequest();
             }
             else IsReading = false;
         }
 
         void GetWritesRequest()
         {
-            _model.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.finish}#", (str) =>
+            VM.CommService.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.finish}#", (str) =>
             {
                 if (str == "")
                 {
@@ -218,7 +198,7 @@ namespace IDensity.Models
         }
         void GetNextFileListTelegrams()
         {
-            _model.Tcp.ListenAndExecute((str) =>
+            VM.CommService.Tcp.ListenAndExecute((str) =>
             {
                 if (str.Length > 8)
                 {
@@ -241,7 +221,7 @@ namespace IDensity.Models
                     WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
                 });
             }
-            if (str.Contains("111111111")) _model.SdCard.FileNames = fileNames;
+            if (str.Contains("111111111")) FileNames = fileNames;
             else GetNextFileListTelegrams();
         }
 

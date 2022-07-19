@@ -1,24 +1,26 @@
-﻿using System;
+﻿using IDensity.AddClasses;
+using IDensity.AddClasses.EventHistory;
+using IDensity.Models;
+using IDensity.Models.SQL;
+using IDensity.Services.CheckPulse;
+using IDensity.Services.ComminicationServices;
+using IDensity.Services.InitServices;
+using IDensity.Services.SQL;
+using IDensity.Services.XML;
+using IDensity.ViewModels.Commands;
+using IDensity.ViewModels.MasrerSettings;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using IDensity.AddClasses;
-using IDensity.Models;
-using IDensity.Models.SQL;
-using IDensity.Models.XML;
-using IDensity.ViewModels.Commands;
-using System.Timers;
-using IDensity.AddClasses.EventHistory;
-using System.Windows.Data;
-using System.ComponentModel;
 using System.Windows.Controls;
-using IDensity.ViewModels.MasrerSettings;
+using System.Windows.Data;
 
 namespace IDensity.ViewModels
 {
@@ -27,6 +29,41 @@ namespace IDensity.ViewModels
     /// </summary>
     public class VM : PropertyChangedBase
     {
+        #region Дочерние VM
+        public CommonSettingsVm CommonSettingsVm { get; private set; }
+        public MasterSettingsViewModel MasterSettingsViewModel { get; private set; }
+        public AdcViewModel AdcViewModel { get; private set; }
+        public ConnectSettingsVm ConnectSettingsVm { get; private set; }
+        #endregion
+
+        #region Cервисы
+        public CommunicationService CommService { get; private set; }
+        
+        #endregion
+
+        /// <summary>
+        /// Инициализация дочерних Vm
+        /// </summary>
+        void InitVm()
+        {
+            CommonSettingsVm = new CommonSettingsVm(this);
+            MasterSettingsViewModel = new MasterSettingsViewModel(this);
+            AdcViewModel = new AdcViewModel(this);
+            ConnectSettingsVm = new ConnectSettingsVm(this);
+        }
+
+        #region Инициализация сервисов
+        void ServicesInit()
+        {
+            CommService = new CommunicationService(mainModel);
+            CommService.UpdateDataEvent += AddDataToCollection;
+            CommService.MainProcessExecute();
+
+
+        }
+        #endregion
+
+
         #region Пользователи
 
         #region Текущий пользователь
@@ -40,30 +77,20 @@ namespace IDensity.ViewModels
         #endregion
         #endregion
 
-        #region Команды
-
-        #region Обновить список доступных Com портов
-        RelayCommand _updateComPortListCommand;
-        public RelayCommand UpdateComPortListCommand => _updateComPortListCommand ?? (_updateComPortListCommand = new RelayCommand(o => ComPorts = SerialPort.GetPortNames(), o => true));
-        #endregion
+        #region Команды        
 
         #region Команда "Закрыть приложение"
         RelayCommand _closeAppCommand;
         public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o =>
         {
-            Udp?.Stop();
+            AdcViewModel.UdpService?.Stop();
             Application.Current.Shutdown();
         }, o => true));
-        #endregion
-
-        #region Команда вкл-выкл напряжение
-        RelayCommand _switchHvCommand;
-        public RelayCommand SwitchHvCommand { get => _switchHvCommand ?? (_switchHvCommand = new RelayCommand(o => mainModel.SwitchHv(), o => true)); }
-        #endregion
+        #endregion        
 
         #region Команда вкл-выкл измерения
         RelayCommand _switchMeasCommand;
-        public RelayCommand SwitchMeasCommand { get => _switchMeasCommand ?? (_switchMeasCommand = new RelayCommand(o => mainModel.SwitchMeas(), o => true)); }
+        public RelayCommand SwitchMeasCommand { get => _switchMeasCommand ?? (_switchMeasCommand = new RelayCommand(o => CommService.SwitchMeas(), o => true)); }
         #endregion
 
         #region Команда плказать архивный тренд
@@ -86,34 +113,17 @@ namespace IDensity.ViewModels
         RelayCommand _setRtcCommand;
         public RelayCommand SetRtcCommand => _setRtcCommand ?? (_setRtcCommand = new RelayCommand(execPar =>
         {
-            mainModel.SetRtc(mainModel.Rtc.WriteValue);
+            CommService.SetRtc(mainModel.Rtc.WriteValue);
         }, canExecPar => true));
         #endregion
         #region Синхронизировать c временем ПК
         RelayCommand _syncRtcCommand;
         public RelayCommand SyncRtcCommand => _syncRtcCommand ?? (_syncRtcCommand = new RelayCommand(execPar =>
         {
-            mainModel.SetRtc(DateTime.Now);
+            CommService.SetRtc(DateTime.Now);
         }, canExecPar => true));
         #endregion
-        #endregion
-
-        #region Команды настроек измерительного порта
-        #region Сменить режим порта 
-        RelayCommand _changeSerialSelectCommand;
-        public RelayCommand ChangeSerialSelectCommand => _changeSerialSelectCommand ?? (_changeSerialSelectCommand = new RelayCommand(o => mainModel.ChangeSerialSelect((int)o), o => o != null));
-        #endregion
-
-        #region Сменить баудрейт 
-        RelayCommand _changeBaudrateCommand;
-        public RelayCommand ChangeBaudrateCommand => _changeBaudrateCommand ?? (_changeBaudrateCommand = new RelayCommand(o => mainModel.ChangeBaudrate((uint)(o)), o => o != null));
-        #endregion
-        #endregion        
-
-        #region Команда "Установить напряжение HV"
-        RelayCommand _setHvCommand;
-        public RelayCommand SetHvCommand => _setHvCommand ?? (_setHvCommand = new RelayCommand(obj => mainModel.SetHv(mainModel.TelemetryHV.VoltageSV.WriteValue), obj => true));
-        #endregion
+        #endregion                  
 
         #region Команды вывода и фильтрации событий
         private RelayCommand _showEventsCommand;
@@ -122,49 +132,10 @@ namespace IDensity.ViewModels
 
         #endregion
 
-        #region Команда "Установить настроку IP приемника UDP даных
-        RelayCommand _setUpsAddrCommand;
-        public RelayCommand SetUpsAddrCommand => _setUpsAddrCommand ?? (_setUpsAddrCommand = new RelayCommand(execPar =>
-        {
-            byte num = 0;
-            var nums = (mainModel.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
-            if (nums.Length == 4) mainModel.SetUdpAddr(nums, mainModel.PortUdp);
-        },
-            canExecPar => mainModel.Connecting.Value));
-
-        #endregion        
-
-        #region Запуск-останов платы АЦП
-        RelayCommand _startAdcCommand;
-        public RelayCommand StartAdcCommand => _startAdcCommand ?? (_startAdcCommand = new RelayCommand(execPar =>
-        {
-            ushort num = 0;
-            if (execPar != null && ushort.TryParse(execPar.ToString(), out num))
-            {
-                mainModel.SwitchAdcBoard(num);
-                Udp.Start();
-            }
-        }, canEcecPar => true));
-        #endregion
-
-        #region Запуск/останов выдачи данных АЦП 
-        RelayCommand _startAdcDataCommand;
-        public RelayCommand StartAdcDataCommand => _startAdcDataCommand ?? (_startAdcDataCommand = new RelayCommand(execPar =>
-        {
-            ushort num = 0;
-            if (execPar != null && ushort.TryParse(execPar.ToString(), out num)) mainModel.StartStopAdcData(num);
-            Udp.Start();
-        }, canEcecPar => true));
-        #endregion
-
-        #region Разорвать tcp соединение 
-        RelayCommand _tcpDisconnectCommand;
-        public RelayCommand TcpDisconnectCommand => _tcpDisconnectCommand ?? (_tcpDisconnectCommand = new RelayCommand(par => mainModel.Tcp.Disconnect(), o => true));
-        #endregion
-
         #region Переключить реле
         RelayCommand _switchRelayCommand;
-        public RelayCommand SwitchRelayCommand => _switchRelayCommand ?? (_switchRelayCommand = new RelayCommand(par => {
+        public RelayCommand SwitchRelayCommand => _switchRelayCommand ?? (_switchRelayCommand = new RelayCommand(par =>
+        {
             ushort temp = 0;
             if (par != null && ushort.TryParse(par.ToString(), out temp))
             {
@@ -186,123 +157,15 @@ namespace IDensity.ViewModels
         }, o => true));
         #endregion
 
-        #region Показать осциллограмму
-        RelayCommand _showOscillCommand;
-        public RelayCommand ShowOscillCommand => _showOscillCommand ?? (_showOscillCommand = new RelayCommand(par => 
-        {
-            mainModel.StartStopAdcData(0);
-            mainModel.SwitchAdcBoard(0);
-            mainModel.SetAdcMode(0);
-            mainModel.StartStopAdcData(1);
-            mainModel.SwitchAdcBoard(1);
-            Udp.Start();
-
-        }, o => mainModel.Connecting.Value));
         #endregion
-
-        #region Показать спектр
-        RelayCommand _showSpectrCommand;
-        public RelayCommand ShowSpectrCommand => _showSpectrCommand ?? (_showSpectrCommand = new RelayCommand(par =>
-        {
-            mainModel.StartStopAdcData(0);
-            Udp.Start();
-            mainModel.SwitchAdcBoard(0);
-            mainModel.SetAdcMode(1);
-            mainModel.SetAdcProcMode(1);
-            mainModel.StartStopAdcData(1);
-            mainModel.SwitchAdcBoard(1);
-
-        }, o => mainModel.Connecting.Value));
-        #endregion
-
-        #region Очистить спектр
-        RelayCommand _clearSpectrCommand;
-        public RelayCommand ClearSpectrCommand => _clearSpectrCommand ?? (_clearSpectrCommand = new RelayCommand(par =>
-        {
-            mainModel.ClearSpectr();
-            mainModel.SwitchAdcBoard(1);
-
-        }, o => mainModel.Connecting.Value));
-        #endregion
-
-        #region выбранный диапазон счетчика
-        private CountDiapasone _selectedCountDiapasone;
-
-        public CountDiapasone SelectedCountDiapasone
-        {
-            get { return _selectedCountDiapasone; }
-            set { Set(ref _selectedCountDiapasone, value); }
-        }
-        #endregion
-
-        #region Запуск-останов логирования спектра
-        RelayCommand _startStopSpectrLogCommand;
-        public RelayCommand StartStopSpectrLogCommand => _startStopSpectrLogCommand ?? (_startStopSpectrLogCommand = new RelayCommand(par => 
-        {
-            if (!IsSpectrLogging)
-            {
-                if (!File.Exists(SpetrLogPath)) MessageBox.Show($"Путь {SpetrLogPath} некорректный!");
-                else IsSpectrLogging = true;
-            }
-            else IsSpectrLogging = false;
-        }, o => true));
-        #endregion
-
-        #region запись параметров Ethernet параметров платы
-        RelayCommand _writeEthParamsCommand;
-        public RelayCommand WriteEthParamsCommand => _writeEthParamsCommand ?? (_writeEthParamsCommand = new RelayCommand(par => 
-        {
-            if (mainModel.CommMode.EthEnable) mainModel.Tcp.SetIPAddr(mainModel.IP, mainModel.Mask, mainModel.GateWay);
-        }, 
-            o => mainModel.Connecting.Value));
-        #endregion
-
-        #region Найти максимум спектра и перезаписать границы для выбранного диапазона счетчиков
-
-        #region ПОиск максимума спектра и перезаписать границы для выбранного диапазона счетчиков
-        /// <summary>
-        /// ПОиск максимума спектра и перезаписать границы для выбранного диапазона счетчиков
-        /// </summary>
-        RelayCommand _tuneCounterDiapasoneCommand;
-        /// <summary>
-        /// ПОиск максимума спектра и перезаписать границы для выбранного диапазона счетчиков
-        /// </summary>
-        public RelayCommand TuneCounterDiapasoneCommand => _tuneCounterDiapasoneCommand ?? (_tuneCounterDiapasoneCommand = new RelayCommand(execPar =>
-        {
-            if (Udp.Mode == 2 && AdcDataTrend!=null && AdcDataTrend.Count > Udp.SpectrMaxLimit)
-            {
-                var max = AdcDataTrend[Udp.SpectrMinLimit];
-                for (int i = Udp.SpectrMinLimit + 1; i < Udp.SpectrMaxLimit; i++)
-                {
-                    if (AdcDataTrend[i].Y > max.Y) max = AdcDataTrend[i];
-                }
-                var index = max.X;
-                index = Math.Max(0, index - Udp.SpectrFilterDeep / 2);
-                var minLimit = Math.Clamp(index - index * Udp.LeftCounterCoeff, 0, 4095);
-                var maxLimit = Math.Clamp(index + index * Udp.RightCounterCoeff, 0, 4095);
-                if (SelectedCountDiapasone != null)
-                {
-                    var diap = SelectedCountDiapasone.Clone() as CountDiapasone;
-                    diap.Start.Value = (ushort)minLimit;
-                    diap.Finish.Value = (ushort)maxLimit;
-                    mainModel.WriteCounterSettings(diap);
-                }                
-            }   
-        }, canExecPar => true));
-        #endregion
-
-        #endregion
-
-        #endregion
-        public MainModel mainModel { get; } = new MainModel();
+        public MainModel mainModel { get; }
 
         #region Конструктор
         public VM()
         {
             if ((Application.Current is App))
             {
-                mainModel.ModelProcess();
-                mainModel.UpdateDataEvent += AddDataToCollection;
+                mainModel = new MainModel();
                 timer.Elapsed += (s, e) => CurPcDateTime = DateTime.Now;
                 timer.Start();
                 Events = new Events(mainModel);
@@ -310,41 +173,17 @@ namespace IDensity.ViewModels
                 Events.EventExecute += AddHistoryItem;
                 _selectedEventItems.Filter += OnEventsFiltered;
                 _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
-                GetMeasDates();
-                UdpInit();
-                MasterSettingsViewModel = new MasterSettingsViewModel(this);
-            }                
+                GetMeasDates();                
+                
+                InitVm();
+                ServicesInit();
+
+                
+            }
         }
 
-        public MasterSettingsViewModel MasterSettingsViewModel { get;}
-        #endregion
 
-        private UDP _udp;
-
-        public UDP Udp
-        {
-            get { return _udp; }
-            set { Set(ref _udp, value); }
-        }
-
-        
-
-        void UdpInit()
-        {
-            Udp = ClassInit<UDP>();
-            Udp.Start();
-            Udp.UpdateOscillEvent += (collection) =>
-            {
-                UpdateAdcTrend(collection);
-                if (Udp.Mode == 2 && IsSpectrLogging)
-                {
-                    var parameters = $"hv={mainModel.TelemetryHV.VoltageCurOut.Value},syn_level={mainModel.AdcBoardSettings.AdcSyncLevel.Value},preamp_gain={mainModel.AdcBoardSettings.PreampGain.Value}";
-                    SpectrLogService.WriteToFile(SpetrLogPath, parameters, collection);
-                    IsSpectrLogging = false;
-                }
-            };
-            Udp.UpdateAmplitudesEvent += UpdateMaxAmpsData;
-        }
+        #endregion        
 
         #region Текущая дата-время компьютера
         private DateTime _curPcDateTime;
@@ -383,9 +222,9 @@ namespace IDensity.ViewModels
 
         #region Настройки тренда
         GraphSettings _trendSettings;
-        public GraphSettings TrendSettings { get => _trendSettings ?? (_trendSettings = ClassInit<GraphSettings>()); }
-        #endregion        
-        
+        public GraphSettings TrendSettings { get => _trendSettings ?? (_trendSettings = XmlInit.ClassInit<GraphSettings>()); }
+        #endregion
+
         ObservableCollection<TimePoint> _plotCollection;
         public ObservableCollection<TimePoint> PlotCollection
         {
@@ -395,8 +234,8 @@ namespace IDensity.ViewModels
 
         #region Настройки видимости графиков
         private TrendVisible _trendsVisible;
-        public TrendVisible TrendsVisible => _trendsVisible ?? (_trendsVisible = ClassInit<TrendVisible>());
-        #endregion
+        public TrendVisible TrendsVisible => _trendsVisible ?? (_trendsVisible = XmlInit.ClassInit<TrendVisible>());
+        #endregion 
 
         #region Данные для архивного тренда
         #region Коллекция
@@ -462,7 +301,7 @@ namespace IDensity.ViewModels
 
         #region Доступные ЕИ
         public IEnumerable<MeasUnitSettings> AvialableMeasUnitSettings => mainModel.MeasUnitSettings.Where(mu => mu.A.Value != 0 || mu.B.Value != 0).Select(mu => mu);
-        
+
         #endregion
 
 
@@ -501,7 +340,7 @@ namespace IDensity.ViewModels
                     ArchivalDataPotnts = list;
                     ArchivalTrendDownloading = false;
                 });
-                
+
             }
             catch (Exception)
             {
@@ -534,133 +373,26 @@ namespace IDensity.ViewModels
                     };
                     PlotCollection.Add(tp);
                     int i = 0;
-                    while (PlotCollection.Count > 0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i<5)
+                    while (PlotCollection.Count > 0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 5)
                     {
                         PlotCollection.RemoveAt(0);
                         i++;
                     }
-                    SqlMethods.WritetoDb<TimePoint>(tp);                    
-                }); 
+                    SqlMethods.WritetoDb<TimePoint>(tp);
+                });
 
         }
-        #endregion
-
-        #region Инициализация унивесального параметра
-        T ClassInit<T>() where T : PropertyChangedBase
-        {
-            T cell = XmlMethods.GetParam<T>().FirstOrDefault();
-            if (cell == null)
-            {
-                cell = (T)Activator.CreateInstance(typeof(T));
-                XmlMethods.AddToXml<T>(cell);
-            }
-            cell.PropertyChanged += (sender, e) => XmlMethods.EditParam<T>(cell, e.PropertyName);
-            return cell;
-        }
-        #endregion
+        #endregion        
 
         #region Время усреднения для пользователя(запись)
         uint _avgTimeWrite = 1;
         public uint AvgTimeWrite
         {
             get => _avgTimeWrite;
-            set 
+            set
             {
                 if (value > 0) Set(ref _avgTimeWrite, value);
             }
-        }
-        #endregion
-
-        #region Данные UDP
-        DateTime lastUpdateTime = DateTime.Now;
-        #region Данные тренда
-        List<Point> _adcDataTrend;
-        public List<Point> AdcDataTrend
-        {
-            get => _adcDataTrend;
-            set
-            {
-                Set(ref _adcDataTrend, value);
-
-            }
-        }
-        void UpdateAdcTrend(List<Point> list)
-        {
-            if (lastUpdateTime.AddMilliseconds(500) < DateTime.Now)
-            {
-                AdcDataTrend = list;
-                lastUpdateTime = DateTime.Now;
-            }
-
-        }
-        #endregion
-
-        #region Данные гистограммы в режиме максимальных амплитуд
-        List<Point> _maxAmplitudesData;
-        /// <summary>
-        /// Данные гистограммы в режиме максимальных амплитуд
-        /// </summary>
-        public List<Point> MaxAmplitudesData
-        {
-            get => _maxAmplitudesData;
-            set => Set(ref _maxAmplitudesData, value);
-        }
-        void UpdateMaxAmpsData(List<Point> list)
-        {
-            if (lastUpdateTime.AddMilliseconds(500) < DateTime.Now)
-            {
-                MaxAmplitudesData = list;
-                lastUpdateTime = DateTime.Now;
-            }
-        }
-        #endregion
-        #endregion
-
-        #region Логирование спектра
-        private string _spetrLogPath;
-
-        public string SpetrLogPath
-        {
-            get { return _spetrLogPath; }
-            set { Set(ref _spetrLogPath, value); }
-        }
-
-
-        #region Флаг выполнения
-        private bool _isSpectrLogging;
-        /// <summary>
-        /// Выполняется логирование спектра
-        /// </summary>
-        public bool IsSpectrLogging
-        {
-            get { return _isSpectrLogging; }
-            set { Set(ref _isSpectrLogging, value); }
-        }
-
-        #endregion
-        /// <summary>
-        /// Сервис логгирования спектра
-        /// </summary>
-        private SpectrLogService _logService;
-        /// <summary>
-        /// Сервис логирования спектра
-        /// </summary>
-        public SpectrLogService SpectrLogService
-        {
-            get 
-            {
-                if (_logService == null)
-                {
-                    _logService = new SpectrLogService();
-                    _logService.SpectrErrorEvent += (msg) =>
-                      {
-                          MessageBox.Show(msg);
-                          IsSpectrLogging = false;
-                      };
-                }
-                return _logService; 
-            }
-            
         }
         #endregion
 
@@ -694,7 +426,7 @@ namespace IDensity.ViewModels
             }
             catch (Exception ex)
             {
-                
+
             }
         }
         #endregion        
@@ -731,7 +463,7 @@ namespace IDensity.ViewModels
         public string EventFilterText
         {
             get { return _eventFilterText; }
-            set 
+            set
             {
                 if (!Set(ref _eventFilterText, value)) return;
                 _selectedEventItems.View.Refresh();
@@ -772,10 +504,10 @@ namespace IDensity.ViewModels
             private set
             {
                 if (!Set(ref _historyEventItems, value)) return;
-                _selectedEventItems.Source = value; 
+                _selectedEventItems.Source = value;
                 OnPropertyChanged(nameof(SelectedEventItems));
             }
-        } 
+        }
         #endregion
 
         #region Флаг загрузки данных событий из БД
@@ -814,7 +546,7 @@ namespace IDensity.ViewModels
                             Activity = list[i].Activity,
                             Event = Events.EventDevices.Where(dev => dev.Id == list[i].Id).FirstOrDefault()
                         });
-                });                        
+                });
             }
             catch (Exception)
             {
@@ -822,12 +554,12 @@ namespace IDensity.ViewModels
             }
         }
         #endregion
-               
+
 
         #region Метод загрузки события в базу данных и коллекцию
         void AddHistoryItem(EventDevice device)
-        {            
-            App.Current?.Dispatcher.Invoke(()=> 
+        {
+            App.Current?.Dispatcher.Invoke(() =>
             {
                 var time = DateTime.Now;
                 var name = CurUser == null ? "Пользователь не авторизован" : $"{CurUser.Somename} {CurUser.Name}";
@@ -850,7 +582,7 @@ namespace IDensity.ViewModels
                 }
                 catch (Exception)
                 {
-                    
+
                 }
             });
         }
@@ -860,24 +592,24 @@ namespace IDensity.ViewModels
         void UpadateDates(object obj)
         {
             if (!(obj is Calendar calendar)) return;
-            DateTime startDate = new DateTime(calendar.DisplayDate.Year,calendar.DisplayDate.Month,1);
-            var enabledDates = MeasDates.Where(ms => ms.Time >= startDate && ms.Time <= startDate.AddMonths(1)).Select(ms=>ms.Time);            
-            calendar.DisplayDateEnd = startDate.AddMonths(1);            
+            DateTime startDate = new DateTime(calendar.DisplayDate.Year, calendar.DisplayDate.Month, 1);
+            var enabledDates = MeasDates.Where(ms => ms.Time >= startDate && ms.Time <= startDate.AddMonths(1)).Select(ms => ms.Time);
+            calendar.DisplayDateEnd = startDate.AddMonths(1);
             var tempDate = startDate;
             calendar.BlackoutDates.Clear();
-            while (tempDate<= calendar.DisplayDateEnd)
+            while (tempDate <= calendar.DisplayDateEnd)
             {
-                if (tempDate != calendar.SelectedDate && !enabledDates.Any(dt=>dt==tempDate))
+                if (tempDate != calendar.SelectedDate && !enabledDates.Any(dt => dt == tempDate))
                     calendar.BlackoutDates.Add(new CalendarDateRange(tempDate));
                 tempDate = tempDate.AddDays(1);
-            }  
+            }
         }
         private RelayCommand _selectDatesCommand;
 
         public RelayCommand SelectDatesCommand
         {
             get { return _selectDatesCommand ?? (_selectDatesCommand = new RelayCommand(obj => UpadateDates(obj), obj => true)); }
-            
+
         }
         #endregion
 

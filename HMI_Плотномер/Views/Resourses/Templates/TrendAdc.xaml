@@ -7,7 +7,7 @@
         <Grid>
             <!--#region Тренд в режиме осциллографа-->
             <oxy:Plot PlotMargins="30,0,0,30"  
-                                      Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=3}"
+                                      Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=3}"
                                       Grid.Row="1"
                                       PlotType="XY"                                         
                                       PlotAreaBorderThickness="0" 
@@ -40,7 +40,7 @@
                                       PlotAreaBorderColor="WhiteSmoke"
                                       SelectionColor="WhiteSmoke"
                                       LegendTextColor="WhiteSmoke"
-                                      Visibility="{Binding Udp.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=3}"
+                                      Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=3}"
                                       Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
                                       PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
                 <oxy:Plot.Axes>
@@ -61,7 +61,7 @@
             <!--#endregion-->           
         </Grid>
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding Udp.Mode}" Value="0">
+            <DataTrigger Binding="{Binding UdpService.Mode}" Value="0">
                 <Setter TargetName="LowLine" Property="StrokeThickness" Value="0"/>
                 <Setter TargetName="HighLine" Property="StrokeThickness" Value="0"/>
             </DataTrigger>

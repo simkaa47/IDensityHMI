@@ -6,75 +6,77 @@
         <DataTemplate.Resources>
             <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
         </DataTemplate.Resources>
-        <Border  Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}" BorderBrush="WhiteSmoke" BorderThickness="1">
-            <StackPanel HorizontalAlignment="Stretch">
-                <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="30" FontWeight="Bold">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource EnumCustomConverter}">
-                            <Binding Path="MeasProcessNum.Value" Mode="OneWay"/>
-                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasProcNames.Data"  Mode="OneWay"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <StackPanel Orientation="Horizontal" >
-                    <StackPanel>
-                        <!--#region Мгновенное значение -->
-                        <TextBlock Text="{Binding PhysValueCur.Value, StringFormat=f1}"                          
+        <Viewbox>
+            <Border  Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}" BorderBrush="WhiteSmoke" BorderThickness="1">
+                <StackPanel HorizontalAlignment="Stretch">
+                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="30" FontWeight="Bold">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource EnumCustomConverter}">
+                                <Binding Path="MeasProcessNum.Value" Mode="OneWay"/>
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasProcNames.Data"  Mode="OneWay"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel>
+                            <!--#region Мгновенное значение -->
+                            <TextBlock Text="{Binding PhysValueCur.Value, StringFormat=f1}"                          
                            Foreground="Aqua"
                            FontSize="100"/>
-                        <!--#endregion-->
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Мгновенное"                           
+                            <!--#endregion-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Мгновенное"                           
                                     FontSize="30"
                                     Foreground="Aqua"/>
-                            <Rectangle  Fill="Aqua"
+                                <Rectangle  Fill="Aqua"
                                     Stretch="UniformToFill"
                                     Height="20"
                                     Margin="10"
                                     Width="300"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                    <!--#region Счетчик -->
-                    <StackPanel Orientation="Horizontal"
+                        <!--#region Счетчик -->
+                        <StackPanel Orientation="Horizontal"
                             Margin="100,0,0,0">
-                        <TextBlock Text="(" FontSize="60" Foreground="Aqua"/>
-                        <TextBlock
+                            <TextBlock Text="(" FontSize="60" Foreground="Aqua"/>
+                            <TextBlock
                            HorizontalAlignment="Center"
                            TextWrapping="Wrap"
                            Foreground="Aqua">
                     <Run Text="{Binding CounterValue.Value, StringFormat=f1}" FontSize="50"/>
                     <LineBreak/>
                     <Run Text="каунтов/c." FontSize="20"/>
-                        </TextBlock>
-                        <TextBlock Text=")" FontSize="60" Foreground="Aqua"/>
-                    </StackPanel>
-                    <!--#endregion-->
+                            </TextBlock>
+                            <TextBlock Text=")" FontSize="60" Foreground="Aqua"/>
+                        </StackPanel>
+                        <!--#endregion-->
 
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Settings.OutMeasNum.MeasUnitName.Value}"
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Settings.OutMeasNum.MeasUnitName.Value}"
                            Margin="80,20,80,20"
                            VerticalAlignment="Center"
                            FontSize="40"
                            Foreground="LightGray"/>
-                    <StackPanel>
-                        <TextBlock Text="{Binding PhysValueAvg.Value, StringFormat=f1}"
+                        <StackPanel>
+                            <TextBlock Text="{Binding PhysValueAvg.Value, StringFormat=f1}"
                                FontSize="100"
                                Foreground="Orange"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Усредненное"                           
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Усредненное"                           
                                     FontSize="30"
                                     Foreground="Orange"/>
-                            <Rectangle  Fill="Orange"
+                                <Rectangle  Fill="Orange"
                                     Stretch="UniformToFill"
                                     Height="20"
                                     Margin="10"
                                     Width="300"/>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </Border>
+            </Border>
+        </Viewbox>
 
 
     </DataTemplate>
