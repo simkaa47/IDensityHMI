@@ -6,28 +6,6 @@
     <CommMode RsEnable="False" EthEnable="True" HartEnable="False" />
     <GraphSettings PlotTime="5" PlotLowLimit="10" PlotHighLimit="15" />
     <TrendVisible VisLine1="False" VisLine2="True" VisLine3="True" VisLine4="False" VisLine5="False" VisLine6="False" VisLine7="False" VisLine8="False" VisLine9="False" VisLine10="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
-    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />
+    <GraphSettings PlotTime="1" PlotLowLimit="0" PlotHighLimit="0" WriteIfNoMeasState="False" />    
   </params>
 </body>

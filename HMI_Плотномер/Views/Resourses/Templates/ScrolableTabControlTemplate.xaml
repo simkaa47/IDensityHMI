@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTemplate TargetType="TabControl" x:Key="TabControlHorizontalScroll">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ScrollViewer 
+            HorizontalScrollBarVisibility="Disabled"  
+            VerticalScrollBarVisibility="Auto" 
+            FlowDirection="RightToLeft">
+                <TabPanel 
+                    x:Name="HeaderPanel"
+                    Panel.ZIndex ="0" 
+                    KeyboardNavigation.TabIndex="1"
+                    IsItemsHost="true"/>
+            </ScrollViewer>
+            <ContentPresenter 
+            x:Name="PART_SelectedContentHost"
+            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+            ContentSource="SelectedContent" Grid.Column="1"/>
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

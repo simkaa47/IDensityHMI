@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace IDensity.Services.CheckPulse
+namespace IDensity.Services.AdcServices
 {
     public class CheckPulseService : PropertyChangedBase
     {
@@ -112,12 +112,12 @@ namespace IDensity.Services.CheckPulse
             Calculate();
         }
         void Run(List<Point> arr)
-        {            
+        {
             int overFullCount = 0;
             if (arr.Count < 1000) return;
             CommontCount++;
-            double sum = 0;            
-            double min = 0, avgMin = 0, max = 0, avgMax = 0, actValue = 0;            
+            double sum = 0;
+            double min = 0, avgMin = 0, max = 0, avgMax = 0, actValue = 0;
             for (int i = 0; i < CheckSize; i++)
             {
                 if (arr[i].Y == 4095) overFullCount++;
@@ -127,13 +127,13 @@ namespace IDensity.Services.CheckPulse
                     return;
                 }
                 if (i < AvgDeep)
-                { 
+                {
                     sum = sum + arr[i].Y;
                     actValue = sum / (i + 1);
                 }
                 else
                 {
-                    sum = sum + arr[i].Y - arr[i-AvgDeep].Y;
+                    sum = sum + arr[i].Y - arr[i - AvgDeep].Y;
                     actValue = sum / AvgDeep;
                 }
                 min = Math.Min(min, arr[i].Y);
@@ -142,12 +142,12 @@ namespace IDensity.Services.CheckPulse
                 avgMax = Math.Max(avgMax, actValue);
             }
             if ((max - min) / (avgMax - avgMin) > 1.5) NoisePulses++;
-            
+
         }
 
         void Calculate()
         {
-            SuccessDeviation = ((double)(CommontCount - NoisePulses - OverValuePulses) / (CommontCount)) * 100;
+            SuccessDeviation = (double)(CommontCount - NoisePulses - OverValuePulses) / CommontCount * 100;
         }
 
         public void Clear()

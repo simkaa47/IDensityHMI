@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="IDensity.Views.Resourses.UserControls.MeasUnitControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
+             mc:Ignorable="d"              
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <DataGrid ItemsSource="{Binding mainModel.MeasUnitSettings}">
+            <DataGrid.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </DataGrid.ItemsPanel>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding A.Value}" Value="0"/>
+                                <Condition Binding="{Binding B.Value}" Value="0"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Opacity" Value="0.25"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <!--#region Id -->
+                <DataGridTextColumn IsReadOnly="True" Header="№" Binding="{Binding Id.Value}"/>
+                <!--#endregion-->
+                <!--#region № по классификации -->
+                <DataGridTemplateColumn Width="200">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="№ по классификации" TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding MeasUnitClassNum}"
+                                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetMeasUnitCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Тип -->
+                <DataGridTemplateColumn Width="200">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Тип ЕИ" TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding Type}"
+                                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetMeasUnitCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region A -->
+                <DataGridTemplateColumn Header="Коэффициент A">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding A}" Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetMeasUnitCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region B -->
+                <DataGridTemplateColumn Header="Коэффициент B">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding B}" Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetMeasUnitCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Имя -->
+                <DataGridTemplateColumn Header="Название">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding MeasUnitName}" Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetMeasUnitCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

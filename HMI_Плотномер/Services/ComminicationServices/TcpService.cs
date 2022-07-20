@@ -987,6 +987,8 @@ namespace IDensity.Services.ComminicationServices
         }
         #endregion
 
+
+
         public void WriteCommonSettings(string arg)
         {
             var str = $"*SETT,{arg}#";

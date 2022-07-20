@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDensity.Services.CheckPulse
+namespace IDensity.Services.AdcServices
 {
-    public  class CheckPulseResult:PropertyChangedBase
+    public class CheckPulseResult : PropertyChangedBase
     {
 
         #region Общее количество испульсов

@@ -1,6 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.Models;
-using IDensity.Services.CheckPulse;
+using IDensity.Services.AdcServices;
 using IDensity.Services.ComminicationServices;
 using IDensity.Services.InitServices;
 using IDensity.ViewModels.Commands;

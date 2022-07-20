@@ -2,13 +2,13 @@
 using IDensity.AddClasses.EventHistory;
 using IDensity.Models;
 using IDensity.Models.SQL;
-using IDensity.Services.CheckPulse;
 using IDensity.Services.ComminicationServices;
 using IDensity.Services.InitServices;
 using IDensity.Services.SQL;
 using IDensity.Services.XML;
 using IDensity.ViewModels.Commands;
 using IDensity.ViewModels.MasrerSettings;
+using IDensity.ViewModels.SdCard;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,6 +34,10 @@ namespace IDensity.ViewModels
         public MasterSettingsViewModel MasterSettingsViewModel { get; private set; }
         public AdcViewModel AdcViewModel { get; private set; }
         public ConnectSettingsVm ConnectSettingsVm { get; private set; }
+        public SdCardVm SdCardVm { get; private set; }
+        public MeasProcessVm MeasProcessVm { get; private set; }
+        public AnalogVm AnalogVm { get; private set; }
+        public MeasUnitVm MeasUnitSettingsVm { get; private set; }
         #endregion
 
         #region Cервисы
@@ -50,6 +54,10 @@ namespace IDensity.ViewModels
             MasterSettingsViewModel = new MasterSettingsViewModel(this);
             AdcViewModel = new AdcViewModel(this);
             ConnectSettingsVm = new ConnectSettingsVm(this);
+            MeasProcessVm = new MeasProcessVm(this);
+            SdCardVm = new SdCardVm(this);
+            AnalogVm = new AnalogVm(this);
+            MeasUnitSettingsVm = new MeasUnitVm(this);
         }
 
         #region Инициализация сервисов
@@ -58,7 +66,6 @@ namespace IDensity.ViewModels
             CommService = new CommunicationService(mainModel);
             CommService.UpdateDataEvent += AddDataToCollection;
             CommService.MainProcessExecute();
-
 
         }
         #endregion
@@ -142,12 +149,7 @@ namespace IDensity.ViewModels
                 mainModel.SwitchRelay(temp);
             }
         }, canExec => true));
-        #endregion
-
-        #region Перезагрузить плату
-        RelayCommand _rstBoardCommand;
-        public RelayCommand RstBoardCommand => _rstBoardCommand ?? (_rstBoardCommand = new RelayCommand(par => mainModel.RstBoard(), o => mainModel.Connecting.Value));
-        #endregion
+        #endregion       
 
         #region Обновить доступные ЕИ
         RelayCommand _updateAvialablemeasUnitCommand;
@@ -173,15 +175,12 @@ namespace IDensity.ViewModels
                 Events.EventExecute += AddHistoryItem;
                 _selectedEventItems.Filter += OnEventsFiltered;
                 _selectedEventItems.SortDescriptions.Add(new SortDescription("EventTime", ListSortDirection.Descending));
-                GetMeasDates();                
-                
-                InitVm();
+                GetMeasDates();
                 ServicesInit();
-
-                
+                InitVm();
+                TrendInit();
             }
         }
-
 
         #endregion        
 
@@ -220,9 +219,14 @@ namespace IDensity.ViewModels
         public int InterpolIndex { get => _interpolIndex; set { Set(ref _interpolIndex, value); } }
         #endregion
 
+        void TrendInit()
+        {
+            _trendSettings = XmlInit.ClassInit<GraphSettings>();
+            _trendsVisible = XmlInit.ClassInit<TrendVisible>();
+        }
         #region Настройки тренда
         GraphSettings _trendSettings;
-        public GraphSettings TrendSettings { get => _trendSettings ?? (_trendSettings = XmlInit.ClassInit<GraphSettings>()); }
+        public GraphSettings TrendSettings => _trendSettings;
         #endregion
 
         ObservableCollection<TimePoint> _plotCollection;
@@ -234,7 +238,7 @@ namespace IDensity.ViewModels
 
         #region Настройки видимости графиков
         private TrendVisible _trendsVisible;
-        public TrendVisible TrendsVisible => _trendsVisible ?? (_trendsVisible = XmlInit.ClassInit<TrendVisible>());
+        public TrendVisible TrendsVisible => _trendsVisible;
         #endregion 
 
         #region Данные для архивного тренда

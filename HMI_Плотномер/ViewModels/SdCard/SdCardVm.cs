@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Models;
 using IDensity.ViewModels;
 using IDensity.ViewModels.Commands;
 using System;
@@ -10,18 +11,18 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace IDensity.Models
+namespace IDensity.ViewModels.SdCard
 {
-    public class SdCardVm:PropertyChangedBase
-    {        
+    public class SdCardVm : PropertyChangedBase
+    {
         public SdCardVm(VM vM)
         {
-            VM = vM;            
+            VM = vM;
             VM.CommService.Tcp.TcpEvent += (s) =>
               {
                   if (IsReading) GetWritesRequest();
               };
-            
+
         }
         /// <summary>
         /// Временная коллекция списка файлов
@@ -74,12 +75,12 @@ namespace IDensity.Models
             });
         }, canExecPar => true));
         #endregion
-
+         
         #region Запрос записей на SD карте
         RelayCommand _getSdCardWritesCommand;
         public RelayCommand GetSdCardWritesCommand => _getSdCardWritesCommand ?? (_getSdCardWritesCommand = new RelayCommand(par =>
         {
-           GetWrites();
+            GetWrites();
         }, o => true));
 
         #endregion
@@ -156,7 +157,7 @@ namespace IDensity.Models
         public bool IsWritingToFile
         {
             get => _isWritingToFile;
-            set => Set(ref _isWritingToFile, WriteToFilePath!=null?value:false);
+            set => Set(ref _isWritingToFile, WriteToFilePath != null ? value : false);
         }
         public VM VM { get; }
         #endregion
@@ -179,22 +180,22 @@ namespace IDensity.Models
             {
                 if (str == "")
                 {
-                    if(IsReading)GetWritesRequest();
+                    if (IsReading) GetWritesRequest();
                     return;
                 }
-                Write(str); 
+                Write(str);
                 if (readFile.Start >= readFile.finish)
                 {
                     IsReading = false;
                 }
                 if (IsReading)
                 {
-                    readFile.Start += ((readFile.finish - readFile.Start > 1 ? 2 : 1));
+                    readFile.Start += readFile.finish - readFile.Start > 1 ? 2 : 1;
                     GetWritesRequest();
                 }
 
             });
-            
+
         }
         void GetNextFileListTelegrams()
         {
@@ -218,7 +219,7 @@ namespace IDensity.Models
                 {
                     Id = fileNames.Count + 1,
                     Name = fileInfos[i],
-                    WriteNumber = (int.TryParse(fileInfos[i + 1], out int temp)) ? temp : 0
+                    WriteNumber = int.TryParse(fileInfos[i + 1], out int temp) ? temp : 0
                 });
             }
             if (str.Contains("111111111")) FileNames = fileNames;
@@ -272,11 +273,11 @@ namespace IDensity.Models
         SdCardMeasData ParseResults(string[] strs, int start, int finish)
         {
             if (strs.Length <= finish) return null;
-            if ((finish - start)!=25) return null;
-            SdCardMeasData result = new SdCardMeasData();            
+            if (finish - start != 25) return null;
+            SdCardMeasData result = new SdCardMeasData();
             ushort tempUshort = 0;
             DateTime tempDateTime = new DateTime();
-            result.Time = DateTime.TryParse($"{strs[start]} {strs[start+1]}", out tempDateTime) ? tempDateTime : default(DateTime);
+            result.Time = DateTime.TryParse($"{strs[start]} {strs[start + 1]}", out tempDateTime) ? tempDateTime : default;
             for (int i = 0; i < 2; i++)
             {
                 result.MeasResults[i].ProcNum = (int)strs[start + i * 5 + 2].StringToFloat();
@@ -296,8 +297,8 @@ namespace IDensity.Models
             result.CommState = (ushort)(ushort.TryParse(strs[start + 24], NumberStyles.HexNumber, null, out tempUshort) ? tempUshort : 0);
             result.PhysParamState = (ushort)(ushort.TryParse(strs[start + 25], NumberStyles.HexNumber, null, out tempUshort) ? tempUshort : 0);
             return result;
-            
+
         }
     }
-    
+
 }

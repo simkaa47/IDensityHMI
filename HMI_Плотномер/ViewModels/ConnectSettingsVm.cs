@@ -52,6 +52,11 @@ namespace IDensity.ViewModels
             o => VM.mainModel.Connecting.Value));
         #endregion
 
+        #region Перезагрузить плату
+        RelayCommand _rstBoardCommand;
+        public RelayCommand RstBoardCommand => _rstBoardCommand ?? (_rstBoardCommand = new RelayCommand(par => VM.CommService.RstBoard(), o => VM.mainModel.Connecting.Value));
+        #endregion
+
         #endregion
     }
 }

@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,30 +11,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using IDensity.ViewModels;
-using IDensity.Views;
-using Microsoft.Win32;
 
-namespace IDensity
+namespace IDensity.Views.Resourses.UserControls
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SdCardControl.xaml
     /// </summary>
-    public  partial class MainWindow : Window
-    {        
-        public MainWindow()
-        {            
-            InitializeComponent();                        
+    public partial class SdCardControl : UserControl
+    {
+        public SdCardControl()
+        {
+            InitializeComponent();
         }
 
-        private void Logout_click(object sender, RoutedEventArgs e)
+        private void SdCardWritePathShow(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as VM;
-            Password password = new Password(vm);
-            password.Show();            
-        }    
+            FileDialogOpen(SdCardWritePath);
+        }
 
-        
         private void FileDialogOpen(TextBlock tb)
         {
             OpenFileDialog fileDialog = new OpenFileDialog()
@@ -56,13 +48,5 @@ namespace IDensity
 
             }
         }
-        private void BrowseLogPath(object sender, RoutedEventArgs e)
-        {
-            FileDialogOpen(LogPath);
-        }
-
-        
-
-       
     }
 }

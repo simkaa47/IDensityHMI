@@ -45,7 +45,7 @@ namespace IDensity.Services.ComminicationServices
         #endregion
 
         #region Записать общие настройки платы
-        void WriteCommonSettings(string arg)
+        public void WriteCommonSettings(string arg)
         {
             Tcp.WriteCommonSettings(arg);
         }
@@ -188,5 +188,91 @@ namespace IDensity.Services.ComminicationServices
             }
         }
         #endregion 
+
+        #region Записать данные измерительных процессов
+        public void WriteMeasProcSettings(string tcpArg, ushort measProcNum)
+        {
+            Tcp.WriteMeasProcSettings(tcpArg, measProcNum);
+        }
+
+        #endregion
+
+        #region Записать активности измерительных процессов
+        public void SetMeasProcActivity()
+        {
+            string cmd = "*SETT,meas_prc_ndx=";
+            for (int i = 0; i < MainModel.MeasProcNum; i++)
+            {
+                if (_mainModel.MeasProcSettings[i].IsActive.WriteValue) cmd += $"{i},";
+            }
+            cmd = cmd.Remove(cmd.Length - 1) + "#";
+            Tcp.SetMeasProcActivity(cmd);
+        }
+
+        #endregion
+
+        #region Команда "Произвести еденичное измеренине"
+        public void MakeSingleMeasure(int time, ushort measProcNdx, ushort index)
+        {
+            Tcp.MakeSingleMeasure((ushort)time, measProcNdx, index);
+            
+        }
+        #endregion
+
+        #region Команда "Произвести стандартизацию"
+        /// <summary>
+        /// Произвести стандартизацию
+        /// </summary>
+        /// <param name="index">Номер набора стандартизации</param>
+        public void MakeStand(ushort measProcNum, ushort standNum)
+        {
+            Tcp.MakeStand(measProcNum, standNum);
+        }
+        #endregion
+
+        #region Команда "Перезагрузить плату"
+        public void RstBoard()
+        {
+            Tcp.RstBoard();
+        }
+        #endregion
+
+        #region Управление питанием аналоговых модулей
+        public void SwitchAm(int groupNum, int moduleNum, bool value)
+        {
+            Tcp.SwitchAm(groupNum, moduleNum, value);            
+        }
+        #endregion
+
+        #region Отправить значение тестовой величины
+        public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
+        {
+            Tcp.SetTestValueAm(groupNum, moduleNum, value);
+            
+        }
+        #endregion
+
+        #region Команда "Изменить активность аналогового выхода"
+        public void ChangeDacAct(int groupNum, int moduleNum, AnalogOutput value)
+        {
+            Tcp.SendAnalogOutSwttings(groupNum, moduleNum, value);           
+        }
+        #endregion
+
+        #region Команда "Изменить активность аналогового входа"
+        public void ChangeAdcAct(int groupNum, int moduleNum, AnalogInput value)
+        {
+            Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);            
+        }
+        #endregion        
+
+        #region Команда "Записать настройки едениц измерерия"
+        public void SetMeasUnitsSettings(MeasUnitSettings settings)
+        {
+            Tcp.SetMeasUnitsSettings(settings);            
+        }
+
+        #endregion
+
     }
 }
