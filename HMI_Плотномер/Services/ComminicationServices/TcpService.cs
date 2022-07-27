@@ -514,13 +514,18 @@ namespace IDensity.Services.ComminicationServices
         {
             _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,2#"));
-            var list = GetNumber("adc_proc_cntr", 3, MainModel.CountCounters, str);
+            var list = GetNumber("adc_proc_cntr", 8, MainModel.CountCounters, str);
             if (list == null) return;
             for (int i = 0; i < MainModel.CountCounters; i++)
             {
                 _model.CountDiapasones[i].Num.Value = (ushort)list[i][0];
-                _model.CountDiapasones[i].Start.Value = (ushort)list[i][1];
-                _model.CountDiapasones[i].Finish.Value = (ushort)list[i][2];
+                _model.CountDiapasones[i].CounterMode.Value = (ushort)list[i][1];
+                _model.CountDiapasones[i].Start.Value = (ushort)list[i][2];
+                _model.CountDiapasones[i].Width.Value = (ushort)list[i][3];
+                _model.CountDiapasones[i].CountPeakFind.Value = list[i][4];
+                _model.CountDiapasones[i].CountPeakSmooth.Value = list[i][5];
+                _model.CountDiapasones[i].CountTopPerc.Value = (ushort)list[i][6];
+                _model.CountDiapasones[i].CountBotPerc.Value = (ushort)list[i][7];
             }
             list = GetNumber("adc_proc_mode", 1, 1, str);
             if (list == null) return;
@@ -824,7 +829,10 @@ namespace IDensity.Services.ComminicationServices
         #region Команда "Записать настройки счечиков"
         public void WriteCounterSettings(CountDiapasone diapasone)
         {
-            var str = $"*SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.Start.Value},{diapasone.Finish.Value}";
+            var str = $"*SETT,adc_proc_cntr={diapasone.Num.Value},{diapasone.CounterMode.Value},{diapasone.Start.Value}," +
+                $"{diapasone.Width.Value},{diapasone.CountPeakFind.Value.ToStringPoint()}," +
+                $"{diapasone.CountPeakSmooth.Value.ToStringPoint()}," +
+                $"{diapasone.CountTopPerc.Value},{diapasone.CountBotPerc.Value}";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings2(); }, Encoding.ASCII.GetBytes(str + "#")));
         }
         #endregion        

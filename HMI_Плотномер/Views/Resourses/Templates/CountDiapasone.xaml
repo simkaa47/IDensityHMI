@@ -1,8 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls" 
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
                     xmlns:add="clr-namespace:IDensity.AddClasses"
+                    
                     xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
     <ControlTemplate TargetType="UserControl" x:Key="CountersTemplate">
         <StackPanel>
@@ -21,6 +23,20 @@
                 </DataGrid.ItemsPanel>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" IsReadOnly="True" Binding="{Binding Num.Value}"/>
+                    <DataGridTemplateColumn Header="Режим">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{StaticResource CountModes}"
+                                          SelectedIndex="{Binding CounterMode.Value}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="DropDownClosed">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Старт">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -29,10 +45,43 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Финиш">
+                    <DataGridTemplateColumn Header="Ширина">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <uc:MenuItemParameterText DataContext="{Binding Finish}" Command="{Binding Command}"/>
+                                <uc:MenuItemParameterText DataContext="{Binding Width}" 
+                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="К-т сглаживания по спектру">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <uc:MenuItemParameterText DataContext="{Binding CountPeakFind}" 
+                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="К-т сглаживания по времени">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <uc:MenuItemParameterText DataContext="{Binding CountPeakSmooth}" 
+                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Отклонение вниз, %">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <uc:MenuItemParameterText DataContext="{Binding CountBotPerc}" 
+                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Отклонение вверх, %">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <uc:MenuItemParameterText DataContext="{Binding CountTopPerc}" 
+                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

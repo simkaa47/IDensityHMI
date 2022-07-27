@@ -155,6 +155,7 @@ namespace IDensity.Services.AdcServices
             SuccessDeviation = 100;
             CommontCount = 0;
             NoisePulses = 0;
+            OverValuePulses = 0;
         }
 
 

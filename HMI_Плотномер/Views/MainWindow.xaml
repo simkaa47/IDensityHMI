@@ -675,7 +675,7 @@
                                                         <StackPanel Orientation="Horizontal" DataContext="{Binding AmTestValue}">
                                                             <TextBox  Width="50" HorizontalAlignment="Left">
                                                                 <TextBox.Text>
-                                                                    <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged">
+                                                                    <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                                                         <Binding.ValidationRules>
                                                                             <DataErrorValidationRule />
                                                                         </Binding.ValidationRules>

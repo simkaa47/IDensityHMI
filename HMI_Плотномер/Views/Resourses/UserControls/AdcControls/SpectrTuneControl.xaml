@@ -156,6 +156,7 @@
                 <TextBlock Text="% корректных импульсов: "/>
                 <TextBlock Text="{Binding CheckPulseService.SuccessDeviation, StringFormat=f3}" HorizontalAlignment="Right"/>
             </DockPanel>
+            <Button Content="Clear" Command="{Binding ClearPulseStaticticCommand}"/>
         </ListBox>
 
         <ScrollViewer Grid.Row="1" Grid.Column="1">

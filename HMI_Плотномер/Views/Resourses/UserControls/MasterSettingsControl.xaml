@@ -11,6 +11,7 @@
     <Grid>
         <ListBox HorizontalContentAlignment="Stretch">            
             <Button Content="Старт мастера настроек соединения с плотномером" Command="{Binding StartMasterConnectCommand}"/>
+            <Button Content="Старт мастера проверки прибора" Command="{Binding StartCheckMasterCommand}"/>
         </ListBox> 
     </Grid>
 </UserControl>

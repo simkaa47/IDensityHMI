@@ -218,7 +218,7 @@ namespace IDensity.ViewModels
                 {
                     var diap = SelectedCountDiapasone.Clone() as CountDiapasone;
                     diap.Start.Value = (ushort)minLimit;
-                    diap.Finish.Value = (ushort)maxLimit;
+                    diap.Width.Value = (ushort)(maxLimit - minLimit);
                     VM.CommService.WriteCounterSettings(diap);
                 }
             }
@@ -242,12 +242,28 @@ namespace IDensity.ViewModels
                 if (SelectedCountDiapasone == null) return;
                 if (SelectedCountDiapasone.Clone() is CountDiapasone diapasone)
                 {
+                    diapasone.CounterMode.Value = SelectedCountDiapasone.CounterMode.WriteValue;
                     diapasone.Start.Value = SelectedCountDiapasone.Start.WriteValue;
-                    diapasone.Finish.Value = SelectedCountDiapasone.Finish.WriteValue;
+                    diapasone.Width.Value = SelectedCountDiapasone.Width.WriteValue;
+                    diapasone.CountPeakFind.Value = SelectedCountDiapasone.CountPeakFind.WriteValue;
+                    diapasone.CountPeakSmooth.Value = SelectedCountDiapasone.CountPeakSmooth.WriteValue;
+                    diapasone.CountTopPerc.Value = SelectedCountDiapasone.CountTopPerc.WriteValue;
+                    diapasone.CountBotPerc.Value = SelectedCountDiapasone.CountBotPerc.WriteValue;
                     VM.CommService.WriteCounterSettings(diapasone);
                 }
                
             }, canExecPar => true));
+        #endregion
+
+        #region Очистить статистику импульсов в режиме осцилографа
+        /// <summary>
+        /// Очистить статистику импульсов в режиме осцилографа
+        /// </summary>
+        RelayCommand _clearPulseStaticticCommand;
+        /// <summary>
+        /// Очистить статистику импульсов в режиме осцилографа
+        /// </summary>
+        public RelayCommand ClearPulseStaticticCommand => _clearPulseStaticticCommand ?? (_clearPulseStaticticCommand = new RelayCommand(execPar => CheckPulseService.Clear(), canExecPar => true));
         #endregion
 
         #endregion

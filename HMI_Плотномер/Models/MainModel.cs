@@ -30,7 +30,7 @@ namespace IDensity.Models
         /// <summary>
         /// Количество счетчиков
         /// </summary>
-        public static readonly int CountCounters = 8;
+        public static readonly int CountCounters = 2;
         #endregion
 
         #region Количество измерительных процессов

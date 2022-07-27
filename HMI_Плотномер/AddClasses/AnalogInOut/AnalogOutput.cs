@@ -84,7 +84,7 @@ namespace IDensity.AddClasses
         #endregion
         #endregion
 
-        AnalogOutput Clone()
+        public AnalogOutput Clone()
         {
             var output = new AnalogOutput(GroupNum);
             output.Activity.Value = this.Activity.ValidationOk ? this.Activity.WriteValue : this.Activity.Value;

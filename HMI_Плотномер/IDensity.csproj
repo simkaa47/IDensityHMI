@@ -32,6 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\CheckMaster\CancelByCommPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CheckMaster\CancelByUserPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Resourses\UserControls\MenuItemCompoboxParameter.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -50,6 +56,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\CheckMaster\CancelByCommPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CheckMaster\CancelByUserPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Resourses\UserControls\MenuItemCompoboxParameter.xaml">
       <SubType>Designer</SubType>
     </Page>
