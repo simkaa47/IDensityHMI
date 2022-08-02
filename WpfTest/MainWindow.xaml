@@ -169,6 +169,10 @@
 
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.Resources>
             
             <Style TargetType="MenuItem">
@@ -181,7 +185,7 @@
             </Style>
             
         </Grid.Resources>
-        <StackPanel>
+        <!--<StackPanel>
             <Menu>
                 <Menu.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -215,8 +219,25 @@
                     </MenuItem>
                 </MenuItem>
             </Menu>
-        </StackPanel>
-        
-        
+        </StackPanel>-->
+        <FlowDocumentScrollViewer  Name="Viewer" >
+            <!--<FlowDocumentScrollViewer.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                    <Setter Property="FontSize" Value="16"/>
+                </Style>
+            </FlowDocumentScrollViewer.Resources>-->
+            <FlowDocument>
+                <Paragraph TextAlignment="Center">TIOBE Rate</Paragraph>
+                <BlockUIContainer FontSize="13">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Height="40" Padding="10">Click the Button to see TIOBE Rate</TextBlock>
+                        <Button Width="60">Click Me</Button>
+                    </StackPanel>
+                </BlockUIContainer>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <Button Grid.Row="1" Content="Print" Click="Print_Click"/>
+
     </Grid>
 </Window>

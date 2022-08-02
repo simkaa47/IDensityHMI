@@ -28,7 +28,7 @@ namespace IDensity.Services.ComminicationServices
 
 
         #region UDP клиент
-        UdpClient client;
+        public UdpClient Client { get; private set; }
         int localPort = 49051;
         #endregion
 
@@ -56,8 +56,8 @@ namespace IDensity.Services.ComminicationServices
 
         public async void Start()
         {
-            if (client != null) return;
-            client = new UdpClient(localPort);
+            if (Client != null) return;
+            Client = new UdpClient(localPort);
             IPEndPoint remoteIp = null;
             await Task.Run(() =>
             {
@@ -65,7 +65,7 @@ namespace IDensity.Services.ComminicationServices
                 {
                     while (true)
                     {
-                        byte[] data = client.Receive(ref remoteIp);
+                        byte[] data = Client.Receive(ref remoteIp);
                         ParseData(data);
 
                     }
@@ -76,7 +76,7 @@ namespace IDensity.Services.ComminicationServices
                 }
                 finally
                 {
-                    client?.Close();
+                    Client?.Close();
                 }
             });
 
@@ -84,7 +84,7 @@ namespace IDensity.Services.ComminicationServices
 
         public void Stop()
         {
-            client?.Close();
+            Client?.Close();
         }
 
         int nextPacketNum = 1;

@@ -72,7 +72,9 @@ namespace IDensity.ViewModels.MasrerSettings
         }
         #endregion
 
-
+        #region Сервисы
+        
+        #endregion
 
 
 
@@ -131,8 +133,11 @@ namespace IDensity.ViewModels.MasrerSettings
             try
             {
                 MainStatus = "Проверка работы аналоговых выходов...";
-                for (int i = 0; i < 2; i++)
-                    await CheckAnalog(i);
+                await StartService(new AnalogCheckService(_cancellationTokenSource, VM));
+                MainStatus = "Проверка корректности импульсов от ФЭУ...";
+                await StartService(new PulseCheckService(_cancellationTokenSource, VM));
+                MainStatus = "Проверка корректности работы модуля RTC...";
+                await StartService(new RtcCheckService(_cancellationTokenSource, VM));
                 Stage = CheckMasterStates.Success;
             }
             catch (Exception ex)
@@ -145,80 +150,24 @@ namespace IDensity.ViewModels.MasrerSettings
             }
         }
 
-        async Task CheckAnalog(int number)
+        async Task StartService(ICheckService service)
         {
-            //List<SetCurrentResult> setCurrentResults = new List<SetCurrentResult>();
-            await SwitchAnalog(number);
-            //setCurrentResults.Add(await SetCurrent(4, number));
-            //setCurrentResults.Add(await SetCurrent(12, number));
-            //setCurrentResults.Add(await SetCurrent(20, number));
-            ///Print(setCurrentResults, number);
-
+            if (service is null) return;
+            service.ProcessEvent += s => SubStatus = s;
+            var results = await service.Check();
+            Results.AddRange(results);
         }
 
-        async Task SwitchAnalog(int outNum)
+        void Print()
         {
-            bool needSetSettings = false;
-            do
-            {
-                if (!(_model.AnalogGroups[outNum].AO.Clone() is AnalogOutput analog)) return;
-                analog.DacType.Value = 0;
-                needSetSettings = false;
-                if (!_model.AnalogGroups[outNum].AO.CommState.Value)
-                    needSetSettings = await CheckAnalogAndExecute(() =>
-                    {
-                        _commService.SwitchAm(outNum, 0, true);
-                        _commService.SwitchAm(outNum, 1, true);
-                    });
-
-                if (_model.AnalogGroups[outNum].AO.DacType.Value != 0)
-                    needSetSettings = await CheckAnalogAndExecute(() => _commService.ChangeDacAct(outNum, 0, analog));
-
-            } while (needSetSettings && !_cancellationTokenSource.IsCancellationRequested);
+            //States.Add($"Проверка аналогового модуля {moduleNum}:");
+            //foreach (var result in results)
+            //{
+            //    States.Add($"Уровень тока {result.SetLevel} mA:");
+            //    States.Add($"Измеренное значение {result.CurrentLevel.ToString("f3")}");
+            //    States.Add($"Отклонение {((Math.Abs(result.CurrentLevel-result.SetLevel))/result.SetLevel*100).ToString("f3")}%");                
+            //}
         }
-
-        async Task<bool> CheckAnalogAndExecute(Action action)
-        {
-            if (_cancellationTokenSource.IsCancellationRequested) return false;
-            action?.Invoke();
-            await Task.Delay(1000, _cancellationTokenSource.Token);
-            return true;
-        }
-
-        //async Task<SetCurrentResult> SetCurrent(int setValue, int moduleNum)
-        //{
-        //    SubStatus = ($"Аналоговый выход {moduleNum} : Выставляем ток {setValue} mA");
-        //    var result = new SetCurrentResult();
-        //    _model.AnalogGroups[moduleNum].AO.AmTestValue.Value = (ushort)(setValue * 1000);
-        //    _commService.SetTestValueAm(moduleNum, 0, (ushort)(setValue*1000));
-        //    await Task.Delay(5000, _cancellationTokenSource.Token);
-        //    result.SetLevel = setValue;
-        //    result.CurrentLevel = (float)_model.AnalogGroups[moduleNum].AO.AdcValue.Value / 69;
-        //    if (_model.AnalogGroups[moduleNum].AO.VoltageTest.Value < 200)
-        //    {
-        //        SubStatus = ($"Аналоговый выход {moduleNum} : Обрыв цепи аналогового выхода");
-        //    }
-        //    else
-        //    {
-        //        SubStatus = ($"Аналоговый выход {moduleNum} :   " +
-        //            $"Результат замера {result.CurrentLevel} mA при ожидаемых {result.SetLevel} mA " +
-        //            $"(Отклонение {((Math.Abs(result.CurrentLevel - result.SetLevel)) / result.SetLevel * 100).ToString("f3")}%)");
-        //    }
-
-        //    return result;
-        //}
-
-
-        //void Print(List<SetCurrentResult> results, int moduleNum)
-        //{
-        //    //States.Add($"Проверка аналогового модуля {moduleNum}:");
-        //    //foreach (var result in results)
-        //    //{
-        //    //    States.Add($"Уровень тока {result.SetLevel} mA:");
-        //    //    States.Add($"Измеренное значение {result.CurrentLevel.ToString("f3")}");
-        //    //    States.Add($"Отклонение {((Math.Abs(result.CurrentLevel-result.SetLevel))/result.SetLevel*100).ToString("f3")}%");                
-        //    //}
-        //}
 
         void Describe()
         {

@@ -27,7 +27,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{StaticResource CountModes}"
-                                          SelectedIndex="{Binding CounterMode.Value}">
+                                          SelectedIndex="{Binding CounterMode.WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="DropDownClosed">
                                             <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.WriteCountDiapasoneCommand}"/>

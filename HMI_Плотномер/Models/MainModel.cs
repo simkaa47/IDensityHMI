@@ -335,10 +335,25 @@ namespace IDensity.Models
 
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
-        #endregion 
-        
         #endregion
-        
+
+        #endregion
+
+        #region Физические параметры платы
+        /// <summary>
+        /// Физические параметры платы
+        /// </summary>
+        private ushort _physParamsState;
+        /// <summary>
+        /// Физические параметры платы
+        /// </summary>
+        public ushort PhysParamsState
+        {
+            get => _physParamsState;
+            set => Set(ref _physParamsState, value);
+        }
+        #endregion
+
         public TcpConnectData TcpConnectData { get; private set; }
 
         #region Инициализация

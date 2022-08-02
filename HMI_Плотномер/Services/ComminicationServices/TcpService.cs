@@ -35,7 +35,7 @@ namespace IDensity.Services.ComminicationServices
         int errCommCount = 0;
 
         #region Клиент
-        TcpClient client;
+        public TcpClient Client { get; private set; }
         #endregion
 
         #region Буффер входящих данных
@@ -46,7 +46,7 @@ namespace IDensity.Services.ComminicationServices
         #endregion
 
         #region Stream
-        NetworkStream stream;
+        public NetworkStream Stream { get; private set; }
         #endregion
 
         Queue<TcpWriteCommand> commands = new Queue<TcpWriteCommand>();
@@ -58,14 +58,14 @@ namespace IDensity.Services.ComminicationServices
             commands?.Clear();
             var ip = _model.TcpConnectData.IP;
             var port = _model.TcpConnectData.PortNum;
-            client = new TcpClient();
-            client.ReceiveTimeout = 2000;
-            client.SendTimeout = 2000;
+            Client = new TcpClient();
+            Client.ReceiveTimeout = 2000;
+            Client.SendTimeout = 2000;
             TcpEvent?.Invoke($"Выполняется подключение к {ip}:{port}");
-            client.Connect(ip, port);
+            Client.Connect(ip, port);
 
             TcpEvent?.Invoke($"Произведено подключение к {ip}:{port}");
-            stream = client.GetStream();
+            Stream = Client.GetStream();
 
         }
         #endregion
@@ -75,11 +75,11 @@ namespace IDensity.Services.ComminicationServices
         {
             var ip = _model.TcpConnectData.IP;
             var port = _model.TcpConnectData.PortNum;
-            if (client != null)
+            if (Client != null)
             {
                 TcpEvent?.Invoke($"{ip}:{port}: соединение завершено пользователем");
-                client.Close();
-                client.Dispose();
+                Client.Close();
+                Client.Dispose();
             }
         }
         #endregion
@@ -94,7 +94,7 @@ namespace IDensity.Services.ComminicationServices
         {
             try
             {                
-                if (client == null || !client.Connected)
+                if (Client == null || !Client.Connected)
                 {
                     Connect();
                     return;
@@ -116,7 +116,7 @@ namespace IDensity.Services.ComminicationServices
                 GetSetiings();
 
                 errCommCount = 0;
-                _model.Connecting.Value = client.Connected;
+                _model.Connecting.Value = Client.Connected;
                 //if(CycicRequest)CloseConnection();
             }
             catch (Exception ex)
@@ -140,7 +140,7 @@ namespace IDensity.Services.ComminicationServices
         void SendTlg(byte[] buffer)
         {
             StreamClear();
-            stream?.Write(buffer, 0, buffer.Length);
+            Stream?.Write(buffer, 0, buffer.Length);
             Thread.Sleep(_model.TcpConnectData.Pause);
         }
         #endregion
@@ -154,16 +154,16 @@ namespace IDensity.Services.ComminicationServices
         string AskResponse(byte[] buffer)
         {
             StreamClear();
-            stream.Write(buffer, 0, buffer.Length);
+            Stream.Write(buffer, 0, buffer.Length);
             int num = 0;
             int offset = 0;
             do
             {
-                num = stream.Read(inBuf, offset, inBuf.Length - offset);
+                num = Stream.Read(inBuf, offset, inBuf.Length - offset);
                 Thread.Sleep(_model.TcpConnectData.Pause);
                 offset += num;
 
-            } while (stream.DataAvailable && inBuf.Length - offset > 0);
+            } while (Stream.DataAvailable && inBuf.Length - offset > 0);
             _model.Connecting.Value = true;
 
             return Encoding.ASCII.GetString(inBuf, 0, offset);// Получаем строку из байт;            
@@ -256,6 +256,7 @@ namespace IDensity.Services.ComminicationServices
             _model.CommStates.Value = strNums[0];
             _model.AnalogStateGroups[0].Value = strNums[2];
             _model.AnalogStateGroups[1].Value = strNums[3];
+            _model.PhysParamsState = strNums[1];
             _model.GetDeviceData();
         }
         #endregion
@@ -274,6 +275,10 @@ namespace IDensity.Services.ComminicationServices
                 GetSdLogStatus();
             }
         }
+
+       
+
+
         #region Настройки измерительных процессов
         /// <summary>
         /// Метод получения всех данных изменительных настроек
@@ -1014,10 +1019,10 @@ namespace IDensity.Services.ComminicationServices
         {
             commands.Enqueue(new TcpWriteCommand((buf) =>
             {
-                client.ReceiveTimeout = 10000;
+                Client.ReceiveTimeout = 10000;
                 var str = AskResponse(Encoding.ASCII.GetBytes(cmnd));
                 action?.Invoke(str);
-                client.ReceiveTimeout = 2000;
+                Client.ReceiveTimeout = 2000;
 
             }, null));
         }
@@ -1030,11 +1035,11 @@ namespace IDensity.Services.ComminicationServices
                 int offset = 0;
                 do
                 {
-                    num = stream.Read(inBuf, offset, inBuf.Length);
+                    num = Stream.Read(inBuf, offset, inBuf.Length);
                     Thread.Sleep(_model.TcpConnectData.Pause);
                     offset += num;
 
-                } while (stream.DataAvailable);
+                } while (Stream.DataAvailable);
                 action?.Invoke(Encoding.ASCII.GetString(inBuf, 0, num));
 
             }, null));
@@ -1043,9 +1048,9 @@ namespace IDensity.Services.ComminicationServices
         #region Очистка буфера
         void StreamClear()
         {
-            while (stream.DataAvailable)
+            while (Stream.DataAvailable)
             {
-                stream.Read(inBuf, 0, 1);
+                Stream.Read(inBuf, 0, 1);
             }
         }
         #endregion

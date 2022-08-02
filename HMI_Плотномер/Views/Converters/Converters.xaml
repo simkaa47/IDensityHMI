@@ -15,4 +15,5 @@
     <conv:NotEqualityToVisibilityConverter x:Key="VisibleIfNotEqual"/>
     <conv:StringByIndexConverter x:Key="StringByIndex"/>
     <conv:GetNameFromEnumCustom x:Key="EnumCustomConverter"/>
+    <conv:GetBitFromNum x:Key="GetBitConverter"/>
 </ResourceDictionary>
