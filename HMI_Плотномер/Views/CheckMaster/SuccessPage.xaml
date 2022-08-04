@@ -22,13 +22,16 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <TextBlock>Проверка завершена. Нажмите кнопку 'Далее', чтобы выйти из мастера</TextBlock>
         <FlowDocumentScrollViewer IsToolBarVisible="True" Grid.Row="1">            
             <FlowDocument Name="Document">
+                <Paragraph>
+                    <TextBlock Text="{Binding LastCheckDate, StringFormat=Результаты проверки прибора {0:F}, ConverterCulture=ru-RU}"/>
+                </Paragraph>
                 <BlockUIContainer>
                     <ListBox ItemsSource="{Binding Results}">
                         <ListBox.ItemTemplate>
@@ -44,8 +47,8 @@
             </FlowDocument>
         </FlowDocumentScrollViewer>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Height="80" Width="80"  Click="Print_Click" Margin="5">
-                <fa:ImageAwesome Height="40" Width="40" Icon="Print"/>
+            <Button Content="Печать" Width="80"  Click="Print_Click" Margin="5">
+                
             </Button>
         </StackPanel>
     </Grid>

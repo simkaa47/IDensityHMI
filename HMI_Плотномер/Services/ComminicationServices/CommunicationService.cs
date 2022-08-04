@@ -2,6 +2,8 @@
 using IDensity.Models;
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IDensity.Services.ComminicationServices
@@ -271,7 +273,25 @@ namespace IDensity.Services.ComminicationServices
         {
             Tcp.SetMeasUnitsSettings(settings);            
         }
+        #endregion
 
+        #region Запрос контрольной суммы ПО плотномера
+        public void GetCheckSum()
+        {
+            Tcp.GetResponce("*CMND,CHS#", (s) =>
+            {
+                if (string.IsNullOrEmpty(s)) return;
+                uint temp = 0;
+                var strNum = s.Replace("0x","")
+                .Split(new char[] { ',', '#','x' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(s => uint.TryParse(s, NumberStyles.HexNumber, null, out temp))
+                .Select(s => temp)
+                .FirstOrDefault();
+                _mainModel.CurCheckSum = strNum;
+
+            }
+            );
+        }
         #endregion
 
     }

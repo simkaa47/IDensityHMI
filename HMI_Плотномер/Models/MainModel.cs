@@ -337,6 +337,23 @@ namespace IDensity.Models
         public bool SettingsReaded { get; set; }
         #endregion
 
+        public CheckSum CheckSum { get; set; }
+
+        #region Текущая контрольная сумма ПО
+        /// <summary>
+        /// Текущая контрольная сумма ПО
+        /// </summary>
+        private uint _curCheckSum;
+        /// <summary>
+        /// Текущая контрольная сумма ПО
+        /// </summary>
+        public uint CurCheckSum
+        {
+            get => _curCheckSum;
+            set => Set(ref _curCheckSum, value);
+        }
+        #endregion
+
         #endregion
 
         #region Физические параметры платы
@@ -359,7 +376,8 @@ namespace IDensity.Models
         #region Инициализация
         void Init()
         {
-            TcpConnectData = XmlInit.ClassInit<TcpConnectData>();       
+            TcpConnectData = XmlInit.ClassInit<TcpConnectData>(); 
+            CheckSum = XmlInit.ClassInit<CheckSum>();
             Connecting.PropertyChanged += (obj, args) => SettingsReaded = false;           
         }        
 

@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,6 +29,24 @@ namespace IDensity.ViewModels
                 VM.CommService.WriteCommonSettings($"isotope={VM.mainModel.IsotopName.WriteValue.Substring(0, Math.Min(VM.mainModel.IsotopName.WriteValue.Length, 10))}");
             VM.mainModel.SourceInstallDate.CommandEcecutedEvent += (o) => 
                 VM.CommService.WriteCommonSettings($"src_inst_date={VM.mainModel.SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
-            VM.mainModel.SourceExpirationDate.CommandEcecutedEvent += (o) => VM.CommService.WriteCommonSettings($"src_exp_date={VM.mainModel.SourceExpirationDate.WriteValue.ToString("dd:MM:yy")}");}
+            VM.mainModel.SourceExpirationDate.CommandEcecutedEvent += (o) => VM.CommService.WriteCommonSettings($"src_exp_date={VM.mainModel.SourceExpirationDate.WriteValue.ToString("dd:MM:yy")}");
         }
-    }
+
+        #region Запрос контрольной суммы ПО основного микроконтроллера
+        /// <summary>
+        /// Запрос контрольной суммы ПО основного микроконтроллера
+        /// </summary>
+        RelayCommand _getCheckSumCommand;
+        /// <summary>
+        /// Запрос контрольной суммы ПО основного микроконтроллера
+        /// </summary>
+        public RelayCommand GetCheckSumCommand => _getCheckSumCommand ?? (_getCheckSumCommand = new RelayCommand(execPar => 
+        {
+            VM.CommService.GetCheckSum();
+
+        }, canExecPar => true));
+        #endregion        
+
+    }   
+
+}

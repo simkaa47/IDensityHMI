@@ -62,6 +62,7 @@ namespace IDensity.Services.XML
             switch (type.Name.ToLower())
             {
                 case "boolean": return par.ToLower() == "true";
+                case "uint32": return uint.Parse(par);
                 case "int32": return int.Parse(par);
                 case "byte": return byte.Parse(par);
                 case "single":
@@ -116,7 +117,7 @@ namespace IDensity.Services.XML
                 {
                     foreach (var prop in props)
                     {
-                        if (prop.Name != changedProperty) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
+                        if (prop.Name == changedProperty) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
                     }
                 }
                 xDoc.Save(Path);

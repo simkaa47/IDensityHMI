@@ -118,7 +118,8 @@
             <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка Измерение -->
-            <TabItem Header="ИЗМЕРЕНИЕ">
+            <TabItem Header="ИЗМЕРЕНИЕ" Name="MainTab" IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
+                
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
@@ -487,7 +488,7 @@
             </TabItem>
             <!--#endregion-->
             <!--#region НАСТРОЙКИ -->
-            <TabItem Header="НАСТРОЙКИ">
+            <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 <TabItem.Resources>
                     <!--#region Общий стиль для DaraGrid -->
                     <Style TargetType="DataGrid">
@@ -571,6 +572,17 @@
                             <uc:Parameter DataContext="{Binding mainModel.DeviceType}" Command="{Binding Command}"/>
                             <uc:Parameter DataContext="{Binding mainModel.FwVersion}" Command="{Binding Command}"/>
                             <uc:Parameter DataContext="{Binding mainModel.CustNumber}" Command="{Binding Command}"/>
+                            <ListBoxItem  Content="{Binding mainModel.CheckSum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}"
+                                          Template="{StaticResource TextBoxParameter}" 
+                                          Tag="Контрольная сумма ПО плотномера"/>
+                            <DockPanel Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                                <TextBlock Text="Запрос контрольной суммы ПО плотномера"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding mainModel.CurCheckSum}" Width="100"/>
+                                    <Button Content="-->" Command="{Binding CommonSettingsVm.GetCheckSumCommand}"/>
+                                </StackPanel>
+                            </DockPanel>
                         </ListBox>
                     </TabItem>
                     <!--#endregion-->
@@ -833,7 +845,7 @@
                         <uc:MeasUnitControl/>
                     </TabItem>
                     <!--#endregion-->
-                    <!--#region Настройки платы HV -->в 
+                    <!--#region Настройки платы HV --> 
                     <TabItem Header="ПЛАТА HV" >
                         <ListBox HorizontalContentAlignment="Stretch" >
                             <!--#region Уставка напряжения -->
@@ -1250,7 +1262,7 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Управление -->
-            <TabItem Header="УПРАВЛЕНИЕ">
+            <TabItem Header="УПРАВЛЕНИЕ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 <adc:SpectrTuneControl DataContext="{Binding AdcViewModel}"/>
             </TabItem>
             <!--#endregion-->

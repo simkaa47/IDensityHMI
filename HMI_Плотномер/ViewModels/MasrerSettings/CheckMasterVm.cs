@@ -73,11 +73,23 @@ namespace IDensity.ViewModels.MasrerSettings
         #endregion
 
         #region Сервисы
-        
+
         #endregion
 
-
-
+        #region Дата последней проверки прибора
+        /// <summary>
+        /// Дата последней проверки прибора
+        /// </summary>
+        private DateTime _lastCheckDate;
+        /// <summary>
+        /// Дата последней проверки прибора
+        /// </summary>
+        public DateTime LastCheckDate
+        {
+            get => _lastCheckDate;
+            set => Set(ref _lastCheckDate, value);
+        }
+        #endregion
 
         public VM VM { get; }
 
@@ -138,6 +150,9 @@ namespace IDensity.ViewModels.MasrerSettings
                 await StartService(new PulseCheckService(_cancellationTokenSource, VM));
                 MainStatus = "Проверка корректности работы модуля RTC...";
                 await StartService(new RtcCheckService(_cancellationTokenSource, VM));
+                MainStatus = "Проверка контрольной суммы ПО прибора...";
+                await StartService(new CheckCheckSumService(_cancellationTokenSource, VM));
+                LastCheckDate = DateTime.Now;
                 Stage = CheckMasterStates.Success;
             }
             catch (Exception ex)
