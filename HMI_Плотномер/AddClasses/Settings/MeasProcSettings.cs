@@ -1,16 +1,15 @@
 ﻿using IDensity.Models;
+using IDensity.Services.Calibration;
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Timers;
-using System.Windows;
 
 namespace IDensity.AddClasses.Settings
 {
-    public class MeasProcSettings:PropertyChangedBase
+    public class MeasProcSettings : PropertyChangedBase
     {
         public MeasProcSettings(int num)
         {
@@ -27,7 +26,7 @@ namespace IDensity.AddClasses.Settings
             // Подписка на события настроек данных еденичных измерений
             foreach (var src in SingleMeasResults)
             {
-                src.NeedWriteEvent += (arg, i) => 
+                src.NeedWriteEvent += (arg, i) =>
                 {
                     var str = "calib_src=";
                     for (int j = 0; j < SingleMeasResCount; j++)
@@ -42,10 +41,10 @@ namespace IDensity.AddClasses.Settings
             // Подписка на собтия записи данных калибровочгных кривых
             CalibrCurve.NeedWriteEvent += OnWriteCommandExecuted;
             //Действие по изменению продолжительности и глубины измерения
-            MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue*10}");
+            MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue * 10}");
             MeasDeep.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"aver_depth={MeasDeep.WriteValue}");
             // Действия по изменению настроек плотности
-            DensityLiq.NeedWriteEvent+=(s)=> OnWriteCommandExecuted($"dens_liq={s}");
+            DensityLiq.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
             DensitySol.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
             // Действия по изменению настроек компенсаций
             TempCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_temp={s}");
@@ -53,18 +52,18 @@ namespace IDensity.AddClasses.Settings
             // Подписка на изменение типа измерения
             MeasType.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"type={MeasType.WriteValue}");
             // Подписка на изменение настроек быстрых измерений
-            FastChange.NeedWriteEvent+= OnWriteCommandExecuted;
+            FastChange.NeedWriteEvent += OnWriteCommandExecuted;
             //Подписка на измерение диаметра трубы
-            PipeDiameter.CommandEcecutedEvent+=(o)=>OnWriteCommandExecuted($"pipe_diam={(ushort)(PipeDiameter.WriteValue*10)}");
+            PipeDiameter.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"pipe_diam={(ushort)(PipeDiameter.WriteValue * 10)}");
             // Настройка таймера
             singleMeasTimer.Elapsed += (o, e) =>
-            {                
+            {
                 if (--SingleMeasTimeLeft <= 0)
                 {
                     singleMeasTimer?.Stop();
                     SingleMeasFlag = false;
                     SingleMeasEventFinishedEvent?.Invoke(Num);
-                } 
+                }
             };
         }
         #region Константы
@@ -78,7 +77,7 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Количество измеренных точек для построения калибровочеого полинома
         /// </summary>
-        public const int SingleMeasResCount = 10; 
+        public const int SingleMeasResCount = 10;
         #endregion
         #endregion
         #region Номер текущего измерительного процесса
@@ -213,8 +212,8 @@ namespace IDensity.AddClasses.Settings
             get { return _singleMeasDeg; }
             set
             {
-                Calibration.PolDegree = value;
-                Set(ref _singleMeasDeg, Calibration.PolDegree);
+                CalibrationService.PolDegree = value;
+                Set(ref _singleMeasDeg, CalibrationService.PolDegree);
             }
         }
         #endregion
@@ -247,15 +246,15 @@ namespace IDensity.AddClasses.Settings
         {
             get
             {
-                return _singleMeasCommand ?? (_singleMeasCommand = new RelayCommand(par => 
+                return _singleMeasCommand ?? (_singleMeasCommand = new RelayCommand(par =>
                 {
                     if (!SingleMeasFlag)
                     {
-                        NeedMakeSingleMeasEvent?.Invoke(SingleMeasTime.Value, Num, SingleMeasIndex);                        
-                        singleMeasTimer.Interval = 1000;                       
+                        NeedMakeSingleMeasEvent?.Invoke(SingleMeasTime.Value, Num, SingleMeasIndex);
+                        singleMeasTimer.Interval = 1000;
                         singleMeasTimer.Start();
                         SingleMeasFlag = true;
-                        SingleMeasTimeLeft = SingleMeasTime.Value/10 + 4; 
+                        SingleMeasTimeLeft = SingleMeasTime.Value / 10 + 4;
                     }
 
                 }, can => IsActive.Value));
@@ -280,19 +279,26 @@ namespace IDensity.AddClasses.Settings
 
         #region Расчет к-тов полинома
         RelayCommand _calculatePolinomCommand;
-        public RelayCommand CalculatePolinomCommand => _calculatePolinomCommand ?? (_calculatePolinomCommand = new RelayCommand(par => 
+        public RelayCommand CalculatePolinomCommand => _calculatePolinomCommand ?? (_calculatePolinomCommand = new RelayCommand(par =>
         {
-            var measPoints = SingleMeasResults.Where(smr => smr.Selected)
-                .Select(smr => new Point(smr.Weak.Value, smr.CounterValue.Value))
-                .ToList();
-            if (measPoints.Count > 0)
+            try
             {
-                CalculatedCoeefs.Clear();
-                var result = Calibration.GetCoeffs(measPoints);
-                for (int i = 0; i < result.Count; i++)
+                var measPoints = SingleMeasResults.Where(smr => smr.Selected)
+                                 .Select(smr => new Point(smr.Weak.Value, smr.CounterValue.Value))
+                                 .ToList();
+                if (measPoints.Count > 0)
                 {
-                    CalculatedCoeefs.Add((new CalibrationCoeff(i,result[i])));
+                    CalculatedCoeefs.Clear();
+                    var result = CalibrationService.GetCoeffs(measPoints);
+                    for (int i = 0; i < result.Count; i++)
+                    {
+                        CalculatedCoeefs.Add((new CalibrationCoeff(i, result[i])));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
             }
 
         }, o => true));
@@ -307,7 +313,7 @@ namespace IDensity.AddClasses.Settings
         {
             var measList = SingleMeasResults.Where(sm => sm.Selected).
             OrderBy(sm => sm.Weak.Value).Select(sm => new Point(sm.Weak.Value, sm.CounterValue.Value)).ToList();
-            if (measList.Count>=2)
+            if (measList.Count >= 2)
             {
                 var startWeak = measList[0].X;
                 var finishWeak = measList[measList.Count - 1].X;
@@ -319,7 +325,7 @@ namespace IDensity.AddClasses.Settings
                     Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
                     MeasuredPointsCollection = measList;
                     CalculatedMeasCollection = calcList;
-                } 
+                }
             }
         }, canExecPar => true));
 
@@ -359,7 +365,7 @@ namespace IDensity.AddClasses.Settings
         #region КОманда записать рассчитанные к-ты в память
         private RelayCommand _writeCalibrCoeefsCommand;
 
-        public RelayCommand WriteCalibrCoeefsCommand => _writeCalibrCoeefsCommand ?? (_writeCalibrCoeefsCommand = new RelayCommand(par => 
+        public RelayCommand WriteCalibrCoeefsCommand => _writeCalibrCoeefsCommand ?? (_writeCalibrCoeefsCommand = new RelayCommand(par =>
         {
             var arg = $"calib_curve={CalibrCurve.Type.Value},{CalibrCurve.MeasUnit.Id.Value}";
             for (int i = 0; i < 6; i++)
@@ -381,11 +387,11 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Команда - скопировать настройки на другой измерительный процесс
         /// </summary>
-        public RelayCommand CopyAllCommand => _copyAllCommand ?? (_copyAllCommand = new RelayCommand(execPar => 
+        public RelayCommand CopyAllCommand => _copyAllCommand ?? (_copyAllCommand = new RelayCommand(execPar =>
         {
             int par = (int)execPar;
             var arg = CopyAll(par);
-            if(par!=Num) NeedWriteEvent?.Invoke($"*SETT,meas_proc={par},{arg}#", (ushort)par);
+            if (par != Num) NeedWriteEvent?.Invoke($"*SETT,meas_proc={par},{arg}#", (ushort)par);
 
         }, canExecPar => true));
         #endregion
@@ -398,7 +404,7 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Необходимо записать настройки измерительных процессов
         /// </summary>
-        public event Action<string,ushort> NeedWriteEvent;
+        public event Action<string, ushort> NeedWriteEvent;
 
         /// <summary>
         /// Необходимо произвести стандартизацию
@@ -412,7 +418,7 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Необходимо произвести еденичное измерение
         /// </summary>
-        public event Action<int,ushort,ushort> NeedMakeSingleMeasEvent;
+        public event Action<int, ushort, ushort> NeedMakeSingleMeasEvent;
 
         /// <summary>
         /// Закончилось ЕИ
@@ -424,20 +430,20 @@ namespace IDensity.AddClasses.Settings
             var str = $"cntr={MeasProcCounterNum.Value},";
             foreach (var std in MeasStandSettings)
             {
-                str += std.Copy()+",";
+                str += std.Copy() + ",";
             }
             str += CalibrCurve.Copy() + ",";
             str += "calib_src=";
             for (int j = 0; j < SingleMeasResCount; j++)
             {
                 str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()},";
-                
+
             }
             str += $"dens_liq={DensityLiq.Copy()},dens_solid={DensitySol.Copy()},";
             str += $"comp_temp={TempCompensation.Copy()},comp_steam={SteamCompensation.Copy()},";
             str += $"aver_depth={MeasDeep.Value},";
             str += $"type={MeasType.Value},";
-            str += FastChange.Copy()+",";
+            str += FastChange.Copy() + ",";
             str += $"pipe_diam={(ushort)(PipeDiameter.Value * 10)}";
             return str;
         }

@@ -1,4 +1,6 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Models;
+using System.Collections.Generic;
 
 namespace IDensity.ViewModels
 {
@@ -7,17 +9,29 @@ namespace IDensity.ViewModels
         public MeasUnitVm(VM vM)
         {
             VM = vM;
-            Init();
+            
         }
 
         public VM VM { get; }
 
-        void Init()
+        #region Коллекция ЕИ
+        /// <summary>
+        /// Коллекция ЕИ
+        /// </summary>
+        private List<MeasNum> _measUnits;
+        /// <summary>
+        /// Коллекция ЕИ
+        /// </summary>
+        public List<MeasNum> MeasUnits
         {
-            foreach (var sett in VM.mainModel.MeasUnitSettings)
-            {
-                sett.Writing += VM.CommService.SetMeasUnitsSettings;
-            }
+            get => _measUnits;
+            set => Set(ref _measUnits, value);
         }
+        #endregion
+
+
+
+
+
     }
 }

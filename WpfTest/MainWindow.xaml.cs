@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfTest
 {
@@ -23,7 +12,12 @@ namespace WpfTest
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();           
+        }
+
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         private void Print_Click(object sender, RoutedEventArgs e)
@@ -47,7 +41,7 @@ namespace WpfTest
 
             if (printDialog.ShowDialog() == true)
             {
-                
+
                 printDialog.PrintDocument(((IDocumentPaginatorSource)doc).DocumentPaginator, "Напечатай меня?");
 
                 doc.PageHeight = pageHeight;
@@ -55,10 +49,10 @@ namespace WpfTest
                 doc.PagePadding = pagePadding;
                 doc.ColumnGap = columnGap;
                 doc.ColumnWidth = columnWidth;
-               
+
 
             }
-            
+
         }
 
         /// <summary>
