@@ -18,7 +18,7 @@ namespace IDensity.Services.XML
         #endregion
 
         #region Путь
-        public static string Path = "settings.xml";
+        public static string _path = "settings.xml";
         #endregion
 
         #region Метод чтения данных по дескриптору
@@ -32,7 +32,7 @@ namespace IDensity.Services.XML
             try
             {
                 var xDoc = new XmlDocument();// создаем документ
-                xDoc.Load(Path);// загружаем данные
+                xDoc.Load(_path);// загружаем данные
                 Type type = typeof(T);
                 var props = typeof(T).GetProperties();
 
@@ -79,7 +79,7 @@ namespace IDensity.Services.XML
             try
             {
                 var xDoc = new XmlDocument();// создаем документ
-                xDoc.Load(Path);// загружаем данные
+                xDoc.Load(_path);// загружаем данные
                 XmlNode xNode = xDoc.DocumentElement.SelectSingleNode("params");
                 Type type = typeof(T);
                 XmlElement deviceElem = xDoc.CreateElement(type.Name);
@@ -93,7 +93,7 @@ namespace IDensity.Services.XML
 
                 }
                 xNode.AppendChild(deviceElem);
-                xDoc.Save(Path);
+                xDoc.Save(_path);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace IDensity.Services.XML
             try
             {
                 var xDoc = new XmlDocument();
-                xDoc.Load(Path);
+                xDoc.Load(_path);
                 Type type = typeof(T);
                 var props = typeof(T).GetProperties();
                 XmlNodeList nodeList = xDoc.DocumentElement.GetElementsByTagName(type.Name);
@@ -120,7 +120,7 @@ namespace IDensity.Services.XML
                         if (prop.Name == changedProperty) nodeList.Item(i).Attributes[changedProperty].Value = type.GetProperty(changedProperty).GetValue(param).ToString();
                     }
                 }
-                xDoc.Save(Path);
+                xDoc.Save(_path);
             }
             catch (Exception ex)
             {
