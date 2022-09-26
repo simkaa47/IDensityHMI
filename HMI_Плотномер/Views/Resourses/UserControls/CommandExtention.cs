@@ -45,7 +45,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for CommanDParameter.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CommanDParameterProperty =
-            DependencyProperty.Register("CommanDParameter", typeof(object), typeof(CommandExtention));
+            DependencyProperty.Register(nameof(CommanDParameter), typeof(object), typeof(CommandExtention));
         #endregion
     }
 }

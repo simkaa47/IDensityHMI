@@ -31,6 +31,37 @@ namespace IDensity.ViewModels
         }
         #endregion
 
+        #region Записать настройки компенсации температуры
+        RelayCommand _writeTempCompensationCommand;
+        public RelayCommand WriteTempCompensationCommand => _writeTempCompensationCommand ?? (_writeTempCompensationCommand = new RelayCommand(exec =>
+        {
+            if (!(exec is int index)) return;
+            if (SelectedProcess is null) return;
+            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},comp_temp={index},{(SelectedProcess.TempCompensations[index].Activity.WriteValue ? 1 : 0)},0");
+            foreach (var coeff in SelectedProcess.TempCompensations[index].Coeffs)
+            {
+                cmd += $",{coeff.WriteValue.ToStringPoint()}";
+            }
+            cmd += "#";
+            VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
+
+
+        }, canExec => VM.mainModel.Connecting.Value));
+        #endregion
+        #region Записать-кты ослабления
+        RelayCommand _writeAttenuationCommand;
+        public RelayCommand WriteAttenuationCommand => _writeAttenuationCommand ?? (_writeAttenuationCommand = new RelayCommand(exec =>
+        {            
+            if (SelectedProcess is null) return;
+            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},att_coeffs={(SelectedProcess.AttCoeffs[0].WriteValue.ToStringPoint())},{(SelectedProcess.AttCoeffs[1].WriteValue.ToStringPoint())}");           
+            cmd += "#";
+            VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
+
+
+        }, canExec => VM.mainModel.Connecting.Value));
+        #endregion
+
+
         void Describe()
         {
             foreach (var mp in VM.mainModel.MeasProcSettings)

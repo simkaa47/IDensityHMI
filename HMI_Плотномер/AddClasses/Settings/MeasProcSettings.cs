@@ -1,4 +1,5 @@
-﻿using IDensity.Models;
+﻿using IDensity.Core.AddClasses.Settings;
+using IDensity.Models;
 using IDensity.Services.Calibration;
 using IDensity.ViewModels.Commands;
 using System;
@@ -44,10 +45,10 @@ namespace IDensity.AddClasses.Settings
             MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue * 10}");
             MeasDeep.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"aver_depth={MeasDeep.WriteValue}");
             // Действия по изменению настроек плотности
-            DensityLiq.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
-            DensitySol.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
+            DensityLiqD1.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
+            DensitySolD2.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
             // Действия по изменению настроек компенсаций
-            TempCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_temp={s}");
+            
             SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");
             // Подписка на изменение типа измерения
             MeasType.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"type={MeasType.WriteValue}");
@@ -121,19 +122,19 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Плотность жидкости
         /// </summary>
-        public DensitySett DensityLiq { get; } = new DensitySett();
+        public DensitySett DensityLiqD1 { get; } = new DensitySett();
         #endregion
         #region Плотность твердого
         /// <summary>
         /// Плотность твердого
         /// </summary>
-        public DensitySett DensitySol { get; } = new DensitySett();
+        public DensitySett DensitySolD2 { get; } = new DensitySett();
         #endregion
-        #region Компенсация по температуре
+        #region Компенсация по температуре для твердого
         /// <summary>
-        /// Компенсация по температуре
+        /// Компенсация по температуре твердого
         /// </summary>
-        public Compensation TempCompensation { get; } = new Compensation();
+        public List<TempCompensation> TempCompensations { get; } = Enumerable.Range(0, 3).Select(i => new TempCompensation { Index = i }).ToList();
         #endregion
         #region Компенсация паровой фазы
         /// <summary>
@@ -186,6 +187,9 @@ namespace IDensity.AddClasses.Settings
         #endregion
         #region Активность
         public Parameter<bool> IsActive { get; } = new Parameter<bool>("MeasProcActive", "Активность измерительного процесса", false, true, 0, "hold");
+        #endregion
+        #region К-ты ослабления
+        public List<Parameter<float>> AttCoeffs { get; } = Enumerable.Range(0, 2).Select(i => new Parameter<float>($"MeasProcAttCoeff{i}", $"К-т ослабления {i}", float.MinValue, float.MaxValue, 0, "")).ToList(); 
         #endregion
 
         #region Настройки единичного измерения
@@ -439,12 +443,17 @@ namespace IDensity.AddClasses.Settings
                 str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()},";
 
             }
-            str += $"dens_liq={DensityLiq.Copy()},dens_solid={DensitySol.Copy()},";
-            str += $"comp_temp={TempCompensation.Copy()},comp_steam={SteamCompensation.Copy()},";
+            str += $"dens_liq={DensityLiqD1.Copy()},dens_solid={DensitySolD2.Copy()},";
+            foreach (var comp in TempCompensations)
+            {
+                str += $"comp_temp={comp.Copy()},";
+            }
+            str += $"comp_steam={SteamCompensation.Copy()},";
             str += $"aver_depth={MeasDeep.Value},";
             str += $"type={MeasType.Value},";
             str += FastChange.Copy() + ",";
             str += $"pipe_diam={(ushort)(PipeDiameter.Value * 10)}";
+            str += $"att_coeffs={AttCoeffs[0].Value.ToStringPoint()},{AttCoeffs[1].Value.ToStringPoint()}";
             return str;
         }
 

@@ -1,5 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.Settings;
+using IDensity.Core.AddClasses.Settings;
 using IDensity.Models;
 using System;
 using System.Collections.Generic;
@@ -330,22 +331,24 @@ namespace IDensity.Services.ComminicationServices
             _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
-            if (arr == null || arr.Length != 109) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 122) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             _model.MeasProcSettings[index].Num = (ushort)arr[0];
             _model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
-            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensityLiq, 84);
-            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensitySol, 86);
-            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].TempCompensation, 88);
-            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].SteamCompensation, 95);
-            _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[102];
+            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensityLiqD1, 84);
+            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensitySolD2, 86);
+            RecognizeTempCompensation(arr, _model.MeasProcSettings[index], 88);
+            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].SteamCompensation, 106);
+            _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[113];
             RecognizeFastChangeSett(arr, index);
-            _model.MeasProcSettings[index].MeasDuration.Value = arr[105] / 10;
-            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[106];
-            _model.MeasProcSettings[index].OutMeasNum = _model.MeasUnitSettings[(ushort)arr[107]];
-            _model.MeasProcSettings[index].PipeDiameter.Value = arr[108] / 10;
+            _model.MeasProcSettings[index].MeasDuration.Value = arr[116] / 10;
+            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[117];
+            _model.MeasProcSettings[index].OutMeasNum = _model.MeasUnitSettings[(ushort)arr[118]];
+            _model.MeasProcSettings[index].PipeDiameter.Value = arr[119] / 10;
+            _model.MeasProcSettings[index].AttCoeffs[0].Value = arr[120];
+            _model.MeasProcSettings[index].AttCoeffs[1].Value = arr[121];
             _model.SettingsReaded = true;
         }
         #endregion
@@ -430,6 +433,26 @@ namespace IDensity.Services.ComminicationServices
         /// <param name="arr">Массив чисел</param>
         /// <param name="compensation">Класс определяющий данные компенсации</param>
         /// <param name="offset">Смещение данных компенсации в массиве чисел</param>
+        void RecognizeTempCompensation(float[] arr, MeasProcSettings settings, int offset)
+        {
+            int size = 6;
+            for (int i = 0; i < 3; i++)
+            {
+                settings.TempCompensations[i].Activity.Value = arr[i * size+offset] > 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    settings.TempCompensations[i].Coeffs[j].Value = arr[offset+ i * size+2+j] ;
+                }
+            }           
+
+        }
+
+        /// <summary>
+        /// Метод распознавания настроек компенсации
+        /// </summary>
+        /// <param name="arr">Массив чисел</param>
+        /// <param name="compensation">Класс определяющий данные компенсации</param>
+        /// <param name="offset">Смещение данных компенсации в массиве чисел</param>
         void RecognizeCompensationFromArr(float[] arr, Compensation compensation, int offset)
         {
             compensation.Activity.Value = arr[offset] > 0;
@@ -447,8 +470,8 @@ namespace IDensity.Services.ComminicationServices
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            _model.MeasProcSettings[num].FastChange.Activity.Value = arr[103] > 0;
-            _model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[104];
+            _model.MeasProcSettings[num].FastChange.Activity.Value = arr[114] > 0;
+            _model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[115];
         }
 
         #endregion
@@ -660,6 +683,7 @@ namespace IDensity.Services.ComminicationServices
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,8#"));
             // Номер порта
             var list = GetNumber("udp_sett", 5, 1, str);
+            if (list is null) return;
             _model.UdpAddrString = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
             _model.PortUdp = (int)list[0][4];
             list = GetNumber("tcp_sett", 12, 1, str);
@@ -667,6 +691,28 @@ namespace IDensity.Services.ComminicationServices
             _model.IP = $"{list[0][0]}.{list[0][1]}.{list[0][2]}.{list[0][3]}";
             _model.Mask = $"{list[0][4]}.{list[0][5]}.{list[0][6]}.{list[0][7]}";
             _model.GateWay = $"{list[0][8]}.{list[0][9]}.{list[0][10]}.{list[0][11]}";
+
+            //Настройки фильтра калмана
+            list = GetNumber("kalman_sett", 3, 2, str);
+            if (list == null) return;
+            for (int i = 0; i < 2; i++)
+            {
+                _model.KalmanSettings[i].Speed.Value = list[i][1];
+                _model.KalmanSettings[i].Smooth.Value = list[i][2];
+            }
+
+            //Настройки темрературы
+            list = GetNumber("am_temp_coeffs", 3, 2, str);
+            if (list == null) return;
+            for (int i = 0; i < 2; i++)
+            {
+                _model.GetTemperature.Coeffs[i].A.Value = list[i][1];
+                _model.GetTemperature.Coeffs[i].B.Value = list[i][2];
+            }
+            
+            list = GetNumber("temperature_src", 1, 1, str);
+            if (list == null) return;
+            _model.GetTemperature.Source = (int)list[0][0];
             _model.SettingsReaded = true;
         }
         #endregion
@@ -1000,6 +1046,13 @@ namespace IDensity.Services.ComminicationServices
         }
         #endregion
 
+        #region Записать настройки FSRD8
+        public void SetFsrd8(string arg)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(arg)));
+        }
+
+        #endregion
 
 
         public void WriteCommonSettings(string arg)

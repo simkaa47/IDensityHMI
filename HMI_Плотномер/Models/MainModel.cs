@@ -1,6 +1,7 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
+using IDensity.Core.AddClasses.Settings;
 using IDensity.Services.ComminicationServices;
 using IDensity.Services.InitServices;
 using IDensity.Services.XML;
@@ -335,6 +336,14 @@ namespace IDensity.Models
 
         #region Данные прочитаны
         public bool SettingsReaded { get; set; }
+        #endregion
+
+        #region Настройки фильтра калмана
+        public List<Kalman> KalmanSettings { get; } = Enumerable.Range(0, 2).Select(i => new Kalman(i)).ToList();
+        #endregion
+
+        #region Настройки получения температуры
+        public GetTemperature GetTemperature { get; } = new GetTemperature();
         #endregion
 
         public CheckSum CheckSum { get; set; }

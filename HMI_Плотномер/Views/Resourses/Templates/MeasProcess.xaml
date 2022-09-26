@@ -94,26 +94,104 @@
         </Setter>
     </Style>
     <!--#endregion-->
+    <!--#region Шаблон для настроек компенсации температуры твердого -->
+    <ControlTemplate TargetType="DataGrid" x:Key="TempCompensation" >
+        <DataGrid CanUserAddRows="False"
+                  ItemsSource="{TemplateBinding ItemsSource}"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <!--#region Индекс -->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Тип"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextWrapping="Wrap">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringByIndex}">
+                                        <Binding Path="Index"/>
+                                        <Binding Source="{StaticResource TempCompensDestinations}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Активность -->
+                <DataGridTemplateColumn Header="Активность">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Activity.WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                <Button Content="-->" Width="60" Margin="10,0,10,0" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
+                                    CommandParameter="{Binding Index}"/>
+                                <CheckBox IsChecked="{Binding Activity.Value, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                            </StackPanel>                            
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region К-т 0 -->
+                    <DataGridTemplateColumn Header="К-т 0">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding Coeffs[0]}"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
+                                                      CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
+                        </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region К-т 1 -->
+                <DataGridTemplateColumn Header="К-т 1">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding Coeffs[1]}"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
+                                                      CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region К-т 2 -->
+                <DataGridTemplateColumn Header="К-т 2">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding Coeffs[2]}"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
+                                                      CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region К-т 3 -->
+                <DataGridTemplateColumn Header="К-т 3">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <uc:MenuItemParameterText DataContext="{Binding Coeffs[3]}"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
+                                                      CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+            </DataGrid.Columns>
+            
+
+        </DataGrid>
+    </ControlTemplate>
+    <!--#endregion-->
     <!--#region Шаблон для настроек плотности -->
     <ControlTemplate TargetType="ListBox" x:Key="DeinsitySettingsItem">
         <ListBox HorizontalContentAlignment="Stretch">
             <!--#region ЕИ -->
             <DockPanel>
-                <TextBlock Text="Единица измерения" Style="{StaticResource Common}"/>
-                <ComboBox Width="150"
-                                  SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  HorizontalAlignment="Right"                                  
-                                  DisplayMemberPath="MeasUnitName.Value"
-                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="DropDownOpened">
-                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="DropDownClosed">
-                            <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
+                
             </DockPanel>
             <!--#endregion-->
             <!--#region Величина -->
@@ -213,25 +291,7 @@
                     <!--#endregion-->
                     <uc:Parameter DataContext="{Binding FastChange.Threshold}"
                                   Command="{Binding Command}"/>
-                    <!--#region Выходная ЕИ -->
-                    <DockPanel>
-                        <TextBlock Text="Выходная ЕИ" Style="{StaticResource Common}"/>                        
-                        <ComboBox Width="150"
-                                  SelectedItem="{Binding OutMeasNum,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  HorizontalAlignment="Right"                                  
-                                  DisplayMemberPath="MeasUnitName.Value"
-                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="DropDownOpened">
-                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>                                    
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="DropDownClosed">
-                                    <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
-                    </DockPanel>
-                    <!--#endregion-->
+                    
                     <!--#region Диаметр трубы -->
                     <uc:Parameter DataContext="{Binding PipeDiameter}" Command="{Binding Command}"/>
                     <!--#endregion-->
@@ -242,6 +302,14 @@
                                   IsChecked="{Binding WriteValue}"
                                   HorizontalAlignment="Right"/>
                     </DockPanel>
+                    <!--#endregion-->
+                    <!--#region К-т ослабления 0 -->
+                    <uc:Parameter DataContext="{Binding AttCoeffs[0]}"
+                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+                    <!--#endregion-->
+                    <!--#region К-т ослабления 1 -->
+                    <uc:Parameter DataContext="{Binding AttCoeffs[1]}"
+                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
                     <!--#endregion-->
                     <!--#region Скопировать на другой изм. процесс -->
                     <DockPanel>
@@ -695,11 +763,11 @@
             <!--#region НАСТРОЙКИ ПЛОТНОСТИ -->
             <TabItem Header="НАСТРОЙКИ ПЛОТНОСТИ">
                 <StackPanel>
-                    <GroupBox  DataContext="{Binding DensityLiq}"
+                    <GroupBox  DataContext="{Binding DensityLiqD1}"
                                Header="ПЛОТНОСТЬ ЖИДКОГО">
                         <ListBox Template="{StaticResource DeinsitySettingsItem}"/>
                     </GroupBox>
-                    <GroupBox  DataContext="{Binding DensitySol}"
+                    <GroupBox  DataContext="{Binding DensitySolD2}"
                                Header="ПЛОТНОСТЬ ТВЕРДОГО">
                         <ListBox Template="{StaticResource DeinsitySettingsItem}"/>
                     </GroupBox>
@@ -709,9 +777,8 @@
             <!--#region Компенсации -->
             <TabItem Header="КОМПЕНСАЦИИ">
                 <StackPanel>
-                    <GroupBox DataContext="{Binding TempCompensation}"
-                              Header="ТЕМПЕРАТУРНАЯ КОМПЕНСАЦИЯ">
-                        <ListBox Template="{StaticResource CompensationItemTemplate }"/>
+                    <GroupBox  Header="ТЕМПЕРАТУРНАЯ КОМПЕНСАЦИЯ">
+                        <DataGrid Template="{StaticResource TempCompensation}" ItemsSource="{Binding TempCompensations}"/>
                     </GroupBox>
                     <GroupBox DataContext="{Binding SteamCompensation}"
                               Header="КОМПЕНСАЦИЯ ПАРОВОЙ ФАЗЫ">

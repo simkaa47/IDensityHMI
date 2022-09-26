@@ -507,7 +507,7 @@
                         <TabControl TabStripPlacement="Top"
                                     ContentTemplate="{StaticResource TabItemMeasProc}"
                                     ItemsSource="{Binding VM.mainModel.MeasProcSettings}"
-                                    SelectedItem="SelectedProcess">
+                                    SelectedItem="{Binding SelectedProcess}">
                             <TabControl.ItemContainerStyle>
                                 <Style TargetType="TabItem"  BasedOn="{StaticResource MeasProcTabItemStyle}">
                                     <Setter Property="Header" Value="{Binding Num}"/>
@@ -529,6 +529,89 @@
                             <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
                         </TabItem.Resources>
                         <ListBox HorizontalContentAlignment="Stretch">
+                            <!--#region Настройки фильтра калмана -->
+                            <GroupBox Header="НАСТРОЙКИ ФИЛЬТРА КАЛМАНА">
+                                <DataGrid AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          ItemsSource="{Binding mainModel.KalmanSettings}"
+                                          CanUserDeleteRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="№" Binding="{Binding Index}" IsReadOnly="True"/>
+                                        <!--#region К-т скорости -->
+                                        <DataGridTemplateColumn Header="К-т скорости">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <uc:MenuItemParameterText DataContext="{Binding Speed}"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSettingsCommand}"
+                                                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                        <!--#region К-т сглаживания -->
+                                        <DataGridTemplateColumn Header="К-т сглаживания">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <uc:MenuItemParameterText DataContext="{Binding Smooth}"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSettingsCommand}"
+                                                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <!--#endregion-->
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+                            </GroupBox>
+                            <!--#endregion-->
+                            <!--#region Настройки получения температуры -->
+                            <GroupBox Header="НАСТРОЙКИ ПОЛУЧЕНИЯ ТЕМПЕРАТУРЫ" DataContext="{Binding mainModel.GetTemperature}">
+                                <StackPanel>
+                                    <DockPanel>
+                                        <TextBlock Text="Источник температуры"/>
+                                        <ComboBox ItemsSource="{StaticResource TempSrc}"
+                                              HorizontalAlignment="Right"
+                                              SelectedIndex="{Binding Source}"
+                                              Width="200">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="DropDownClosed">
+                                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempSourceSettingsCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </DockPanel>
+                                    <DataGrid Visibility="{Binding Source, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
+                                              ItemsSource="{Binding Coeffs}"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Номер модуля" Binding="{Binding ModNum}" IsReadOnly="True"/>
+                                            <DataGridTemplateColumn Header="К-т A">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <uc:MenuItemParameterText DataContext="{Binding A}"
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempRecalculateSettingsCommand}"
+                                                                                  CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.ModNum}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Header="К-т B">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <uc:MenuItemParameterText DataContext="{Binding B}"
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempRecalculateSettingsCommand}"
+                                                                                  CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.ModNum}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                                
+                                
+                            </GroupBox>
+                            <!--#endregion-->
                             <uc:Parameter DataContext="{Binding mainModel.HalfLife}" Command="{Binding Command}"/>
                             <uc:Parameter DataContext="{Binding mainModel.DeviceName}" Command="{Binding Command}"/>
                             <uc:Parameter DataContext="{Binding mainModel.IsotopName}" Command="{Binding Command}"/>

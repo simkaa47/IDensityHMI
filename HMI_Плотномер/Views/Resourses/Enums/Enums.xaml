@@ -139,5 +139,16 @@
     <col1:ArrayList   x:Key="CountModes">
         <sys1:String>Фиксированный</sys1:String>
         <sys1:String>Относительно пика спектра</sys1:String>
+        <sys1:String>По всей ширине</sys1:String>
+    </col1:ArrayList>
+    <x:Array Type="sys1:String"   x:Key="TempCompensDestinations">
+        <sys1:String>Для твердого</sys1:String>
+        <sys1:String>Для жидкого</sys1:String>
+        <sys1:String>?</sys1:String>
+    </x:Array>
+    <col1:ArrayList   x:Key="TempSrc">
+        <sys1:String>AI0</sys1:String>
+        <sys1:String>AI1</sys1:String>
+        <sys1:String>PT100</sys1:String>
     </col1:ArrayList>
 </ResourceDictionary>

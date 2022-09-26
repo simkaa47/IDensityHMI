@@ -45,8 +45,46 @@ namespace IDensity.ViewModels
             VM.CommService.GetCheckSum();
 
         }, canExecPar => true));
-        #endregion        
+        #endregion
 
-    }   
+        #region Команды
+        #region Записать настройки калмана
+        private RelayCommand _writeKalmanSettingsCommand;
+        public RelayCommand WriteKalmanSettingsCommand => _writeKalmanSettingsCommand ?? (_writeKalmanSettingsCommand = new RelayCommand(exec => 
+        {
+            if (!(exec is int index)) return;
+            if (index > 1) return;
+            var kalmans = VM.mainModel.KalmanSettings;
+            string arg = $"*SETT,kalman_sett={index},{kalmans[index].Speed.WriteValue.ToStringPoint()},{kalmans[index].Smooth.WriteValue.ToStringPoint()}#";
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }, canExec => true));
+
+
+        #endregion
+
+        #region Записать настройки пересчета температуры
+        private RelayCommand _writeTempRecalculateSettingsCommand;
+        public RelayCommand WriteTempRecalculateSettingsCommand => _writeTempRecalculateSettingsCommand ?? (_writeTempRecalculateSettingsCommand = new RelayCommand(exec =>
+        {
+            if (!(exec is int index)) return;
+            if (index > 1) return;
+            var temp = VM.mainModel.GetTemperature;
+            string arg = $"*SETT,am_temp_coeffs={index},{temp.Coeffs[index].A.WriteValue.ToStringPoint()},{temp.Coeffs[index].B.WriteValue.ToStringPoint()}#";
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }, canExec => true));
+        #endregion
+
+        #region Записать настройки источника темпрературы
+        private RelayCommand _writeTempSourceSettingsCommand;
+        public RelayCommand WriteTempSourceSettingsCommand => _writeTempSourceSettingsCommand ?? (_writeTempSourceSettingsCommand = new RelayCommand(exec =>
+        {            
+            var temp = VM.mainModel.GetTemperature;
+            string arg = $"*SETT,temperature_src={temp.Source}#";
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }, canExec => true));
+        #endregion
+        #endregion
+
+    }
 
 }
