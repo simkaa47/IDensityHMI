@@ -320,11 +320,7 @@ namespace IDensity.Models
 
         #region Номер заказа
         public Parameter<string> OrderNumber { get; } = new Parameter<string>("DeviceOrder", "Номер заказа", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
-        #endregion
-
-        #region Тип устройства
-        public Parameter<string> DeviceType { get; } = new Parameter<string>("DeviceType", "Тип устройства", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
-        #endregion
+        #endregion        
 
         #region Версия firmware
         public Parameter<string> FwVersion { get; } = new Parameter<string>("FwVersion", "Версия FW", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
@@ -344,6 +340,14 @@ namespace IDensity.Models
 
         #region Настройки получения температуры
         public GetTemperature GetTemperature { get; } = new GetTemperature();
+        #endregion
+
+        #region Тип устройства
+        public Parameter<ushort> DeviceType { get; } = new Parameter<ushort>("DeviceType", "Тип устройства", 0, 1, 0, "");
+        #endregion
+
+        #region Длина уровнемена
+        public Parameter<float> LevelLength { get; } = new Parameter<float>("LevelLength", "Длина уровнемера, мм", 0, float.MaxValue, 0, "");
         #endregion
 
         public CheckSum CheckSum { get; set; }

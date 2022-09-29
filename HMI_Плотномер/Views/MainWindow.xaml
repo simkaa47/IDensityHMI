@@ -652,7 +652,19 @@
                             </DockPanel>
                             <uc:Parameter DataContext="{Binding mainModel.SerialNumber}" Command="{Binding Command}"/>
                             <uc:Parameter DataContext="{Binding mainModel.OrderNumber}" Command="{Binding Command}"/>
-                            <uc:Parameter DataContext="{Binding mainModel.DeviceType}" Command="{Binding Command}"/>
+                            <!--#region Тип устройства -->
+                            <uc:CompoboxParameter ItemSource="{StaticResource DeviceTypes}"
+                                                  DataContext="{Binding mainModel.DeviceType}"
+                                                  CompoboxWidth="200"
+                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CommonSettingsVm.WriteDeviceTypeCommand}"/>
+                            <!--#endregion-->
+                            <!--#region Длина уровнемера -->
+                            <uc:Parameter DataContext="{Binding mainModel.LevelLength}" 
+                                          Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}"
+                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WiteLevelLengthCommand}"/>
+                            <!--#endregion-->
+
                             <uc:Parameter DataContext="{Binding mainModel.FwVersion}" Command="{Binding Command}"/>
                             <uc:Parameter DataContext="{Binding mainModel.CustNumber}" Command="{Binding Command}"/>
                             <ListBoxItem  Content="{Binding mainModel.CheckSum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

@@ -83,6 +83,24 @@ namespace IDensity.ViewModels
             VM.CommService.Tcp.SetFsrd8(arg);
         }, canExec => true));
         #endregion
+
+        #region Записать тип устройства
+        private RelayCommand _writeDeviceTypeCommand;
+        public RelayCommand WriteDeviceTypeCommand => _writeDeviceTypeCommand ?? (_writeDeviceTypeCommand = new RelayCommand(exec =>
+        {           
+            string arg = $"*SETT,device_type={VM.mainModel.DeviceType.WriteValue}#";
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }, canExec => true));
+        #endregion
+
+        #region Записать длину уровнемера
+        private RelayCommand _writeLevelLengthCommand;
+        public RelayCommand WiteLevelLengthCommand => _writeLevelLengthCommand ?? (_writeLevelLengthCommand = new RelayCommand(exec =>
+        {
+            string arg = $"*SETT,levelmeter_ln={VM.mainModel.LevelLength.WriteValue.ToStringPoint()}#";
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }, canExec => true));
+        #endregion
         #endregion
 
     }

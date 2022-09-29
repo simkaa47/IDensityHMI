@@ -189,7 +189,10 @@ namespace IDensity.AddClasses.Settings
         public Parameter<bool> IsActive { get; } = new Parameter<bool>("MeasProcActive", "Активность измерительного процесса", false, true, 0, "hold");
         #endregion
         #region К-ты ослабления
-        public List<Parameter<float>> AttCoeffs { get; } = Enumerable.Range(0, 2).Select(i => new Parameter<float>($"MeasProcAttCoeff{i}", $"К-т ослабления {i}", float.MinValue, float.MaxValue, 0, "")).ToList(); 
+        public List<Parameter<float>> AttCoeffs { get; } = Enumerable.Range(0, 2).Select(i => new Parameter<float>($"MeasProcAttCoeff{i}", $"К-т ослабления {i}", float.MinValue, float.MaxValue, 0, "")).ToList();
+        #endregion
+        #region К-ты расчета обьема
+        public List<Parameter<float>> VolumeCoeefs { get; } = Enumerable.Range(0, 4).Select(i => new Parameter<float>($"VolumeCoeff{i}", $"К-т расчета обьема {i}", float.MinValue, float.MaxValue, 0, "")).ToList();
         #endregion
 
         #region Настройки единичного измерения
@@ -429,6 +432,10 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         public event Action<ushort> SingleMeasEventFinishedEvent;
 
+        #region Тип расчета
+        public Parameter<ushort> CalculationType { get; } = new Parameter<ushort>("CalculationType", "Тип расчета", 0, 3, 0, "");
+        #endregion
+
         public string CopyAll(int number)
         {
             var str = $"cntr={MeasProcCounterNum.Value},";
@@ -454,6 +461,13 @@ namespace IDensity.AddClasses.Settings
             str += FastChange.Copy() + ",";
             str += $"pipe_diam={(ushort)(PipeDiameter.Value * 10)}";
             str += $"att_coeffs={AttCoeffs[0].Value.ToStringPoint()},{AttCoeffs[1].Value.ToStringPoint()}";
+            str += $"calc_type={CalculationType.Value}";
+            str += ",volume_coeffs=";
+            foreach (var volume in VolumeCoeefs)
+            {
+                str += $"{volume.Value.ToStringPoint()},";
+            }
+            str.Remove(str.Length - 1);
             return str;
         }
 

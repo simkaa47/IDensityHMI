@@ -157,29 +157,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--#endregion-->
-                <!--#region К-т 2 -->
-                <DataGridTemplateColumn Header="К-т 2">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <uc:MenuItemParameterText DataContext="{Binding Coeffs[2]}"
-                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
-                                                      CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!--#endregion-->
-                <!--#region К-т 3 -->
-                <DataGridTemplateColumn Header="К-т 3">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <uc:MenuItemParameterText DataContext="{Binding Coeffs[3]}"
-                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteTempCompensationCommand}"
-                                                      CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!--#endregion-->
+                <!--#endregion-->                
             </DataGrid.Columns>
             
 
@@ -190,9 +168,7 @@
     <ControlTemplate TargetType="ListBox" x:Key="DeinsitySettingsItem">
         <ListBox HorizontalContentAlignment="Stretch">
             <!--#region ЕИ -->
-            <DockPanel>
-                
-            </DockPanel>
+           
             <!--#endregion-->
             <!--#region Величина -->
             <uc:Parameter DataContext="{Binding PhysValue}"
@@ -236,14 +212,7 @@
             <uc:Parameter DataContext="{Binding B}"
                           Command="{Binding Command}"/>
             <!--#endregion-->
-            <!--#region C -->
-            <uc:Parameter DataContext="{Binding C}"
-                          Command="{Binding Command}"/>
-            <!--#endregion-->
-            <!--#region D -->
-            <uc:Parameter DataContext="{Binding D}"
-                          Command="{Binding Command}"/>
-            <!--#endregion-->
+            
         </ListBox>
     </ControlTemplate>
     <!--#endregion-->
@@ -310,6 +279,25 @@
                     <!--#region К-т ослабления 1 -->
                     <uc:Parameter DataContext="{Binding AttCoeffs[1]}"
                                   Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+                    <!--#endregion-->
+                    <!--#region К-ты расчета обьема -->
+                    <GroupBox Header="К-ТЫ РАСЧЕТА ОБЬЕМА">
+                        <ListBox HorizontalContentAlignment="Stretch">
+                            <uc:Parameter DataContext="{Binding VolumeCoeefs[0]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                            <uc:Parameter DataContext="{Binding VolumeCoeefs[1]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                            <uc:Parameter DataContext="{Binding VolumeCoeefs[2]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                            <uc:Parameter DataContext="{Binding VolumeCoeefs[3]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                        </ListBox>
+                        
+                    </GroupBox>
+                    <!--#endregion-->
+                    <!--#region Тип расчета -->
+                    <uc:CompoboxParameter DataContext="{Binding CalculationType}"
+                                          CompoboxWidth="200"
+                                          Index="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteCalcTypeCommand}"
+                                          ItemSource="{StaticResource CalcTypes}"
+                                  />
                     <!--#endregion-->
                     <!--#region Скопировать на другой изм. процесс -->
                     <DockPanel>
@@ -503,7 +491,7 @@
                     <!--#region Общие настройки -->
                     <ListBox HorizontalContentAlignment="Stretch" >
                         <!--#region ЕИ -->
-                        <DockPanel>
+                        <!--<DockPanel>
                             <TextBlock Text="Единица измерения" Style="{StaticResource Common}"/>
                             <ComboBox Width="150"
                                   SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -516,6 +504,21 @@
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="DropDownClosed">
                                         <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        </DockPanel>-->
+                        <!--#endregion-->
+                        <!--#region Результат калибровки -->
+                        <DockPanel>
+                            <TextBlock Text="Результат калибровки" Style="{StaticResource Common}"/>
+                            <ComboBox Width="150"
+                                  SelectedIndex="{Binding Result.WriteValue}"
+                                  HorizontalAlignment="Right" 
+                                  ItemsSource="{StaticResource CalibrResults}">
+                                <i:Interaction.Triggers>                                    
+                                    <i:EventTrigger EventName="DropDownClosed">
+                                        <i:InvokeCommandAction Command="{Binding Result.Command}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </ComboBox>

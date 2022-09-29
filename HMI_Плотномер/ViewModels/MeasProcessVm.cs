@@ -61,7 +61,38 @@ namespace IDensity.ViewModels
         }, canExec => VM.mainModel.Connecting.Value));
         #endregion
 
+        #region Записать- тип расчета
+        RelayCommand _writeCalcTypeCommand;
+        public RelayCommand WriteCalcTypeCommand => _writeCalcTypeCommand ?? (_writeCalcTypeCommand = new RelayCommand(exec =>
+        {
+            
+            if (SelectedProcess is null) return;
+            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},calc_type={SelectedProcess.CalculationType.WriteValue}");
+            cmd += "#";
+            VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
 
+
+        }, canExec => VM.mainModel.Connecting.Value));
+        #endregion
+
+        #region Записать к-ты расчета обьема
+        RelayCommand _writeVolumeCoeffsCommand;
+        public RelayCommand WriteVolumeCoeffsCommand => _writeVolumeCoeffsCommand ?? (_writeVolumeCoeffsCommand = new RelayCommand(exec =>
+        {
+
+            if (SelectedProcess is null) return;
+            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num}");
+            cmd += ",volume_coeffs=";
+            foreach (var volume in SelectedProcess.VolumeCoeefs)
+            {
+                cmd += $"{volume.WriteValue.ToStringPoint()},";
+            }
+            cmd = cmd.Remove(cmd.Length - 1);
+            cmd += "#";
+            VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
+
+        }, canExec => VM.mainModel.Connecting.Value));
+        #endregion
         void Describe()
         {
             foreach (var mp in VM.mainModel.MeasProcSettings)

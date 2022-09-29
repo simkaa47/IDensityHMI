@@ -16,6 +16,7 @@ namespace IDensity.AddClasses
             {
                 coeff.CommandEcecutedEvent += OnCommandWriteExecuted;
             }
+            Result.CommandEcecutedEvent += OnCommandWriteExecuted;
         }
         void OnCommandWriteExecuted(object par)
         {
@@ -24,6 +25,7 @@ namespace IDensity.AddClasses
             {
                 arg += $",{coeff.WriteValue.ToStringPoint()}";
             }
+            arg += $",{Result.WriteValue}";
             NeedWriteEvent?.Invoke(arg);
         }
 
@@ -56,6 +58,10 @@ namespace IDensity.AddClasses
         public List<Parameter<float>> Coeffs { get; } = Enumerable.Range(0, 6).Select(i => new Parameter<float>("CalibrCoeff" + i, "Коэффициент калибровочной кривой " + i, float.NegativeInfinity, float.PositiveInfinity, 97 + i * 2, "hold")).ToList();
 
         #endregion
+        #region Резульат калибровки
+        public Parameter<ushort> Result { get; } = new Parameter<ushort>("CalibrResult", "Результат калибровки", 0, 2, 0, ""); 
+        #endregion
+
         /// <summary>
         /// Необходимо записать настройки стандартизаций
         /// </summary>
@@ -67,6 +73,7 @@ namespace IDensity.AddClasses
             {
                 arg += ","+ coeff.Value.ToStringPoint();
             }
+            arg += $",{Result.Value}";
             return arg;
         }
     }

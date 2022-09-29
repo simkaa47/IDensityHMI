@@ -308,7 +308,7 @@ namespace IDensity.Services.ComminicationServices
             {
                 if (i < 2) _model.MeasResults[i].IsActive = false;
                 _model.MeasProcSettings[i].IsActive.Value = (mask & (int)Math.Pow(2, i)) > 0;
-                if (_model.MeasProcSettings[i].IsActive.Value && max <= 2)
+                if (_model.MeasProcSettings[i].IsActive.Value && max < 2)
                 {
                     _model.MeasResults[max].IsActive = true;
                     _model.MeasResults[max].Settings = _model.MeasProcSettings[i];
@@ -331,24 +331,26 @@ namespace IDensity.Services.ComminicationServices
             _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
-            if (arr == null || arr.Length != 122) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 120) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
             _model.MeasProcSettings[index].Num = (ushort)arr[0];
             _model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
-            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensityLiqD1, 84);
-            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensitySolD2, 86);
-            RecognizeTempCompensation(arr, _model.MeasProcSettings[index], 88);
-            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].SteamCompensation, 106);
-            _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[113];
+            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensityLiqD1, 85);
+            RecognizeDensityFromArr(arr, _model.MeasProcSettings[index].DensitySolD2, 87);
+            RecognizeTempCompensation(arr, _model.MeasProcSettings[index], 89);
+            RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].SteamCompensation, 101);
+            _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[106];
             RecognizeFastChangeSett(arr, index);
-            _model.MeasProcSettings[index].MeasDuration.Value = arr[116] / 10;
-            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[117];
-            _model.MeasProcSettings[index].OutMeasNum = _model.MeasUnitSettings[(ushort)arr[118]];
-            _model.MeasProcSettings[index].PipeDiameter.Value = arr[119] / 10;
-            _model.MeasProcSettings[index].AttCoeffs[0].Value = arr[120];
-            _model.MeasProcSettings[index].AttCoeffs[1].Value = arr[121];
+            _model.MeasProcSettings[index].MeasDuration.Value = arr[109] / 10;
+            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[110];
+            _model.MeasProcSettings[index].OutMeasNum = _model.MeasUnitSettings[(ushort)arr[111]];
+            _model.MeasProcSettings[index].PipeDiameter.Value = arr[112] / 10;
+            _model.MeasProcSettings[index].AttCoeffs[0].Value = arr[113];
+            _model.MeasProcSettings[index].AttCoeffs[1].Value = arr[114];
+            _model.MeasProcSettings[index].CalculationType.Value = (ushort)arr[115];
+            GetVolumeCoeffsFromArr(arr, 116, index);
             _model.SettingsReaded = true;
         }
         #endregion
@@ -393,6 +395,7 @@ namespace IDensity.Services.ComminicationServices
             {
                 _model.MeasProcSettings[num].CalibrCurve.Coeffs[i].Value = arr[offset + 2 + i];
             }
+            _model.MeasProcSettings[num].CalibrCurve.Result.Value = (ushort)arr[offset + 8];
         }
 
         /// <summary>
@@ -435,11 +438,11 @@ namespace IDensity.Services.ComminicationServices
         /// <param name="offset">Смещение данных компенсации в массиве чисел</param>
         void RecognizeTempCompensation(float[] arr, MeasProcSettings settings, int offset)
         {
-            int size = 6;
+            int size = 4;
             for (int i = 0; i < 3; i++)
             {
                 settings.TempCompensations[i].Activity.Value = arr[i * size+offset] > 0;
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     settings.TempCompensations[i].Coeffs[j].Value = arr[offset+ i * size+2+j] ;
                 }
@@ -459,9 +462,7 @@ namespace IDensity.Services.ComminicationServices
             compensation.MeasUnitNum.Value = (ushort)arr[offset + 1];
             compensation.Sourse.Value = (ushort)arr[offset + 2];
             compensation.A.Value = arr[offset + 3];
-            compensation.B.Value = arr[offset + 4];
-            compensation.C.Value = arr[offset + 5];
-            compensation.D.Value = arr[offset + 6];
+            compensation.B.Value = arr[offset + 4];           
         }
         /// <summary>
         /// Метод распознаания настроек быстрого измерения
@@ -470,8 +471,8 @@ namespace IDensity.Services.ComminicationServices
         /// <param name="num"></param>
         void RecognizeFastChangeSett(float[] arr, int num)
         {
-            _model.MeasProcSettings[num].FastChange.Activity.Value = arr[114] > 0;
-            _model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[115];
+            _model.MeasProcSettings[num].FastChange.Activity.Value = arr[107] > 0;
+            _model.MeasProcSettings[num].FastChange.Threshold.Value = (ushort)arr[108];
         }
 
         #endregion
@@ -488,6 +489,14 @@ namespace IDensity.Services.ComminicationServices
                 .Where(s => float.TryParse(s.Replace(".", ","), out temp))
                 .Select(s => temp)
                 .ToArray();
+        }
+
+        void GetVolumeCoeffsFromArr(float[] arr, int offset, int measProcNum)
+        {
+            for (int i = 0; i < _model.MeasProcSettings[measProcNum].VolumeCoeefs.Count; i++)
+            {
+                _model.MeasProcSettings[measProcNum].VolumeCoeefs[i].Value = arr[offset + i];
+            }
         }
 
         #region Настройки №1
@@ -641,8 +650,7 @@ namespace IDensity.Services.ComminicationServices
             _model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
             _model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
             _model.SerialNumber.Value = GetStringById("SN", str);
-            _model.OrderNumber.Value = GetStringById("ORDER", str);
-            _model.DeviceType.Value = GetStringById("TYPE", str);
+            _model.OrderNumber.Value = GetStringById("ORDER", str);           
             _model.FwVersion.Value = GetStringById("FW_VER", str);
             _model.FwVersion.Value = GetStringById("FW_VER", str);
             _model.CustNumber.Value = GetStringById("CUSTOMER_NUMBER", str); ;
@@ -709,13 +717,32 @@ namespace IDensity.Services.ComminicationServices
                 _model.GetTemperature.Coeffs[i].A.Value = list[i][1];
                 _model.GetTemperature.Coeffs[i].B.Value = list[i][2];
             }
-            
+
             list = GetNumber("temperature_src", 1, 1, str);
             if (list == null) return;
             _model.GetTemperature.Source = (int)list[0][0];
+
+            // Тип устройства
+            list = GetNumber("device_type", 1, 1, str);
+            if (list == null) return;
+            _model.DeviceType.Value = (ushort)list[0][0];
+            //Длина уровнемерра
+            list = GetNumber("levelmeter_ln", 1, 1, str);
+            if (list == null) return;
+            _model.LevelLength.Value = list[0][0];
             _model.SettingsReaded = true;
         }
         #endregion
+
+        #region Настройки №8
+        void GetSettings9()
+        {
+            _model.SettingsReaded = false;
+            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,9#"));
+            _model.SettingsReaded = true;
+        }
+        #endregion
+
 
         #region Метод вычленения числовых данных по тестовому индикатору в пакетах FSRD
         /// <summary>

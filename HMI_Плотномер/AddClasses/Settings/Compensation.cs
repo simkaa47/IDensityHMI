@@ -12,13 +12,11 @@ namespace IDensity.AddClasses.Settings
             MeasUnitNum.CommandEcecutedEvent += (o) => OnWriteExecuted();
             Sourse.CommandEcecutedEvent += (o) => OnWriteExecuted();
             A.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            B.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            C.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            D.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            B.CommandEcecutedEvent += (o) => OnWriteExecuted();            
         }
         void OnWriteExecuted()
         {
-            NeedWriteEvent?.Invoke($"{(Activity.WriteValue ? 1:0)},{MeasUnitNum.WriteValue},{Sourse.WriteValue},{A.WriteValue.ToStringPoint()},{B.WriteValue.ToStringPoint()},{C.WriteValue.ToStringPoint()},{D.WriteValue.ToStringPoint()}");
+            NeedWriteEvent?.Invoke($"{(Activity.WriteValue ? 1:0)},{MeasUnitNum.WriteValue},{Sourse.WriteValue},{A.WriteValue.ToStringPoint()},{B.WriteValue.ToStringPoint()}");
         }
         #region Активность компенсации
         /// <summary>
@@ -71,7 +69,7 @@ namespace IDensity.AddClasses.Settings
 
         public string Copy()
         {
-            return $"{(Activity.Value ? 1 : 0)},{MeasUnitNum.Value},{Sourse.Value},{A.Value.ToStringPoint()},{B.Value.ToStringPoint()},{C.Value.ToStringPoint()},{D.Value.ToStringPoint()}";
+            return $"{(Activity.Value ? 1 : 0)},{MeasUnitNum.Value},{Sourse.Value},{A.Value.ToStringPoint()},{B.Value.ToStringPoint()}";
         }
     }
 }
