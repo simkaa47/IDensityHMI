@@ -937,7 +937,7 @@
                     <!--#endregion-->
                     <!--#region ЕДИНИЦЫ ИЗМЕРЕНИЯ -->
                     <TabItem Header="ЕДИНИЦЫ ИЗМЕРЕНИЯ">
-                        <uc:MeasUnitControl/>
+                        <uc:MeasUnitControl DataContext="{Binding MeasUnitSettingsVm}"/>
                     </TabItem>
                     <!--#endregion-->
                     <!--#region Настройки платы HV --> 

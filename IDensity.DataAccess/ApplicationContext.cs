@@ -15,7 +15,7 @@ namespace IDensity.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseLazyLoadingProxies()
+               // .UseLazyLoadingProxies()
                 .UseSqlite("Data Source=application.db");
         }
     }
