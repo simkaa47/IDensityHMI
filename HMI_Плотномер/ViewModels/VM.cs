@@ -1,11 +1,11 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.EventHistory;
+using IDensity.Core.ViewModels.MeasUnits;
 using IDensity.Models;
 using IDensity.Models.SQL;
 using IDensity.Services.ComminicationServices;
 using IDensity.Services.InitServices;
 using IDensity.Services.SQL;
-using IDensity.Services.XML;
 using IDensity.ViewModels.Commands;
 using IDensity.ViewModels.MasrerSettings;
 using IDensity.ViewModels.SdCard;
@@ -42,7 +42,7 @@ namespace IDensity.ViewModels
 
         #region Cервисы
         public CommunicationService CommService { get; private set; }
-        
+
         #endregion
 
         /// <summary>

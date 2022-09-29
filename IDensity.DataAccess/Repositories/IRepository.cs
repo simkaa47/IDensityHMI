@@ -10,7 +10,7 @@ namespace IDensity.DataAccess.Repositories
         void Delete(T entity);
         void Update(T entity);
 
-        void Init(IEnumerable<T> collection);
+        IEnumerable<T> Init(IEnumerable<T> collection);
 
     }
     

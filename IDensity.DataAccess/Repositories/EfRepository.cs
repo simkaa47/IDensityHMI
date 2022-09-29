@@ -6,63 +6,50 @@ using System.Linq;
 namespace IDensity.DataAccess.Repositories
 {
     public class EfRepository<T> : IRepository<T> where T : class, IDataBased
-    { 
+    {
+        public readonly ApplicationContext _dbContext;
+        public EfRepository()
+        {
+            _dbContext = new ApplicationContext();
+        }
         public void Add(T entity)
         {
-            using(var dbContext = new ApplicationContext())
-            {
-                dbContext.Set<T>().Add(entity);
-            }
+            _dbContext.Set<T>().Add(entity);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(T entity)
         {
-            using (var dbContext = new ApplicationContext())
+            T entityFromDb = _dbContext.Set<T>().Find(entity.Id);
+            if (entityFromDb != null)
             {
-                T entityFromDb = dbContext.Set<T>().Find(entity.Id);
-                if (entityFromDb != null)
-                {
-                    dbContext.Set<T>().Remove(entityFromDb);
-                    dbContext.SaveChanges();
-                }
-            }            
+                _dbContext.Set<T>().Remove(entityFromDb);
+                _dbContext.SaveChanges();
+            }
         }
 
         public List<T> GetAll()
         {
-            using (var dbContext = new ApplicationContext())
-            {
-                return dbContext.Set<T>().ToList();
-            }
-            
+            return _dbContext.Set<T>().ToList();
         }
 
         public T GetById(int id)
         {
-            using (var dbContext = new ApplicationContext())
-            {
-                return dbContext.Set<T>()
+            return _dbContext.Set<T>()
                  .Where(e => e.Id == id)
                  .FirstOrDefault();
-            }
-            
+
         }
 
-        public void Init(IEnumerable<T> collection)
+        public IEnumerable<T> Init(IEnumerable<T> collection)
         {
-            using (var dbContext = new ApplicationContext())
-            {
-                dbContext.Init(collection);
-            }
+            return _dbContext.Init(collection);
         }
 
         public void Update(T entity)
         {
-            using (var dbContext = new ApplicationContext())
-            {
-                dbContext.Entry(entity).State = EntityState.Modified;
-                dbContext.SaveChangesAsync();
-            }
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.SaveChanges();
         }
     }
 }
