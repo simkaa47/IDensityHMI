@@ -16,4 +16,5 @@
     <conv:StringByIndexConverter x:Key="StringByIndex"/>
     <conv:GetNameFromEnumCustom x:Key="EnumCustomConverter"/>
     <conv:GetBitFromNum x:Key="GetBitConverter"/>
+    <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
 </ResourceDictionary>

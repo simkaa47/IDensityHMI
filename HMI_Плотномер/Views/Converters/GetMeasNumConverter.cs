@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-namespace IDensity.Core.Views.Converters
+namespace IDensity.Views.Converters
 {
     public class GetMeasNumConverter : IMultiValueConverter
     {

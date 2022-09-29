@@ -12,9 +12,10 @@
     <Grid>
         <ListBox HorizontalContentAlignment="Stretch">
             <!--#region Кнопки управления -->
+           
             <StackPanel Orientation="Horizontal">
                 <!--#region Добавить ЕИ-->
-                <Button Height="80" Width="80"
+                <Button Height="80" Width="80" Margin="2"
                         Command="{Binding AddMeasUnitCommand}">
                     <fa:ImageAwesome Icon="PlusCircle"></fa:ImageAwesome>
                     <Button.ToolTip>
@@ -22,9 +23,27 @@
                     </Button.ToolTip>
                 </Button>
                 <!--#endregion-->
-
+                <!--#region Удалить ЕИ-->
+                <Button Height="80" Width="80" Margin="2"
+                        Command="{Binding DelMeasNumCommand}">
+                    <fa:ImageAwesome Icon="Remove"></fa:ImageAwesome>
+                    <Button.ToolTip>
+                        <TextBlock Text="Удалить"/>
+                    </Button.ToolTip>
+                </Button>
+                <!--#endregion-->
+                <!--#region Редактированть ЕИ-->
+                <Button Height="80" Width="80" Margin="2"
+                        Command="{Binding EditMeasNumCommand}">
+                    <fa:ImageAwesome Icon="Edit"></fa:ImageAwesome>
+                    <Button.ToolTip>
+                        <TextBlock Text="Редактировать"/>
+                    </Button.ToolTip>
+                </Button>
+                <!--#endregion-->
             </StackPanel>
             <!--#endregion-->
+            <!--#region Коллекция ЕИ -->
             <DataGrid CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
@@ -53,6 +72,17 @@
                 </DataGrid.Columns>
 
             </DataGrid>
+            <!--#endregion-->
+            <ComboBox>
+                <ComboBox.ItemsSource>
+                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}">
+                        <Binding Path="MeasUnits"/>
+                        <Binding Path="VM.mainModel.MeasResults[0].Settings.MeasType.Value"/>
+                    </MultiBinding>
+                </ComboBox.ItemsSource>
+                
+            </ComboBox>
+            
         </ListBox>
        
     </Grid>
