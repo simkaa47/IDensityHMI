@@ -15,7 +15,13 @@ namespace IDensity.Views.Converters
             if (values.Length < 2) return null;
             if(!(values[0] is IEnumerable<MeasUnit> measUnits)) return null;
             if (!(values[1] is int mode)) return null;
-            return measUnits.Where(mu=>mu.Mode==mode).ToList();
+            if (values.Length == 2) return measUnits.Where(mu => mu.Mode == mode).ToList();
+            if (!(values[2] is double index)) return null;
+            var selected = measUnits.Where(m => m.Id == index).FirstOrDefault();
+            if (selected is null)return measUnits.Where(mu => mu.Mode == mode).FirstOrDefault();
+            return selected;
+
+
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

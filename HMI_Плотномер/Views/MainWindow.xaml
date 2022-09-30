@@ -1263,7 +1263,7 @@
                         <uc:MasterSettingsControl/>
                     </TabItem>
                     <!--#endregion-->
-                    <TabItem Header="Переменные состоняий">
+                    <TabItem Header="Переменные состоняий" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" >
                         <TabControl TabStripPlacement="Top">
                             <TabControl.Resources>
                                 <Style TargetType="DataGridColumnHeader">

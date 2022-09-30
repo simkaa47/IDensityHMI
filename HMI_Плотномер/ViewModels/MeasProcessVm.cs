@@ -48,6 +48,7 @@ namespace IDensity.ViewModels
 
         }, canExec => VM.mainModel.Connecting.Value));
         #endregion
+
         #region Записать-кты ослабления
         RelayCommand _writeAttenuationCommand;
         public RelayCommand WriteAttenuationCommand => _writeAttenuationCommand ?? (_writeAttenuationCommand = new RelayCommand(exec =>
@@ -105,10 +106,5 @@ namespace IDensity.ViewModels
                 mp.SingleMeasEventFinishedEvent += (num) => VM.CommService.Tcp.GetMeasSettingsExternal(num);
             }
         }
-
-
-
-
-
     }
 }

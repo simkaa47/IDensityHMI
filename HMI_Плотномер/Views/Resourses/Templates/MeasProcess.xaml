@@ -783,7 +783,7 @@
                     <GroupBox  Header="ТЕМПЕРАТУРНАЯ КОМПЕНСАЦИЯ">
                         <DataGrid Template="{StaticResource TempCompensation}" ItemsSource="{Binding TempCompensations}"/>
                     </GroupBox>
-                    <GroupBox DataContext="{Binding SteamCompensation}"
+                    <GroupBox DataContext="{Binding SteamCompensation}" Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}"
                               Header="КОМПЕНСАЦИЯ ПАРОВОЙ ФАЗЫ">
                         <ListBox Template="{StaticResource CompensationItemTemplate }"/>
                     </GroupBox>

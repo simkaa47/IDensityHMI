@@ -73,15 +73,23 @@
 
             </DataGrid>
             <!--#endregion-->
-            <ComboBox>
+            <!--<TextBox Text="{Binding MeasUnits[0].K}"/>
+            <ComboBox DisplayMemberPath="Name">
                 <ComboBox.ItemsSource>
                     <MultiBinding Converter="{StaticResource GetMeasNumConverter}">
                         <Binding Path="MeasUnits"/>
                         <Binding Path="VM.mainModel.MeasResults[0].Settings.MeasType.Value"/>
                     </MultiBinding>
                 </ComboBox.ItemsSource>
-                
-            </ComboBox>
+                <ComboBox.SelectedItem>
+                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}">
+                        <Binding Path="MeasUnits"/>
+                        <Binding Path="VM.mainModel.MeasResults[0].Settings.MeasType.Value"/>
+                        <Binding Path=" MeasUnits[0].K"/>
+                    </MultiBinding>
+                </ComboBox.SelectedItem>
+
+            </ComboBox>-->
             
         </ListBox>
        

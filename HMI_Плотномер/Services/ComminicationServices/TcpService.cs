@@ -552,6 +552,7 @@ namespace IDensity.Services.ComminicationServices
             _model.SettingsReaded = false;
             var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,2#"));
             var list = GetNumber("adc_proc_cntr", 8, MainModel.CountCounters, str);
+            
             if (list == null) return;
             for (int i = 0; i < MainModel.CountCounters; i++)
             {
