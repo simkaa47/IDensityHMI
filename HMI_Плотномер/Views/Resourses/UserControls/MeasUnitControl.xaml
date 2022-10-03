@@ -52,7 +52,7 @@
                   ItemsSource="{Binding MeasUnits}"
                   SelectedItem="{Binding SelectedMeasUnit}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="№" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}"/>
+                    <DataGridTextColumn Header="№" Binding="{Binding Id}"/>
                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
                     <DataGridTextColumn Header="К-т" Binding="{Binding K}"/>
                     <DataGridTemplateColumn Header="Контекст">
@@ -73,23 +73,25 @@
 
             </DataGrid>
             <!--#endregion-->
-            <!--<TextBox Text="{Binding MeasUnits[0].K}"/>
-            <ComboBox DisplayMemberPath="Name">
+            <TextBox Text="{Binding VM.mainModel.MeasProcSettings[0].MeasType.Value}"/>
+            
+            <TextBox Text="{Binding MeasUnits[0].K, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox DisplayMemberPath="Name" >
                 <ComboBox.ItemsSource>
-                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}">
+                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
                         <Binding Path="MeasUnits"/>
-                        <Binding Path="VM.mainModel.MeasResults[0].Settings.MeasType.Value"/>
+                        <Binding Path="VM.mainModel.MeasProcSettings[0].MeasType.Value"/>
                     </MultiBinding>
                 </ComboBox.ItemsSource>
                 <ComboBox.SelectedItem>
-                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}">
+                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
                         <Binding Path="MeasUnits"/>
-                        <Binding Path="VM.mainModel.MeasResults[0].Settings.MeasType.Value"/>
-                        <Binding Path=" MeasUnits[0].K"/>
+                        <Binding Path="VM.mainModel.MeasProcSettings[0].MeasType.Value"/>
+                        <Binding Path="MeasUnits[0].K"/>
                     </MultiBinding>
                 </ComboBox.SelectedItem>
 
-            </ComboBox>-->
+            </ComboBox>
             
         </ListBox>
        

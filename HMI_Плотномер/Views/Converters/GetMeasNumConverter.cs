@@ -26,7 +26,8 @@ namespace IDensity.Views.Converters
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            var ret = new object[2];
+            return ret;
         }
     }
 }
