@@ -8,9 +8,9 @@ namespace IDensity.AddClasses
 {
     public class MeasResult:PropertyChangedBase
     {
-        public MeasResult()
+        public MeasResult(string measMemoryId)
         {
-
+            MeasUnitMemoryId = measMemoryId;
         }
         #region Значение счетчика, импульсов/с
         /// <summary>
@@ -55,8 +55,15 @@ namespace IDensity.AddClasses
         {
             get { return _isActive; }
             set { Set(ref _isActive, value); }
-        } 
+        }
         #endregion
+
+        private string _measUnitMemoryId;
+        public string MeasUnitMemoryId
+        {
+            get => _measUnitMemoryId;
+            set => Set(ref _measUnitMemoryId, value);
+        }
 
 
         public void ClearResult()

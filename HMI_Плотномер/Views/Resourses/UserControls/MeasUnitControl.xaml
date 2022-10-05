@@ -6,9 +6,13 @@
              xmlns:vm="clr-namespace:IDensity.Core.ViewModels.MeasUnits"
              xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls" 
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:MeasUnitVm}"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:MeasUnitMultiplyConverter x:Key="Multi"/>
+    </UserControl.Resources>
     <Grid>
         <ListBox HorizontalContentAlignment="Stretch">
             <!--#region Кнопки управления -->
@@ -60,7 +64,7 @@
                             <DataTemplate>
                                 <TextBlock>
                                     <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource EnumCustomConverter }">
+                                        <MultiBinding Converter="{StaticResource EnumCustomConverter}">
                                             <Binding Path="Mode"/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasTypesNamesNames.Data"/>
                                         </MultiBinding>
@@ -73,10 +77,10 @@
 
             </DataGrid>
             <!--#endregion-->
-            <TextBox Text="{Binding VM.mainModel.MeasProcSettings[0].MeasType.Value}"/>
+            <!--<TextBox Text="{Binding VM.mainModel.MeasProcSettings[0].MeasType.Value}"/>
             
             <TextBox Text="{Binding MeasUnits[0].K, UpdateSourceTrigger=PropertyChanged}"/>
-            <ComboBox DisplayMemberPath="Name" >
+            <ComboBox DisplayMemberPath="Name" Name="MUnit" >
                 <ComboBox.ItemsSource>
                     <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
                         <Binding Path="MeasUnits"/>
@@ -92,7 +96,16 @@
                 </ComboBox.SelectedItem>
 
             </ComboBox>
-            
+            <TextBox FontSize="20"  Name="djc">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource Multi}">
+                        <Binding Path="VM.mainModel.MeasResults[0].PhysValueAvg.Value"/>
+                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="{Binding ElementName=djc, Path=Text}" FontSize="20"  Foreground="White"/>-->
+
         </ListBox>
        
     </Grid>

@@ -35,7 +35,7 @@
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility1}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle1, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="time" DataFieldY="y1"  Color="Red"/>
+                                           DataFieldX="time" DataFieldY="y1"   Color="Red"/>
             
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility2}"

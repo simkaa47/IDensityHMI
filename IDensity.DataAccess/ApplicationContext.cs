@@ -6,6 +6,7 @@ namespace IDensity.DataAccess
     public class ApplicationContext : DbContext
     {
         public DbSet<MeasUnit> MeasUnits => Set<MeasUnit>();
+        public DbSet<MeasUnitMemory> MeasUnitMemories => Set<MeasUnitMemory>();
 
         public ApplicationContext()
         {

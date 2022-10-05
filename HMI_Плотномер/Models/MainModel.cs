@@ -111,7 +111,7 @@ namespace IDensity.Models
         #endregion
 
         #region Данные измерения
-        public MeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new MeasResult()).ToArray();
+        public MeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new MeasResult($"MeasResult{i}")).ToArray();
         /// <summary>
         /// Привязка настроек измерения к результатам измерения
         /// </summary>
