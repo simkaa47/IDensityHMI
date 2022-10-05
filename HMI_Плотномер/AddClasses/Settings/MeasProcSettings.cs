@@ -460,14 +460,14 @@ namespace IDensity.AddClasses.Settings
             str += $"type={MeasType.Value},";
             str += FastChange.Copy() + ",";
             str += $"pipe_diam={(ushort)(PipeDiameter.Value * 10)}";
-            str += $"att_coeffs={AttCoeffs[0].Value.ToStringPoint()},{AttCoeffs[1].Value.ToStringPoint()}";
-            str += $"calc_type={CalculationType.Value}";
+            str += $",att_coeffs={AttCoeffs[0].Value.ToStringPoint()},{AttCoeffs[1].Value.ToStringPoint()}";
+            str += $",calc_type={CalculationType.Value}";
             str += ",volume_coeffs=";
             foreach (var volume in VolumeCoeefs)
             {
                 str += $"{volume.Value.ToStringPoint()},";
             }
-            str.Remove(str.Length - 1);
+            str = str.Remove(str.Length - 1);
             return str;
         }
 

@@ -34,6 +34,23 @@ namespace IDensity.DataAccess.Migrations
 
                     b.ToTable("MeasUnits");
                 });
+
+            modelBuilder.Entity("IDensity.DataAccess.Models.MeasUnitMemory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("MeasUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeasUnitMemories");
+                });
 #pragma warning restore 612, 618
         }
     }

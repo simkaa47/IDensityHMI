@@ -76,36 +76,7 @@
                 </DataGrid.Columns>
 
             </DataGrid>
-            <!--#endregion-->
-            <!--<TextBox Text="{Binding VM.mainModel.MeasProcSettings[0].MeasType.Value}"/>
-            
-            <TextBox Text="{Binding MeasUnits[0].K, UpdateSourceTrigger=PropertyChanged}"/>
-            <ComboBox DisplayMemberPath="Name" Name="MUnit" >
-                <ComboBox.ItemsSource>
-                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
-                        <Binding Path="MeasUnits"/>
-                        <Binding Path="VM.mainModel.MeasProcSettings[0].MeasType.Value"/>
-                    </MultiBinding>
-                </ComboBox.ItemsSource>
-                <ComboBox.SelectedItem>
-                    <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
-                        <Binding Path="MeasUnits"/>
-                        <Binding Path="VM.mainModel.MeasProcSettings[0].MeasType.Value"/>
-                        <Binding Path="MeasUnits[0].K"/>
-                    </MultiBinding>
-                </ComboBox.SelectedItem>
-
-            </ComboBox>
-            <TextBox FontSize="20"  Name="djc">
-                <TextBox.Text>
-                    <MultiBinding Converter="{StaticResource Multi}">
-                        <Binding Path="VM.mainModel.MeasResults[0].PhysValueAvg.Value"/>
-                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                    </MultiBinding>
-                </TextBox.Text>
-            </TextBox>
-            <TextBlock Text="{Binding ElementName=djc, Path=Text}" FontSize="20"  Foreground="White"/>-->
-
+            <!--#endregion--> 
         </ListBox>
        
     </Grid>

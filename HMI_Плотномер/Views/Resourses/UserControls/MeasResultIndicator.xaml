@@ -11,12 +11,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <conv:MeasUnitMultiplyConverter x:Key="GetMeasNumConverterResult"/>
+        <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
     </UserControl.Resources>
     <Grid>
         <Viewbox >
             <Border   Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}" BorderBrush="WhiteSmoke" BorderThickness="1">
                 <StackPanel HorizontalAlignment="Stretch">
+                    <!--#region Название измренительного процесса -->
                     <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="30" FontWeight="Bold">
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource EnumCustomConverter}">
@@ -25,19 +27,19 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
+                    <!--#endregion-->
                     <StackPanel Orientation="Horizontal" >
+                        <!--#region Мгновенное значение измеряемой величины -->
                         <StackPanel>
-                            <!--#region Мгновенное значение -->
-                            <!--
-                            <TextBlock>
+                            <TextBlock  Foreground="Aqua" FontSize="80">
                                 <TextBlock.Text>
-                                    <Mu
+                                    <MultiBinding Converter="{StaticResource Multyply}" StringFormat="f1">
+                                        <Binding Path="PhysValueCur.Value"/>
+                                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                        <Binding Path="MeasUnitMemoryId"/>
+                                    </MultiBinding>
                                 </TextBlock.Text>
-                            </TextBlock> Text="{Binding PhysValueCur.Value, StringFormat=f1}"                          
-                           Foreground="Aqua"
-                           FontSize="100"/>
-                            -->
-                            <!--#endregion-->
+                            </TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Мгновенное"                           
                                     FontSize="30"
@@ -49,6 +51,7 @@
                                     Width="300"/>
                             </StackPanel>
                         </StackPanel>
+                        <!--#endregion-->
                         <!--#region Счетчик -->
                         <StackPanel Orientation="Horizontal"
                             Margin="100,0,0,0">
@@ -64,10 +67,13 @@
                             <TextBlock Text=")" FontSize="60" Foreground="Aqua"/>
                         </StackPanel>
                         <!--#endregion-->
-
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox DisplayMemberPath="Name" Name="MUnit" Width="200" >
+                        <ComboBox DisplayMemberPath="Name" 
+                                  Name="MUnit" Width="200"
+                                  VerticalAlignment="Center"
+                                  FontSize="40">
+                            <!--#region ЕИ -->
                             <ComboBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
                                     <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
@@ -83,10 +89,18 @@
                             </ComboBox.SelectedItem>
 
                         </ComboBox>
+                        <!--#endregion-->
+                        <!--#region Усредненное значение ФВ -->
                         <StackPanel>
-                            <TextBlock Text="{Binding PhysValueAvg.Value, StringFormat=f1}"
-                               FontSize="100"
-                               Foreground="Orange"/>
+                            <TextBlock  Foreground="Orange" FontSize="80">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource Multyply}" StringFormat="f1">
+                                        <Binding Path="PhysValueAvg.Value"/>
+                                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                        <Binding Path="MeasUnitMemoryId"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Усредненное"                           
                                     FontSize="30"
@@ -98,6 +112,7 @@
                                     Width="300"/>
                             </StackPanel>
                         </StackPanel>
+                        <!--#endregion-->
                     </StackPanel>
                 </StackPanel>
             </Border>

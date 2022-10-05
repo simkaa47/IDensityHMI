@@ -40,10 +40,9 @@ namespace IDensity.Views.Converters
             }
             long index = GetId(idString);
             selected = measUnits.Where(m => m.Id == index).FirstOrDefault();
-            if (selected is null)selected = measUnits.Where(mu => mu.Mode == mode).FirstOrDefault();
-
-            
-
+            if (selected is null || selected.Mode!=mode)selected = measUnits.Where(mu => mu.Mode == mode).FirstOrDefault();
+            if (selected is null) return null;
+            SetId(idString, selected.Id);
             return selected;
 
 
