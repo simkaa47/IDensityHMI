@@ -56,23 +56,50 @@
                   ItemsSource="{Binding MeasUnits}"
                   SelectedItem="{Binding SelectedMeasUnit}">
                 <DataGrid.Columns>
+                    <!--#region ID -->
                     <DataGridTextColumn Header="№" Binding="{Binding Id}"/>
+                    <!--#endregion-->
+                    <!--#region Имя -->
                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                    <!--#endregion-->
+                    <!--#region К-т -->
                     <DataGridTextColumn Header="К-т" Binding="{Binding K}"/>
-                    <DataGridTemplateColumn Header="Контекст">
+                    <!--#endregion-->
+                    <!--#region Смещение -->
+                    <DataGridTextColumn Header="Смещение" Binding="{Binding Offset}"/>
+                    <!--#endregion-->
+                    <!--#region Тип прибора -->
+                    <DataGridTemplateColumn Header="Тип прибора">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource EnumCustomConverter}">
-                                            <Binding Path="Mode"/>
-                                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasTypesNamesNames.Data"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
+                                <ComboBox Width="200"
+                                          ItemsSource="{StaticResource DeviceTypes}"
+                                          IsEnabled="False"
+                                          SelectedIndex="{Binding DeviceType}">
+                                </ComboBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region Тип измерения -->
+                    <DataGridTemplateColumn Header="Тип измерения">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox IsEnabled="False"
+                                          SelectedIndex="{Binding Mode}">
+                                    <ComboBox.ItemsSource>
+                                        <MultiBinding Converter="{StaticResource Multiselector}">
+                                            <Binding Path="DeviceType"/>
+                                            <Binding Source="{StaticResource DensityCalculation}"/>
+                                            <Binding Source="{StaticResource LevelCalculation}"/>
+                                        </MultiBinding>
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    
                 </DataGrid.Columns>
 
             </DataGrid>

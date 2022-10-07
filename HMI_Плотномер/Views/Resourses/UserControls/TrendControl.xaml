@@ -7,12 +7,9 @@
              xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:local="clr-namespace:IDensity.Views.Resourses.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <conv:TrendMultiplyConverter x:Key="TrendMultiplyConverter"/>
-    </UserControl.Resources>
+             d:DesignHeight="450" d:DesignWidth="800">   
     <Grid>
-        <oxy:Plot PlotMargins="30,0,0,30"                  
+        <oxy:Plot PlotMargins="80,0,0,30"                  
                       PlotType="XY"                   
                       PlotAreaBorderThickness="0"
                       TextColor="WhiteSmoke"                       
@@ -36,7 +33,7 @@
                                   MajorGridlineStyle="Dot"
                                   FontSize="14"/>
             </oxy:Plot.Axes>
-            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource, Converter={StaticResource TrendMultiplyConverter} }"
+            <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=DataSource}"
                                             
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineVisibility1}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:TrendControl}, Path=LineTitle1, UpdateSourceTrigger=PropertyChanged}"

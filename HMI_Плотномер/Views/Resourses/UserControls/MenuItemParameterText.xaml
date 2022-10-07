@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:IDensity.Views.Converters"
+             xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:local="clr-namespace:IDensity.Views.Resourses.UserControls"
              mc:Ignorable="d">
     <local:CommandExtention.Resources>

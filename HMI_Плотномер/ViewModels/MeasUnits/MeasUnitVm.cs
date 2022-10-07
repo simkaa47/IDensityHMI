@@ -37,17 +37,12 @@ namespace IDensity.Core.ViewModels.MeasUnits
             SafetyAction(() =>
             {
                 var addMeasNum = new MeasUnit();
-                MeasUnitDialog dialog = new MeasUnitDialog((new MeasUnitDialogVm
-                {
-                    MeasUnit = addMeasNum,
-                    measUnitNames = VM.MeasTypesNamesNames.Data
-                }));
+                MeasUnitDialog dialog = new MeasUnitDialog(addMeasNum);               
                 if (dialog.ShowDialog() == true)
                 {
                     _measUnitRepository.Add(addMeasNum);
                 }
-            });
-            
+            });            
 
         }, canExecPar => true));
         #endregion
@@ -65,11 +60,7 @@ namespace IDensity.Core.ViewModels.MeasUnits
             if (SelectedMeasUnit is null) return;
             SafetyAction(() =>
             {
-                MeasUnitDialog dialog = new MeasUnitDialog((new MeasUnitDialogVm
-                {
-                    MeasUnit = SelectedMeasUnit,
-                    measUnitNames = VM.MeasTypesNamesNames.Data
-                }));
+                MeasUnitDialog dialog = new MeasUnitDialog(SelectedMeasUnit);
                 if (dialog.ShowDialog() == true)
                 {
                     _measUnitRepository.Update(SelectedMeasUnit);
@@ -95,7 +86,6 @@ namespace IDensity.Core.ViewModels.MeasUnits
             });
         }, canExecPar => true));
         #endregion
-
 
         #endregion
 
@@ -137,8 +127,17 @@ namespace IDensity.Core.ViewModels.MeasUnits
         {
             MeasUnits = _measUnitRepository.Init(new List<MeasUnit>
             {
-                new MeasUnit{Name="г/см^3",K=1, Mode=0},
-                new MeasUnit{Name="мм",K=1, Mode=1}
+                new MeasUnit{Name="г/см^3",K=1, Offset = 0, Mode=0, DeviceType=0},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=1, DeviceType=0},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=2, DeviceType=0},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=3, DeviceType=0},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=4, DeviceType=0},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=5, DeviceType=0},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=6, DeviceType=0},
+                new MeasUnit{Name="мм",K=1, Offset=0, Mode=0, DeviceType=1},
+                new MeasUnit{Name="%",K=1, Offset=0, Mode=1, DeviceType=1},
+                new MeasUnit{Name="%",K=1, Offset=0, Mode=2, DeviceType=1},
+                new MeasUnit{Name="мм/c",K=1, Offset=0, Mode=3, DeviceType=1},
             });
         }
 

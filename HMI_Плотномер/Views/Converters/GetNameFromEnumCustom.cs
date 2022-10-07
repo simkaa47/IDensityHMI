@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     class GetNameFromEnumCustom : IMultiValueConverter
     {

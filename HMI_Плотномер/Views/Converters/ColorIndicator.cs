@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     public class ColorIndicator : IValueConverter
     {

@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     /// <summary>
     /// Позволяет получить текущее время усреднения, умножая длительность на количество точек измерения

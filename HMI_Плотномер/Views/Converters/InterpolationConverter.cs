@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
-    public class InterpolationConverter:IValueConverter
+    public class InterpolationConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,7 +25,7 @@ namespace IDensity.Views.Converters
                 return OxyPlot.InterpolationAlgorithms.UniformCatmullRomSpline;
             }
 
-            
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

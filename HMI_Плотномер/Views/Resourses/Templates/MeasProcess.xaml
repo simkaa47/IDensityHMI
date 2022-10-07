@@ -242,13 +242,19 @@
                     <uc:Parameter DataContext="{Binding MeasDeep}"
                                   Command="{Binding Command}"/>
                     <!--#endregion-->
-                    <!--#region Тип измерения -->
+                    <!--#region Тип измерения-->
                     <uc:CompoboxParameter DataContext="{Binding MeasType}"
                                           CompoboxWidth="150"
-                                          Command="{Binding Command}"
-                                          DisplayMemberPath="Name"
-                                          ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.MeasTypesNamesNames.Data}"
-                                          Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                          Command="{Binding Command}"                                                                                
+                                          Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                        <uc:CompoboxParameter.ItemSource>
+                            <MultiBinding Converter="{StaticResource Multiselector}">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                                <Binding Source="{StaticResource DensityCalculation}"/>
+                                <Binding Source="{StaticResource LevelCalculation}"/>
+                            </MultiBinding>
+                        </uc:CompoboxParameter.ItemSource>
+                    </uc:CompoboxParameter>
                     <!--#endregion-->
                     <!--#region Активность быстрых измерений -->
                     <DockPanel DataContext="{Binding FastChange.Activity}">
@@ -281,7 +287,7 @@
                                   Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
                     <!--#endregion-->
                     <!--#region К-ты расчета обьема -->
-                    <GroupBox Header="К-ТЫ РАСЧЕТА ОБЬЕМА">
+                    <GroupBox Header="К-ТЫ РАСЧЕТА ОБЬЕМА" Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
                         <ListBox HorizontalContentAlignment="Stretch">
                             <uc:Parameter DataContext="{Binding VolumeCoeefs[0]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
                             <uc:Parameter DataContext="{Binding VolumeCoeefs[1]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
@@ -530,8 +536,7 @@
                                           Command="{Binding Command}"
                                           CompoboxWidth="150"
                                           Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                          ItemSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.TypeCalibrations.Data}" 
-                                          DisplayMemberPath="Name"/>
+                                          ItemSource="{StaticResource CalibrTypes}"/>
                         <!--#endregion-->
                     </ListBox>
                     <!--#endregion-->

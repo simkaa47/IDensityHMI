@@ -1,11 +1,12 @@
 ﻿using IDensity.DataAccess.Extentions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace IDensity.DataAccess.Repositories
 {
-    public class EfRepository<T> : IRepository<T> where T : class, IDataBased
+    public class EfRepository<T> : IRepository<T>, IDisposable where T : class, IDataBased
     {
         public readonly ApplicationContext _dbContext;
         public EfRepository()
@@ -26,6 +27,11 @@ namespace IDensity.DataAccess.Repositories
                 _dbContext.Set<T>().Remove(entityFromDb);
                 _dbContext.SaveChanges();
             }
+        }
+
+        public void Dispose()
+        {
+           
         }
 
         public List<T> GetAll()

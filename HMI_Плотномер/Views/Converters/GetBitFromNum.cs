@@ -2,13 +2,13 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     public class GetBitFromNum : IValueConverter
     {
         public object Convert(object v, Type t, object p, CultureInfo c)
         {
-            if ((p is null)) return null;
+            if (p is null) return null;
             var index = System.Convert.ToUInt32(p, c);
             var num = System.Convert.ToUInt32(v, c);
             var bit = (num & (uint)Math.Pow(2, index)) > 0 ? true : false;

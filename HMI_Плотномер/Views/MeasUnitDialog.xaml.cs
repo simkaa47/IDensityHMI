@@ -21,14 +21,14 @@ namespace IDensity.Core.Views
     public partial class MeasUnitDialog : Window
     {
 
-        public MeasUnitDialog(MeasUnitDialogVm data)
+        public MeasUnitDialog(MeasUnit data)
         {
             InitializeComponent();
             Data = data;
             this.DataContext = Data;
         }
 
-        public MeasUnitDialogVm Data { get; }
+        public MeasUnit Data { get; }
 
         void Accept_Click(object sender, RoutedEventArgs e)
         {

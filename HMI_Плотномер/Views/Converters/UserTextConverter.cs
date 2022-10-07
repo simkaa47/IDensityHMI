@@ -1,11 +1,9 @@
 ﻿using IDensity.AddClasses;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     /// <summary>
     /// Получает из текущего пользователя имя, фамилию, уровень
@@ -16,7 +14,7 @@ namespace IDensity.Views.Converters
         {
             if (value == null) return "Пользователь не авторизован";
             var user = value as User;
-            if(user==null) return "Пользователь не авторизован";
+            if (user == null) return "Пользователь не авторизован";
             return user.Somename + " " + user.Name + $"({user.Level})";
         }
 

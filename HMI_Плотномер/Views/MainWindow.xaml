@@ -1217,16 +1217,10 @@
                             </ControlTemplate>
                             <!--#endregion-->
                         </TabItem.Resources>
-                        <WrapPanel>
-                            <!--#region Названия Источников компенсаций -->
-                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding MeasTypesNamesNames.Data}" Tag="Типы измерений"></DataGrid>
-                            <!--#endregion-->
+                        <WrapPanel>                           
                             <!--#region Названия Источников компенсаций -->
                             <DataGrid Template="{StaticResource Enums}" DataContext="{Binding CompensationSrcNames.Data}" Tag="Источники компенсаций"></DataGrid>
-                            <!--#endregion-->
-                            <!--#region Названия Типов калибровок -->
-                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding TypeCalibrations.Data}" Tag="Типы калибровок"></DataGrid>
-                            <!--#endregion-->
+                            <!--#endregion-->                            
                             <!--#region Единицы измерения -->
                             <DataGrid Template="{StaticResource Enums}" DataContext="{Binding UnitNames.Data}" Tag="Единицы измерения"></DataGrid>
                             <!--#endregion-->

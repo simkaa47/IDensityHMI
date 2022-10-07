@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     class GetStatusConveter : IValueConverter
     {
@@ -14,11 +11,11 @@ namespace IDensity.Views.Converters
         {
             try
             {
-               
+
                 var arrStr = parameter as ArrayList;
                 if (arrStr == null) return "КОЛЛЕКЦИЯ ПУСТА";
                 var condition = (bool)value;
-             return condition ? arrStr[1] : arrStr[0];
+                return condition ? arrStr[1] : arrStr[0];
             }
             catch (Exception ex)
             {

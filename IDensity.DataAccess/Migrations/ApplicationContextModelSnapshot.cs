@@ -21,7 +21,10 @@ namespace IDensity.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("K")
+                    b.Property<int>("DeviceType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("K")
                         .HasColumnType("REAL");
 
                     b.Property<int>("Mode")
@@ -29,6 +32,9 @@ namespace IDensity.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<float>("Offset")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 

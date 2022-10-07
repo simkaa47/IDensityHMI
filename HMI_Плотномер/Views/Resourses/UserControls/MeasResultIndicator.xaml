@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <conv:MeasUnitMultiplyConverter x:Key="GetMeasNumConverterResult"/>
         <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
+        <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
     </UserControl.Resources>
     <Grid>
@@ -78,12 +79,14 @@
                                 <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
                                     <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
                                     <Binding Path="Settings.MeasType.Value"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
                                 </MultiBinding>
                             </ComboBox.ItemsSource>
                             <ComboBox.SelectedItem>
                                 <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
                                     <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
                                     <Binding Path="Settings.MeasType.Value"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
                                     <Binding Path="MeasUnitMemoryId"/>
                                 </MultiBinding>
                             </ComboBox.SelectedItem>

@@ -4,15 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     public class GetMeasNumConverter : IMultiValueConverter
     {
         private readonly EfRepository<MeasUnitMemory> _measUnitMemoryRepository;
-        
+
         public GetMeasNumConverter()
         {
             _measUnitMemoryRepository = new EfRepository<MeasUnitMemory>();
@@ -21,16 +20,17 @@ namespace IDensity.Views.Converters
         public MeasUnit CurrentMeasUnit { get; set; }
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length < 2) return null;
-            if(!(values[0] is IEnumerable<MeasUnit> measUnits)) return null;
+            if (values.Length < 3) return null;
+            if (!(values[0] is IEnumerable<MeasUnit> measUnits)) return null;
             if (!(values[1] is int mode)) return null;
-            if (values.Length == 2) return measUnits.Where(mu => mu.Mode == mode).ToList();
-            if (!(values[2] is string idString)) return null;
+            if (!(values[2] is ushort deviceType)) return null;
+            if (values.Length == 3) return measUnits.Where(mu => mu.Mode == mode && mu.DeviceType == deviceType).ToList();
+            if (!(values[3] is string idString)) return null;
             MeasUnit selected = null;
-            if (!(IsMemoryExist(idString)))
+            if (!IsMemoryExist(idString))
             {
                 long measUnitId = 0;
-                selected = measUnits.Where(mu => mu.Mode == mode).FirstOrDefault();
+                selected = measUnits.Where(mu => mu.Mode == mode && mu.DeviceType == deviceType).FirstOrDefault();
                 if (selected != null) measUnitId = selected.Id;
                 _measUnitMemoryRepository.Add(new MeasUnitMemory
                 {
@@ -40,7 +40,7 @@ namespace IDensity.Views.Converters
             }
             long index = GetId(idString);
             selected = measUnits.Where(m => m.Id == index).FirstOrDefault();
-            if (selected is null || selected.Mode!=mode)selected = measUnits.Where(mu => mu.Mode == mode).FirstOrDefault();
+            if (selected is null || selected.Mode != mode  || selected.DeviceType != deviceType) selected = measUnits.Where(mu => mu.Mode == mode && mu.DeviceType == deviceType).FirstOrDefault();
             if (selected is null) return null;
             SetId(idString, selected.Id);
             return selected;
@@ -65,17 +65,17 @@ namespace IDensity.Views.Converters
             return _measUnitMemoryRepository.GetAll().Any(m => m.Name == id);
         }
 
-        void SetId(string memoryId,long measUnitId)
+        void SetId(string memoryId, long measUnitId)
         {
             var memory = _measUnitMemoryRepository.GetAll().Where(m => m.Name == memoryId).FirstOrDefault();
-            if(!(memory is null))
+            if (!(memory is null))
             {
                 memory.MeasUnitId = measUnitId;
                 _measUnitMemoryRepository.Update(memory);
             }
         }
 
-        
+
 
     }
 }

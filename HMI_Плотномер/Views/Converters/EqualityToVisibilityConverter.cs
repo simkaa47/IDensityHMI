@@ -5,14 +5,14 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 
-namespace IDensity.Views.Converters
+namespace IDensity.Core.Views.Converters
 {
     class NotEqualityToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value == null || parameter==null)return Visibility.Collapsed;
-            if(value.ToString()!=parameter.ToString()) return Visibility.Visible;
+            if (value == null || parameter == null) return Visibility.Collapsed;
+            if (value.ToString() != parameter.ToString()) return Visibility.Visible;
             return Visibility.Collapsed;
         }
 

@@ -1,6 +1,8 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.EventHistory;
 using IDensity.Core.ViewModels.MeasUnits;
+using IDensity.DataAccess.Models;
+using IDensity.DataAccess.Repositories;
 using IDensity.Models;
 using IDensity.Models.SQL;
 using IDensity.Services.ComminicationServices;
@@ -44,7 +46,7 @@ namespace IDensity.ViewModels
         public CommunicationService CommService { get; private set; }
 
         #endregion
-
+        
         /// <summary>
         /// Инициализация дочерних Vm
         /// </summary>
@@ -58,6 +60,7 @@ namespace IDensity.ViewModels
             SdCardVm = new SdCardVm(this);
             AnalogVm = new AnalogVm(this);
             MeasUnitSettingsVm = new MeasUnitVm(this);
+           
         }
 
         #region Инициализация сервисов
@@ -178,7 +181,7 @@ namespace IDensity.ViewModels
                 GetMeasDates();
                 ServicesInit();
                 InitVm();
-                TrendInit();
+                TrendInit();                
             }
         }
 
@@ -308,20 +311,11 @@ namespace IDensity.ViewModels
 
         #endregion
 
-
-        //#endregion
-
-        #region Названия типов измерений
-        public DataBaseCollection<EnumCustom> MeasTypesNamesNames { get; } = new DataBaseCollection<EnumCustom>("MeasTypesNamesNames", new EnumCustom());
-        #endregion
+        //#endregion       
 
         #region Названия источников компенсаций
         public DataBaseCollection<EnumCustom> CompensationSrcNames { get; } = new DataBaseCollection<EnumCustom>("CompensationSrcNames", new EnumCustom());
-        #endregion
-
-        #region Названия типов калибровок
-        public DataBaseCollection<EnumCustom> TypeCalibrations { get; } = new DataBaseCollection<EnumCustom>("TypeCalibrations", new EnumCustom());
-        #endregion
+        #endregion        
 
         #region Названия измерительных процессов
         public DataBaseCollection<EnumCustom> MeasProcNames { get; } = new DataBaseCollection<EnumCustom>("MeasProcNames", new EnumCustom());
@@ -341,9 +335,27 @@ namespace IDensity.ViewModels
                 await Task.Run(() =>
                 {
                     var list = SqlMethods.ReadFromSql<TimePoint>($"SELECT * FROM TimePoints WHERE time >= datetime('{DisplayDateStart.ToString("u")}') AND time <= datetime('{DisplayDateEnd.ToString("u")}');");
+                    for (int j = 0; j < 2; j++)
+                    {
+                        var unit = GetCoeff(mainModel.MeasResults[j].MeasUnitMemoryId);
+                        foreach (var point in list)
+                        {
+                            if (j == 0)
+                            {
+                                point.y2 = point.y2 * unit.K + unit.Offset;
+                                point.y3 = point.y3 * unit.K + unit.Offset;
+                            }
+                            else
+                            {
+                                point.y5 = point.y5 * unit.K + unit.Offset;
+                                point.y6 = point.y6 * unit.K + unit.Offset;
+                            }
+                        }
+                        MeasResultMeasUnits[j] = unit;
+                    }
                     ArchivalDataPotnts = list;
-                    ArchivalTrendDownloading = false;
-                });
+                ArchivalTrendDownloading = false;
+            });
 
             }
             catch (Exception)
@@ -375,14 +387,40 @@ namespace IDensity.ViewModels
                         y9 = mainModel.TelemetryHV.VoltageCurOut.Value,
                         y10 = mainModel.TempTelemetry.TempInternal.Value
                     };
+                    SqlMethods.WritetoDb<TimePoint>(tp);                    
+                    tp.y2 = mainModel.MeasResults[0].PhysValueCur.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                    tp.y3 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                    tp.y5 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
+                    tp.y6 = mainModel.MeasResults[1].PhysValueAvg.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
                     PlotCollection.Add(tp);
                     int i = 0;
-                    while (PlotCollection.Count > 0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 5)
+                    while (PlotCollection.Count > 0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 10)
                     {
                         PlotCollection.RemoveAt(0);
                         i++;
                     }
-                    SqlMethods.WritetoDb<TimePoint>(tp);
+                    for (int j = 0; j < 2; j++)
+                    {                        
+                        var unit = GetCoeff(mainModel.MeasResults[j].MeasUnitMemoryId);
+                        if (!(MeasUnit.CompareMeasUnits(unit, MeasResultMeasUnits[j])))
+                        {                            
+                            foreach (var point in PlotCollection)
+                            {
+                                if (j == 0)
+                                {
+                                    point.y2 = ((point.y2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.y3 = ((point.y3 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                }
+                                else
+                                {
+                                    point.y5 = ((point.y5 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.y6 = ((point.y6 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                }
+                            }
+                            MeasResultMeasUnits[j] = unit;
+                        }
+                    }
+                    
                 });
 
         }
@@ -616,6 +654,30 @@ namespace IDensity.ViewModels
 
         }
         #endregion
+
+        /// <summary>
+        /// Метод для расчета 
+        /// </summary>
+        /// <param name="memoryId"></param>
+        /// <returns></returns>
+        private MeasUnit GetCoeff(string memoryId)
+        {
+            MeasUnitMemory memory = null;
+            MeasUnit measUnit = null;
+            using (var _measUnitMemoryRepository = new EfRepository<MeasUnitMemory>())
+            {
+                memory = _measUnitMemoryRepository.GetAll().Where(m => m.Name == memoryId).FirstOrDefault();
+            }
+            if (memory is null) return new MeasUnit();
+            using (var _measUnitRepository = new EfRepository<MeasUnit>())
+            {
+                measUnit = _measUnitRepository.GetAll().Where(mu => mu.Id == memory.MeasUnitId).FirstOrDefault();
+            }  
+            if (measUnit is null) return new MeasUnit();
+            return measUnit;
+        }
+
+        MeasUnit[] MeasResultMeasUnits { get; } = Enumerable.Range(0, 2).Select(i => new MeasUnit()).ToArray();
 
     }
 }
