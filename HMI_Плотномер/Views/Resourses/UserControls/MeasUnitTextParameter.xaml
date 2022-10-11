@@ -4,9 +4,89 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Views.Resourses.UserControls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <local:CommandExtention.Resources>
+        <conv:GetMeasNumConverter x:Key="GetMeasNum"/>
+        <conv:ToStringFormatConverter x:Key="StringFormatConverter"/>
+        <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}">
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </local:CommandExtention.Resources>
+    <DockPanel HorizontalAlignment="Stretch">        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <!--#region Поле для ввода текста -->
+            <TextBox x:Name="Write" Width="60" VerticalContentAlignment="Center"
+                     Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource Multyply}"  
+                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
+                        <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                        <Binding ElementName="MeasUnitSelector" Path="SelectedItem"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitTextParameter}" Path="MeasUnitMemoryId"/>
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+            <!--#endregion-->
+            <!--#region Кнопка записи -->
+            <Button Width="50"
+                    Content="-->"                    
+                    Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}"
+                    Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitTextParameter}, Path=Command}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitTextParameter}, Path=CommanDParameter}"
+                    IsEnabled="{Binding ValidationOk}"
+                    Margin="5,0,5,0"/>
+            <!--#endregion-->
+            <!--#region Текущее значение -->
+            <Border Width="80" BorderThickness="1" >
+                <TextBlock Width="60"
+                           VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}" 
+                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
+                            <Binding Path="Value"/>
+                            <Binding ElementName="MeasUnitSelector" Path="SelectedItem"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitTextParameter}" Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Border>
+            <!--#endregion-->
+            <!--#region ЕИ -->
+            <ComboBox Width="100" Name="MeasUnitSelector"  DisplayMemberPath="Name" >
+                <ComboBox.ItemsSource>
+                    <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay" >
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitTextParameter}" Path="MeasType"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                    </MultiBinding>
+                </ComboBox.ItemsSource>
+                <ComboBox.SelectedItem>
+                    <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay">
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitTextParameter}" Path="MeasType"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitTextParameter}" Path="MeasUnitMemoryId"/>
+                    </MultiBinding>
+                </ComboBox.SelectedItem>
+            </ComboBox>
+            <!--#endregion-->
+        </StackPanel>
+        <DockPanel.ToolTip>
+            <ToolTip Placement="MousePoint">
+                <StackPanel>
+                    <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
+                    <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
+                    <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>
+                </StackPanel>
+            </ToolTip>
+        </DockPanel.ToolTip>
+    </DockPanel>
 </local:CommandExtention>

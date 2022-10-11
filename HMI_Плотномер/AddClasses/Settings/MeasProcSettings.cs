@@ -196,6 +196,15 @@ namespace IDensity.AddClasses.Settings
         #endregion
 
         #region Настройки единичного измерения
+        #region ID ЕИ
+        private string _measUnitMemoryId = "SingleMeasMemoryId";
+        public string MeasUnitMemoryId
+        {
+            get => _measUnitMemoryId;
+            set => Set(ref _measUnitMemoryId, value);
+        }
+        #endregion
+
         Timer singleMeasTimer = new Timer();
         #region Время единичного измерния
         public Parameter<ushort> SingleMeasTime { get; } = new Parameter<ushort>("SingleMeasTime", "Время еденичного измерения, c.", 1, ushort.MaxValue, 0, "");

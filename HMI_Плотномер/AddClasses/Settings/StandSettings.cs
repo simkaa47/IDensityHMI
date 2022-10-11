@@ -14,6 +14,7 @@ namespace IDensity.AddClasses.Settings
         {
             this.Id = id;
             DescribeOnCommands();
+            MeasUnitMemoryId = $"StandMeasMemory{id}";
         }
         /// <summary>
         /// Подписка на изменения 
@@ -117,6 +118,17 @@ namespace IDensity.AddClasses.Settings
         public Parameter<float> HalfLifeCorr { get; } = new Parameter<float>("StandHalfLifeCorr", "Значение с учетом полураспада", float.MinValue, float.MaxValue, 0, "");
 
         #endregion
+
+        #region ID ЕИ
+        private string _measUnitMemoryId;
+        public string MeasUnitMemoryId
+        {
+            get => _measUnitMemoryId;
+            set => Set(ref _measUnitMemoryId, value);
+        } 
+        #endregion
+
+
         /// <summary>
         /// Необходимо записать настройки стандартизаций
         /// </summary>

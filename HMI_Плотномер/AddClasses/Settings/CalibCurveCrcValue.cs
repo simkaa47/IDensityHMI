@@ -15,7 +15,8 @@ namespace IDensity.AddClasses.Settings
             this.Id = id;
             Date.CommandEcecutedEvent += o => CallWriteEvent("date", Date.WriteValue.ToString("dd:MM:yy"));
             Weak.CommandEcecutedEvent += o => CallWriteEvent("weak", Weak.WriteValue);
-            CounterValue.CommandEcecutedEvent += o => CallWriteEvent("value", CounterValue.WriteValue);            
+            CounterValue.CommandEcecutedEvent += o => CallWriteEvent("value", CounterValue.WriteValue);
+            MeasUnitMemoryId = $"SingleSrcMeasUnitMemory{id}";
         }
         #region Id
         private int _id;
@@ -50,9 +51,16 @@ namespace IDensity.AddClasses.Settings
         {
             get { return _selected; }
             set { Set(ref _selected, value); }
-        } 
+        }
         #endregion
-
+        #region ID ЕИ
+        private string _measUnitMemoryId;
+        public string MeasUnitMemoryId
+        {
+            get => _measUnitMemoryId;
+            set => Set(ref _measUnitMemoryId, value);
+        }
+        #endregion
         void CallWriteEvent<T>(string parName, T value)
         {
             var arg = TcpArg.Replace(parName, value.ToString().Replace(",", "."));

@@ -37,7 +37,9 @@ namespace IDensity.Core.Views.Converters
             {
                 SaveMemoryMeasUnit(memoryId, CurMeasUnit.Id);
             }
-            return y.ToString("f3");
+            var stringFormat = "";
+            if (!(p is null)) stringFormat = p.ToString();
+            return y.ToString(stringFormat);
 
         }
 

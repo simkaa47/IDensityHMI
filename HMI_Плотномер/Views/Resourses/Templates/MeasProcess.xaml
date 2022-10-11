@@ -5,7 +5,8 @@
                     xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates" xmlns:oxy="http://oxyplot.org/wpf">
+                    xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
+                    xmlns:oxy="http://oxyplot.org/wpf">
     <Style TargetType="MenuItem" x:Key="WithoutMenu">
         <Style.Triggers>
             <Trigger Property="IsHighlighted" Value="True">
@@ -15,53 +16,7 @@
                 <Setter Property="IsSubmenuOpen" Value="False"/>
             </Trigger>
         </Style.Triggers>
-    </Style> 
-    <!--#region  Шаблон для настроек стандартизаций -->
-    <DataTemplate DataType="{x:Type sett:StandSettings}" x:Key="MenuStandSettings">
-        <Menu>
-            <MenuItem>
-                <MenuItem.Header>
-                    <MultiBinding Converter="{StaticResource StringByIndex}">
-                        <Binding Path="Id"/>
-                        <Binding Source="{StaticResource StandTypes}"/>
-                    </MultiBinding>
-                </MenuItem.Header>
-                <!--#region Номер ЕИ -->
-                <MenuItem DataContext="{Binding StandMeasUnitNum}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Длительность -->
-                <MenuItem DataContext="{Binding StandDuration}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Дата -->
-                <MenuItem DataContext="{Binding LastStandDate}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Физическая величина -->
-                <MenuItem DataContext="{Binding StandPhysValue}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Результат -->
-                <MenuItem DataContext="{Binding StandResult}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <!--#region Значение стандартизации с учетом полураспада -->
-                <MenuItem DataContext="{Binding HalfLifeCorr}" Header="{Binding Description}">
-                    <uc:MenuItemParameterText Command="{Binding Command}"/>
-                </MenuItem>
-                <!--#endregion-->
-                <Button Command="{Binding MakeStandCommand}"
-                        Content="{Binding IsStandartisation, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource StandStates}}"/>
-            </MenuItem>
-        </Menu>
-    </DataTemplate>
-    <!--#endregion-->       
+    </Style>
     <!--#region Стиль для вкладок -->
     <Style TargetType="TabItem" x:Key="MeasProcTabItemStyle">
         <Setter Property="Template">
@@ -435,45 +390,21 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Физическая величина -->
-                        <DataGridTemplateColumn MaxWidth="190">
+                        <DataGridTemplateColumn >
                             <DataGridTemplateColumn.Header>
                                 <TextBlock Text="Физическая величина"
                                            TextWrapping="Wrap"/>
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <uc:MenuItemParameterText Command="{Binding Command}" DataContext="{Binding StandPhysValue}"/>
+                                    <uc:MeasUnitTextParameter Command="{Binding Command}" 
+                                                              DataContext="{Binding StandPhysValue}"
+                                                              MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
+                                                              MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--#endregion-->
-                        <!--#region Единица измерения -->
-                        <DataGridTemplateColumn MaxWidth="110">
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="Единица измерения"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox   Width="150"
-                                                SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                HorizontalAlignment="Right"
-                                                HorizontalContentAlignment="Right"
-                                                DisplayMemberPath="MeasUnitName.Value"
-                                                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="DropDownOpened">
-                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
-                                            </i:EventTrigger>
-                                            <i:EventTrigger EventName="DropDownClosed">
-                                                <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </ComboBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <!--#endregion-->
+                        <!--#endregion-->                       
                         <!--#region Управление стандартизацией -->
                         <DataGridTemplateColumn MaxWidth="100">
                             <DataGridTemplateColumn.Header>
@@ -495,26 +426,7 @@
             <TabItem Header="КАЛИБРОВОЧНАЯ КРИВАЯ">
                 <StackPanel DataContext="{Binding CalibrCurve}">
                     <!--#region Общие настройки -->
-                    <ListBox HorizontalContentAlignment="Stretch" >
-                        <!--#region ЕИ -->
-                        <!--<DockPanel>
-                            <TextBlock Text="Единица измерения" Style="{StaticResource Common}"/>
-                            <ComboBox Width="150"
-                                  SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  HorizontalAlignment="Right"                                  
-                                  DisplayMemberPath="MeasUnitName.Value"
-                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="DropDownOpened">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="DropDownClosed">
-                                        <i:InvokeCommandAction Command="{Binding OutMeasNumWriteCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </ComboBox>
-                        </DockPanel>-->
-                        <!--#endregion-->
+                    <ListBox HorizontalContentAlignment="Stretch" >                        
                         <!--#region Результат калибровки -->
                         <DockPanel>
                             <TextBlock Text="Результат калибровки" Style="{StaticResource Common}"/>
@@ -558,6 +470,10 @@
                     <StackPanel>
                         <!--#region Общие настройки -->
                         <ListBox HorizontalContentAlignment="Stretch">
+                            <ListBox.Resources>
+                                <conv:MeasUnitMultiplyConverter x:Key="SingleMultiply"/>
+                                <conv:GetMeasNumConverter x:Key="SingleMeasPhysValueNum"/>
+                            </ListBox.Resources>
                             <!--#region Время ед. измерения -->
                             <DockPanel>
                                 <TextBlock Text="Время еденичного измерения, x0.1 c." Style="{StaticResource Common}"/>
@@ -581,11 +497,41 @@
                             <!--#region Физическая величина образца -->
                             <DockPanel>
                                 <TextBlock Style="{StaticResource Common}" Text="Физическая величина"/>
-                                <TextBox Width="80"
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBox Width="80"
                                      VerticalContentAlignment="Center"
                                      HorizontalAlignment="Right"
-                                     Height="30"
-                                     Text="{Binding SingleMeasPhysValue}"/>
+                                     Height="30">
+                                        <TextBox.Text>
+                                            <MultiBinding Converter="{StaticResource SingleMultiply}">
+                                                <Binding Path="SingleMeasPhysValue"/>
+                                                <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                                <Binding Path="MeasUnitMemoryId"/>
+                                            </MultiBinding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <ComboBox DisplayMemberPath="Name" 
+                                               Name="MUnit" Width="100"
+                                               VerticalAlignment="Center">
+                                        <!--#region ЕИ -->
+                                        <ComboBox.ItemsSource>
+                                            <MultiBinding Converter="{StaticResource SingleMeasPhysValueNum}" Mode="OneWay" >
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                                                <Binding Path="MeasType.Value"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                                            </MultiBinding>
+                                        </ComboBox.ItemsSource>
+                                        <ComboBox.SelectedItem>
+                                            <MultiBinding Converter="{StaticResource SingleMeasPhysValueNum}" Mode="OneWay">
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                                                <Binding Path="MeasType.Value"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                                                <Binding Path="MeasUnitMemoryId"/>
+                                            </MultiBinding>
+                                        </ComboBox.SelectedItem>
+
+                                    </ComboBox>
+                                </StackPanel>
                             </DockPanel>
                             <!--#endregion-->
 
@@ -645,13 +591,17 @@
                                         </DataGridTemplateColumn>
                                         <!--#endregion-->
                                         <!--#region Физическая величина -->
-                                        <DataGridTemplateColumn MaxWidth="200">
+                                        <DataGridTemplateColumn>
                                             <DataGridTemplateColumn.Header>
                                                 <TextBlock Text="Физическая величина" TextWrapping="Wrap"/>
                                             </DataGridTemplateColumn.Header>
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding CounterValue}" Command="{Binding Command}"/>
+                                                    <uc:MeasUnitTextParameter 
+                                                        DataContext="{Binding CounterValue}" 
+                                                        Command="{Binding Command}"
+                                                        MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
+                                                        MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
