@@ -46,6 +46,7 @@
                                          HorizontalAlignment="Right"
                                          VerticalContentAlignment="Center"/>
                 </DockPanel>
+                <UserControl Template="{StaticResource BitIndicator}" DataContext="{Binding VM.mainModel.AdcBoard.CommState}"/>
                 <!--#endregion-->
             </ListBox>
             <!--#endregion-->
