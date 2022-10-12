@@ -19,7 +19,7 @@ namespace IDensity.ViewModels
             VM = vM;
             AdcAvgSettings = XmlInit.ClassInit<AdcAvgSettings>();
             _spectrLogSettings = XmlInit.ClassInit<SpectrLogSettings>();
-            UdpService = new UdpService(AdcAvgSettings);            
+            UdpService = new UdpService(AdcAvgSettings, vM);            
             UdpService.Start();
             Describe();
         }

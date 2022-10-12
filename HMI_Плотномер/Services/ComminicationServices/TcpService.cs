@@ -20,6 +20,8 @@ namespace IDensity.Services.ComminicationServices
             this._model = model;
         }
 
+        string currentIp;
+
         #region События
         public event Action<string> TcpEvent;
         #endregion        
@@ -64,7 +66,7 @@ namespace IDensity.Services.ComminicationServices
             Client.SendTimeout = 2000;
             TcpEvent?.Invoke($"Выполняется подключение к {ip}:{port}");
             Client.Connect(ip, port);
-
+            currentIp = ip;
             TcpEvent?.Invoke($"Произведено подключение к {ip}:{port}");
             Stream = Client.GetStream();
 
@@ -115,7 +117,7 @@ namespace IDensity.Services.ComminicationServices
 
                 }
                 GetSetiings();
-
+                if (currentIp != _model.TcpConnectData.IP) Disconnect();
                 errCommCount = 0;
                 _model.Connecting.Value = Client.Connected;
                 //if(CycicRequest)CloseConnection();

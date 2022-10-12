@@ -17,7 +17,9 @@
 
                 <oxy:Plot.Annotations>                    
                     <oxy:LineAnnotation Name="LowLine"  Type="Vertical" X="{Binding SelectedCountDiapasone.Start.Value}" Color="Blue" Text="Старт" StrokeThickness="4" />
-                    <oxy:LineAnnotation Name="HighLine"  Type="Vertical" X="{Binding SelectedCountDiapasone.Finish.Value}" Color="Red" Text="Финиш" StrokeThickness="4"/>                    
+                    <oxy:LineAnnotation Name="HighLine"  Type="Vertical" X="{Binding SelectedCountDiapasone.Finish}"  Color="Red" Text="Финиш" StrokeThickness="4">
+                        
+                    </oxy:LineAnnotation>                    
                 </oxy:Plot.Annotations>
                 <oxy:Plot.Axes>
                     <oxy:LinearAxis  

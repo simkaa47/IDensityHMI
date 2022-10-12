@@ -1,5 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.Models;
+using IDensity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace IDensity.Services.ComminicationServices
         #region UDP клиент
         public UdpClient Client { get; private set; }
         int localPort = 49051;
+        IPEndPoint remoteIp = null;
         #endregion
 
         #region Событие ошибки UDP
@@ -48,38 +50,50 @@ namespace IDensity.Services.ComminicationServices
         List<Point> CurOscillList = new List<Point>();
 
         #region Конструктор
-        public UdpService(AdcAvgSettings settings)
+        public UdpService(AdcAvgSettings settings, VM vM)
         {
             _settings = settings;
+            _vM = vM;
         }
         #endregion
 
         public async void Start()
         {
             if (Client != null) return;
-            Client = new UdpClient(localPort);
-            IPEndPoint remoteIp = null;
+            
             await Task.Run(() =>
             {
-                try
+                SetClient(localPort);
+                while (true)
                 {
-                    while (true)
-                    {
-                        byte[] data = Client.Receive(ref remoteIp);
-                        ParseData(data);
 
+                    try
+                    {
+                        while (true)
+                        {
+                            byte[] data = Client.Receive(ref remoteIp);
+                            ParseData(data); 
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    UdpErrorEvent?.Invoke($"UdpClient - {ex.Message}");
-                }
-                finally
-                {
-                    Client?.Close();
+                    catch (Exception ex)
+                    {
+                        UdpErrorEvent?.Invoke($"UdpClient - {ex.Message}");
+                    }
+                    finally
+                    {
+                        Client?.Close();
+                        SetClient(_vM.mainModel.PortUdp);
+                    } 
                 }
             });
 
+        }
+
+        void SetClient(int port)
+        {
+            Client = new UdpClient(port);
+            Client.Client.ReceiveTimeout = 5000;
+            remoteIp = null;
         }
 
         public void Stop()
@@ -89,6 +103,7 @@ namespace IDensity.Services.ComminicationServices
 
         int nextPacketNum = 1;
         private readonly AdcAvgSettings _settings;
+        private readonly VM _vM;
 
         void ParseData(byte[] data)
         {

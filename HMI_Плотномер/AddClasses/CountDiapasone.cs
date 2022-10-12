@@ -11,7 +11,8 @@ namespace IDensity.AddClasses
     {
         public CountDiapasone()
         {
-            
+            Start.PropertyChanged += (o, e) => Finish = (ushort)(Start.Value + Width.Value);
+            Width.PropertyChanged += (o, e) => Finish = (ushort)(Start.Value + Width.Value);
         }
         #region Номер набора
         public Parameter<ushort> Num { get; set; } = new Parameter<ushort>("CountSelectionNum", "Номер набора", 0, 4095, 91, "hold");
@@ -23,6 +24,16 @@ namespace IDensity.AddClasses
 
         #region Начальный номер счетчика
         public Parameter<ushort> Start { get; set; } = new Parameter<ushort>("CountDiapasoneStart", "Начальный номер счетчика", 0, 4095, 92, "hold");
+        #endregion
+
+        #region КОнечный номер счетчика
+        private ushort _finish;
+        public ushort Finish
+        {
+            get => _finish;
+            set => Set(ref _finish, value);
+
+        }
         #endregion
 
         #region Ширина счетчика

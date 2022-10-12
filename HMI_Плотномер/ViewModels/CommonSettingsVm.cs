@@ -101,6 +101,14 @@ namespace IDensity.ViewModels
             VM.CommService.Tcp.SetFsrd8(arg);
         }, canExec => true));
         #endregion
+
+        #region Записать mainModel в файл
+        private RelayCommand _writeSettingsToFile;
+        public RelayCommand WriteSettingsToFile => _writeSettingsToFile ?? (_writeSettingsToFile = new RelayCommand(p => 
+        { 
+            
+        }, canExec => true));
+        #endregion
         #endregion
 
     }
