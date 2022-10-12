@@ -173,12 +173,7 @@ namespace IDensity.AddClasses.Settings
         }, o => true));
         public event Action NeedMakeStand;
         public event Action StandFinishEvent;
-        #endregion
-
-        public string Copy()
-        {
-            return $"std={Id},{MeasUnit.Id.Value},{StandDuration.Value},{LastStandDate.Value:dd:MM:yy},{StandResult.Value.ToStringPoint()},{StandPhysValue.Value.ToStringPoint()},{HalfLifeCorr.Value.ToStringPoint()}";
-        }
+        #endregion        
         
     }
 }

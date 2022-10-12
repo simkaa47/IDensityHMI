@@ -275,7 +275,7 @@
                             <Button Width="100" 
                                     Margin="5" 
                                     Content="Copy" 
-                                    Command="{Binding CopyAllCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.CopyMeasProcessCommand}"
                                     CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
                         </StackPanel>
 

@@ -392,26 +392,7 @@ namespace IDensity.AddClasses.Settings
 
         }, o => true));
 
-        #endregion
-
-
-        #region Команда - скопировать настройки на другой измерительный процесс
-        /// <summary>
-        /// Команда - скопировать настройки на другой измерительный процесс
-        /// </summary>
-        RelayCommand _copyAllCommand;
-        /// <summary>
-        /// Команда - скопировать настройки на другой измерительный процесс
-        /// </summary>
-        public RelayCommand CopyAllCommand => _copyAllCommand ?? (_copyAllCommand = new RelayCommand(execPar =>
-        {
-            int par = (int)execPar;
-            var arg = CopyAll(par);
-            if (par != Num) NeedWriteEvent?.Invoke($"*SETT,meas_proc={par},{arg}#", (ushort)par);
-
-        }, canExecPar => true));
-        #endregion
-
+        #endregion 
 
         void OnWriteCommandExecuted(string argument)
         {
@@ -444,41 +425,7 @@ namespace IDensity.AddClasses.Settings
         #region Тип расчета
         public Parameter<ushort> CalculationType { get; } = new Parameter<ushort>("CalculationType", "Тип расчета", 0, 3, 0, "");
         #endregion
-
-        public string CopyAll(int number)
-        {
-            var str = $"cntr={MeasProcCounterNum.Value},";
-            foreach (var std in MeasStandSettings)
-            {
-                str += std.Copy() + ",";
-            }
-            str += CalibrCurve.Copy() + ",";
-            str += "calib_src=";
-            for (int j = 0; j < SingleMeasResCount; j++)
-            {
-                str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()},";
-
-            }
-            str += $"dens_liq={DensityLiqD1.Copy()},dens_solid={DensitySolD2.Copy()},";
-            foreach (var comp in TempCompensations)
-            {
-                str += $"comp_temp={comp.Copy()},";
-            }
-            str += $"comp_steam={SteamCompensation.Copy()},";
-            str += $"aver_depth={MeasDeep.Value},";
-            str += $"type={MeasType.Value},";
-            str += FastChange.Copy() + ",";
-            str += $"pipe_diam={(ushort)(PipeDiameter.Value * 10)}";
-            str += $",att_coeffs={AttCoeffs[0].Value.ToStringPoint()},{AttCoeffs[1].Value.ToStringPoint()}";
-            str += $",calc_type={CalculationType.Value}";
-            str += ",volume_coeffs=";
-            foreach (var volume in VolumeCoeefs)
-            {
-                str += $"{volume.Value.ToStringPoint()},";
-            }
-            str = str.Remove(str.Length - 1);
-            return str;
-        }
+        
 
     }
 }
