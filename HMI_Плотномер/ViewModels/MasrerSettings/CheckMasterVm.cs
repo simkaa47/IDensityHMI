@@ -1,4 +1,7 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Services.CheckServices;
+using IDensity.Core.Services.CheckServices.ElectronicUnit;
+using IDensity.Core.Services.CheckServices.PrepareChecking;
 using IDensity.Models;
 using IDensity.Services.CheckServices;
 using IDensity.Services.ComminicationServices;
@@ -57,6 +60,24 @@ namespace IDensity.ViewModels.MasrerSettings
 
         #endregion
 
+        #region Информация об устройстве
+        public DeviceInformation DeviceInfo { get; set; } = new DeviceInformation();
+        #endregion
+
+        #region Предварительная проверка
+        public PrepareCheck PrepareCheckInformation { get; } = new PrepareCheck();
+
+        #endregion
+
+        #region Результаты проверки 
+        private ElectronicUnitCheck _electronicUnitCheck;
+        public ElectronicUnitCheck ElectronicUnitCheck
+        {
+            get => _electronicUnitCheck;
+            set => Set(ref _electronicUnitCheck, value);
+        }
+        #endregion
+
         #region Список результатов
         /// <summary>
         /// Список результатов
@@ -73,7 +94,7 @@ namespace IDensity.ViewModels.MasrerSettings
         #endregion
 
         #region Сервисы
-
+        
         #endregion
 
         #region Дата последней проверки прибора
@@ -144,14 +165,18 @@ namespace IDensity.ViewModels.MasrerSettings
             Stage = CheckMasterStates.Process;
             try
             {
-                MainStatus = "Проверка работы аналоговых выходов...";
-                await StartService(new AnalogCheckService(_cancellationTokenSource, VM));
-                MainStatus = "Проверка корректности импульсов от ФЭУ...";
-                await StartService(new PulseCheckService(_cancellationTokenSource, VM));
-                MainStatus = "Проверка корректности работы модуля RTC...";
-                await StartService(new RtcCheckService(_cancellationTokenSource, VM));
-                MainStatus = "Проверка контрольной суммы ПО прибора...";
-                await StartService(new CheckCheckSumService(_cancellationTokenSource, VM));
+                MainStatus = "Предварительное условие проверки...";
+                GetDeviceInformation();
+                new PrepareCheckService(PrepareCheckInformation, VM).Check();
+                MainStatus = "Проверка основного блока электроники...";
+                ElectronicUnitCheck = await new ElectronicUnitCheckService(_cancellationTokenSource, VM).Check();
+                //await StartService(new AnalogCheckService(_cancellationTokenSource, VM));
+                //MainStatus = "Проверка корректности импульсов от ФЭУ...";
+                //await StartService(new PulseCheckService(_cancellationTokenSource, VM));
+                //MainStatus = "Проверка корректности работы модуля RTC...";
+                //await StartService(new RtcCheckService(_cancellationTokenSource, VM));
+                //MainStatus = "Проверка контрольной суммы ПО прибора...";
+                //await StartService(new CheckCheckSumService(_cancellationTokenSource, VM));
                 LastCheckDate = DateTime.Now;
                 Stage = CheckMasterStates.Success;
             }
@@ -173,16 +198,7 @@ namespace IDensity.ViewModels.MasrerSettings
             Results.AddRange(results);
         }
 
-        void Print()
-        {
-            //States.Add($"Проверка аналогового модуля {moduleNum}:");
-            //foreach (var result in results)
-            //{
-            //    States.Add($"Уровень тока {result.SetLevel} mA:");
-            //    States.Add($"Измеренное значение {result.CurrentLevel.ToString("f3")}");
-            //    States.Add($"Отклонение {((Math.Abs(result.CurrentLevel-result.SetLevel))/result.SetLevel*100).ToString("f3")}%");                
-            //}
-        }
+        
 
         void Describe()
         {
@@ -205,6 +221,13 @@ namespace IDensity.ViewModels.MasrerSettings
             {
                 _cancellationTokenSource.Cancel();
             }
+        }
+
+        void GetDeviceInformation()
+        {
+            DeviceInfo.DeviceName = VM.mainModel.DeviceName.Value;
+            DeviceInfo.HmiSoftwareNumber = App.VersionNumber;
+            DeviceInfo.SerialNumber = VM.mainModel.SerialNumber.Value;
         }
 
 

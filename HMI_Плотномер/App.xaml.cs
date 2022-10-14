@@ -15,6 +15,8 @@ namespace IDensity
     /// </summary>
     public partial class App : Application
     {
-        
+        public const string VersionNumber = "1.01";
     }
 }
+
+    
