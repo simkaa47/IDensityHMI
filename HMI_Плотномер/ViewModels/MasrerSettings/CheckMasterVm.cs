@@ -2,6 +2,8 @@
 using IDensity.Core.Services.CheckServices;
 using IDensity.Core.Services.CheckServices.ElectronicUnit;
 using IDensity.Core.Services.CheckServices.PrepareChecking;
+using IDensity.Core.Services.CheckServices.Process;
+using IDensity.Core.Services.CheckServices.Sensor;
 using IDensity.Models;
 using IDensity.Services.CheckServices;
 using IDensity.Services.ComminicationServices;
@@ -76,26 +78,33 @@ namespace IDensity.ViewModels.MasrerSettings
             get => _electronicUnitCheck;
             set => Set(ref _electronicUnitCheck, value);
         }
+
+        private SensorCheck _sensorCheck;
+        public SensorCheck SensorCheck
+        { 
+            get => _sensorCheck;
+            set => Set(ref _sensorCheck, value);
+        }
+
+
         #endregion
 
-        #region Список результатов
+        #region Список параметров процесса
         /// <summary>
         /// Список результатов
         /// </summary>
-        private List<DeviceCheckResult> _results = new List<DeviceCheckResult>();
+        private List<ProcessParameter> _processes = new List<ProcessParameter>();
         /// <summary>
         /// Список результатов
         /// </summary>
-        public List<DeviceCheckResult> Results
+        public List<ProcessParameter> Processes
         {
-            get => _results;
-            set => Set(ref _results, value);
+            get => _processes;
+            set => Set(ref _processes, value);
         }
         #endregion
 
-        #region Сервисы
-        
-        #endregion
+       
 
         #region Дата последней проверки прибора
         /// <summary>
@@ -170,14 +179,9 @@ namespace IDensity.ViewModels.MasrerSettings
                 new PrepareCheckService(PrepareCheckInformation, VM).Check();
                 MainStatus = "Проверка основного блока электроники...";
                 ElectronicUnitCheck = await new ElectronicUnitCheckService(_cancellationTokenSource, VM).Check();
-                //await StartService(new AnalogCheckService(_cancellationTokenSource, VM));
-                //MainStatus = "Проверка корректности импульсов от ФЭУ...";
-                //await StartService(new PulseCheckService(_cancellationTokenSource, VM));
-                //MainStatus = "Проверка корректности работы модуля RTC...";
-                //await StartService(new RtcCheckService(_cancellationTokenSource, VM));
-                //MainStatus = "Проверка контрольной суммы ПО прибора...";
-                //await StartService(new CheckCheckSumService(_cancellationTokenSource, VM));
-                LastCheckDate = DateTime.Now;
+                MainStatus = "Проверка блока ФЭУ...";
+                SensorCheck = await new SensorCheckService(_cancellationTokenSource, VM).Check();
+                Processes = new GetProcesesService(VM).GetProcessParameters();
                 Stage = CheckMasterStates.Success;
             }
             catch (Exception ex)
@@ -190,16 +194,7 @@ namespace IDensity.ViewModels.MasrerSettings
             }
         }
 
-        async Task StartService(ICheckService service)
-        {
-            if (service is null) return;
-            service.ProcessEvent += s => SubStatus = s;
-            var results = await service.Check();
-            Results.AddRange(results);
-        }
-
         
-
         void Describe()
         {
             _model.Connecting.PropertyChanged += (o, e) =>

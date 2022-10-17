@@ -3,18 +3,8 @@ using IDensity.Services.CheckServices;
 
 namespace IDensity.Core.Services.CheckServices.Sensor
 {
-    class SensorCheck :PropertyChangedBase
-    {
-
-        #region Результат проверки всей секции
-        private bool _checkResult;
-        public bool CheckResult
-        {
-            get => _checkResult;
-            set => Set(ref _checkResult, value);
-        }
-        #endregion
-
+    public class SensorCheck :Check
+    { 
         #region Проверка правильности формы импульсв
         private DeviceCheckResult _pulseCheck;
         public DeviceCheckResult PulseCheck
@@ -24,8 +14,13 @@ namespace IDensity.Core.Services.CheckServices.Sensor
         }
         #endregion
 
-
-
-
+        #region Проверка отклонения высокого напряжения на ФЭУ
+        private DeviceCheckResult _hvCheck;
+        public DeviceCheckResult HvCheck
+        {
+            get => _hvCheck;
+            set => Set(ref _hvCheck, value);
+        }
+        #endregion
     }
 }

@@ -3,18 +3,9 @@ using IDensity.Services.CheckServices;
 
 namespace IDensity.Core.Services.CheckServices.ElectronicUnit
 {
-    public class ElectronicUnitCheck : PropertyChangedBase
+    public class ElectronicUnitCheck : Check
     {
-        #region Результат проверки всей секции
-        private bool _checkResult;
-        public bool CheckResult
-        {
-            get => _checkResult;
-            set => Set(ref _checkResult, value);
-        } 
-        #endregion
-
-
+        
         #region Ппроверка напряжения
         private DeviceCheckResult _hvSourceCheck;
         public DeviceCheckResult HvSourceCheck

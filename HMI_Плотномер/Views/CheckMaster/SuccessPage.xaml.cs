@@ -31,44 +31,9 @@ namespace IDensity.Views.CheckMaster
 
         }
 
-        private void MakeReport()
-        {
-            if (_checkMasterVm.Results is null) return;
-            var title = new TextBlock
-            {
-                Text = $"Результаты проверки прибора от {DateTime.Now.ToString()}",
-                FontWeight = FontWeights.Bold,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-            var paragraph = new Paragraph();
-            paragraph.Inlines.Add(title);
-            Document.Blocks.Add(paragraph);
-            foreach (var result in _checkMasterVm.Results)
-            {
-                Document.Blocks.Add(MakeParagraph(result));
-            }
-        }
+        
 
-        Paragraph MakeParagraph(DeviceCheckResult result)
-        { 
-            var paragraph = new Paragraph();
-            var title = new TextBlock
-            {
-                Text = result.ProcessName+":",
-                FontWeight = FontWeights.Bold,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-            var status = new TextBlock
-            {
-                Text = result.Status,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Foreground = result.IsError ? Brushes.Red : Brushes.Black                
-            };
-
-            paragraph.Inlines.Add(title);
-            paragraph.Inlines.Add(status);
-            return paragraph;
-        }
+       
 
         
 
