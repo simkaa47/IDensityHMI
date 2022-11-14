@@ -183,6 +183,7 @@ namespace IDensity.ViewModels.MasrerSettings
                 SensorCheck = await new SensorCheckService(_cancellationTokenSource, VM).Check();
                 Processes = new GetProcesesService(VM).GetProcessParameters();
                 Stage = CheckMasterStates.Success;
+                LastCheckDate = DateTime.Now;
             }
             catch (Exception ex)
             {
