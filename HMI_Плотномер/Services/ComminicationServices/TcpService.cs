@@ -272,8 +272,7 @@ namespace IDensity.Services.ComminicationServices
                 GetMeasProcessDataAll();// Получить данные процеса измерений
                 GetSettings2();
                 GetSettings7();
-                GetSettings1();
-                GetSettings4();
+                GetSettings1();                
                 GetSettings8();
                 GetSdLogStatus();
             }
@@ -574,36 +573,7 @@ namespace IDensity.Services.ComminicationServices
             }
             _model.SettingsReaded = true;
         }
-        #endregion        
-
-        #region Настройки 4
-        void GetSettings4()
-        {
-            _model.SettingsReaded = false;
-            var str = AskResponse(Encoding.ASCII.GetBytes("*CMND,FSR,4#"));
-            var indexOfEqual = str.LastIndexOf('=');
-            if (indexOfEqual < 1) return;
-            var strArr = str.Substring(indexOfEqual + 1).
-                Split(new char[] { '#', ',', '=' })
-                .ToArray();
-            float temp = 0;
-            if (strArr.Length <= 126) throw new Exception("Сигнатура ответа на запрос CMND,FSR,4# не соответствует ожидаемому!");
-            for (int i = 0; i < 126; i += 6)
-            {
-                var id = i / 6;
-                _model.MeasUnitSettings[id].Id.Value = float.TryParse(strArr[i], out temp) ? (ushort)temp : default;
-                _model.MeasUnitSettings[id].MeasUnitClassNum.Value = float.TryParse(strArr[i + 1], out temp) ? (ushort)temp : default;
-                _model.MeasUnitSettings[id].Type.Value = float.TryParse(strArr[i + 2], out temp) ? (ushort)temp : default;
-                _model.MeasUnitSettings[id].A.Value = float.TryParse(strArr[i + 3].Replace(".", ","), out temp) ? temp : default;
-                _model.MeasUnitSettings[id].B.Value = float.TryParse(strArr[i + 4].Replace(".", ","), out temp) ? temp : default;
-                _model.MeasUnitSettings[id].MeasUnitName.Value = strArr[i + 5];
-            }
-
-            _model.SettingsReaded = true;
-        }
-
-
-        #endregion
+        #endregion                
 
         #region Настройки № 7
         void GetSettings7()
@@ -988,21 +958,7 @@ namespace IDensity.Services.ComminicationServices
             var str = $"*CMND,AMS,{time},{measProcNdx},{index}#";
             commands.Enqueue(new TcpWriteCommand((buf) => SendTlg(buf), Encoding.ASCII.GetBytes(str)));
         }
-        #endregion
-
-        #region Команда "Записать настройки едениц измерерия"
-        public void SetMeasUnitsSettings(MeasUnitSettings settings)
-        {
-            var str = $"*SETT,meas_unit={settings.Id.WriteValue}" +
-                $",{settings.MeasUnitClassNum.WriteValue}," +
-                $"{settings.Type.WriteValue}," +
-                $"{settings.A.WriteValue.ToStringPoint()}," +
-                $"{settings.B.WriteValue.ToStringPoint()}," +
-                settings.MeasUnitName.WriteValue.Replace(",", "").Substring(0, Math.Min(8, settings.MeasUnitName.WriteValue.Length));
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings4(); }, Encoding.ASCII.GetBytes(str + "#")));
-        }
-
-        #endregion
+        #endregion        
 
         #region Команда "Переключить реле"
         public void SwitchRelay(ushort value)

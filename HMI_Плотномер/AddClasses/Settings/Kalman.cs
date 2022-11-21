@@ -1,7 +1,9 @@
 ﻿using IDensity.AddClasses;
+using System.Runtime.Serialization;
 
 namespace IDensity.Core.AddClasses.Settings
 {
+    [DataContract]
     public class Kalman:PropertyChangedBase
     {
         public Kalman(int index)
@@ -10,6 +12,7 @@ namespace IDensity.Core.AddClasses.Settings
         }
 
         private int _index;
+        [DataMember]
         public int Index
         {
             get => _index;
@@ -17,11 +20,13 @@ namespace IDensity.Core.AddClasses.Settings
         }
 
         #region Скорость измрениния, к-т
-        public Parameter<float> Speed { get; } = new Parameter<float>("KalmanSpeed", "К-т скорости изменения сигнала", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> Speed { get; set; } = new Parameter<float>("KalmanSpeed", "К-т скорости изменения сигнала", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region К-т сглаживания
-        public Parameter<float> Smooth { get; } = new Parameter<float>("KalmanSmooth", "К-т сглаживания", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> Smooth { get; set; } = new Parameter<float>("KalmanSmooth", "К-т сглаживания", float.MinValue, float.MaxValue, 0, "");
         #endregion
     }
 }

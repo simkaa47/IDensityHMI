@@ -152,15 +152,7 @@ namespace IDensity.ViewModels
                 mainModel.SwitchRelay(temp);
             }
         }, canExec => true));
-        #endregion       
-
-        #region Обновить доступные ЕИ
-        RelayCommand _updateAvialablemeasUnitCommand;
-        public RelayCommand UpdateAvialablemeasUnitCommand => _updateAvialablemeasUnitCommand ?? (_updateAvialablemeasUnitCommand = new RelayCommand(par =>
-        {
-            OnPropertyChanged(nameof(AvialableMeasUnitSettings));
-        }, o => true));
-        #endregion
+        #endregion               
 
         #endregion
         public MainModel mainModel { get; }
@@ -304,14 +296,7 @@ namespace IDensity.ViewModels
 
         #endregion
 
-        #region Данные перечислений        
-
-        #region Доступные ЕИ
-        public IEnumerable<MeasUnitSettings> AvialableMeasUnitSettings => mainModel.MeasUnitSettings.Where(mu => mu.A.Value != 0 || mu.B.Value != 0).Select(mu => mu);
-
-        #endregion
-
-        //#endregion       
+        #region Данные перечислений 
 
         #region Названия источников компенсаций
         public DataBaseCollection<EnumCustom> CompensationSrcNames { get; } = new DataBaseCollection<EnumCustom>("CompensationSrcNames", new EnumCustom());
@@ -363,9 +348,7 @@ namespace IDensity.ViewModels
 
             }
         }
-        #endregion
-
-        public IEnumerable<string> UnitNames => mainModel.MeasUnitSettings.Select(mu => mu.MeasUnitName.Value);
+        #endregion        
 
         #region Добавление данных в график
         void AddDataToCollection()

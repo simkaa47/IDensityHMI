@@ -209,25 +209,22 @@ namespace IDensity.Models
         }
         #endregion 
 
-        #region Данные счетчиков        
-        public CountDiapasone[] CountDiapasones { get; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
+        #region Данные счетчиков 
+        [DataMember]
+        public CountDiapasone[] CountDiapasones { get; set; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
         #endregion        
 
         #region Параметры полседовательного порта платы
         #region Баудрейт
-        public Parameter<uint> PortBaudrate { get; } = new Parameter<uint>("PortBaudrate", "Скорость передачи данных", 1200, 115200, 48, "hold");
+        [DataMember]
+        public Parameter<uint> PortBaudrate { get; set; } = new Parameter<uint>("PortBaudrate", "Скорость передачи данных", 1200, 115200, 48, "hold");
         #endregion
 
         #region Режим работы последовательного порта
-        public Parameter<ushort> PortSelectMode { get; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");
+        [DataMember]
+        public Parameter<ushort> PortSelectMode { get; set; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");
         #endregion
-        #endregion
-
-        #region Настройки едениц измерений
-        public MeasUnitSettings[] MeasUnitSettings { get; } = Enumerable.Range(0, 21)
-            .Select(i => new MeasUnitSettings())
-            .ToArray();        
-        #endregion        
+        #endregion           
 
         #region Настройки платы АЦП
 
@@ -236,6 +233,7 @@ namespace IDensity.Models
         /// <summary>
         /// Адрес UDP приемника
         /// </summary>
+        [DataMember]
         public string UdpAddrString
         {
             get { return _udpAddrString; }
@@ -281,45 +279,55 @@ namespace IDensity.Models
         #endregion
 
         #region Настройки платы АЦП
-        public AdcBoardSettings AdcBoardSettings { get; } = new AdcBoardSettings();        
+        [DataMember]
+        public AdcBoardSettings AdcBoardSettings { get; set; } = new AdcBoardSettings();
         #endregion
 
         #endregion
 
         #region Значение полураспада
-        public Parameter<float> HalfLife { get; } = new Parameter<float>("HalfLife", "Значение полураспада", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> HalfLife { get; set; } = new Parameter<float>("HalfLife", "Значение полураспада", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region Название прибора
-        public Parameter<string> DeviceName { get; } = new Parameter<string>("DeviceName", "Название прибора", string.Empty, "zzzzzzzzzzz", 0, "");
+        [DataMember]
+        public Parameter<string> DeviceName { get; set; } = new Parameter<string>("DeviceName", "Название прибора", string.Empty, "zzzzzzzzzzz", 0, "");
         #endregion
 
         #region Имя изотопа
-        public Parameter<string> IsotopName { get; } = new Parameter<string>("IsotopName", "Название изотопа", string.Empty, "zzzzzzzzzzz", 0, "");
+        [DataMember]
+        public Parameter<string> IsotopName { get; set; } = new Parameter<string>("IsotopName", "Название изотопа", string.Empty, "zzzzzzzzzzz", 0, "");
         #endregion        
 
         #region Время установки источника
-        public Parameter<DateTime> SourceInstallDate { get; } = new Parameter<DateTime>("SourceInstallDate", "Дата установки источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<DateTime> SourceInstallDate { get; set; } = new Parameter<DateTime>("SourceInstallDate", "Дата установки источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
         #endregion
 
         #region Время истечения источника
-        public Parameter<DateTime> SourceExpirationDate { get; } = new Parameter<DateTime>("SourceExpirationDate", "Дата истечения срока источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<DateTime> SourceExpirationDate { get; set; } = new Parameter<DateTime>("SourceExpirationDate", "Дата истечения срока источника", DateTime.MinValue, DateTime.MaxValue, 0, "");
         #endregion
 
         #region Серийный номер источника
-        public Parameter<string> SerialNumber { get; } = new Parameter<string>("SerialNumber", "Серийный номер", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        [DataMember]
+        public Parameter<string> SerialNumber { get; set; } = new Parameter<string>("SerialNumber", "Серийный номер", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
         #endregion
 
         #region Номер заказа
-        public Parameter<string> OrderNumber { get; } = new Parameter<string>("DeviceOrder", "Номер заказа", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        [DataMember]
+        public Parameter<string> OrderNumber { get; set; } = new Parameter<string>("DeviceOrder", "Номер заказа", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
         #endregion        
 
         #region Версия firmware
-        public Parameter<string> FwVersion { get; } = new Parameter<string>("FwVersion", "Версия FW", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        [DataMember]
+        public Parameter<string> FwVersion { get; set; } = new Parameter<string>("FwVersion", "Версия FW", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
         #endregion
 
         #region Номер заказчика
-        public Parameter<string> CustNumber { get; } = new Parameter<string>("CustNumber", "Номер заказчика", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        [DataMember]
+        public Parameter<string> CustNumber { get; set; } = new Parameter<string>("CustNumber", "Номер заказчика", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
         #endregion
 
         #region Данные прочитаны
@@ -327,19 +335,23 @@ namespace IDensity.Models
         #endregion
 
         #region Настройки фильтра калмана
-        public List<Kalman> KalmanSettings { get; } = Enumerable.Range(0, 2).Select(i => new Kalman(i)).ToList();
+        [DataMember]
+        public List<Kalman> KalmanSettings { get; set; } = Enumerable.Range(0, 2).Select(i => new Kalman(i)).ToList();
         #endregion
 
         #region Настройки получения температуры
-        public GetTemperature GetTemperature { get; } = new GetTemperature();
+        [DataMember]
+        public GetTemperature GetTemperature { get; set; } = new GetTemperature();
         #endregion
 
         #region Тип устройства
-        public Parameter<ushort> DeviceType { get; } = new Parameter<ushort>("DeviceType", "Тип устройства", 0, 1, 0, "");
+        [DataMember]
+        public Parameter<ushort> DeviceType { get; set; } = new Parameter<ushort>("DeviceType", "Тип устройства", 0, 1, 0, "");
         #endregion
 
         #region Длина уровнемена
-        public Parameter<float> LevelLength { get; } = new Parameter<float>("LevelLength", "Длина уровнемера, мм", 0, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> LevelLength { get; set; } = new Parameter<float>("LevelLength", "Длина уровнемера, мм", 0, float.MaxValue, 0, "");
         #endregion
 
         public CheckSum CheckSum { get; set; }

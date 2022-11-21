@@ -266,14 +266,7 @@ namespace IDensity.Services.ComminicationServices
         {
             Tcp.SendAnalogInSwttings(groupNum, moduleNum, value);            
         }
-        #endregion        
-
-        #region Команда "Записать настройки едениц измерерия"
-        public void SetMeasUnitsSettings(MeasUnitSettings settings)
-        {
-            Tcp.SetMeasUnitsSettings(settings);            
-        }
-        #endregion
+        #endregion                
 
         #region Запрос контрольной суммы ПО плотномера
         public void GetCheckSum()
