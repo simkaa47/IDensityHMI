@@ -155,7 +155,7 @@ namespace IDensity.ViewModels
         private string CopyCalibrCurve(MeasProcSettings settings)
         {
             var curve = settings.CalibrCurve;
-            var arg = $"calib_curve={curve.Type.WriteValue},{curve.MeasUnit.Id.Value}";
+            var arg = $"calib_curve={curve.Type.WriteValue},0";
             foreach (var coeff in curve.Coeffs)
             {
                 arg += "," + coeff.Value.ToStringPoint();

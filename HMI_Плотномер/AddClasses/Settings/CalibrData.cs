@@ -3,10 +3,12 @@ using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
+    [DataContract]
     public class CalibrData:PropertyChangedBase
     {
         public CalibrData()
@@ -20,7 +22,7 @@ namespace IDensity.AddClasses
         }
         void OnCommandWriteExecuted(object par)
         {
-            var arg = $"calib_curve={Type.WriteValue},{MeasUnit.Id.Value}";
+            var arg = $"calib_curve={Type.WriteValue},0";
             foreach (var coeff in Coeffs)
             {
                 arg += $",{coeff.WriteValue.ToStringPoint()}";
@@ -29,24 +31,17 @@ namespace IDensity.AddClasses
             NeedWriteEvent?.Invoke(arg);
         }
 
-        
+
         #region Тип калибровки
         /// <summary>
         /// Тип калибровки
         /// </summary>
-        public Parameter<ushort> Type { get; } = new Parameter<ushort>("CalibrType", "Тип калибровки", 0, 10, 0, "hold");
+        [DataMember]
+        public Parameter<ushort> Type { get; set; } = new Parameter<ushort>("CalibrType", "Тип калибровки", 0, 10, 0, "hold");
         #endregion
 
-        #region ЕИ
-        MeasUnitSettings _measUnit = new MeasUnitSettings();
-        /// <summary>
-        /// ЕИ
-        /// </summary>
-        public MeasUnitSettings MeasUnit
-        {
-            get => _measUnit;
-            set => Set(ref _measUnit, value);
-        }
+        #region Команда записи
+        
         private RelayCommand _outMeasNumWriteCommand;
 
         public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnCommandWriteExecuted(null), o => true));
@@ -55,11 +50,13 @@ namespace IDensity.AddClasses
         /// <summary>
         /// КОэффициенты калибровки
         /// </summary>
-        public List<Parameter<float>> Coeffs { get; } = Enumerable.Range(0, 6).Select(i => new Parameter<float>("CalibrCoeff" + i, "Коэффициент калибровочной кривой " + i, float.NegativeInfinity, float.PositiveInfinity, 97 + i * 2, "hold")).ToList();
+        [DataMember]
+        public List<Parameter<float>> Coeffs { get; set; } = Enumerable.Range(0, 6).Select(i => new Parameter<float>("CalibrCoeff" + i, "Коэффициент калибровочной кривой " + i, float.NegativeInfinity, float.PositiveInfinity, 97 + i * 2, "hold")).ToList();
 
         #endregion
         #region Резульат калибровки
-        public Parameter<ushort> Result { get; } = new Parameter<ushort>("CalibrResult", "Результат калибровки", 0, 2, 0, ""); 
+        [DataMember]
+        public Parameter<ushort> Result { get; set; } = new Parameter<ushort>("CalibrResult", "Результат калибровки", 0, 2, 0, ""); 
         #endregion
 
         /// <summary>

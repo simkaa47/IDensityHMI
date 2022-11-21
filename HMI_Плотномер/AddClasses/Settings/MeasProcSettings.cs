@@ -121,7 +121,8 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Данные коэффициентов калибровочной кривой
         /// </summary>
-        public CalibrData CalibrCurve { get; } = new CalibrData();
+        [DataMember]
+        public CalibrData CalibrCurve { get; set; } = new CalibrData();
         #endregion
         #region Плотность жидкости
         /// <summary>
@@ -388,7 +389,7 @@ namespace IDensity.AddClasses.Settings
 
         public RelayCommand WriteCalibrCoeefsCommand => _writeCalibrCoeefsCommand ?? (_writeCalibrCoeefsCommand = new RelayCommand(par =>
         {
-            var arg = $"calib_curve={CalibrCurve.Type.Value},{CalibrCurve.MeasUnit.Id.Value}";
+            var arg = $"calib_curve={CalibrCurve.Type.Value},0";
             for (int i = 0; i < 6; i++)
             {
                 arg += "," + (i < CalculatedCoeefs.Count ? ((float)CalculatedCoeefs[i].Coeff).ToStringPoint() : "0");

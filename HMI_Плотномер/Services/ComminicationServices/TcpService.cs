@@ -390,8 +390,7 @@ namespace IDensity.Services.ComminicationServices
         void RecognizeCalibrCurveFromArr(float[] arr, int num)
         {
             var offset = 76;
-            _model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];
-            _model.MeasProcSettings[num].CalibrCurve.MeasUnit = _model.MeasUnitSettings[(ushort)arr[offset + 1]];
+            _model.MeasProcSettings[num].CalibrCurve.Type.Value = (ushort)arr[offset];            
             for (int i = 0; i < 6; i++)
             {
                 _model.MeasProcSettings[num].CalibrCurve.Coeffs[i].Value = arr[offset + 2 + i];
