@@ -6,10 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Timers;
 
 namespace IDensity.AddClasses.Settings
 {
+    [DataContract]
     public class MeasProcSettings : PropertyChangedBase
     {
         public MeasProcSettings(int num)
@@ -96,19 +98,22 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Номер счетчика
         /// </summary>
-        public Parameter<ushort> MeasProcCounterNum { get; } = new Parameter<ushort>("MeasProcCounterNum", "Номер счетчика", 0, 8, 0, "hold");
+        [DataMember]
+        public Parameter<ushort> MeasProcCounterNum { get; set; } = new Parameter<ushort>("MeasProcCounterNum", "Номер счетчика", 0, 8, 0, "hold");
         #endregion
         #region Данные стандартизаций
         /// <summary>
         /// Данные стандартизаций
         /// </summary>
-        public StandSettings[] MeasStandSettings { get; } = Enumerable.Range(0, StandCount).Select(i => new StandSettings(i)).ToArray();
+        [DataMember]
+        public StandSettings[] MeasStandSettings { get; set; } = Enumerable.Range(0, StandCount).Select(i => new StandSettings(i)).ToArray();
         #endregion
         #region Массив значений еденичных измерений
         /// <summary>
         /// Массив значений еденичных измерений
         /// </summary>
-        public CalibCurveCrcValue[] SingleMeasResults { get; } = Enumerable.Range(0, SingleMeasResCount)
+        [DataMember]
+        public CalibCurveCrcValue[] SingleMeasResults { get; set; } = Enumerable.Range(0, SingleMeasResCount)
             .Select(i => new CalibCurveCrcValue(i))
             .ToArray();
         #endregion

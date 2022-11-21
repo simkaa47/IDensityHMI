@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using System.Windows;
 
 namespace IDensity.Models
 {
+    [DataContract]
     public class MainModel : PropertyChangedBase
     {
         #region Количество наборов стандартизаций
@@ -92,14 +94,10 @@ namespace IDensity.Models
         {
             Init();// Инициализация параметров  
             MeasProccessInit();
-        }
+        }        
 
-        #region Спсоб соединения с платой
-        public CommMode CommMode { get; private set; }
-        #endregion
-
-        #region RTC контроллера платы
-        public Parameter<DateTime> Rtc { get; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");
+        #region RTC контроллера платы        
+        public Parameter<DateTime> Rtc { get; set; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");
         #endregion
 
         #region Статус соединения с платой       
@@ -113,17 +111,7 @@ namespace IDensity.Models
         #region Данные измерения
         public MeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new MeasResult($"MeasResult{i}")).ToArray();
         /// <summary>
-        /// Привязка настроек измерения к результатам измерения
-        /// </summary>
-        //public void SetMeasResultData()
-        //{            
-        //    for (int i = 0; i < 2; i++)
-        //    {
-        //        MeasResults[i].Settings = MeasProcSettings[MeasResults[i].MeasProcessNum.Value];
-        //        if (MeasResults[i].Settings.IsActive.Value) MeasResults[i].IsActive = true;
-        //    }
-        //}
-
+        
 
         #region Статус циклических измерений
         public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("CycleMeasStatus", "Статус циклических измерений", false, true, 1, "hold");
@@ -178,9 +166,11 @@ namespace IDensity.Models
         #region Настройки в плате
         #region Данные измерительных процессов
         MeasProcSettings[] _measProcSettings;
+        [DataMember]
         public MeasProcSettings[] MeasProcSettings
         {
-            get=> _measProcSettings;            
+            get=> _measProcSettings;
+            set => _measProcSettings = value;
         }
         /// <summary>
         /// Инициализация измерительных процессов

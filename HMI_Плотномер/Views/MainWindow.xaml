@@ -1241,6 +1241,11 @@
                             </TabItem>
                         </TabControl>
                     </TabItem>
+                    <!--#region Сохранить json -->
+                    <TabItem Header="SAVE-LOAD JSON" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                        <uc:SaveLoadMainModelControl DataContext="{Binding CommonSettingsVm}"/>
+                    </TabItem>
+                    <!--#endregion-->
                 </TabControl>
             </TabItem>
             <!--#endregion-->

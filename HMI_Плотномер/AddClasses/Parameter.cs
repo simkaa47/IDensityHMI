@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -15,6 +16,7 @@ namespace IDensity.AddClasses
     /// Хранит информацию о том или ином параметре: адрес Modbus, описание
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [DataContract]
     public class Parameter<T> : PropertyChangedBase, IDataErrorInfo, ICloneable where T : IComparable
     {
         #region Событие ошибки работы с ДБ
@@ -83,6 +85,7 @@ namespace IDensity.AddClasses
 
         #region Величина
         T _value;
+        [DataMember]
         public T Value
         {
             get => _value;
@@ -98,6 +101,7 @@ namespace IDensity.AddClasses
 
         #region Значение записи
         T _writeValue;
+        [DataMember]
         public T WriteValue
         {
             get => _writeValue;

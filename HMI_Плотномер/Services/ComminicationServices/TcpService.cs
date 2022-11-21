@@ -374,8 +374,7 @@ namespace IDensity.Services.ComminicationServices
                 int month = (ushort)arr[4 + i * 8];
                 month = month > 0 && month <= 12 ? month : 1;
                 int year = (ushort)arr[5 + i * 8] + 2000;
-                _model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);
-                _model.MeasProcSettings[num].MeasStandSettings[i].MeasUnit = _model.MeasUnitSettings[(ushort)arr[6 + i * 8]];
+                _model.MeasProcSettings[num].MeasStandSettings[i].LastStandDate.Value = new DateTime(year, month, day);                
                 _model.MeasProcSettings[num].MeasStandSettings[i].StandResult.Value = arr[7 + i * 8];
                 _model.MeasProcSettings[num].MeasStandSettings[i].StandPhysValue.Value = arr[8 + i * 8];
                 _model.MeasProcSettings[num].MeasStandSettings[i].HalfLifeCorr.Value = arr[9 + i * 8];

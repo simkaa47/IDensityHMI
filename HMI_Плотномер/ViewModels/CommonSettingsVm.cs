@@ -1,8 +1,11 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Services;
+using IDensity.Models;
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace IDensity.ViewModels
 {
@@ -105,11 +108,28 @@ namespace IDensity.ViewModels
         #region Записать mainModel в файл
         private RelayCommand _writeSettingsToFile;
         public RelayCommand WriteSettingsToFile => _writeSettingsToFile ?? (_writeSettingsToFile = new RelayCommand(p => 
-        { 
-            
+        {
+            SafetyAction(Save);
         }, canExec => true));
         #endregion
         #endregion
+
+        public void Save()
+        {
+            JsonSaveLoadService.Save(VM.mainModel, typeof(MainModel));
+        }
+
+        void SafetyAction(Action action)
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
     }
 

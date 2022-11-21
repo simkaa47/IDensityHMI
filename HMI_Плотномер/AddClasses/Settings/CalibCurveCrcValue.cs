@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses.Settings
@@ -7,6 +8,7 @@ namespace IDensity.AddClasses.Settings
     /// <summary>
     /// Данные, из которых получена калибровочная кривая
     /// </summary>
+    [DataContract]
     public class CalibCurveCrcValue:PropertyChangedBase
     {
         const string TcpArg = "date,weak,value";
@@ -20,30 +22,33 @@ namespace IDensity.AddClasses.Settings
         }
         #region Id
         private int _id;
-
+        [DataMember]
         public int Id
         {
             get { return _id; }
             set { Set(ref _id, value); }
-        } 
+        }
         #endregion
         #region Дата 
         /// <summary>
         /// Дата измерения
         /// </summary>
-        public Parameter<DateTime> Date { get; } = new Parameter<DateTime>("CalibCurveCrcDate", "Дата измерения", DateTime.MinValue, DateTime.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<DateTime> Date { get; set; } = new Parameter<DateTime>("CalibCurveCrcDate", "Дата измерения", DateTime.MinValue, DateTime.MaxValue, 0, "");
         #endregion
         #region Ослабление
         /// <summary>
         /// Ослабление
         /// </summary>
-        public Parameter<float> Weak { get; } = new Parameter<float>("CalibCurveCrcWeak", "Ослабление", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> Weak { get; set; } = new Parameter<float>("CalibCurveCrcWeak", "Ослабление", float.MinValue, float.MaxValue, 0, "");
         #endregion
         #region Значение счетчика
         /// <summary>
         /// Значение счетчика
         /// </summary>
-        public Parameter<float> CounterValue { get; } = new Parameter<float>("CalibCurveCrcValue", "Значение счетчика", 0, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> CounterValue { get; set; } = new Parameter<float>("CalibCurveCrcValue", "Значение счетчика", 0, float.MaxValue, 0, "");
         #endregion        
         #region Флаг участия в расчете к-тов
         private bool _selected;

@@ -1,20 +1,23 @@
 ﻿using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
     /// <summary>
     /// Класс настроек едениц измерения
-    /// </summary>
+    /// </summary>    
     public class MeasUnitSettings
     {
         #region Номер еденицы измерения
+        
         public Parameter<ushort> Id { get; set; } = new Parameter<ushort>("MeasUnitSettNum", "Номер еденицы измерения", 0, 10, 0, "");
         #endregion
 
         #region Номер еденицы измерения по классификации
+        
         public Parameter<ushort> MeasUnitClassNum { get; set; } = new Parameter<ushort>("MeasUnitClassNum", "Номер еденицы измерения по классификации", 0, 10, 0, "");
         #endregion
 
