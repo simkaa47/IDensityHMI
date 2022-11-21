@@ -1,12 +1,15 @@
 ﻿using IDensity.AddClasses;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace IDensity.Core.AddClasses.Settings
 {
+    [DataContract]
     public class TempCompensation:PropertyChangedBase
     {
         private int _index;
+        [DataMember]
         public int Index
         {
             get=> _index;
@@ -15,11 +18,13 @@ namespace IDensity.Core.AddClasses.Settings
 
 
         #region Активность
-        public Parameter<bool> Activity { get; } = new Parameter<bool>("TempCompensationActivity", "Актвность", false, true, 0, "");
+        [DataMember]
+        public Parameter<bool> Activity { get; set; } = new Parameter<bool>("TempCompensationActivity", "Актвность", false, true, 0, "");
         #endregion
 
         #region К-ты компннсации
-        public List<Parameter<float>> Coeffs { get; } = Enumerable.Range(0, 2).Select(i => new Parameter<float>($"TempCompensationCOeff{i}", $"К-т компннсации {i}", float.MinValue, float.MaxValue, 0, "")).ToList();
+        [DataMember]
+        public List<Parameter<float>> Coeffs { get; set; } = Enumerable.Range(0, 2).Select(i => new Parameter<float>($"TempCompensationCOeff{i}", $"К-т компннсации {i}", float.MinValue, float.MaxValue, 0, "")).ToList();
         #endregion
 
         public string Copy()

@@ -177,7 +177,7 @@ namespace IDensity.ViewModels
 
         private string DensitySettCopy(DensitySett sett)
         {
-            return $"{sett.MeasUnit.Id.Value},{sett.PhysValue.Value.ToStringPoint()}";
+            return $"0,{sett.PhysValue.Value.ToStringPoint()}";
         }
 
         private string CopyTempCompensation(MeasProcSettings settings)

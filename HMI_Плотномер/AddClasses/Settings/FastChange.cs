@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace IDensity.AddClasses.Settings
 {
     /// <summary>
     /// Данные отслеживания быстрых изменений
     /// </summary>
-    public class FastChange:PropertyChangedBase
+    [DataContract]
+    public class FastChange : PropertyChangedBase
     {
         public FastChange()
         {
@@ -18,13 +18,15 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Активность
         /// </summary>
-        public Parameter<bool> Activity { get; } = new Parameter<bool>("FastChangeActivity", "Активность отслеживания", false, true, 0, "");
+        [DataMember]
+        public Parameter<bool> Activity { get; set; } = new Parameter<bool>("FastChangeActivity", "Активность отслеживания", false, true, 0, "");
         #endregion
         #region Порог реакции
         /// <summary>
         /// Порог реакции
         /// </summary>
-        public Parameter<ushort> Threshold { get; } = new Parameter<ushort>("FastChangeThreshold", "Порог реакции", 0, ushort.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<ushort> Threshold { get; set; } = new Parameter<ushort>("FastChangeThreshold", "Порог реакции", 0, ushort.MaxValue, 0, "");
         #endregion
         void OnWriteExecuted()
         {
@@ -34,6 +36,6 @@ namespace IDensity.AddClasses.Settings
         /// Необходимо записать настройки стандартизаций
         /// </summary>
         public event Action<string> NeedWriteEvent;
-        
+
     }
 }

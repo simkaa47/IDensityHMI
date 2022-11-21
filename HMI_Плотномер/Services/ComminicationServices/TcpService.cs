@@ -346,8 +346,7 @@ namespace IDensity.Services.ComminicationServices
             _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[106];
             RecognizeFastChangeSett(arr, index);
             _model.MeasProcSettings[index].MeasDuration.Value = arr[109] / 10;
-            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[110];
-            _model.MeasProcSettings[index].OutMeasNum = _model.MeasUnitSettings[(ushort)arr[111]];
+            _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[110];            
             _model.MeasProcSettings[index].PipeDiameter.Value = arr[112] / 10;
             _model.MeasProcSettings[index].AttCoeffs[0].Value = arr[113];
             _model.MeasProcSettings[index].AttCoeffs[1].Value = arr[114];
@@ -425,8 +424,7 @@ namespace IDensity.Services.ComminicationServices
         /// /// <param name="offset">смещение данных в массиве</param>
         /// <param name="density">Класс, в который</param>
         void RecognizeDensityFromArr(float[] arr, DensitySett density, int offset)
-        {
-            density.MeasUnit = _model.MeasUnitSettings[(ushort)arr[offset]];
+        {           
             density.PhysValue.Value = arr[offset + 1];
         }
 

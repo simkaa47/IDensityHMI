@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses.Settings
 {
+    [DataContract]
     public class Compensation :PropertyChangedBase
     {
         public Compensation()
@@ -22,44 +24,51 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Активность компенсации
         /// </summary>
-        public Parameter<bool> Activity { get; } = new Parameter<bool>("CompensationActivity", "Активность", false, true, 0, "");
+        [DataMember]
+        public Parameter<bool> Activity { get; set; } = new Parameter<bool>("CompensationActivity", "Активность", false, true, 0, "");
         #endregion
         #region  Номер ЕИ
         /// <summary>
         /// Номер ЕИ
         /// </summary>
-        public Parameter<ushort> MeasUnitNum { get; } = new Parameter<ushort>("CompensationMeasUnitNum", "Тип ЕИ", 0, ushort.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<ushort> MeasUnitNum { get; set; } = new Parameter<ushort>("CompensationMeasUnitNum", "Тип ЕИ", 0, ushort.MaxValue, 0, "");
         #endregion
         #region Источник компенсации
         /// <summary>
         /// Источник компенсации
         /// </summary>
-        public Parameter<ushort> Sourse { get; } = new Parameter<ushort>("CompensationSource", "Источник", 0, ushort.MaxValue, 0, ""); 
+        [DataMember]
+        public Parameter<ushort> Sourse { get; set; } = new Parameter<ushort>("CompensationSource", "Источник", 0, ushort.MaxValue, 0, "");
         #endregion
         #region Коэффициент А
         /// <summary>
         /// Коэффициент А
         /// </summary>
-        public Parameter<float> A { get; } = new Parameter<float>("CompensationA", "Коэффициент А", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> A { get; set; } = new Parameter<float>("CompensationA", "Коэффициент А", float.MinValue, float.MaxValue, 0, "");
         #endregion
         #region Коэффициент B
         /// <summary>
         /// Коэффициент B
         /// </summary>
-        public Parameter<float> B { get; } = new Parameter<float>("CompensationB", "Коэффициент B", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> B { get; set; } = new Parameter<float>("CompensationB", "Коэффициент B", float.MinValue, float.MaxValue, 0, "");
         #endregion
         #region Коэффициент C
         /// <summary>
         /// Коэффициент C
         /// </summary>
-        public Parameter<float> C { get; } = new Parameter<float>("CompensationC", "Коэффициент C", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> C { get; set; } = new Parameter<float>("CompensationC", "Коэффициент C", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region Коэффициент D
         /// <summary>
         /// Коэффициент D
         /// </summary>
-        public Parameter<float> D { get; } = new Parameter<float>("CompensationD", "Коэффициент D", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> D { get; set; } = new Parameter<float>("CompensationD", "Коэффициент D", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         /// <summary>

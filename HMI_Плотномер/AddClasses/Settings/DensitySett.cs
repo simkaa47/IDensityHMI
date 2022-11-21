@@ -1,6 +1,7 @@
 ﻿using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses.Settings
@@ -8,18 +9,11 @@ namespace IDensity.AddClasses.Settings
     /// <summary>
     /// Определяет настройки плотности
     /// </summary>
+    [DataContract]
     public class DensitySett:PropertyChangedBase
     {
-        #region ЕИ
-        MeasUnitSettings _measUnit = new MeasUnitSettings();
-        /// <summary>
-        /// ЕИ
-        /// </summary>
-        public MeasUnitSettings MeasUnit
-        {
-            get => _measUnit;
-            set => Set(ref _measUnit, value);
-        }
+        #region Команда записи
+        
         private RelayCommand _outMeasNumWriteCommand;
 
         public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnWriteExecuted(), o => true));
@@ -28,7 +22,8 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Физическая величина
         /// </summary>
-        public Parameter<float> PhysValue { get; } = new Parameter<float>("DensitySettValue", "Физическая величина", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> PhysValue { get; set; } = new Parameter<float>("DensitySettValue", "Физическая величина", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         public DensitySett()
@@ -38,7 +33,7 @@ namespace IDensity.AddClasses.Settings
         }
         void OnWriteExecuted()
         {
-            NeedWriteEvent?.Invoke($"{MeasUnit.Id.Value},{PhysValue.WriteValue.ToStringPoint()}");
+            NeedWriteEvent?.Invoke($"0,{PhysValue.WriteValue.ToStringPoint()}");
         }
         /// <summary>
         /// Необходимо записать настройки стандартизаций
