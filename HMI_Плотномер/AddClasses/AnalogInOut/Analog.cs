@@ -2,10 +2,12 @@
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
+    [DataContract]
     public abstract class AnalogData:PropertyChangedBase
     {
         public AnalogData(int groupNum)
@@ -20,9 +22,11 @@ namespace IDensity.AddClasses
         public Parameter<Protocols> Protocol { get; } = new Parameter<Protocols>("ProtocolType", "Тип протокола", Protocols.None, Protocols.Fieldbus, 0, "");
         #endregion
         #region Номер группы
+        [DataMember]
         public int GroupNum { get; set; }
         #endregion
         #region Номер модуля
+        [DataMember]
         public int ModulNum { get; set; }
         #endregion
         #region Индикаторы

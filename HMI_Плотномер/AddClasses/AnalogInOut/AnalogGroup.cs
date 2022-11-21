@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
+    [DataContract]
     public class AnalogGroup: PropertyChangedBase
-    {        
-        public int Id { get; }
-        public AnalogInput AI { get; }
-        public AnalogOutput AO { get; }
+    {
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public AnalogInput AI { get; set; }
+        [DataMember]
+        public AnalogOutput AO { get; set; }
         public AnalogGroup(int groupNum)
         {
             Id = groupNum;

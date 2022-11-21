@@ -829,31 +829,7 @@
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Единица измерения -->
-                                        <DataGridTemplateColumn Width="120"
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                Header="Единица измерения">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="add:AnalogOutput">
-                                                    <ComboBox Width="150"
-                                                              SelectedItem="{Binding MeasUnit,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                              HorizontalAlignment="Left"                                  
-                                                              DisplayMemberPath="MeasUnitName.Value"
-                                                              ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AvialableMeasUnitSettings}">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="DropDownOpened">
-                                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UpdateAvialablemeasUnitCommand}"/>
-                                                            </i:EventTrigger>
-                                                            <i:EventTrigger EventName="DropDownClosed">
-                                                                <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </ComboBox>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
+                                        <!--#endregion-->                                        
                                         <!--#region Номер изм. процесса -->
                                         <DataGridTemplateColumn Header="№ изм. процесса" Width="200">
                                             <DataGridTemplateColumn.CellTemplate>

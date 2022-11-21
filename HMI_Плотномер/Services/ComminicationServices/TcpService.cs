@@ -624,8 +624,7 @@ namespace IDensity.Services.ComminicationServices
             for (int i = 0; i < 2; i++)
             {
                 _model.AnalogGroups[i].AO.Activity.Value = (ushort)list[i][1];
-                _model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];
-                _model.AnalogGroups[i].AO.MeasUnit = _model.MeasUnitSettings[(ushort)list[i][3]];
+                _model.AnalogGroups[i].AO.DacType.Value = (ushort)list[i][2];                
                 _model.AnalogGroups[i].AO.AnalogMeasProcNdx.Value = (ushort)list[i][4];
                 _model.AnalogGroups[i].AO.VarNdx.Value = (ushort)list[i][5];
                 _model.AnalogGroups[i].AO.DacLowLimit.Value = list[i][6];
@@ -871,7 +870,7 @@ namespace IDensity.Services.ComminicationServices
         #region Отправить настройки аналоговых выходов
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
-            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},{value.MeasUnit.Id.Value},{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
+            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},0,{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion

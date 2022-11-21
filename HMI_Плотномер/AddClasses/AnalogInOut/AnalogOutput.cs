@@ -2,10 +2,12 @@
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
+    [DataContract]
     public class AnalogOutput : AnalogData
     {
         #region КОнтструтор
@@ -21,7 +23,8 @@ namespace IDensity.AddClasses
         #endregion
 
         #region Значение тестового напряжения
-        public Parameter<ushort> AmTestValue { get; } = new Parameter<ushort>("AmTestValue", "Значение тестового напряжения, mV", 0, 3000, 12, "holds");
+        [DataMember]
+        public Parameter<ushort> AmTestValue { get; set; } = new Parameter<ushort>("AmTestValue", "Значение тестового напряжения, mV", 0, 3000, 12, "holds");
         #endregion
 
         #region Индикация напряжения RX
@@ -33,47 +36,43 @@ namespace IDensity.AddClasses
         #endregion
 
         #region активность ЦАП
-        public Parameter<ushort> Activity { get; } = new Parameter<ushort>("DacActivity", "Активность аналогового выходв, вкл./выкл.", 0, 1, 0, "");
+        [DataMember]
+        public Parameter<ushort> Activity { get; set; } = new Parameter<ushort>("DacActivity", "Активность аналогового выходв, вкл./выкл.", 0, 1, 0, "");
         #endregion
 
         #region Тип ЦАП
-        public Parameter<ushort> DacType { get; } = new Parameter<ushort>("DacType", "Тип источника ЦАП", 0, 1, 0, "");
-        #endregion
-
-        #region ЕИ
-        MeasUnitSettings _measUnit = new MeasUnitSettings();
-        /// <summary>
-        /// ЕИ
-        /// </summary>
-        public MeasUnitSettings MeasUnit
-        {
-            get => _measUnit;
-            set => Set(ref _measUnit, value);
-        }        
-        #endregion
+        [DataMember]
+        public Parameter<ushort> DacType { get; set; } = new Parameter<ushort>("DacType", "Тип источника ЦАП", 0, 1, 0, "");
+        #endregion        
 
         #region Номер измерительного процесса
-        public Parameter<ushort> AnalogMeasProcNdx { get; } = new Parameter<ushort>("AnalogMeasProcNdx", "Номер измерительного процесса", 0, 4, 0, "");
+        [DataMember]
+        public Parameter<ushort> AnalogMeasProcNdx { get; set; } = new Parameter<ushort>("AnalogMeasProcNdx", "Номер измерительного процесса", 0, 4, 0, "");
         #endregion
 
         #region Тип переменной
-        public Parameter<ushort> VarNdx { get; } = new Parameter<ushort>("AnalogVarNdx", "Тип переменной", 0, 1, 1, "");
+        [DataMember]
+        public Parameter<ushort> VarNdx { get; set; } = new Parameter<ushort>("AnalogVarNdx", "Тип переменной", 0, 1, 1, "");
         #endregion
 
         #region Нижняя граница ЦАП
-        public Parameter<float> DacLowLimit { get; } = new Parameter<float>("DacLowLimit", "Нижний предел для ЦАП", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> DacLowLimit { get; set; } = new Parameter<float>("DacLowLimit", "Нижний предел для ЦАП", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region Верхняя граница ЦАП
-        public Parameter<float> DacHighLimit { get; } = new Parameter<float>("DacHighLimit", "Верхний предел для ЦАП", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> DacHighLimit { get; set; } = new Parameter<float>("DacHighLimit", "Верхний предел для ЦАП", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region Нижняя граница ЦАП(mA)
-        public Parameter<float> DacLowLimitMa { get; } = new Parameter<float>("DacLowLimitMa", "Нижний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> DacLowLimitMa { get; set; } = new Parameter<float>("DacLowLimitMa", "Нижний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region Верхняя граница ЦАП(mA)
-        public Parameter<float> DacHighLimitMa { get; } = new Parameter<float>("DacHighLimitMa", "Верхний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
+        [DataMember]
+        public Parameter<float> DacHighLimitMa { get; set; } = new Parameter<float>("DacHighLimitMa", "Верхний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
         #region Команды      
@@ -88,8 +87,7 @@ namespace IDensity.AddClasses
         {
             var output = new AnalogOutput(GroupNum);
             output.Activity.Value = this.Activity.ValidationOk ? this.Activity.WriteValue : this.Activity.Value;
-            output.DacType.Value = this.DacType.ValidationOk ? this.DacType.WriteValue : this.DacType.Value;
-            output.MeasUnit = this.MeasUnit;
+            output.DacType.Value = this.DacType.ValidationOk ? this.DacType.WriteValue : this.DacType.Value;           
             output.AnalogMeasProcNdx.Value = this.AnalogMeasProcNdx.ValidationOk ? this.AnalogMeasProcNdx.WriteValue : this.AnalogMeasProcNdx.Value;
             output.VarNdx.Value = this.VarNdx.ValidationOk ? this.VarNdx.WriteValue : this.VarNdx.Value;
             output.DacLowLimit.Value = this.DacLowLimit.ValidationOk ? this.DacLowLimit.WriteValue : this.DacLowLimit.Value;

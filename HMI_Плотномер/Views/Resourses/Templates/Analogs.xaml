@@ -175,25 +175,7 @@
                         </ComboBox>
                     </DockPanel>
                 </ListBoxItem>
-                <!--#endregion-->
-                <!--#region ЕИ -->
-                <ListBoxItem HorizontalContentAlignment="Stretch">
-                    <DockPanel>
-                        <TextBlock Text="Единица измерения" TextWrapping="Wrap"/>
-                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.UnitNames.Data}" 
-                                  Width="100"
-                                  HorizontalAlignment="Right"
-                                                              DisplayMemberPath="Name" 
-                                                              SelectedIndex="{Binding DacEiNdx.WriteValue, UpdateSourceTrigger=PropertyChanged}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="DropDownClosed">
-                                    <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
-                    </DockPanel>
-                </ListBoxItem>
-                <!--#endregion-->
+                <!--#endregion-->                
                 <!--#region Измерияемая переменная -->
                 <ListBoxItem HorizontalContentAlignment="Stretch">
                     <DockPanel>

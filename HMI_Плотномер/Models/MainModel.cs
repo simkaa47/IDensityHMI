@@ -186,12 +186,13 @@ namespace IDensity.Models
         }
         #endregion        
 
-        #region Настройки платы АЦП
-        public AdcParameters AdcBoard { get; } = new AdcParameters();
+        #region Настройки платы АЦП        
+        public AdcParameters AdcBoard { get;  } = new AdcParameters();
         #endregion
 
         #region Настройки аналоговых модулей
         AnalogGroup[] _analogGroups;
+        [DataMember]
         public AnalogGroup[] AnalogGroups
         {
             get
@@ -204,6 +205,7 @@ namespace IDensity.Models
                 }
                 return _analogGroups;
             }
+            set=>_analogGroups=value;
         }
         #endregion 
 

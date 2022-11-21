@@ -1,10 +1,12 @@
 ﻿using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
+    [DataContract]
     public class AnalogInput:AnalogData
     {
         public AnalogInput(int groupNum) : base(groupNum) 
@@ -13,7 +15,8 @@ namespace IDensity.AddClasses
         }
 
         #region активность АЦП
-        public Parameter<ushort> Activity { get; } = new Parameter<ushort>("AdcActivity", "Активность аналогового входа, вкл./выкл.", 0, 1, 0, "");
+        [DataMember]
+        public Parameter<ushort> Activity { get; set; } = new Parameter<ushort>("AdcActivity", "Активность аналогового входа, вкл./выкл.", 0, 1, 0, "");
         #endregion
 
         #region Команда "Записать настройки АЦП"
