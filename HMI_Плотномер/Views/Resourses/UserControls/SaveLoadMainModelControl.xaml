@@ -9,11 +9,39 @@
              d:DataContext="{d:DesignInstance Type=vm:CommonSettingsVm}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+        </Grid.Resources>
         <ListBox HorizontalContentAlignment="Stretch">
-            <DockPanel>
-                <TextBlock Text="Сохранить"/>
-                <Button HorizontalAlignment="Right" Width="100" Command="{Binding WriteSettingsToFile}">--></Button>
-            </DockPanel>
+            <!--#region Путь к файлу -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Путь к файлу сохранения всех настроек"/>
+                <Border Grid.Row="1" BorderBrush="White" BorderThickness="1">
+                    <DockPanel>
+                        <Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding FileSettingsPath, TargetNullValue=Нажите на кнопку \'Browse\' чтобы указать файл}"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <Button Width="100" Content="Browse" Command="{Binding BrowseFilePathCommand}" Margin="5"
+                                    HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </Border>
+            </Grid>
+            <!--#endregion-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="5" Content="СОХРАНИТЬ"
+                        Command="{Binding WriteSettingsToFile}"/>
+                <Button Margin="5" Content="ЗАГРУЗИТЬ" Grid.Column="1"
+                        Command="{Binding ReadSettingsToMemoryCommand}"/>
+            </Grid>
         </ListBox>    
     </Grid>
 </UserControl>

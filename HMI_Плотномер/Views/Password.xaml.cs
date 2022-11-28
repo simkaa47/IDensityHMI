@@ -31,6 +31,11 @@ namespace IDensity.Views
 
         private void EnterClick(object sender, RoutedEventArgs e)
         {
+            Check();
+        }
+
+        private void Check()
+        {
             var user = vM.Users.Data.Where(user => user.Password == Pword.Password && user.Login == Login.Text)
                 .FirstOrDefault();
             if (user != null)
@@ -57,6 +62,13 @@ namespace IDensity.Views
             this.Pword.Tag = this.Pword.Password;
             Pword.Foreground = Brushes.Black;
             Login.Foreground = Brushes.Black;
+        }
+
+       
+
+        private void Pword_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) Check();
         }
     }
 }

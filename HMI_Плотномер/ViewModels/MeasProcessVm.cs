@@ -128,6 +128,7 @@ namespace IDensity.ViewModels
             str += $",{CopyTempCompensation(settings)}";
             str += $",{CopySteamCompensation(settings)}";
             str += $",aver_depth={settings.MeasDeep.Value}";
+            str += $",duration={settings.MeasDuration.Value*10}";
             str += $",type={settings.MeasType.Value}";
             str += $",{CopyFastChanges(settings)}";
             str += $",pipe_diam={(ushort)(settings.PipeDiameter.Value * 10)}";
