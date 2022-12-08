@@ -41,9 +41,13 @@ namespace IDensity.Views.CheckMaster
         {
             //FlowDocument doc = new FlowDocument();
             //AddDocument(Document, doc);
+            //foreach (var block in Document.Blocks)
+            //{
+            //    AddBlock(block, doc);
+            //}
 
             PrintDialog printDialog = new PrintDialog();
-            var doc = Document;
+            var doc = pageViewer.Document;
             double pageHeight = doc.PageHeight;
             double pageWidth = doc.PageWidth;
             Thickness pagePadding = doc.PagePadding;
@@ -64,6 +68,8 @@ namespace IDensity.Views.CheckMaster
                 doc.PagePadding = pagePadding;
                 doc.ColumnGap = columnGap;
                 doc.ColumnWidth = columnWidth;
+                pageViewer.IncreaseZoom();
+
             }
 
         }
@@ -76,11 +82,31 @@ namespace IDensity.Views.CheckMaster
         public static void AddDocument(FlowDocument from, FlowDocument to)
         {
             TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
-            MemoryStream stream = new MemoryStream();
-            System.Windows.Markup.XamlWriter.Save(range, stream);
-            range.Save(stream, DataFormats.XamlPackage);
-            TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
-            range2.Load(stream, DataFormats.XamlPackage);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                System.Windows.Markup.XamlWriter.Save(range, stream);
+                range.Save(stream, DataFormats.XamlPackage);
+                TextRange textRange2 = new TextRange(to.ContentEnd, to.ContentEnd);
+                textRange2.Load(stream, DataFormats.XamlPackage);
+            }
+        }
+
+        /// <summary>
+        /// Adds a block to a flowdocument.
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        public static void AddBlock(Block from, FlowDocument to)
+        {
+            if (from != null)
+            {
+                TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
+                MemoryStream stream = new MemoryStream();
+                System.Windows.Markup.XamlWriter.Save(range, stream);
+                range.Save(stream, DataFormats.XamlPackage);
+                TextRange textRange2 = new TextRange(to.ContentEnd, to.ContentEnd);
+                textRange2.Load(stream, DataFormats.XamlPackage);
+            }
         }
     }
 }

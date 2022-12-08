@@ -53,7 +53,7 @@ namespace IDensity.AddClasses.Settings
                         arg = arg.Replace(par, StandPhysValue.Value.ToStringPoint());
                         break;
                     case "halfLifeValue":
-                        arg = arg.Replace(par, StandPhysValue.Value.ToStringPoint());
+                        arg = arg.Replace(par, HalfLifeCorr.Value.ToStringPoint());
                         break;
                     default:
                         break;
