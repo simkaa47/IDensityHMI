@@ -4,10 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using IDensity.AddClasses;
 
 namespace IDensity.Core.Services.CheckServices.Sensor
 {
-    class SensorCheckService
+    class SensorCheckService:PropertyChangedBase
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly VM _vM;
@@ -16,13 +17,31 @@ namespace IDensity.Core.Services.CheckServices.Sensor
             _cancellationTokenSource = cancellationTokenSource;
             _vM = vM;
         }
+
+        #region Процент выполнения
+        /// <summary>
+        /// Процент выполнения
+        /// </summary>
+        private double _processPercent;
+        /// <summary>
+        /// Процент выполнения
+        /// </summary>
+        public double ProcessPercent
+        {
+            get => _processPercent;
+            set => Set(ref _processPercent, value);
+        }
+        #endregion
         public async Task<SensorCheck> Check()
         {
-            var result = new SensorCheck();
+            ProcessPercent = 0;
+            var result = new SensorCheck();            
             var pulses = await new PulseCheckService(_cancellationTokenSource, _vM).Check();
             result.PulseCheck = pulses.FirstOrDefault();
+            ProcessPercent = 50;
             result.HvCheck = CheckHv();
             result.CheckResult = !(result.HvCheck.IsError || result.PulseCheck.IsError);
+            ProcessPercent = 100;
             return result;
         }
 

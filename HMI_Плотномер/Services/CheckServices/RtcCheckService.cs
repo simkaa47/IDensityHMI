@@ -31,11 +31,9 @@ namespace IDensity.Services.CheckServices
             result.Status += $"За десять секунд состояние модуля RTC изменилось на  " +
                 $": {diff.TotalSeconds} секунд\n\r";
             if (diff.TotalSeconds < 8)
-            {
-                result.Status += $"Проверка модуля RTC не пройдена";
+            {                
                 result.IsError = true;
-            }
-            else result.Status += $"Проверка модуля RTC  пройдена успешно";
+            }            
             list.Add(result);
             return list;
         }

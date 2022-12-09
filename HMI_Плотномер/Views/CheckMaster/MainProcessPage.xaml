@@ -12,7 +12,22 @@
     <Grid>
         <StackPanel Margin="20">
             <TextBlock Text="{Binding MainStatus}"/>
-            <TextBlock Text="{Binding SubStatus}"/>
+            <TextBlock Text="{Binding SubStatus}"/>            
         </StackPanel>
+        <Border  Height="50"                     
+                Width="300">
+            <Grid>
+                <ProgressBar 
+                     Value="{Binding ProcessPercent}"
+                     Height="20"
+                     HorizontalContentAlignment="Stretch"
+                     VerticalContentAlignment="Stretch"
+                     Minimum="0"
+                     Maximum="100">
+                </ProgressBar>
+                
+            </Grid>
+        </Border>
+        
     </Grid>
 </Page>

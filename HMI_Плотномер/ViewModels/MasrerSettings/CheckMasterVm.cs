@@ -30,6 +30,22 @@ namespace IDensity.ViewModels.MasrerSettings
 
         #region Статусы процесса
 
+        #region Процент выполнения
+        /// <summary>
+        /// Процент выполнения
+        /// </summary>
+        private double _processPercent;
+        /// <summary>
+        /// Процент выполнения
+        /// </summary>
+        public double ProcessPercent
+        {
+            get => _processPercent;
+            set => Set(ref _processPercent, value);
+        }
+        #endregion
+
+
         #region Основной статус процессв
         /// <summary>
         /// Основной статус процессв
@@ -174,15 +190,35 @@ namespace IDensity.ViewModels.MasrerSettings
             Stage = CheckMasterStates.Process;
             try
             {
+                ProcessPercent = 0;
                 MainStatus = "Предварительное условие проверки...";
-                GetDeviceInformation();
+                GetDeviceInformation();                
                 new PrepareCheckService(PrepareCheckInformation, VM).Check();
+                ProcessPercent = 10;
                 MainStatus = "Проверка основного блока электроники...";
-                ElectronicUnitCheck = await new ElectronicUnitCheckService(_cancellationTokenSource, VM).Check();
+                var electronicCheckService = new ElectronicUnitCheckService(_cancellationTokenSource, VM);
+                electronicCheckService.PropertyChanged += (o, e) =>
+                {
+                    if (e.PropertyName == nameof(electronicCheckService.ProcessPercent))
+                    {
+                        ProcessPercent  = 10 + 80.0 / 100.0 * electronicCheckService.ProcessPercent;
+                    }
+                };
+                ElectronicUnitCheck = await electronicCheckService.Check();
                 MainStatus = "Проверка блока ФЭУ...";
-                SensorCheck = await new SensorCheckService(_cancellationTokenSource, VM).Check();
+                var sensorCheckService = new SensorCheckService(_cancellationTokenSource, VM);
+                sensorCheckService.PropertyChanged += (o, e) =>
+                {
+                    if (e.PropertyName == nameof(sensorCheckService.ProcessPercent))
+                    {
+                        ProcessPercent = 90 + 10.0 / 100.0 * sensorCheckService.ProcessPercent;
+                    }
+                };
+                SensorCheck = await sensorCheckService.Check();
+
                 Processes = new GetProcesesService(VM).GetProcessParameters();
                 Stage = CheckMasterStates.Success;
+                ProcessPercent = 100;
                 LastCheckDate = DateTime.Now;
             }
             catch (Exception ex)

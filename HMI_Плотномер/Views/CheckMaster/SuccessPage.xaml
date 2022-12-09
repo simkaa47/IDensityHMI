@@ -6,6 +6,7 @@
       xmlns:vm="clr-namespace:IDensity.ViewModels.MasrerSettings"
       xmlns:local="clr-namespace:IDensity.Views.CheckMaster"
       mc:Ignorable="d" 
+      xmlns:serv="clr-namespace:IDensity.Core.Services.CheckServices"
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       d:DataContext="{d:DesignInstance Type=vm:CheckMasterVm}"
       d:DesignHeight="450" d:DesignWidth="800"      
@@ -74,7 +75,15 @@
                             </Grid.RowDefinitions>
                             <!--#region Название прибора -->
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Название прибора"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceInfo.DeviceName}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource Multiselector}">
+                                        <Binding Path="VM.mainModel.DeviceType.Value"/>
+                                        <Binding Source="Плотномер радиоизотопный IDensity"/>
+                                        <Binding Source="Уровнемер радиоизотопный ILevel"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
                             <!--#endregion-->
                             <!--#region SN -->
                             <TextBlock Grid.Row="1" Grid.Column="0" Text="Серийный номер прибора"/>
@@ -94,7 +103,10 @@
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Предварительные условия проверки" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke" Margin="0"/>
-                                <CheckBox IsChecked="{Binding PrepareCheckInformation.CheckResult, Mode=OneWay}"   Margin="50,0,0,0"/>
+                                <CheckBox IsEnabled="False" IsChecked="{Binding PrepareCheckInformation.CheckResult, Mode=OneWay}"   Margin="50,0,10,0"/>
+                                <TextBlock Text="{Binding PrepareCheckInformation.CheckResult, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource BlockStatuses}}"
+                                           TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke"/>
                             </StackPanel>
                         </GroupBox.Header>
                         <Grid ShowGridLines="True">
@@ -105,8 +117,11 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Статус системы"/>
                             <CheckBox  Grid.Column="1" IsChecked="{Binding PrepareCheckInformation.CheckSysytemErrors.IsError, 
-                                    Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
+                                    Converter={StaticResource InvertBooleanConverter}, 
+                                    Mode=OneWay}" IsEnabled="False"/>
+                            <TextBlock Grid.Column="2" Text="{Binding PrepareCheckInformation.CheckSysytemErrors.IsError, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource SystemStatuses}}"
+                                           TextWrapping="Wrap"  />
                         </Grid>
                     </GroupBox>
                     <!--#endregion-->
@@ -117,7 +132,10 @@
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Основной блок электроники" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke" Margin="0"/>
-                                <CheckBox IsChecked="{Binding ElectronicUnitCheck.CheckResult, Mode=OneWay}"   Margin="50,0,0,0"/>
+                                <CheckBox IsChecked="{Binding ElectronicUnitCheck.CheckResult, Mode=OneWay}" IsEnabled="False"   Margin="50,0,10,0"/>
+                                <TextBlock Text="{Binding ElectronicUnitCheck.CheckResult, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource BlockStatuses}}"
+                                           TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke"/>
                             </StackPanel>
                         </GroupBox.Header>
                         <Grid ShowGridLines="True">
@@ -134,39 +152,45 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <!--#region Аналоговый выход 0 -->
-                            <TextBlock Text="Аналоговый выход 0"/>
-                            <CheckBox  Grid.Column="1" IsChecked="{Binding ElectronicUnitCheck.AnalogCheck0.IsError, 
-                                    Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
-                            <TextBlock TextWrapping="Wrap" Grid.Column="2" Text="{Binding ElectronicUnitCheck.AnalogCheck0.Status}"/>
+                            <serv:CheckAnalogControl Grid.ColumnSpan="3" Grid.Row="0" DataContext="{Binding ElectronicUnitCheck.AnalogCheck0}"/>
                             <!--#endregion-->
                             <!--#region Аналоговый выход 1 -->
-                            <TextBlock  Grid.Row="1" Text="Аналоговый выход 1"/>
-                            <CheckBox  Grid.Column="1" Grid.Row="1" IsChecked="{Binding ElectronicUnitCheck.AnalogCheck1.IsError, 
-                                    Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
-                            <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="1" Text="{Binding ElectronicUnitCheck.AnalogCheck1.Status}"/>
+                            <serv:CheckAnalogControl Grid.ColumnSpan="3" Grid.Row="1" DataContext="{Binding ElectronicUnitCheck.AnalogCheck1}"/>
                             <!--#endregion-->
                             <!--#region Напряжение на колодках платы питания -->
-                            <TextBlock  Grid.Row="2" Text="Напряжение на колодках платы питания"/>
+                            <TextBlock  Grid.Row="2" Text="Напряжение на колодках платы питания ФЭУ"/>
                             <CheckBox  Grid.Column="1" Grid.Row="2" IsChecked="{Binding ElectronicUnitCheck.HvSourceCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
-                            <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="2" Text="{Binding ElectronicUnitCheck.HvSourceCheck.Status}"/>
+                                    Mode=OneWay}" IsEnabled="False"/>
+                            <ListBox Grid.Column="2" Grid.Row="2">
+                                <TextBlock TextWrapping="Wrap"  Text="{Binding ElectronicUnitCheck.HvSourceCheck.Status}"/>
+                                <TextBlock TextWrapping="Wrap"  Text="Отклонение напряжения должно быть не более 0.5 В"/>
+                                <TextBlock Text="{Binding ElectronicUnitCheck.HvSourceCheck.IsError, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource CheckStatusesCommon}}" 
+                                           TextWrapping="Wrap"  />
+                            </ListBox>                            
                             <!--#endregion-->
                             <!--#region Контрольня сумма основного МК -->
-                            <TextBlock  Grid.Row="3" Text="Контрольная сумма основного МК"/>
+                            <TextBlock  Grid.Row="3" Text="Контрольная ПО сумма основного МК"/>
                             <CheckBox  Grid.Column="1" Grid.Row="3" IsChecked="{Binding ElectronicUnitCheck.SoftwareCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
+                                    Mode=OneWay}"
+                                       IsEnabled="False"/>
                             <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="3" Text="{Binding ElectronicUnitCheck.SoftwareCheck.Status}"/>
                             <!--#endregion-->
                             <!--#region RTC -->
                             <TextBlock  Grid.Row="4" Text="Часы реального времени"/>
                             <CheckBox  Grid.Column="1" Grid.Row="4" IsChecked="{Binding ElectronicUnitCheck.RtcCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
-                            <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="4" Text="{Binding ElectronicUnitCheck.RtcCheck.Status}"/>
+                                    Mode=OneWay}"
+                                       IsEnabled="False"/>
+                            <ListBox Grid.Column="2" Grid.Row="4">
+                                <TextBlock TextWrapping="Wrap"  Text="{Binding ElectronicUnitCheck.RtcCheck.Status}"/>
+                                <TextBlock TextWrapping="Wrap"  Text="Условие проверки - изменение значения модуля RTC"/>
+                                <TextBlock Text="{Binding ElectronicUnitCheck.RtcCheck.IsError, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource RtcStatuses}}" 
+                                           TextWrapping="Wrap"/>
+                            </ListBox>                            
                             <!--#endregion-->
                         </Grid>
                     </GroupBox>
@@ -179,7 +203,10 @@
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Модуль сенсора" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke" Margin="0"/>
-                                <CheckBox IsChecked="{Binding SensorCheck.CheckResult, Mode=OneWay}"   Margin="50,0,0,0"/>
+                                <CheckBox IsChecked="{Binding SensorCheck.CheckResult, Mode=OneWay}"   Margin="50,0,10,0" IsEnabled="False"/>
+                                <TextBlock Text="{Binding SensorCheck.CheckResult, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource BlockStatuses}}"
+                                           TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke"/>
                             </StackPanel>
                         </GroupBox.Header>
                         <Grid ShowGridLines="True">
@@ -196,15 +223,27 @@
                             <TextBlock  Grid.Row="0" Text="Проверка формы импульса"/>
                             <CheckBox  Grid.Column="1" Grid.Row="0" IsChecked="{Binding SensorCheck.PulseCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
-                            <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="0" Text="{Binding SensorCheck.PulseCheck.Status}"/>
+                                    Mode=OneWay}"
+                                       IsEnabled="False"/>
+                            <ListBox Grid.Column="2" Grid.Row="0">
+                                <TextBlock TextWrapping="Wrap"  Text="{Binding SensorCheck.PulseCheck.Status}"/>
+                                <TextBlock TextWrapping="Wrap"  Text="Условие проверки - процент корретных импульсов должен быть более 90%"/>
+                                
+                            </ListBox>                            
                             <!--#endregion-->
-                            <!--#region Проверка правильности формы импульсв -->
+                            <!--#region Проверка отклонения высокого напряженния -->
                             <TextBlock  Grid.Row="1" Text="Проверка отклонения высокого напряженния"/>
                             <CheckBox  Grid.Column="1" Grid.Row="1" IsChecked="{Binding SensorCheck.HvCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
-                                    Mode=OneWay}"/>
-                            <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="1" Text="{Binding SensorCheck.HvCheck.Status}"/>
+                                    Mode=OneWay}"
+                                       IsEnabled="False"/>
+                            <ListBox Grid.Column="2" Grid.Row="1">
+                                <TextBlock TextWrapping="Wrap" Text="{Binding SensorCheck.HvCheck.Status}"/>
+                                <TextBlock TextWrapping="Wrap" Text="Условие проверки - отклонение высокого напряжения от уставки не должно быть более 10 В"/>
+                                <TextBlock Text="{Binding SensorCheck.HvCheck.IsError, Converter={StaticResource SelectStringByBoolConverter},
+                                    ConverterParameter={StaticResource HvCheckStatuses}}" 
+                                           TextWrapping="Wrap"/>
+                            </ListBox>                            
                             <!--#endregion-->
                         </Grid>
                     </GroupBox>

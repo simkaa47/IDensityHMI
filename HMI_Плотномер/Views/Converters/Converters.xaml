@@ -18,4 +18,5 @@
     <conv:GetBitFromNum x:Key="GetBitConverter"/>
     <conv:MultiValueSelector x:Key="Multiselector"/>
     <conv:AddConverter x:Key="AddConverter"/>
+    <conv:SelectStringByBoolConverter x:Key="SelectStringByBoolConverter"/>
 </ResourceDictionary>

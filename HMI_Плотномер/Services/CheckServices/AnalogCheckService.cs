@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IDensity.Services.CheckServices
 {
-    public class AnalogCheckService : ICheckService
+    public class AnalogCheckService :PropertyChangedBase, ICheckService
     {
         private readonly CancellationTokenSource _cancellationToken;
         private readonly VM _vM;
@@ -17,6 +17,21 @@ namespace IDensity.Services.CheckServices
         private readonly CommunicationService _commService;
 
         public event Action<string> ProcessEvent = delegate { };
+
+        #region Процент выполнения
+        /// <summary>
+        /// Процент выполнения
+        /// </summary>
+        private double _processPercent;
+        /// <summary>
+        /// Процент выполнения
+        /// </summary>
+        public double ProcessPercent
+        {
+            get => _processPercent;
+            set => Set(ref _processPercent, value);
+        }
+        #endregion
 
         public AnalogCheckService(CancellationTokenSource cancellationToken,
             VM vM)
@@ -46,7 +61,12 @@ namespace IDensity.Services.CheckServices
             var result = new DeviceCheckResult() { ProcessName = $"Проверка работы аналогового выхода {modNum}" };
             for (int i = 4; i <= 20; i += 8)
             {
-                if (!await SetCurrent(i, modNum, result)) break;
+                if (!await SetCurrent(i, modNum, result))
+                {
+                    ProcessPercent += 50;
+                    break;
+                }
+                ProcessPercent += 50.0 / 3.0;
             }
             return result;
         }
@@ -98,9 +118,11 @@ namespace IDensity.Services.CheckServices
             }
             else
             {
+                var deviation = Math.Abs(currentLevel - setValue) / 16 * 100;
+                result.IsError = deviation > 0.1 ? true : false;
                 var msg = ($"Аналоговый выход {moduleNum} :   " +
                     $"Результат замера {currentLevel} mA при ожидаемых {setValue} mA " +
-                    $"(Отклонение {((Math.Abs(currentLevel - setValue)) / setValue * 100).ToString("f3")}%)");
+                    $"(Погрешность {deviation}%)");
                 ProcessEvent?.Invoke(msg);
                 result.Status += msg + "\n\r";
             }
