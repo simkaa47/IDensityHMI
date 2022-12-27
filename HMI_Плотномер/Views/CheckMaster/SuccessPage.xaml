@@ -6,6 +6,7 @@
       xmlns:vm="clr-namespace:IDensity.ViewModels.MasrerSettings"
       xmlns:local="clr-namespace:IDensity.Views.CheckMaster"
       mc:Ignorable="d" 
+      xmlns:an="clr-namespace:IDensity.Core.Views.Resourses.UserControls.CheckMaster.Analog"
       xmlns:serv="clr-namespace:IDensity.Core.Services.CheckServices"
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       d:DataContext="{d:DesignInstance Type=vm:CheckMasterVm}"
@@ -23,7 +24,7 @@
             </Style>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="10"/>
                 <Setter Property="FontWeight" Value="Light"/>
                 <Setter Property="Margin" Value="10,0,10,0"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -37,7 +38,7 @@
                 <Setter Property="MinHeight" Value="30" />
             </Style>
             <Style TargetType="DataGridCell">
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="10"/>
                 <Setter Property="FontWeight" Value="Light"/>
                 <Setter Property="FontFamily" Value="0"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -111,7 +112,7 @@
                         </GroupBox.Header>
                         <Grid ShowGridLines="True">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.3*"/>
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
@@ -131,7 +132,7 @@
                     <GroupBox>
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Основной блок электроники" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke" Margin="0"/>
+                                <TextBlock Text="Основной блок электроники" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Foreground="WhiteSmoke" Margin="0"/>
                                 <CheckBox IsChecked="{Binding ElectronicUnitCheck.CheckResult, Mode=OneWay}" IsEnabled="False"   Margin="50,0,10,0"/>
                                 <TextBlock Text="{Binding ElectronicUnitCheck.CheckResult, Converter={StaticResource SelectStringByBoolConverter},
                                     ConverterParameter={StaticResource BlockStatuses}}"
@@ -140,7 +141,7 @@
                         </GroupBox.Header>
                         <Grid ShowGridLines="True">
                             <Grid.ColumnDefinitions >
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.3*"/>
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
@@ -150,28 +151,21 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <!--#region Аналоговый выход 0 -->
-                            <serv:CheckAnalogControl Grid.ColumnSpan="3" Grid.Row="0" DataContext="{Binding ElectronicUnitCheck.AnalogCheck0}"/>
-                            <!--#endregion-->
-                            <!--#region Аналоговый выход 1 -->
-                            <serv:CheckAnalogControl Grid.ColumnSpan="3" Grid.Row="1" DataContext="{Binding ElectronicUnitCheck.AnalogCheck1}"/>
-                            <!--#endregion-->
+                            </Grid.RowDefinitions>                            
+                            <an:AnalogCheckControl Grid.ColumnSpan="3" Grid.Row="0" DataContext="{Binding ElectronicUnitCheck.AnalogCheck0}"/>
+                            <an:AnalogCheckControl Grid.ColumnSpan="3" Grid.Row="1" DataContext="{Binding ElectronicUnitCheck.AnalogCheck1}"/>
+                            
                             <!--#region Напряжение на колодках платы питания -->
-                            <TextBlock  Grid.Row="2" Text="Напряжение на колодках платы питания ФЭУ"/>
+                            <TextBlock  Grid.Row="2" Text="Напряжение на колодках платы питания ФЭУ" TextWrapping="Wrap"/>
                             <CheckBox  Grid.Column="1" Grid.Row="2" IsChecked="{Binding ElectronicUnitCheck.HvSourceCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
                                     Mode=OneWay}" IsEnabled="False"/>
                             <ListBox Grid.Column="2" Grid.Row="2">
-                                <TextBlock TextWrapping="Wrap"  Text="{Binding ElectronicUnitCheck.HvSourceCheck.Status}"/>
-                                <TextBlock TextWrapping="Wrap"  Text="Отклонение напряжения должно быть не более 0.5 В"/>
-                                <TextBlock Text="{Binding ElectronicUnitCheck.HvSourceCheck.IsError, Converter={StaticResource SelectStringByBoolConverter},
-                                    ConverterParameter={StaticResource CheckStatusesCommon}}" 
-                                           TextWrapping="Wrap"  />
+                                <TextBlock TextWrapping="Wrap"  Text="{Binding ElectronicUnitCheck.HvSourceCheck.Status}"/>                               
                             </ListBox>                            
                             <!--#endregion-->
                             <!--#region Контрольня сумма основного МК -->
-                            <TextBlock  Grid.Row="3" Text="Контрольная ПО сумма основного МК"/>
+                            <TextBlock  Grid.Row="3" Text="Контрольная ПО сумма основного МК" TextWrapping="Wrap"/>
                             <CheckBox  Grid.Column="1" Grid.Row="3" IsChecked="{Binding ElectronicUnitCheck.SoftwareCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
                                     Mode=OneWay}"
@@ -179,7 +173,7 @@
                             <TextBlock TextWrapping="Wrap" Grid.Column="2" Grid.Row="3" Text="{Binding ElectronicUnitCheck.SoftwareCheck.Status}"/>
                             <!--#endregion-->
                             <!--#region RTC -->
-                            <TextBlock  Grid.Row="4" Text="Часы реального времени"/>
+                            <TextBlock  Grid.Row="4" Text="Часы реального времени" TextWrapping="Wrap"/>
                             <CheckBox  Grid.Column="1" Grid.Row="4" IsChecked="{Binding ElectronicUnitCheck.RtcCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
                                     Mode=OneWay}"
@@ -215,7 +209,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions >
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.3*"/>
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
@@ -227,40 +221,83 @@
                                        IsEnabled="False"/>
                             <ListBox Grid.Column="2" Grid.Row="0">
                                 <TextBlock TextWrapping="Wrap"  Text="{Binding SensorCheck.PulseCheck.Status}"/>
-                                <TextBlock TextWrapping="Wrap"  Text="Условие проверки - процент корретных импульсов должен быть более 90%"/>
-                                
                             </ListBox>                            
                             <!--#endregion-->
                             <!--#region Проверка отклонения высокого напряженния -->
-                            <TextBlock  Grid.Row="1" Text="Проверка отклонения высокого напряженния"/>
+                            <TextBlock  Grid.Row="1" Text="Проверка отклонения высокого напряженния" TextWrapping="Wrap"/>
                             <CheckBox  Grid.Column="1" Grid.Row="1" IsChecked="{Binding SensorCheck.HvCheck.IsError, 
                                     Converter={StaticResource InvertBooleanConverter},
                                     Mode=OneWay}"
                                        IsEnabled="False"/>
                             <ListBox Grid.Column="2" Grid.Row="1">
-                                <TextBlock TextWrapping="Wrap" Text="{Binding SensorCheck.HvCheck.Status}"/>
-                                <TextBlock TextWrapping="Wrap" Text="Условие проверки - отклонение высокого напряжения от уставки не должно быть более 10 В"/>
-                                <TextBlock Text="{Binding SensorCheck.HvCheck.IsError, Converter={StaticResource SelectStringByBoolConverter},
-                                    ConverterParameter={StaticResource HvCheckStatuses}}" 
-                                           TextWrapping="Wrap"/>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding SensorCheck.HvCheck.Status}"/>                                
                             </ListBox>                            
                             <!--#endregion-->
                         </Grid>
                     </GroupBox>
                     <!--#endregion-->
                 </BlockUIContainer>
-                <BlockUIContainer>
+                <BlockUIContainer >
                     <!--#region Параметры процесса -->
                     <GroupBox Header="Параметры процесса">
+                        <GroupBox.Resources>
+                            <DataTemplate x:Key="LocalHeaderTemplate">
+                                <TextBlock TextWrapping="Wrap" FontSize="10">
+                                    <TextBlock.Text>
+                                        <Binding/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GroupBox.Resources>
                         <DataGrid IsReadOnly="True"
                                       ItemsSource="{Binding Processes}"
+                                      HorizontalContentAlignment="Center"
+                                       HorizontalAlignment="Stretch"                                
+                                      
                                       AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Название процесса" Binding="{Binding Description}"/>
-                                <DataGridTextColumn Header="Единица измерения" Binding="{Binding MeasUnit}"/>
-                                <DataGridTextColumn Header="Мин. величина" Binding="{Binding MinValue}"/>
-                                <DataGridTextColumn Header="Акт. величина" Binding="{Binding Value}"/>
-                                <DataGridTextColumn Header="Макс. величина" Binding="{Binding MaxValue}"/>
+                                <DataGridTemplateColumn Header="Название процесса" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Description}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Единица измерения" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding MeasUnit}" Width="100"  TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Мин. величина" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding MinValue, StringFormat=f1}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Акт. величина" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value, StringFormat=f1}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Макс. величина" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding MaxValue, StringFormat=f1}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>                               
+                                <DataGridTemplateColumn Header="Статус проверки" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Result}" MaxWidth="250" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>

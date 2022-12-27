@@ -75,7 +75,13 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit
             DeviceCheckResult result = new DeviceCheckResult();
             var deviation = Math.Abs(_vM.mainModel.TelemetryHV.VoltageCurIn.Value - 12);
             result.IsError = deviation > 0.5;
-            result.Status = $"Напряжение {_vM.mainModel.TelemetryHV.VoltageCurIn.Value.ToString("f3")} В при ожидаемых 12 В";
+            result.Status = $"Напряжение {_vM.mainModel.TelemetryHV.VoltageCurIn.Value.ToString("f3")} В при ожидаемых 12\n\r" +
+                $"Отклонение напряжения должно быть не более 12 ± 0.5 В\n\r";
+            if (result.IsError)
+            {
+                result.Status += $"Отклонение {deviation.ToString("f3")} В, проверка не выполнена";
+            }
+            else result.Status += $"Отклонение {deviation.ToString("f3")} В, проверка выполнена успешно";
             return result;
         }
 

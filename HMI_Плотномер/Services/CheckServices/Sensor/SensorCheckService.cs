@@ -49,7 +49,12 @@ namespace IDensity.Core.Services.CheckServices.Sensor
         {
             var result = new DeviceCheckResult();
             result.IsError = Math.Abs(_vM.mainModel.TelemetryHV.VoltageSV.Value - _vM.mainModel.TelemetryHV.VoltageCurOut.Value) > 10;
-            result.Status = $"Отклонение от уставки {_vM.mainModel.TelemetryHV.VoltageSV.Value - _vM.mainModel.TelemetryHV.VoltageCurOut.Value} В";
+            result.Status = $"Измеренное значение высокого напряжения {_vM.mainModel.TelemetryHV.VoltageCurOut.Value} В\n\r";
+            result.Status += $"Уставка {_vM.mainModel.TelemetryHV.VoltageSV.Value} В\n\r";
+            result.Status += $"Условие проверки - отклонение высокого напряжения от уставки не должно быть более 10 В\n\r";
+            result.Status += $"Отклонение от уставки {_vM.mainModel.TelemetryHV.VoltageSV.Value - _vM.mainModel.TelemetryHV.VoltageCurOut.Value} В,";
+            if(result.IsError) result.Status += $" проверка не пройдена";
+            else result.Status += $" проверка выполнена успешно";
             return result;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Services.CheckServices.ElectronicUnit.Analog;
 using IDensity.Models;
 using IDensity.Services.ComminicationServices;
 using IDensity.ViewModels;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IDensity.Services.CheckServices
 {
-    public class AnalogCheckService :PropertyChangedBase, ICheckService
+    public class AnalogCheckService :PropertyChangedBase
     {
         private readonly CancellationTokenSource _cancellationToken;
         private readonly VM _vM;
@@ -41,9 +42,9 @@ namespace IDensity.Services.CheckServices
             _model = vM.mainModel;
             _commService = vM.CommService;
         }
-        public async Task<List<DeviceCheckResult>> Check()
+        public async Task<List<AnalogResult>> Check()
         {
-            List<DeviceCheckResult> result = new List<DeviceCheckResult>();
+            List<AnalogResult> result = new List<AnalogResult>();
             for (int i = 0; i < 2; i++)
             {
                 result.Add(await CheckAnalog(i));
@@ -55,10 +56,10 @@ namespace IDensity.Services.CheckServices
         /// </summary>
         /// <param name="modNum"></param>
         /// <returns></returns>
-        async Task<DeviceCheckResult> CheckAnalog(int modNum)
+        async Task<AnalogResult> CheckAnalog(int modNum)
         {
             await SwitchAnalog(modNum);
-            var result = new DeviceCheckResult() { ProcessName = $"Проверка работы аналогового выхода {modNum}" };
+            var result = new AnalogResult(modNum);
             for (int i = 4; i <= 20; i += 8)
             {
                 if (!await SetCurrent(i, modNum, result))
@@ -101,31 +102,27 @@ namespace IDensity.Services.CheckServices
             return true;
         }
 
-        async Task<bool> SetCurrent(int setValue, int moduleNum, DeviceCheckResult result)
+        async Task<bool> SetCurrent(int setValue, int moduleNum, AnalogResult result)
         {
             ProcessEvent?.Invoke($"Аналоговый выход {moduleNum} : Выставляем ток {setValue} mA");
             _model.AnalogGroups[moduleNum].AO.AmTestValue.Value = (ushort)(setValue * 1000);
             _commService.SetTestValueAm(moduleNum, 0, (ushort)(setValue * 1000));
             await Task.Delay(5000, _cancellationToken.Token);
             var currentLevel = (float)_model.AnalogGroups[moduleNum].AO.AdcValue.Value / 69;
+            var measPoint = new AnalogMeasPoint(setValue, currentLevel);
+            result.MeasPoints.Add(measPoint);
             if (_model.AnalogGroups[moduleNum].AO.VoltageTest.Value < 200)
             {
-                var msg = $"Аналоговый выход {moduleNum} : Обрыв цепи аналогового выхода";
-                ProcessEvent?.Invoke(msg);
-                result.Status = msg;
-                result.IsError = true;
+                measPoint.Status = AnalogCheckState.BreakError;
+                result.IsError = true;                
                 return false;
             }
             else
             {
                 var deviation = Math.Abs(currentLevel - setValue) / 16 * 100;
                 result.IsError = deviation > 0.1 ? true : false;
-                var msg = ($"Аналоговый выход {moduleNum} :   " +
-                    $"Результат замера {currentLevel} mA при ожидаемых {setValue} mA " +
-                    $"(Погрешность {deviation}%)");
-                ProcessEvent?.Invoke(msg);
-                result.Status += msg + "\n\r";
-            }
+                measPoint.Status = deviation > 0.1 ? AnalogCheckState.DeviationError : AnalogCheckState.Ok;
+            }           
             return true;
         }
 

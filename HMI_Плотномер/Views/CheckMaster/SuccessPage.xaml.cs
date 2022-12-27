@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -31,21 +32,8 @@ namespace IDensity.Views.CheckMaster
 
         }
 
-        
-
-       
-
-        
-
-        private void Print_Click(object sender, RoutedEventArgs e)
+        void Print()
         {
-            //FlowDocument doc = new FlowDocument();
-            //AddDocument(Document, doc);
-            //foreach (var block in Document.Blocks)
-            //{
-            //    AddBlock(block, doc);
-            //}
-
             PrintDialog printDialog = new PrintDialog();
             var doc = pageViewer.Document;
             double pageHeight = doc.PageHeight;
@@ -71,6 +59,11 @@ namespace IDensity.Views.CheckMaster
                 pageViewer.IncreaseZoom();
 
             }
+        }
+        private void Print_Click(object sender, RoutedEventArgs e)
+        {
+            //Task.Run(() => Print());
+            Print();
 
         }
 

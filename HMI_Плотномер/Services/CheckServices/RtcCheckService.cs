@@ -29,7 +29,7 @@ namespace IDensity.Services.CheckServices
             var lastDate = _vM.mainModel.Rtc.Value;
             var diff = lastDate - firstDate;
             result.Status += $"За десять секунд состояние модуля RTC изменилось на  " +
-                $": {diff.TotalSeconds} секунд\n\r";
+                $": {diff.TotalSeconds} секунд";
             if (diff.TotalSeconds < 8)
             {                
                 result.IsError = true;

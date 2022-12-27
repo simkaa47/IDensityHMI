@@ -49,5 +49,22 @@ namespace IDensity.Core.Services.CheckServices
         }
         #endregion
 
+        #region Результат 
+        /// <summary>
+        /// Результат 
+        /// </summary>
+        private string _result;
+        /// <summary>
+        /// Результат 
+        /// </summary>
+        public string Result
+        {
+            get => _result;
+            set => Set(ref _result, value);
+        }
+        #endregion
+
+
+
     }
 }

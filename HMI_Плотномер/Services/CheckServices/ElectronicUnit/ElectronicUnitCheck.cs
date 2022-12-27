@@ -1,4 +1,5 @@
-﻿using IDensity.DataAccess;
+﻿using IDensity.Core.Services.CheckServices.ElectronicUnit.Analog;
+using IDensity.DataAccess;
 using IDensity.Services.CheckServices;
 
 namespace IDensity.Core.Services.CheckServices.ElectronicUnit
@@ -16,8 +17,8 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit
         #endregion
 
         #region Проверка AO0
-        private DeviceCheckResult _analogCheck0;
-        public DeviceCheckResult AnalogCheck0
+        private AnalogResult _analogCheck0;
+        public AnalogResult AnalogCheck0
         {
             get => _analogCheck0;
             set => Set(ref _analogCheck0, value);
@@ -25,8 +26,8 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit
         #endregion
 
         #region Проверка AO1
-        private DeviceCheckResult _analogCheck1;
-        public DeviceCheckResult AnalogCheck1
+        private AnalogResult _analogCheck1;
+        public AnalogResult AnalogCheck1
         {
             get => _analogCheck1;
             set => Set(ref _analogCheck1, value);

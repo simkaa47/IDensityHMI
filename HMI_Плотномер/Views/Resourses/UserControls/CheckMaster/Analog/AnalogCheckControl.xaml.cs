@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IDensity.Core.Services.CheckServices
+namespace IDensity.Core.Views.Resourses.UserControls.CheckMaster.Analog
 {
     /// <summary>
-    /// Логика взаимодействия для CheckAnalogControl.xaml
+    /// Логика взаимодействия для AnalogCheckControl.xaml
     /// </summary>
-    public partial class CheckAnalogControl : UserControl
+    public partial class AnalogCheckControl : UserControl
     {
-        public CheckAnalogControl()
+        public AnalogCheckControl()
         {
             InitializeComponent();
         }
