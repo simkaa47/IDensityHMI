@@ -14,7 +14,7 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit.Analog
         {
             SetValue = setValue;
             MeasValue = measValue;
-            MaxDeviation = 0.016f;
+            MaxDeviation = 0.16f;
         }
 
         #region Уставка

@@ -213,4 +213,8 @@
         <sys1:String>Плотномер радиоизотопный IDensity</sys1:String>
         <sys1:String>Уровнемеррадиоизотопный ILevel</sys1:String>
     </col1:ArrayList>
+    <col1:ArrayList   x:Key="ImitationCheckStatuses">
+        <sys1:String>Вывод: иммитационная поверка не пройдена</sys1:String>
+        <sys1:String>Вывод: иммитационная поверка пройдена успешно</sys1:String>
+    </col1:ArrayList>
 </ResourceDictionary>

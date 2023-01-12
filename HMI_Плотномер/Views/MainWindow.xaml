@@ -6,13 +6,15 @@
         xmlns:vm="clr-namespace:IDensity.ViewModels"       
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"        
+        xmlns:fa="http://schemas.fontawesome.io/icons/" 
+        xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
         xmlns:add="clr-namespace:IDensity.AddClasses"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
         xmlns:adc="clr-namespace:IDensity.Views.Resourses.UserControls.AdcControls"
         xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
-        mc:Ignorable="d"         
+        mc:Ignorable="d"   
+        
         Title="MainWindow" Height="450" Width="800"
         Background="DarkSlateGray">
     <Window.Resources>
@@ -143,10 +145,10 @@
                     <!--#region Тренды -->
                     <TabControl TabStripPlacement="Bottom">
                         <!--#region Текущй тренд -->
-                        <TabItem Header="Текущий тренд">
+                        <TabItem Header="Текущий тренд" BorderBrush="Yellow">
                             <!--#region Текущий тренд -->
                             <Grid>
-                                <uc:TrendControl DataSource="{Binding PlotCollection}"                                                 
+                                <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
                                                  LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                  LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
                                                  LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -344,7 +346,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <!--#region Тренд -->
-                                <uc:TrendControl Grid.Row="2"
+                                <trends:MainTrendControl Grid.Row="2" 
                                                  Grid.ColumnSpan="6" 
                                                  DataSource="{Binding ArchivalDataPotnts}"
                                                  LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"

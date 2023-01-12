@@ -9,6 +9,22 @@
              d:DataContext="{d:DesignInstance Type=m:AnalogResult}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="ListBoxItem">
+                <Setter Property="Margin" Value="0"/>
+            </Style>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource CheckMaster}" x:Key="ResultStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsError}" Value="True">
+                        <Setter Property="Text" Value="Проверка аналогового выхода не пройдена"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsError}" Value="False">
+                        <Setter Property="Text" Value="Проверка аналогового выхода пройдена успешно"/>                        
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
         <Grid.ColumnDefinitions >
             <ColumnDefinition Width="0.3*"/>
             <ColumnDefinition Width="100"/>
@@ -16,6 +32,9 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="{Binding Num, StringFormat=Аналоговый выход {0}}" TextWrapping="Wrap"/>
         <CheckBox Grid.Column="1" IsEnabled="False" IsChecked="{Binding IsError, Converter={StaticResource InvertBooleanConverter}}"/>
-       
+        <ListBox Margin="0" Grid.Column="2" HorizontalContentAlignment="Stretch">
+            <ListBox Margin="-20,0,0,0"   ItemsSource="{Binding MeasPoints}" ItemTemplate="{StaticResource AnalogMeasPointTemplate}"/>
+            <TextBlock Style="{StaticResource ResultStyle}"/>
+        </ListBox>
     </Grid>
 </UserControl>

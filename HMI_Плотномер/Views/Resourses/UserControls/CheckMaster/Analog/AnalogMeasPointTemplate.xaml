@@ -1,0 +1,44 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mp="clr-namespace:IDensity.Core.Services.CheckServices.ElectronicUnit.Analog"
+                    xmlns:local="clr-namespace:IDensity.Core.Views.Resourses.UserControls.CheckMaster.Analog">
+    <DataTemplate DataType="{x:Type mp:AnalogMeasPoint}" x:Key="AnalogMeasPointTemplate">
+        <ListBox>
+            <ListBox.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource CheckMaster}"/>
+                <Style TargetType="TextBlock" x:Key="ErrorStyle" BasedOn="{StaticResource CheckMaster}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="2">
+                            <Setter Property="Foreground" Value="Black"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
+            <ListBoxItem  Visibility="{Binding Status, Converter={StaticResource VisibleIfEqual}, ConverterParameter=BreakError}">
+                <TextBlock Text="Обрыв цепи аналогового выхода"
+                       Foreground="Black"/>
+            </ListBoxItem>
+            <ListBoxItem  Visibility="{Binding Status, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=BreakError}">
+                <TextBlock Style="{StaticResource ErrorStyle}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{} Уставка {0} mA: измеренное значение  {1:f3} mA">
+                            <Binding Path="SetValue"/>
+                            <Binding Path="MeasValue"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </ListBoxItem>
+            <ListBoxItem  Visibility="{Binding Status, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=BreakError}">
+                <TextBlock Style="{StaticResource ErrorStyle}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{} Условие проверки: значение токового выхода должно быть не больше  {0}± {1:f3} mA">
+                            <Binding Path="SetValue"/>
+                            <Binding Path="MaxDeviation"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </ListBoxItem>
+            
+        </ListBox>
+    </DataTemplate>
+</ResourceDictionary>

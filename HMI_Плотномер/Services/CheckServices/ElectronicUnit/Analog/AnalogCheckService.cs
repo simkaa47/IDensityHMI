@@ -108,21 +108,21 @@ namespace IDensity.Services.CheckServices
             _model.AnalogGroups[moduleNum].AO.AmTestValue.Value = (ushort)(setValue * 1000);
             _commService.SetTestValueAm(moduleNum, 0, (ushort)(setValue * 1000));
             await Task.Delay(5000, _cancellationToken.Token);
-            var currentLevel = (float)_model.AnalogGroups[moduleNum].AO.AdcValue.Value / 69;
+            var currentLevel = (float)_model.AnalogGroups[moduleNum].AO.AdcValue.Value / 69.2f;
             var measPoint = new AnalogMeasPoint(setValue, currentLevel);
             result.MeasPoints.Add(measPoint);
             if (_model.AnalogGroups[moduleNum].AO.VoltageTest.Value < 200)
             {
                 measPoint.Status = AnalogCheckState.BreakError;
-                result.IsError = true;                
+                result.IsError = true;
                 return false;
             }
             else
             {
-                var deviation = Math.Abs(currentLevel - setValue) / 16 * 100;
-                result.IsError = deviation > 0.1 ? true : false;
-                measPoint.Status = deviation > 0.1 ? AnalogCheckState.DeviationError : AnalogCheckState.Ok;
-            }           
+                var deviation = Math.Abs(currentLevel - setValue);
+                if (deviation > measPoint.MaxDeviation) result.IsError = true;
+                measPoint.Status = deviation > measPoint.MaxDeviation ? AnalogCheckState.DeviationError : AnalogCheckState.Ok;
+            }            
             return true;
         }
 

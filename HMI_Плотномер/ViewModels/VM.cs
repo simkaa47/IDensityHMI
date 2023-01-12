@@ -60,6 +60,7 @@ namespace IDensity.ViewModels
             SdCardVm = new SdCardVm(this);
             AnalogVm = new AnalogVm(this);
             MeasUnitSettingsVm = new MeasUnitVm(this);
+            CommService.Tcp.TcpEvent += WriteTcpLog;
            
         }
 
@@ -72,7 +73,14 @@ namespace IDensity.ViewModels
 
         }
         #endregion
-
+        
+        async void WriteTcpLog(string message)
+        {
+            using (StreamWriter writer = new StreamWriter("tcplog.txt", true))
+            {
+                await writer.WriteLineAsync($"{DateTime.Now.ToString("dd:MM:YYYY HH:mm:ss")}:{message}");                
+            }
+        }
 
         #region Пользователи
 

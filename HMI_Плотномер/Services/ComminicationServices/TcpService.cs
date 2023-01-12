@@ -133,7 +133,7 @@ namespace IDensity.Services.ComminicationServices
                     errCommCount = 0;
                 }
                 else Thread.Sleep(_model.TcpConnectData.Pause);
-                TcpEvent?.Invoke(ex.Message);
+                TcpEvent?.Invoke(ex.Message + $" ({ex.StackTrace})");
             }
 
         }
@@ -329,7 +329,7 @@ namespace IDensity.Services.ComminicationServices
         /// <param name="index"></param>
         public void GetMeasProcessData(int index)
         {
-            _model.SettingsReaded = false;
+            _model.SettingsReaded = false;            
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
             if (arr == null || arr.Length != 120) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");

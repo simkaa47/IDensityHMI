@@ -5,11 +5,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Border Name="Border" MinWidth="300"  BorderBrush="White"   BorderThickness="0,0,1,1">
-                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,0,0,0">
+                    <Border Name="Border"  MinWidth="250" Margin="10,5,10,5"
+                            BorderBrush="#28BCBA" Background="#1C1C1E" Height="60"   BorderThickness="1" CornerRadius="2">
+                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
                             <Image Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" Stretch="None" />
                             <Label Name="L2"                                         
-                                   FontWeight="Normal"  FontSize="20"
+                                   FontWeight="Light"  FontSize="20" FontFamily="Roboto"
                                    ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                    Content="{TemplateBinding Header}"
                                    HorizontalAlignment="Left" 
@@ -20,7 +21,8 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="L2" Property="Foreground" Value="Aqua"/>
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                            <Setter TargetName="Border" Property="Background" Value="#28BCBA"/>
                         </Trigger>
 
                         <Trigger Property="IsMouseOver" Value="True">
@@ -30,6 +32,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        
     </Style>
     <Style TargetType="TabItem" BasedOn="{StaticResource TabItemStyleCommon}"/>
     <!--#endregion-->

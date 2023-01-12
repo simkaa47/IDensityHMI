@@ -10,6 +10,7 @@ using IDensity.Services.ComminicationServices;
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -120,7 +121,20 @@ namespace IDensity.ViewModels.MasrerSettings
         }
         #endregion
 
-       
+        #region Результат проверки
+        /// <summary>
+        /// Результат проверки
+        /// </summary>
+        private bool _result;
+        /// <summary>
+        /// Результат проверки
+        /// </summary>
+        public bool Result
+        {
+            get => _result;
+            set => Set(ref _result, value);
+        }
+        #endregion
 
         #region Дата последней проверки прибора
         /// <summary>
@@ -219,6 +233,7 @@ namespace IDensity.ViewModels.MasrerSettings
                 Processes = new GetProcesesService(VM).GetProcessParameters();
                 Stage = CheckMasterStates.Success;
                 ProcessPercent = 100;
+                Result = ElectronicUnitCheck.CheckResult && PrepareCheckInformation.CheckResult && SensorCheck.CheckResult && Processes.All(p => p.Value >= p.MinValue && p.Value <= p.MaxValue);
                 LastCheckDate = DateTime.Now;
             }
             catch (Exception ex)

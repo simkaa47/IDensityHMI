@@ -1,33 +1,19 @@
 ﻿using IDensity.AddClasses;
-using OxyPlot.Axes;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace IDensity.Views.Resourses.UserControls
+namespace IDensity.Core.Views.UserControls.Trends
 {
     /// <summary>
-    /// Логика взаимодействия для TrendControl.xaml
+    /// Логика взаимодействия для MainTrendControl.xaml
     /// </summary>
-    public partial class TrendControl : UserControl
+    public partial class MainTrendControl : UserControl
     {
-        public TrendControl()
+        public MainTrendControl()
         {
             InitializeComponent();
         }
-
-
-
-
         public double MaximumRange
         {
             get { return (double)GetValue(MaximumRangeProperty); }
@@ -36,9 +22,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for MaximumRange.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaximumRangeProperty =
-            DependencyProperty.Register("MaximumRange", typeof(double), typeof(TrendControl), new PropertyMetadata(double.MaxValue));
-
-
+            DependencyProperty.Register("MaximumRange", typeof(double), typeof(MainTrendControl), new PropertyMetadata(double.MaxValue));
 
 
         #region Источник для трендов
@@ -50,7 +34,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for DataSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DataSourceProperty =
-            DependencyProperty.Register("DataSource", typeof(IEnumerable<TimePoint>), typeof(TrendControl), new PropertyMetadata(null));
+            DependencyProperty.Register("DataSource", typeof(IEnumerable<TimePoint>), typeof(MainTrendControl), new PropertyMetadata(null));
         #endregion
 
         #region Видимость тренда 1
@@ -62,7 +46,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility1Property =
-            DependencyProperty.Register("LineVisibility1", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility1", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 1
@@ -74,7 +58,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle1Property =
-            DependencyProperty.Register("LineTitle1", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle1", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
 
 
 
@@ -89,7 +73,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility2Property =
-            DependencyProperty.Register("LineVisibility2", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility2", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 2
@@ -101,7 +85,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle2Property =
-            DependencyProperty.Register("LineTitle2", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle2", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
 
 
 
@@ -116,7 +100,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility3Property =
-            DependencyProperty.Register("LineVisibility3", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility3", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 3
@@ -128,7 +112,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle3Property =
-            DependencyProperty.Register("LineTitle3", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle3", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
 
 
 
@@ -143,7 +127,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility4.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility4Property =
-            DependencyProperty.Register("LineVisibility4", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility4", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 4
@@ -155,7 +139,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle4.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle4Property =
-            DependencyProperty.Register("LineTitle4", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle4", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
 
 
 
@@ -170,7 +154,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility5.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility5Property =
-            DependencyProperty.Register("LineVisibility5", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility5", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 5
@@ -182,7 +166,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle4.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle5Property =
-            DependencyProperty.Register("LineTitle5", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle5", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
 
         #region Видимость тренда 6
@@ -194,7 +178,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility6.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility6Property =
-            DependencyProperty.Register("LineVisibility6", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility6", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 6
@@ -206,7 +190,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle6.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle6Property =
-            DependencyProperty.Register("LineTitle6", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle6", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
 
         #region Видимость тренда 7
@@ -218,7 +202,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility7.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility7Property =
-            DependencyProperty.Register("LineVisibility7", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility7", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 7
@@ -230,7 +214,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle7.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle7Property =
-            DependencyProperty.Register("LineTitle7", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle7", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
 
         #region Видимость тренда 8
@@ -242,7 +226,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility8.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility8Property =
-            DependencyProperty.Register("LineVisibility8", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility8", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 8
@@ -254,7 +238,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle8.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle8Property =
-            DependencyProperty.Register("LineTitle8", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle8", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
 
         #region Видимость тренда 9
@@ -266,7 +250,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility9.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility9Property =
-            DependencyProperty.Register("LineVisibility9", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility9", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 9
@@ -278,7 +262,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle9.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle9Property =
-            DependencyProperty.Register("LineTitle9", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle9", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
 
         #region Видимость тренда 10
@@ -290,7 +274,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineVisibility9.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineVisibility10Property =
-            DependencyProperty.Register("LineVisibility10", typeof(Visibility), typeof(TrendControl), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("LineVisibility10", typeof(Visibility), typeof(MainTrendControl), new PropertyMetadata(Visibility.Visible));
         #endregion
 
         #region Навзание тренда 10
@@ -302,7 +286,7 @@ namespace IDensity.Views.Resourses.UserControls
 
         // Using a DependencyProperty as the backing store for LineTitle10.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineTitle10Property =
-            DependencyProperty.Register("LineTitle10", typeof(string), typeof(TrendControl), new PropertyMetadata(""));
+            DependencyProperty.Register("LineTitle10", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
     }
 }

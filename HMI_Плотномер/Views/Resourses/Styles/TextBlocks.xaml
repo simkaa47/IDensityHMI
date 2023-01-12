@@ -11,4 +11,13 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
+
+    <Style TargetType="TextBlock" x:Key="CheckMaster"> 
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Margin" Value="10,0,10,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="0"/>
+    </Style>
 </ResourceDictionary>
