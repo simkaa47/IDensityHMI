@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -25,8 +26,12 @@ namespace IDensity
     public  partial class MainWindow : Window
     {        
         public MainWindow()
-        {            
-            InitializeComponent();                        
+        {
+            CultureInfo.CurrentCulture = new CultureInfo("ru-RU", true);
+            CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator = ",";
+
+            InitializeComponent();
+                                   
         }
 
         private void Logout_click(object sender, RoutedEventArgs e)
