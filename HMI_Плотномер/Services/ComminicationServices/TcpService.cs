@@ -332,7 +332,7 @@ namespace IDensity.Services.ComminicationServices
             _model.SettingsReaded = false;            
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
-            if (arr == null || arr.Length != 120) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной");
+            if (arr == null || arr.Length != 120) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной. Получена строка {str}, которая была разбита на {arr.Length} чисел");
             _model.MeasProcSettings[index].Num = (ushort)arr[0];
             _model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
             RecognizeStandDataFromArr(arr, index);
