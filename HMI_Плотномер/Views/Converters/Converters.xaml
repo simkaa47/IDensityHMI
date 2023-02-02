@@ -19,4 +19,6 @@
     <conv:MultiValueSelector x:Key="Multiselector"/>
     <conv:AddConverter x:Key="AddConverter"/>
     <conv:SelectStringByBoolConverter x:Key="SelectStringByBoolConverter"/>
+    <conv:GetByIndexConverter x:Key="GetByIndex"/>
+    <conv:GetIfTrueConverter x:Key="GetIfTrue"/>
 </ResourceDictionary>

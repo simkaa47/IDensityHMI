@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"               
-        xmlns:vm="clr-namespace:IDensity.ViewModels"       
+        xmlns:vm="clr-namespace:IDensity.ViewModels"
+        xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:fa="http://schemas.fontawesome.io/icons/" 
@@ -25,7 +26,8 @@
     </Window.DataContext>    
         <!--#region Страницы -->
         <Grid>
-            <!--#region Верхний бар -->
+        
+        <!--#region Верхний бар -->
             <Grid>
                 <Grid.Resources>
                     <Style TargetType="Border" BasedOn="{StaticResource BorderLight}"/>

@@ -78,7 +78,15 @@ namespace IDensity.ViewModels
         {
             using (StreamWriter writer = new StreamWriter("tcplog.txt", true))
             {
-                await writer.WriteLineAsync($"{DateTime.Now.ToString("dd:MM:YYYY HH:mm:ss")}:{message}");                
+                try
+                {
+                    await writer.WriteLineAsync($"{DateTime.Now.ToString("dd:MM:YYYY HH:mm:ss")}:{message}");
+                }
+                catch (Exception)
+                {
+
+                }
+                                
             }
         }
 
