@@ -14,10 +14,9 @@
         xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
         xmlns:adc="clr-namespace:IDensity.Views.Resourses.UserControls.AdcControls"
         xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
-        mc:Ignorable="d"   
-        
-        Title="MainWindow" Height="450" Width="800"
-        Background="DarkSlateGray">
+        mc:Ignorable="d"  
+        Background="#000000"
+        Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         
     </Window.Resources>
@@ -26,9 +25,9 @@
     </Window.DataContext>    
         <!--#region Страницы -->
         <Grid>
-        
+        <pages:HighBar></pages:HighBar>
         <!--#region Верхний бар -->
-            <Grid>
+            <!--<Grid>
                 <Grid.Resources>
                     <Style TargetType="Border" BasedOn="{StaticResource BorderLight}"/>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
@@ -42,33 +41,33 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="0.4*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <!--#region Эмблема заказчика -->
+                --><!--#region Эмблема заказчика --><!--
                 <Border Grid.Column="0" Margin="5">
                     <Image Source="Resourses/Pictures/konvels_logo_white.png"/>
                 </Border>
-                <!--#endregion-->
-                <!--#region Серийный номер -->
+                --><!--#endregion-->
+                <!--#region Серийный номер --><!--
                 <Border Grid.Column="1"  Margin="5">
                     <UniformGrid Rows="2">
                         <TextBlock Text="Серийный номер:" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                         <TextBlock Text="{Binding mainModel.SerialNumber.Value}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                     </UniformGrid>
                 </Border>
-                <!--#endregion-->
-                <!--#region Индикатор связи с платой -->
+                --><!--#endregion-->
+                <!--#region Индикатор связи с платой --><!--
                 <Border Background="{Binding mainModel.Connecting.Value, Converter={StaticResource ColorToBool}}"  Grid.Column="2" Margin="5">
                     <TextBlock Text="Связь с платой" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </Border>
-                <!--#endregion-->
-                <!--#region Индикатор измерений -->
+                --><!--#endregion-->
+                <!--#region Индикатор измерений --><!--
                 <Border Grid.Column="3" Margin="5" Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}}">
                     <TextBox Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatus}}"
                          TextWrapping="Wrap"
                          VerticalAlignment="Center"
                          HorizontalAlignment="Center"></TextBox>
                 </Border>
-                <!--#endregion-->
-                <!--#region Индикатор высокого напряжения -->
+                --><!--#endregion-->
+                <!--#region Индикатор высокого напряжения --><!--
                 <Border Grid.Column="4" Margin="5" Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}}">
                     <TextBox Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource hvStatus}}"
                          TextWrapping="Wrap"
@@ -76,8 +75,8 @@
                          HorizontalAlignment="Center"
                          HorizontalContentAlignment="Center"></TextBox>
                 </Border>
-                <!--#endregion-->
-                <!--#region Время и пользователь -->
+                --><!--#endregion-->
+                <!--#region Время и пользователь --><!--
                 <Border Grid.Column="5" Margin="5">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -88,12 +87,12 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="0.2*"/>
                         </Grid.ColumnDefinitions>
-                        <!--#region RTC -->
+                        --><!--#region RTC --><!--
                         <Viewbox Grid.ColumnSpan="2"  >
                             <TextBlock Text="{Binding mainModel.Rtc.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"/>
                         </Viewbox>
-                        <!--#endregion-->
-                        <!--#region Авторизация -->
+                        --><!--#endregion-->
+                        <!--#region Авторизация --><!--
                         <Button Grid.Row="1" Margin="2"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Stretch">
                             <Button.ToolTip>Авторизация</Button.ToolTip>
                             <StackPanel Orientation="Horizontal">
@@ -102,22 +101,22 @@
                                 </TextBlock>
                             </StackPanel>
                         </Button>
-                        <!--#endregion-->
-                        <!--#region Логаут -->
+                        --><!--#endregion-->
+                        <!--#region Логаут --><!--
                         <Button Grid.Column="1" Command="{Binding LogoutCommand}" Grid.Row="1" Margin="2">
                             <fa:ImageAwesome Icon="Reply"/>
                         </Button>
-                        <!--#endregion-->
+                        --><!--#endregion--><!--
                     </Grid>
                 </Border>
-                <!--#endregion-->
-                <!--#region Кнопка закрыть приложение -->
+                --><!--#endregion-->
+                <!--#region Кнопка закрыть приложение --><!--
                 <Button Grid.Column="6" Margin="5" Command="{Binding CloseAppCommand}">
                     <Button.ToolTip>Закрыть приложение</Button.ToolTip>
                     <fa:ImageAwesome Icon="TimesCircle"/>
                 </Button>
-                <!--#endregion-->
-            </Grid>
+                --><!--#endregion--><!--
+            </Grid>-->
             <!--#endregion-->        
             <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >

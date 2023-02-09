@@ -4,41 +4,156 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:col="clr-namespace:System.Collections;assembly=System.Runtime.Extensions"
              d:DesignHeight="100" d:DesignWidth="800" 
              d:DataContext="{d:DesignInstance Type=vm:VM}">
-    <Grid >
-        <Grid.Resources>            
-            <x:Array x:Key="CommBackground" Type="{x:Type sys:String}">
-                <sys:String>#FF3B30</sys:String>
-                <sys:String>#00FFFFFF</sys:String>
-            </x:Array>
-            
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <!--#region Konvels logo -->
-        <Image Grid.Column="0" Source="..\Resourses\Pictures\Logo_Konvels_blue.png"/>
-        <!--#endregion-->
-        <!--#region Board Connect State -->
-        <Grid Grid.Column="1" Background="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">            
+    <Border BorderThickness="0,0,0,1" BorderBrush="#5B5B5B">
+        <Grid Background="#1C1C1E">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" x:Key="TextBlockRoboto">
+                    <Setter Property="FontFamily" Value="Roboto"/>
+                    <Setter Property="FontWeight" Value="700"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <x:Array x:Key="CommBackground" Type="{x:Type sys:String}">
+                    <sys:String>#FF3B30</sys:String>
+                    <sys:String>#00FFFFFF</sys:String>
+                </x:Array>
+                <x:Array x:Key="UserBackground" Type="{x:Type sys:String}">
+                    <sys:String>#FF3B30</sys:String>
+                    <sys:String>#FFFFFF</sys:String>
+                </x:Array>
+                <x:Array x:Key="StatusIcons" Type="{x:Type sys:String}">
+                    <sys:String>..\Resourses\Pictures\Comm_Fail.png</sys:String>
+                    <sys:String>..\Resourses\Pictures\Comm_Ok.png</sys:String>
+                </x:Array>
+                <x:Array x:Key="MeasStatuses" Type="{x:Type sys:String}">
+                    <sys:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys:String>
+                    <sys:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys:String>
+                </x:Array>
+                <x:Array x:Key="HvStatuses" Type="{x:Type sys:String}">
+                    <sys:String>HV ВЫКЛЮЧЕНО</sys:String>
+                    <sys:String>HV ВКЛЮЧЕНО</sys:String>
+                </x:Array>
+                <x:Array x:Key="UserIcons" Type="{x:Type sys:String}">
+                    <sys:String>..\Resourses\Pictures\AccountCircleNonAuthorized.png</sys:String>
+                    <sys:String>..\Resourses\Pictures\AccountCircleAuthorized.png</sys:String>
+                </x:Array>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="0.2"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0"/>
+            <!--#region Konvels logo -->
+            <Image Grid.Column="0" Source="..\Resourses\Pictures\Logo_Konvels_blue.png"/>
+            <!--#endregion-->
+            <!--#region Board Connect State -->
+            <Grid  Grid.Column="1" Background="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Viewbox Grid.Column="1" Margin="5">
+                    <TextBlock  Height="Auto" Width="Auto"  Style="{StaticResource TextBlockRoboto}" Text="СВЯЗЬ С ПЛАТОЙ"/>
+                </Viewbox>
+            </Grid>
+            <!--#endregion-->
+            <!--#region Meas Indication -->
+            <Grid  Grid.Column="2" Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" 
+                       Source="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+                <Viewbox Grid.Column="1" Margin="5">
+                    <TextBlock  Height="Auto" 
+                                Width="Auto"  
+                                Style="{StaticResource TextBlockRoboto}" 
+                                Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasStatuses }}"/>
+                </Viewbox>
+            </Grid>
+            <!--#endregion-->
+            <!--#region HV Indication -->
+            <Grid  Grid.Column="3" Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" 
+                       Source="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+                <Viewbox Grid.Column="1" Margin="5">
+                    <TextBlock  Height="Auto" 
+                                Width="Auto"  
+                                Style="{StaticResource TextBlockRoboto}" 
+                                Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvStatuses }}"/>
+                </Viewbox>
+            </Grid>
+            <!--#endregion-->
+            <!--#region Serial Number -->
+            <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Серийный номер" Style="{StaticResource TextBlockRoboto}" Foreground="#6CFFFFFF"/>
+                <TextBlock Text="{Binding mainModel.SerialNumber.Value}" Style="{StaticResource TextBlockRoboto}" Foreground="#6CFFFFFF"/>
+            </StackPanel>
+            <!--#endregion-->
+            <!--#region DateTime -->
+           
+            <TextBox Grid.Column="5"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     BorderThickness="0"
+                     IsEnabled="False"
+                     VerticalContentAlignment="Center"
+                     HorizontalContentAlignment="Center"
+                     Background="#2C2C2E"
+                     Foreground="#A2FFFFFF"
+                     Padding="10"
+                     Text="{Binding mainModel.Rtc.Value, StringFormat=HH:mm:ss   dd.MM.yyyy}"/>
+            <!--#endregion-->
+            <!--#region Authorization -->
+            <Grid Grid.Column="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.15*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0.15*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0"
+                       MouseLeftButtonDown="Logout_click"
+                       Source="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserIcons }}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center">                    
+                </Image>
+                <Viewbox Grid.Column="1" Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Height="Auto"                                    
+                                Width="Auto"  
+                                Style="{StaticResource TextBlockRoboto}" 
+                                Text="{Binding CurUser, Converter={StaticResource UserToName}}"
+                                Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
+                        
+                    </StackPanel>
+                    
+                </Viewbox>
+            </Grid>
+            <!--#endregion-->
         </Grid>
-        <!--#endregion-->
-    </Grid>
+    </Border>
+   
 </UserControl>
