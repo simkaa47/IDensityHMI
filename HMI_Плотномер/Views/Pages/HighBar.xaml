@@ -15,8 +15,7 @@
         <Grid Background="#1C1C1E">
             <Grid.Resources>
                 <Style TargetType="TextBlock" x:Key="TextBlockRoboto">
-                    <Setter Property="FontFamily" Value="Roboto"/>
-                    <Setter Property="FontWeight" Value="700"/>
+                    <Setter Property="FontFamily" Value="Roboto"/>                    
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -54,7 +53,7 @@
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="0.2"/>
+                <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
             <!--#region Konvels logo -->
             <Image Grid.Column="0" Source="..\Resourses\Pictures\Logo_Konvels_blue.png"/>
@@ -141,17 +140,34 @@
                        VerticalAlignment="Center">                    
                 </Image>
                 <Viewbox Grid.Column="1" Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock  Height="Auto"                                    
+                    <TextBlock  Height="Auto"                                    
                                 Width="Auto"  
                                 Style="{StaticResource TextBlockRoboto}" 
                                 Text="{Binding CurUser, Converter={StaticResource UserToName}}"
-                                Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
-                        
-                    </StackPanel>
-                    
+                                Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>                    
                 </Viewbox>
+                <Image Grid.Column="2" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Image>
             </Grid>
+            <!--#endregion-->
+            <!--#region Buttom Exit -->
+            <Border Grid.Column="7" BorderBrush="#5B5B5B" BorderThickness="1,0,0,0">
+                <Grid Background="#000000">
+                    <Image Source="..\Resourses\Pictures\Clear.png">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding CloseAppCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Image>
+                </Grid>
+            </Border>
+            
             <!--#endregion-->
         </Grid>
     </Border>

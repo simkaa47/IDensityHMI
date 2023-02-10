@@ -25,100 +25,10 @@
     </Window.DataContext>    
         <!--#region Страницы -->
         <Grid>
+        <!--#region High Bar -->
         <pages:HighBar></pages:HighBar>
-        <!--#region Верхний бар -->
-            <!--<Grid>
-                <Grid.Resources>
-                    <Style TargetType="Border" BasedOn="{StaticResource BorderLight}"/>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                </Grid.Resources>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="0.4*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                --><!--#region Эмблема заказчика --><!--
-                <Border Grid.Column="0" Margin="5">
-                    <Image Source="Resourses/Pictures/konvels_logo_white.png"/>
-                </Border>
-                --><!--#endregion-->
-                <!--#region Серийный номер --><!--
-                <Border Grid.Column="1"  Margin="5">
-                    <UniformGrid Rows="2">
-                        <TextBlock Text="Серийный номер:" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                        <TextBlock Text="{Binding mainModel.SerialNumber.Value}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                    </UniformGrid>
-                </Border>
-                --><!--#endregion-->
-                <!--#region Индикатор связи с платой --><!--
-                <Border Background="{Binding mainModel.Connecting.Value, Converter={StaticResource ColorToBool}}"  Grid.Column="2" Margin="5">
-                    <TextBlock Text="Связь с платой" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                </Border>
-                --><!--#endregion-->
-                <!--#region Индикатор измерений --><!--
-                <Border Grid.Column="3" Margin="5" Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}}">
-                    <TextBox Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatus}}"
-                         TextWrapping="Wrap"
-                         VerticalAlignment="Center"
-                         HorizontalAlignment="Center"></TextBox>
-                </Border>
-                --><!--#endregion-->
-                <!--#region Индикатор высокого напряжения --><!--
-                <Border Grid.Column="4" Margin="5" Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}}">
-                    <TextBox Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource hvStatus}}"
-                         TextWrapping="Wrap"
-                         VerticalAlignment="Center"
-                         HorizontalAlignment="Center"
-                         HorizontalContentAlignment="Center"></TextBox>
-                </Border>
-                --><!--#endregion-->
-                <!--#region Время и пользователь --><!--
-                <Border Grid.Column="5" Margin="5">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="0.2*"/>
-                        </Grid.ColumnDefinitions>
-                        --><!--#region RTC --><!--
-                        <Viewbox Grid.ColumnSpan="2"  >
-                            <TextBlock Text="{Binding mainModel.Rtc.Value, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"/>
-                        </Viewbox>
-                        --><!--#endregion-->
-                        <!--#region Авторизация --><!--
-                        <Button Grid.Row="1" Margin="2"  MouseDoubleClick="Logout_click" HorizontalContentAlignment="Stretch">
-                            <Button.ToolTip>Авторизация</Button.ToolTip>
-                            <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="User" HorizontalAlignment="Left" Margin="5,1,10,1"/>
-                                <TextBlock Text="{Binding CurUser, Converter={StaticResource UserToName} }" VerticalAlignment="Center"  HorizontalAlignment="Stretch">
-                                </TextBlock>
-                            </StackPanel>
-                        </Button>
-                        --><!--#endregion-->
-                        <!--#region Логаут --><!--
-                        <Button Grid.Column="1" Command="{Binding LogoutCommand}" Grid.Row="1" Margin="2">
-                            <fa:ImageAwesome Icon="Reply"/>
-                        </Button>
-                        --><!--#endregion--><!--
-                    </Grid>
-                </Border>
-                --><!--#endregion-->
-                <!--#region Кнопка закрыть приложение --><!--
-                <Button Grid.Column="6" Margin="5" Command="{Binding CloseAppCommand}">
-                    <Button.ToolTip>Закрыть приложение</Button.ToolTip>
-                    <fa:ImageAwesome Icon="TimesCircle"/>
-                </Button>
-                --><!--#endregion--><!--
-            </Grid>-->
-            <!--#endregion-->        
-            <!--#region Вкладки -->
+        <!--#endregion-->
+        <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка Измерение -->
             <TabItem Header="ИЗМЕРЕНИЕ" Name="MainTab" IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
