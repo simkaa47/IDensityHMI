@@ -73,8 +73,9 @@
                        VerticalAlignment="Center"
                        MaxHeight="30"
                        MaxWidth="34"/>
-                <Viewbox Grid.Column="1" Margin="5" MaxHeight="15">
-                    <TextBlock  Style="{StaticResource TextBlockRoboto}" 
+                <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
+                    <TextBlock  Style="{StaticResource TextBlockRoboto}"
+                                
                                 Text="СВЯЗЬ С ПЛАТОЙ"/>
                 </Viewbox>
             </Grid>
@@ -91,7 +92,7 @@
                        VerticalAlignment="Center"
                        MaxHeight="30"
                        MaxWidth="34"/>
-                <Viewbox Grid.Column="1" Margin="5" MaxHeight="15">
+                <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
                     <TextBlock  Style="{StaticResource TextBlockRoboto}" 
                                 Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasStatuses }}"/>
                 </Viewbox>
@@ -109,7 +110,7 @@
                        VerticalAlignment="Center"
                        MaxHeight="30"
                        MaxWidth="34"/>
-                <Viewbox Grid.Column="1" Margin="5" MaxHeight="15">
+                <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
                     <TextBlock  Style="{StaticResource TextBlockRoboto}" 
                                 Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvStatuses }}"/>
                 </Viewbox>
