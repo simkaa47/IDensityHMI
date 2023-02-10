@@ -76,27 +76,50 @@ namespace IDensity.ViewModels
         
         async void WriteTcpLog(string message)
         {
-            using (StreamWriter writer = new StreamWriter("tcplog.txt", true))
+            try
             {
-                try
+                using (StreamWriter writer = new StreamWriter("tcplog.txt", true))
                 {
                     await writer.WriteLineAsync($"{DateTime.Now.ToString("dd:MM:YYYY HH:mm:ss")}:{message}");
                 }
-                catch (Exception)
-                {
-
-                }
-                                
             }
+            catch (Exception)
+            {
+                
+            }           
         }
 
         #region Пользователи
 
         #region Текущий пользователь
         User _curUser;
-        public User CurUser { get => _curUser; set => Set(ref _curUser, value); }
+        public User CurUser 
+        { 
+            get => _curUser; 
+            set
+            {
+                if (Set(ref _curUser, value))
+                {
+                    IsAuthorized = _curUser != null;
+                }
+            }
+        }
         #endregion
 
+        #region Авторизован пользователь или нет
+        /// <summary>
+        /// Авторизован пользователь или нет
+        /// </summary>
+        private bool _isAuthorized;
+        /// <summary>
+        /// Авторизован пользователь или нет
+        /// </summary>
+        public bool IsAuthorized
+        {
+            get => _isAuthorized;
+            set => Set(ref _isAuthorized, value);
+        }
+        #endregion
 
         #region Коллекция пользователей
         public DataBaseCollection<User> Users { get; } = new DataBaseCollection<User>("Users", new User { Login = "admin", Password = "0000" });

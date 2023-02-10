@@ -6,7 +6,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <Border Name="Border"  MinWidth="250" Margin="10,5,10,5"
-                            BorderBrush="#28BCBA" Background="#1C1C1E" Height="60"   BorderThickness="1" CornerRadius="2">
+                            BorderBrush="#28BCBA" Background="#1C1C1E" Height="60"  BorderThickness="1" CornerRadius="2">
                         <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
                             <Image Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" Stretch="None" />
                             <Label Name="L2"                                         

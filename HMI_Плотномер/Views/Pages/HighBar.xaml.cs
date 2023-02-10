@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.ViewModels;
+using IDensity.Views;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace IDensity.Core.Views.Pages
 {
@@ -21,6 +13,13 @@ namespace IDensity.Core.Views.Pages
         public HighBar()
         {
             InitializeComponent();
+        }
+
+        private void Logout_click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as VM;
+            Password password = new Password(vm);
+            password.Show();
         }
     }
 }

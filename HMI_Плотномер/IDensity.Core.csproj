@@ -7,7 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
+    <None Remove="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <None Remove="Views\Resourses\Pictures\Clear.png" />
+    <None Remove="Views\Resourses\Pictures\Comm_Fail.png" />
+    <None Remove="Views\Resourses\Pictures\Comm_Ok.png" />
+    <None Remove="Views\Resourses\Pictures\ControlIcon.png" />
+    <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
+    <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
+    <None Remove="Views\Resourses\Pictures\MeasIcon.png" />
+    <None Remove="Views\Resourses\Pictures\ResetTv.png" />
+    <None Remove="Views\Resourses\Pictures\TuneIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +48,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
+    <Resource Include="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <Resource Include="Views\Resourses\Pictures\Clear.png" />
+    <Resource Include="Views\Resourses\Pictures\Comm_Fail.png" />
+    <Resource Include="Views\Resourses\Pictures\Comm_Ok.png" />
+    <Resource Include="Views\Resourses\Pictures\ControlIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />
+    <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
+    <Resource Include="Views\Resourses\Pictures\MeasIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\ResetTv.png" />
+    <Resource Include="Views\Resourses\Pictures\TuneIcon.png" />
   </ItemGroup>
 
   <ItemGroup>

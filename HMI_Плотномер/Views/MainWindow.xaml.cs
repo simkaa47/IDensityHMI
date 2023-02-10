@@ -32,14 +32,7 @@ namespace IDensity
 
             InitializeComponent();
                                    
-        }
-
-        private void Logout_click(object sender, RoutedEventArgs e)
-        {
-            var vm = this.DataContext as VM;
-            Password password = new Password(vm);
-            password.Show();            
-        }    
+        }       
 
         
         private void FileDialogOpen(TextBlock tb)
