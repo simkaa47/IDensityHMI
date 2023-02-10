@@ -16,7 +16,7 @@
         xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
         mc:Ignorable="d"  
         Background="#000000"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">
     <Window.Resources>
         
     </Window.Resources>
@@ -25,14 +25,14 @@
     </Window.DataContext>    
         <!--#region Страницы -->
         <Grid>
-        <!--#region High Bar -->
-        <pages:HighBar></pages:HighBar>
+            <!--#region High Bar -->
+        <pages:HighBar/>
         <!--#endregion-->
         <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка Измерение -->
             <TabItem Header="ИЗМЕРЕНИЕ" Name="MainTab" IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
-                
+
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
@@ -60,26 +60,26 @@
                             <!--#region Текущий тренд -->
                             <Grid>
                                 <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
-                                                 LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
-                                                 LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
-                                                 LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
-                                                 LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
-                                                 LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
-                                                 LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
-                                                 LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
-                                                 LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
-                                                 LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
-                                                 LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
+                                                     LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
+                                                     LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
+                                                     LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
+                                                     LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
+                                                     LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
+                                                     LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
+                                                     LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
+                                                     LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
+                                                     LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
+                                                     LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
                             </Grid>
                             <!--#endregion-->
                         </TabItem>
@@ -98,7 +98,7 @@
                                 <!--#endregion-->
                                 <!--#region Временоой интервал -->
                                 <ListBoxItem Template="{StaticResource TextBoxParameter}" Tag="Максимальное время отображения, мин" 
-                                             Content="{Binding TrendSettings.PlotTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                 Content="{Binding TrendSettings.PlotTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 </ListBoxItem>
                                 <!--#endregion-->
                                 <!--#region Процесс 0 - значение счетчика -->
@@ -258,44 +258,44 @@
                                 </Grid.RowDefinitions>
                                 <!--#region Тренд -->
                                 <trends:MainTrendControl Grid.Row="2" 
-                                                 Grid.ColumnSpan="6" 
-                                                 DataSource="{Binding ArchivalDataPotnts}"
-                                                 LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
-                                                 LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
-                                                 LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
-                                                 LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
-                                                 LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
-                                                 LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
-                                                 LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
-                                                 LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
-                                                 LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
-                                                 LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                 LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
+                                                     Grid.ColumnSpan="6" 
+                                                     DataSource="{Binding ArchivalDataPotnts}"
+                                                     LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
+                                                     LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
+                                                     LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
+                                                     LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
+                                                     LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
+                                                     LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
+                                                     LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
+                                                     LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
+                                                     LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
+                                                     LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
                                 <fa:ImageAwesome Grid.Row="2" Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"    Grid.ColumnSpan="6" Height="30"   Icon="Refresh" />
                                 <!--#endregion-->
                                 <!--#region Стартовая точка тренда -->
                                 <uc:DateTimeParameter Grid.ColumnSpan="2"
-                                                      Description="Стартовая точка тренда"
-                                                      PopupOpenedCommand="{Binding SelectDatesCommand}"
-                                                      DateTimeWidth="180"
-                                                      DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                          Description="Стартовая точка тренда"
+                                                          PopupOpenedCommand="{Binding SelectDatesCommand}"
+                                                          DateTimeWidth="180"
+                                                          DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 <!--#endregion-->
                                 <!--#region Конечная точка тренда -->
                                 <uc:DateTimeParameter Grid.Column="2"
-                                                      Grid.ColumnSpan="2"
-                                                      PopupOpenedCommand="{Binding SelectDatesCommand}"
-                                                      Description="Конечная точка тренда"
-                                                      DateTimeWidth="180"
-                                                      DateTime="{Binding DisplayDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                          Grid.ColumnSpan="2"
+                                                          PopupOpenedCommand="{Binding SelectDatesCommand}"
+                                                          Description="Конечная точка тренда"
+                                                          DateTimeWidth="180"
+                                                          DateTime="{Binding DisplayDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 <!--#endregion-->
                                 <!--#region Кнопка "Показать тренд" -->
                                 <Button Grid.Column="4" Margin="2" Command="{Binding ShowArchivalTrendCommand}">
@@ -317,19 +317,19 @@
                                 <!--#endregion-->
                                 <!--#region Кнопка "Запись" -->
                                 <Button Grid.Row="1" 
-                                        Command="{Binding WriteLogCommand}" 
-                                        HorizontalContentAlignment="Stretch" 
-                                        Grid.Column="4" Margin="2" 
-                                        IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}">
+                                            Command="{Binding WriteLogCommand}" 
+                                            HorizontalContentAlignment="Stretch" 
+                                            Grid.Column="4" Margin="2" 
+                                            IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}">
                                     <DockPanel>
                                         <fa:ImageAwesome 
-                                            Margin="2" 
-                                            Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleConverter}}" 
-                                            Icon="Refresh" HorizontalAlignment="Center"                                             
-                                            Spin="{Binding ArchivalTrendUploading}"/>
+                                                Margin="2" 
+                                                Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleConverter}}" 
+                                                Icon="Refresh" HorizontalAlignment="Center"                                             
+                                                Spin="{Binding ArchivalTrendUploading}"/>
                                         <TextBlock Text="Запись" 
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Center"/>
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center"/>
                                     </DockPanel>
                                 </Button>
                                 <!--#endregion-->
@@ -342,53 +342,53 @@
 
                     <!--#region Числовая индикация ФВ -->
                     <ListBox ItemsSource="{Binding mainModel.MeasResults}"
-                             Grid.Column="1"
-                             HorizontalContentAlignment="Stretch"
-                             VerticalContentAlignment="Stretch"
-                             Grid.RowSpan="2">
+                                 Grid.Column="1"
+                                 HorizontalContentAlignment="Stretch"
+                                 VerticalContentAlignment="Stretch"
+                                 Grid.RowSpan="2">
                     </ListBox>
 
                     <!--#endregion-->
 
                     <!--#region Кнопки управления -->
                     <UniformGrid  Grid.Row="2" 
-                                  Grid.Column="0" 
-                                  Columns="2"
-                                  Rows="2">
+                                      Grid.Column="0" 
+                                      Columns="2"
+                                      Rows="2">
                         <!--#region Кнопка Вкл-выкл измерения -->
                         <Button Margin="5" 
-                                Height="Auto"
-                                Command="{Binding SwitchMeasCommand}" 
-                                Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}">
+                                    Height="Auto"
+                                    Command="{Binding SwitchMeasCommand}" 
+                                    Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}">
 
                             <TextBlock  Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource measStatusBtn}}"
-                                       IsEnabled="{Binding mainModel.Connecting}"
-                                       TextWrapping="Wrap"/>
+                                           IsEnabled="{Binding mainModel.Connecting}"
+                                           TextWrapping="Wrap"/>
                         </Button>
                         <!--#endregion-->
                         <!--#region Напряжение HV -->
                         <Border Margin="5"
-                                BorderThickness="2"
-                                BorderBrush="WhiteSmoke">
+                                    BorderThickness="2"
+                                    BorderBrush="WhiteSmoke">
                             <Grid>
                                 <TextBlock Text="Напряжение HV, вольт"/>
                                 <TextBlock Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value}"
-                                           FontSize="40"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                               FontSize="40"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                         <!--#endregion-->
                         <!--#region Температура -->
                         <Border Margin="5"
-                                BorderThickness="2"
-                                BorderBrush="WhiteSmoke">
+                                    BorderThickness="2"
+                                    BorderBrush="WhiteSmoke">
                             <Grid>
                                 <TextBlock Text="Температура прибора, С"/>
                                 <TextBlock Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1}"
-                                           FontSize="40"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                               FontSize="40"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                         <!--#endregion-->
@@ -418,9 +418,9 @@
                     <!--#region Измерительные процессы -->
                     <TabItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ" DataContext="{Binding MeasProcessVm}">
                         <TabControl TabStripPlacement="Top"
-                                    ContentTemplate="{StaticResource TabItemMeasProc}"
-                                    ItemsSource="{Binding VM.mainModel.MeasProcSettings}"
-                                    SelectedItem="{Binding SelectedProcess}">
+                                        ContentTemplate="{StaticResource TabItemMeasProc}"
+                                        ItemsSource="{Binding VM.mainModel.MeasProcSettings}"
+                                        SelectedItem="{Binding SelectedProcess}">
                             <TabControl.ItemContainerStyle>
                                 <Style TargetType="TabItem"  BasedOn="{StaticResource MeasProcTabItemStyle}">
                                     <Setter Property="Header" Value="{Binding Num}"/>
@@ -465,8 +465,8 @@
                                             <DataGridTemplateColumn.CellTemplate >
                                                 <DataTemplate DataType="add:AnalogInput">
                                                     <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
-                                                                Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
-                                                                Command="{Binding SwitchPwrAmCommand}"></Button>
+                                                                    Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
+                                                                    Command="{Binding SwitchPwrAmCommand}"></Button>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -505,37 +505,37 @@
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="add:AnalogOutput">
                                                     <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
-                                                                Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
-                                                                Command="{Binding SwitchPwrAmCommand}" ></Button>
+                                                                    Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
+                                                                    Command="{Binding SwitchPwrAmCommand}" ></Button>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <!--#endregion-->
                                         <!--#region ЦАП -->
                                         <DataGridTextColumn IsReadOnly="True"
-                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                            Header="Напряжение ЦАП, каунтов"
-                                                            Binding="{Binding VoltageDac.Value}" 
-                                                            Width="120"/>
+                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                Header="Напряжение ЦАП, каунтов"
+                                                                Binding="{Binding VoltageDac.Value}" 
+                                                                Width="120"/>
                                         <!--#endregion-->
                                         <!--#region Напряжение TEST, мВ -->
                                         <DataGridTextColumn IsReadOnly="True"
-                                                            Header="Напряжение TEST, каунтов"
-                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                            Width="120" 
-                                                            Binding="{Binding AdcValue.Value}"/>
+                                                                Header="Напряжение TEST, каунтов"
+                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                Width="120" 
+                                                                Binding="{Binding AdcValue.Value}"/>
                                         <!--#endregion-->
                                         <!--#region Напряжение RX, мВ -->
                                         <DataGridTextColumn Width="120"
-                                                            IsReadOnly="True" 
-                                                            Header="Напряжение RX, каунтов"
-                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                            Binding="{Binding VoltageTest.Value}"/>
+                                                                IsReadOnly="True" 
+                                                                Header="Напряжение RX, каунтов"
+                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                Binding="{Binding VoltageTest.Value}"/>
                                         <!--#endregion-->
                                         <!--#region Тестовое значение, мВ -->
                                         <DataGridTemplateColumn Width="135"
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                Header="Тестовое значение, мкА">
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                    Header="Тестовое значение, мкА">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="add:AnalogOutput">
                                                     <DockPanel>
@@ -558,8 +558,8 @@
                                         <!--#endregion-->
                                         <!--#region Активность -->
                                         <DataGridTemplateColumn Width="120"
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                Header="Активность ЦАП">
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                    Header="Активность ЦАП">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <ComboBox ItemsSource="{StaticResource On/Off}" SelectedIndex="{Binding Activity.WriteValue, UpdateSourceTrigger=PropertyChanged}">
@@ -575,8 +575,8 @@
                                         <!--#endregion-->
                                         <!--#region Тип ЦАП -->
                                         <DataGridTemplateColumn Width="120"
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                Header="Тип значения">
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                    Header="Тип значения">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="add:AnalogOutput">
                                                     <ComboBox ItemsSource="{StaticResource DacSources}" SelectedIndex="{Binding DacType.WriteValue, UpdateSourceTrigger=PropertyChanged}">
@@ -589,63 +589,63 @@
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
-                                        <!--#endregion-->                                        
+                                        <!--#endregion-->
                                         <!--#region Номер изм. процесса -->
                                         <DataGridTemplateColumn Header="№ изм. процесса" Width="200">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemParameterText DataContext="{Binding AnalogMeasProcNdx}"
-                                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <!--#endregion-->
                                         <DataGridTemplateColumn Width="120"
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                Header="Тип переменной">
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
+                                                                    Header="Тип переменной">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemCompoboxParameter DataContext="{Binding VarNdx}"
-                                                                                  CompoboxWidth="100"                                                                                  
-                                                                                  Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"
-                                                                                  ItemSource="{StaticResource VarTypes}"/>
+                                                                                      CompoboxWidth="100"                                                                                  
+                                                                                      Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"
+                                                                                      ItemSource="{StaticResource VarTypes}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
 
                                         </DataGridTemplateColumn>
                                         <!--#region Нижний предел переменной -->
                                         <DataGridTemplateColumn Header="Нижний предел переменной" 
-                                                                Width="200" 
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
+                                                                    Width="200" 
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemParameterText DataContext="{Binding DacLowLimit}"
-                                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <!--#endregion-->
                                         <!--#region Верхний предел переменной -->
                                         <DataGridTemplateColumn Header="Верхний предел переменной" 
-                                                                Width="200" 
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
+                                                                    Width="200" 
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemParameterText DataContext="{Binding DacHighLimit}"
-                                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <!--#endregion-->
                                         <!--#region Нижний предел переменной(mA) -->
                                         <DataGridTemplateColumn Header="Нижний предел тока" 
-                                                                Width="200" 
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
+                                                                    Width="200" 
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemParameterText DataContext="{Binding DacLowLimitMa}"
-                                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -653,12 +653,12 @@
 
                                         <!--#region Верхний предел тока -->
                                         <DataGridTemplateColumn Header="Верхний предел тока" 
-                                                                Width="200" 
-                                                                HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
+                                                                    Width="200" 
+                                                                    HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <uc:MenuItemParameterText DataContext="{Binding DacHighLimitMa}"
-                                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
+                                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -676,12 +676,12 @@
                         <uc:MeasUnitControl DataContext="{Binding MeasUnitSettingsVm}"/>
                     </TabItem>
                     <!--#endregion-->
-                    <!--#region Настройки платы HV --> 
+                    <!--#region Настройки платы HV -->
                     <TabItem Header="ПЛАТА HV" >
                         <ListBox HorizontalContentAlignment="Stretch" >
                             <!--#region Уставка напряжения -->
                             <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageSV}" 
-                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AdcViewModel.SetHvCommand}" />
+                                              Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AdcViewModel.SetHvCommand}" />
                             <!--#endregion-->
                             <!--#region Входное напряжение -->
                             <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}"/>
@@ -691,17 +691,17 @@
                             <!--#endregion-->
                             <!--#region Индикатор связи -->
                             <UserControl DataContext="{Binding mainModel.TelemetryHV.HvCommState}" 
-                                             Template="{StaticResource BitIndicator}"/>
+                                                 Template="{StaticResource BitIndicator}"/>
                             <!--#endregion-->
                             <!--#region Кнопка включения-выключения HV -->
                             <DockPanel>
                                 <TextBlock Style="{StaticResource Common}" 
-                                               Text="Управление Высоким напряжением"/>
+                                                   Text="Управление Высоким напряжением"/>
                                 <Button Width="220" Height="Auto" HorizontalAlignment="Right"
-                                            Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFFF0000}"
-                                            Command="{Binding AdcViewModel.switchHvCommandCommand}">
+                                                Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFFF0000}"
+                                                Command="{Binding AdcViewModel.switchHvCommandCommand}">
                                     <TextBlock TextWrapping="Wrap" 
-                                                   Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource HvButn}}"/>
+                                                       Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource HvButn}}"/>
                                 </Button>
                             </DockPanel>
                             <!--#endregion-->
@@ -724,7 +724,7 @@
                             <!--#endregion-->
                         </ListBox>
                     </TabItem>
-                    <!--#endregion-->                    
+                    <!--#endregion-->
                     <!--#region ДАТА И ВРЕМЯ -->
                     <TabItem Header="ДАТА И ВРЕМЯ">
                         <ListBox HorizontalContentAlignment="Stretch">
@@ -748,8 +748,8 @@
                                     <TextBlock Text="Синхронизировать с временем ПК"></TextBlock>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock Margin="1,0,1,0"  Width="{Binding ElementName=Dt, Path=ActualWidth}" 
-                                                       Text="{Binding CurPcDateTime, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
-                                                       HorizontalAlignment="Center"></TextBlock>
+                                                           Text="{Binding CurPcDateTime, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}"
+                                                           HorizontalAlignment="Center"></TextBlock>
                                         <Button Command="{Binding SyncRtcCommand}" Width="50" Margin="1,0,1,0">--></Button>
                                     </StackPanel>
                                 </DockPanel>
@@ -766,8 +766,8 @@
                     <!--#region События -->
                     <TabItem Header="СОБЫТИЯ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                         <DataGrid ItemsSource="{Binding Events.EventDevices}" 
-                                        AutoGenerateColumns="False"                                        
-                                        CanUserAddRows="False">
+                                            AutoGenerateColumns="False"                                        
+                                            CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <!--#region ID -->
                                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/>
@@ -783,7 +783,7 @@
                                 <DataGridTemplateColumn Width="120">
                                     <DataGridTemplateColumn.Header>
                                         <TextBlock Text="Активный фон"
-                                                   TextWrapping="Wrap"/>
+                                                       TextWrapping="Wrap"/>
                                     </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -796,7 +796,7 @@
                                 <DataGridTemplateColumn Width="120">
                                     <DataGridTemplateColumn.Header>
                                         <TextBlock Text="Неактивный фон"
-                                                   TextWrapping="Wrap"/>
+                                                       TextWrapping="Wrap"/>
                                     </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -847,10 +847,10 @@
                             </ControlTemplate>
                             <!--#endregion-->
                         </TabItem.Resources>
-                        <WrapPanel>                           
+                        <WrapPanel>
                             <!--#region Названия Источников компенсаций -->
                             <DataGrid Template="{StaticResource Enums}" DataContext="{Binding CompensationSrcNames.Data}" Tag="Источники компенсаций"></DataGrid>
-                            <!--#endregion-->                            
+                            <!--#endregion-->
                             <!--#region Единицы измерения -->
                             <DataGrid Template="{StaticResource Enums}" DataContext="{Binding UnitNames.Data}" Tag="Единицы измерения"></DataGrid>
                             <!--#endregion-->
@@ -903,8 +903,8 @@
                                 </Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
                             </TabControl.Resources>
-                            <TabItem Header="Аналоги">                                
-                                <DataGrid ItemsSource="{Binding mainModel.AnalogStateGroups}" AlternationCount="{Binding mainModel.AnalogStateGroups.Length}" IsReadOnly="True">                                    
+                            <TabItem Header="Аналоги">
+                                <DataGrid ItemsSource="{Binding mainModel.AnalogStateGroups}" AlternationCount="{Binding mainModel.AnalogStateGroups.Length}" IsReadOnly="True">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Номер группы"  Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}"/>
                                         <DataGridCheckBoxColumn Header="Выход : нет питания" Binding="{Binding Value, Converter={StaticResource GetBitConverter}, ConverterParameter=0}"/>
@@ -917,61 +917,61 @@
                                         <DataGridCheckBoxColumn Header="Выход : низкое напряжение петли" Binding="{Binding Value, Converter={StaticResource GetBitConverter}, ConverterParameter=7}"/>
                                         <DataGridCheckBoxColumn Header="Выход : цепь разомкнута" Binding="{Binding Value, Converter={StaticResource GetBitConverter}, ConverterParameter=9}"/>
                                         <DataGridCheckBoxColumn Header="Вход : выход напряжения или тока за допуск(11 В или 22 mA)" Binding="{Binding Value, Converter={StaticResource GetBitConverter}, ConverterParameter=10}"/>
-                                    </DataGrid.Columns>                                    
+                                    </DataGrid.Columns>
                                 </DataGrid>
                             </TabItem>
                             <TabItem Header="Физ. параметры платы">
-                                
+
                                 <ListBox  HorizontalContentAlignment="Stretch">
                                     <DockPanel>
                                         <TextBlock Text="Питание 12 вольт не в допуске"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=0}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="HV не запущено"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=1}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="HV не в допуске"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=2}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="Опасный уровень HV"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=3}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="Ток HV не в допуске"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=4}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="Опасный ток HV"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=5}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="Температура не в допуске"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=6}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="Импульсы не идут"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=7}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="HV отключено по допускам"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=8}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                     <DockPanel>
                                         <TextBlock Text="RTC некорректен"/>
                                         <CheckBox IsChecked="{Binding mainModel.PhysParamsState, Converter={StaticResource GetBitConverter}, ConverterParameter=9}"
-                                                  HorizontalAlignment="Right"/>
+                                                      HorizontalAlignment="Right"/>
                                     </DockPanel>
                                 </ListBox>
                             </TabItem>
@@ -1006,26 +1006,26 @@
                             <Grid Grid.Row="0">
                                 <UniformGrid Columns="5">
                                     <uc:DateTimeParameter Description="Начальная точка событий"
-                                              DateTimeWidth="200"
-                                              Margin="2"
-                                              DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                  DateTimeWidth="200"
+                                                  Margin="2"
+                                                  DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <uc:DateTimeParameter Description="Конечная точка событий"
-                                              DateTimeWidth="200"                                              
-                                              Margin="2"
-                                              DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                  DateTimeWidth="200"                                              
+                                                  Margin="2"
+                                                  DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     <Button Margin="2"
-                                            VerticalContentAlignment="Center"
-                                            Command="{Binding ShowEventsCommand}"
-                                           >
+                                                VerticalContentAlignment="Center"
+                                                Command="{Binding ShowEventsCommand}"
+                                               >
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal">
                                                 <fa:ImageAwesome Width="20" 
-                                                                 Icon="Refresh" 
-                                                                 Foreground="AliceBlue" 
-                                                                 Spin="{Binding HistoryItemDownloading}" 
-                                                                 Visibility="{Binding HistoryItemDownloading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                                     Icon="Refresh" 
+                                                                     Foreground="AliceBlue" 
+                                                                     Spin="{Binding HistoryItemDownloading}" 
+                                                                     Visibility="{Binding HistoryItemDownloading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                                 <TextBlock Text="Показать" VerticalAlignment="Center"
-                                                           HorizontalAlignment="Center"/>
+                                                               HorizontalAlignment="Center"/>
                                             </StackPanel>
                                         </Button.Content>
                                     </Button>
@@ -1036,8 +1036,8 @@
                                                 <ColumnDefinition Width="0.1*"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBox HorizontalContentAlignment="Left"
-                                                     VerticalContentAlignment="Center"
-                                                     Text="{Binding EventFilterText, UpdateSourceTrigger=PropertyChanged}"/>
+                                                         VerticalContentAlignment="Center"
+                                                         Text="{Binding EventFilterText, UpdateSourceTrigger=PropertyChanged}"/>
                                             <fa:ImageAwesome Grid.Column="1" Icon="Search" Width="20" Foreground="AliceBlue"/>
                                         </Grid>
                                     </Border>
@@ -1046,12 +1046,12 @@
                             <!--#endregion-->
                             <!--#region Таблица всех событий -->
                             <DataGrid Grid.Row="1" 
-                                      IsReadOnly="True" 
-                                      AutoGenerateColumns="False" 
-                                      ItemsSource="{Binding SelectedEventItems}" 
-                                      VirtualizingPanel.VirtualizationMode="Recycling"
-                                      CanUserAddRows="False" 
-                                      CanUserDeleteRows="False">
+                                          IsReadOnly="True" 
+                                          AutoGenerateColumns="False" 
+                                          ItemsSource="{Binding SelectedEventItems}" 
+                                          VirtualizingPanel.VirtualizationMode="Recycling"
+                                          CanUserAddRows="False" 
+                                          CanUserDeleteRows="False">
                                 <DataGrid.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel/>
@@ -1095,7 +1095,7 @@
             <!--#endregion-->
         </TabControl>
         <Grid.RowDefinitions>
-                <RowDefinition Height="0.1*" ></RowDefinition>
+                <RowDefinition Height="0.08*" ></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <!--#endregion-->        
