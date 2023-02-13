@@ -31,8 +31,8 @@
         <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка Измерение -->
-            <TabItem Header="ИЗМЕРЕНИЕ"
-                     Tag="Resourses\Pictures\MeasIcon.png"
+            <TabItem Header="Измерение"
+                     Tag="..\Pictures\MeasIcon.png"
                      Name="MainTab" 
                      IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
                 <Grid>
