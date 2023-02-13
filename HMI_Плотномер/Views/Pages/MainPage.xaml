@@ -4,11 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
+             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"
+            
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:VM}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Transparent">
+    <Grid Background="Transparent">        
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -18,6 +21,62 @@
                 <RowDefinition/>
                 <RowDefinition Height="0.66*"/>
             </Grid.RowDefinitions>
+            <!--#region Trends-->
+            <TabControl TabStripPlacement="Bottom">
+                <!--#region Current Trend-->
+                <TabItem Header="Текущий тренд">
+                    <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
+                                                     LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
+                                                     LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
+                                                     LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
+                                                     LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
+                                                     LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
+                                                     LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
+                                                     LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
+                                                     LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
+                                                     LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
+                                                     LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region Archieve Trens-->
+                <TabItem Header="Архивный тренд">
+                    
+                </TabItem>
+                <!--#endregion-->
+            </TabControl>
+            <!--#region Trend Settings-->
+            <ToggleButton Grid.Column="1"
+                          Style="{StaticResource NoStyle}"
+                          Margin="20"
+                          MaxHeight="30"
+                          MaxWidth="30"
+                          Background="Transparent"
+                          HorizontalAlignment="Right" 
+                          VerticalAlignment="Top"
+                          x:Name="ShowTrendSettinsButton">
+                <ToggleButton.ToolTip>
+                    <TextBlock Text="Настройки трендов"/>
+                </ToggleButton.ToolTip>
+                <Image Source="..\Resourses\Pictures\TuneIcon.png"/>                
+            </ToggleButton>
+            <Popup Height="200" Width="300"                   
+                   IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
+                   StaysOpen="False"                   
+                   Placement="MousePoint">
+                <uc:TrendSettingsControl/>
+            </Popup>
+            <!--#endregion-->
+            <!--#endregion-->
         </Grid>
     </Grid>
 </UserControl>
