@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
-             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"
-            
+             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"            
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:VM}"
@@ -26,8 +25,8 @@
                 <!--#region Current Trend-->
                 <TabItem Header="Текущий тренд">
                     <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
-                                                     LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
+                                                     LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle1="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
                                                      LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                      LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
                                                      LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -69,7 +68,7 @@
                 </ToggleButton.ToolTip>
                 <Image Source="..\Resourses\Pictures\TuneIcon.png"/>                
             </ToggleButton>
-            <Popup Height="200" Width="300"                   
+            <Popup Height="450" Width="400"                   
                    IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
                    StaysOpen="False"                   
                    Placement="MousePoint">

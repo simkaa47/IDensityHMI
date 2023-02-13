@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="IDensity.Core.Views.Resourses.UserControls.CurveVisibilityControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IDensity.Core.Views.Resourses.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <DockPanel>
+            <Grid Width="28" Height="28" Margin="0,0,10,0">
+                <Ellipse Fill="Black" MaxHeight="28" MaxWidth="28"/>
+                <Ellipse Fill="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Color}" MaxHeight="12" MaxWidth="12"/>
+            </Grid>
+            <Border BorderBrush="#33FFFFFF" BorderThickness="0,0,0,1" Height="30">
+                <DockPanel HorizontalAlignment="Stretch">
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Description}" 
+                           Foreground="White"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                    <CheckBox HorizontalAlignment="Right"
+                              Style="{StaticResource  NoStyleCheckBox}"
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check}"
+                              VerticalAlignment="Center"
+                              Background="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check,
+                        Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxColors}}"
+                              BorderThickness="2"
+                              BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check,
+                        Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
+                              />
+                </DockPanel>
+            </Border>
+        </DockPanel>     
+    </Grid>
+</UserControl>

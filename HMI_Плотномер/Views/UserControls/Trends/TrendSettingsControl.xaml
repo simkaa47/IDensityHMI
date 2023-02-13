@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="IDensity.Core.Views.Resourses.UserControls.TrendSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"
+             xmlns:sys="System.Windows.Media"
+             xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:local="clr-namespace:IDensity.Core.Views.Resourses.UserControls"
+             d:DataContext="{d:DesignInstance Type=vm:VM}"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="500">
+    <Border Background="#1C1C1E" BorderThickness="1" BorderBrush="Aqua">
+        <ListBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" >
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
+                                       Check="{Binding TrendsVisible.VisLine1}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=1}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=1}"
+                                       Check="{Binding TrendsVisible.VisLine2}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=2}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=2}"
+                                       Check="{Binding TrendsVisible.VisLine3}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=3}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=3}"
+                                       Check="{Binding TrendsVisible.VisLine4}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=4}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=4}"
+                                       Check="{Binding TrendsVisible.VisLine5}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=5}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=5}"
+                                       Check="{Binding TrendsVisible.VisLine6}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=6}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=6}"
+                                       Check="{Binding TrendsVisible.VisLine7}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=7}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=7}"
+                                       Check="{Binding TrendsVisible.VisLine8}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
+                                       Check="{Binding TrendsVisible.VisLine9}"/>
+            <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}" 
+                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"
+                                       Check="{Binding TrendsVisible.VisLine10}"/>
+        </ListBox>    
+    </Border>
+</UserControl>
