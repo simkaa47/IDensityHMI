@@ -11,10 +11,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <xctk:ButtonSpinner/>
-                    <xctk:ButtonSpinner   x:Name="PART_Spinner"   AllowSpin="{TemplateBinding AllowSpin}" BorderThickness="{TemplateBinding BorderThickness}" Background="DarkSlateGray" IsTabStop="False" ShowButtonSpinner="True" >
+                    <!--<xctk:ButtonSpinner/>-->
+                   <!--<xctk:ButtonSpinner   x:Name="PART_Spinner"   AllowSpin="{TemplateBinding AllowSpin}" BorderThickness="{TemplateBinding BorderThickness}" Background="DarkSlateGray" IsTabStop="False" ShowButtonSpinner="True" >
                         
-                        <!--I removed setters of Background and Foreground properties here-->
+                        --><!--I removed setters of Background and Foreground properties here--><!--
                         <xctk:WatermarkTextBox  x:Name="PART_TextBox"  AcceptsReturn="False" Foreground="WhiteSmoke" BorderThickness="0" FontWeight="Bold" FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}" FontSize="14" FontFamily="{TemplateBinding FontFamily}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="20" Padding="0" TextAlignment="{TemplateBinding TextAlignment}" TextWrapping="NoWrap" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="{TemplateBinding TabIndex}"  Watermark="{TemplateBinding Watermark}">
                             <xctk:WatermarkTextBox.Template>
                                 <ControlTemplate TargetType="{x:Type xctk:WatermarkTextBox}">
@@ -57,7 +57,7 @@
                                         </Trigger>
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter Property="BorderBrush" TargetName="Border" Value="#FFADB2B5"/>
-                                            <!--I changed Background setter value to White here-->
+                                            --><!--I changed Background setter value to White here--><!--
                                             <Setter Property="Background" TargetName="Border" Value="White"/>
                                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                         </Trigger>
@@ -65,7 +65,8 @@
                                 </ControlTemplate>
                             </xctk:WatermarkTextBox.Template>
                         </xctk:WatermarkTextBox>
-                    </xctk:ButtonSpinner>
+                    </xctk:ButtonSpinner>-->
+                    <DatePickerTextBox/>
                     <ToggleButton x:Name="_calendarToggleButton"   Foreground="AliceBlue" Grid.Column="1" Focusable="False" IsChecked="{Binding IsOpen, RelativeSource={RelativeSource TemplatedParent}}">
                         <ToggleButton.IsHitTestVisible>
                             <Binding Path="IsOpen" RelativeSource="{RelativeSource TemplatedParent}">
@@ -94,15 +95,15 @@
                                                             <ColumnDefinition Width="Auto"/>
                                                         </Grid.ColumnDefinitions>
                                                         <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="Stretch" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Stretch"/>
-                                                        <Grid x:Name="arrowGlyph" Grid.Column="1" IsHitTestVisible="False" Margin="5">
-                                                            <Path x:Name="Arrow" Data="M0,1C0,1 0,0 0,0 0,0 3,0 3,0 3,0 3,1 3,1 3,1 4,1 4,1 4,1 4,0 4,0 4,0 7,0 7,0 7,0 7,1 7,1 7,1 6,1 6,1 6,1 6,2 6,2 6,2 5,2 5,2 5,2 5,3 5,3 5,3 4,3 4,3 4,3 4,4 4,4 4,4 3,4 3,4 3,4 3,3 3,3 3,3 2,3 2,3 2,3 2,2 2,2 2,2 1,2 1,2 1,2 1,1 1,1 1,1 0,1 0,1z" Fill="Black" Height="4" Width="7"/>
+                                                        <Grid x:Name="arrowGlyph" Grid.Column="1" IsHitTestVisible="False" Margin="5">                                                            
+                                                            <Image x:Name="Arrow" Source="..\Pictures\Arrow.png"/>
                                                         </Grid>
                                                     </Grid>
                                                 </xctk:ButtonChrome>
                                             </Grid>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter Property="Fill" TargetName="Arrow" Value="#FFAFAFAF"/>
+                                                    <!--<Setter Property="Fill" TargetName="Arrow" Value="#FFAFAFAF"/>-->
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>

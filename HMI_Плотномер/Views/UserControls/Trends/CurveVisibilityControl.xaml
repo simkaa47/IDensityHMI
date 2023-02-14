@@ -17,17 +17,9 @@
                     <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Description}" 
                            Foreground="White"
                            HorizontalAlignment="Left"
-                           VerticalAlignment="Center"/>
-                    <CheckBox HorizontalAlignment="Right"
-                              Style="{StaticResource  NoStyleCheckBox}"
-                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check}"
-                              VerticalAlignment="Center"
-                              Background="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check,
-                        Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxColors}}"
-                              BorderThickness="2"
-                              BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check,
-                        Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
-                              />
+                           VerticalAlignment="Center"/>                    
+                    <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Check, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DockPanel>
             </Border>
         </DockPanel>     

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace IDensity.Core.Views.UserControls.Trends
 {
@@ -288,5 +289,7 @@ namespace IDensity.Core.Views.UserControls.Trends
         public static readonly DependencyProperty LineTitle10Property =
             DependencyProperty.Register("LineTitle10", typeof(string), typeof(MainTrendControl), new PropertyMetadata(""));
         #endregion
+
+        
     }
 }

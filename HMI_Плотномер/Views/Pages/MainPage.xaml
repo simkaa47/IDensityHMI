@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
-             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"            
+             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"  
+             xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:VM}"
@@ -18,7 +19,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="0.66*"/>
+                <RowDefinition Height="0.5*"/>
             </Grid.RowDefinitions>
             <!--#region Trends-->
             <TabControl TabStripPlacement="Bottom">
@@ -26,30 +27,53 @@
                 <TabItem Header="Текущий тренд">
                     <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
                                                      LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle1="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
-                                                     LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
-                                                     LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
-                                                     LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
-                                                     LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
-                                                     LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
-                                                     LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
-                                                     LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
-                                                     LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
-                                                     LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
+                                                     LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle2="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=1}"
+                                                     LineVisibility3="{Binding TrendsVisible.VisLine3, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle3="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=2}"
+                                                     LineVisibility4="{Binding TrendsVisible.VisLine4, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle4="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=3}"
+                                                     LineVisibility5="{Binding TrendsVisible.VisLine5, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle5="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=4}"
+                                                     LineVisibility6="{Binding TrendsVisible.VisLine6, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle6="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=5}"
+                                                     LineVisibility7="{Binding TrendsVisible.VisLine7, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle7="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=6}"
+                                                     LineVisibility8="{Binding TrendsVisible.VisLine8, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle8="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=7}"
+                                                     LineVisibility9="{Binding TrendsVisible.VisLine9, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle9="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
+                                                     LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineTitle10="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"/>
                 </TabItem>
                 <!--#endregion-->
                 <!--#region Archieve Trens-->
                 <TabItem Header="Архивный тренд">
-                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!--#region Data Source Panel-->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <!--#region Start Time Selection-->
+                            <Border Background="#16FFFFFF" CornerRadius="2,2,0,0">
+                                <StackPanel>
+                                    <TextBlock Foreground="#B1FFFFFF" Text="Стартовая точка тренда"/>
+                                    <wpftool:DateTimePicker Template="{StaticResource DateTimePickerTemplate}"/>
+                                </StackPanel>
+                            </Border>
+                            <!--#endregion-->
+                        </Grid>
+                        <!--#endregion-->
+                    </Grid>
                 </TabItem>
                 <!--#endregion-->
             </TabControl>
@@ -68,7 +92,7 @@
                 </ToggleButton.ToolTip>
                 <Image Source="..\Resourses\Pictures\TuneIcon.png"/>                
             </ToggleButton>
-            <Popup Height="450" Width="400"                   
+            <Popup Height="480" Width="600"                   
                    IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
                    StaysOpen="False"                   
                    Placement="MousePoint">

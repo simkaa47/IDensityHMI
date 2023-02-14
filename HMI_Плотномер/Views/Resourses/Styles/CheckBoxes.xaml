@@ -12,4 +12,17 @@
         <sys:String>#33FFFFFF</sys:String>
         <sys:String>#FF00FFFF</sys:String>
     </x:Array>
+    <Style TargetType="CheckBox" x:Key="CheckBoxAqvaStyle">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#33FFFFFF"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" Value="True">
+                <Setter Property="BorderBrush" Value="#FF00FFFF"/>
+                <Setter Property="Background"  Value="#FF00FFFF"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
