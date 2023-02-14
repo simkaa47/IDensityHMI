@@ -12,9 +12,9 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <!--<xctk:ButtonSpinner/>-->
-                   <!--<xctk:ButtonSpinner   x:Name="PART_Spinner"   AllowSpin="{TemplateBinding AllowSpin}" BorderThickness="{TemplateBinding BorderThickness}" Background="DarkSlateGray" IsTabStop="False" ShowButtonSpinner="True" >
+                   <xctk:ButtonSpinner   x:Name="PART_Spinner" ShowButtonSpinner="False"  AllowSpin="False" BorderThickness="{TemplateBinding BorderThickness}" Background="DarkSlateGray" IsTabStop="False" >
                         
-                        --><!--I removed setters of Background and Foreground properties here--><!--
+                        <!--I removed setters of Background and Foreground properties here-->
                         <xctk:WatermarkTextBox  x:Name="PART_TextBox"  AcceptsReturn="False" Foreground="WhiteSmoke" BorderThickness="0" FontWeight="Bold" FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}" FontSize="14" FontFamily="{TemplateBinding FontFamily}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="20" Padding="0" TextAlignment="{TemplateBinding TextAlignment}" TextWrapping="NoWrap" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="{TemplateBinding TabIndex}"  Watermark="{TemplateBinding Watermark}">
                             <xctk:WatermarkTextBox.Template>
                                 <ControlTemplate TargetType="{x:Type xctk:WatermarkTextBox}">
@@ -57,7 +57,7 @@
                                         </Trigger>
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter Property="BorderBrush" TargetName="Border" Value="#FFADB2B5"/>
-                                            --><!--I changed Background setter value to White here--><!--
+                                            <!--I changed Background setter value to White here-->
                                             <Setter Property="Background" TargetName="Border" Value="White"/>
                                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                         </Trigger>
@@ -65,8 +65,7 @@
                                 </ControlTemplate>
                             </xctk:WatermarkTextBox.Template>
                         </xctk:WatermarkTextBox>
-                    </xctk:ButtonSpinner>-->
-                    <DatePickerTextBox/>
+                    </xctk:ButtonSpinner>
                     <ToggleButton x:Name="_calendarToggleButton"   Foreground="AliceBlue" Grid.Column="1" Focusable="False" IsChecked="{Binding IsOpen, RelativeSource={RelativeSource TemplatedParent}}">
                         <ToggleButton.IsHitTestVisible>
                             <Binding Path="IsOpen" RelativeSource="{RelativeSource TemplatedParent}">

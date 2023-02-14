@@ -67,7 +67,11 @@
                             <Border Background="#16FFFFFF" CornerRadius="2,2,0,0">
                                 <StackPanel>
                                     <TextBlock Foreground="#B1FFFFFF" Text="Стартовая точка тренда"/>
-                                    <wpftool:DateTimePicker Template="{StaticResource DateTimePickerTemplate}"/>
+                                    <uc:DateTimeParameter Grid.ColumnSpan="2"
+                                                          Description="Стартовая точка тренда"
+                                                          PopupOpenedCommand="{Binding SelectDatesCommand}"
+                                                          DateTimeWidth="180"
+                                                          DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
                             </Border>
                             <!--#endregion-->
