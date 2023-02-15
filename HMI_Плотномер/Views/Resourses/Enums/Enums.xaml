@@ -72,10 +72,10 @@
         <sys1:String>HV ВЫКЛЮЧЕНО</sys1:String>
         <sys1:String>HV ВКЛЮЧЕНО</sys1:String>
     </col1:ArrayList>
-    <col1:ArrayList x:Key="measStatusBtn">
+    <x:Array Type="sys1:String" x:Key="measStatusBtn">
         <sys1:String>ВКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
         <sys1:String>ВЫКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
-    </col1:ArrayList>
+    </x:Array>
     <col1:ArrayList x:Key="PortModes">
         <sys1:String>RS485</sys1:String>
         <sys1:String>RS232</sys1:String>
