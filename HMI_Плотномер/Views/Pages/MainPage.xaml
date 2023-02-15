@@ -4,11 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
-             xmlns:uc="clr-namespace:IDensity.Core.Views.Resourses.UserControls"  
+             xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
              xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"   
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DataContext="{d:DesignInstance Type=vm:VM}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="Transparent">        
@@ -48,7 +51,7 @@
                 </TabItem>
                 <!--#endregion-->
                 <!--#region Archieve Trens-->
-                <TabItem Header="Архивный тренд">
+                <TabItem Header="Архивный тренд">                    
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -64,16 +67,65 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <!--#region Start Time Selection-->
-                            <Border Background="#16FFFFFF" CornerRadius="2,2,0,0">
-                                <StackPanel>
-                                    <TextBlock Foreground="#B1FFFFFF" Text="Стартовая точка тренда"/>
-                                    <uc:DateTimeParameter Grid.ColumnSpan="2"
-                                                          Description="Стартовая точка тренда"
-                                                          PopupOpenedCommand="{Binding SelectDatesCommand}"
-                                                          DateTimeWidth="180"
-                                                          DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                </StackPanel>
+                            <dt:DateTimeParameter Description="Стартовая точка тренда"
+                                                  Margin="5,0,5,0"
+                                                  PopupOpenedCommand="{Binding SelectDatesCommand}"                                                        
+                                                  DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <!--#endregion-->
+                            <!--#region Finish Time Selection-->
+                            <dt:DateTimeParameter   Grid.Column="1"
+                                                    Margin="5,0,5,0"
+                                                    Description="Конечная точка тренда"
+                                                    PopupOpenedCommand="{Binding SelectDatesCommand}"                                                      
+                                                    DateTime="{Binding DisplayDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <!--#endregion-->
+                            <!--#region File Browse-->
+                            <Border Grid.Column="2" Margin="5,0,5,0" Background="#16FFFFFF" CornerRadius="4,4,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="0.3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" 
+                                               TextWrapping="Wrap" Foreground="#B1FFFFFF" 
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"/>
+                                    <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\DriveFileMove.png" Opacity="0.5"
+                                           MouseLeftButtonDown="BrowseLogPath"/>
+                                </Grid>
                             </Border>
+                            <!--#endregion-->
+                            <!--#region Write Button -->                            
+                            <Border Grid.Column="3" Margin="4,0,4,0" 
+                                    IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}"
+                                    Opacity="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource Opacities}}"
+                                    Background="#16FFFFFF" CornerRadius="4,4,0,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding WriteLogCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="0.3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Запись" 
+                                               TextWrapping="Wrap" Foreground="#B1FFFFFF" 
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"/>
+                                    <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\SystemUpdateAlt.png" Opacity="0.5"
+                                           Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"/>
+                                    <fa:ImageAwesome 
+                                                Margin="2" 
+                                                Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleConverter}}" 
+                                                Icon="Refresh" HorizontalAlignment="Center"                                             
+                                                Spin="{Binding ArchivalTrendUploading}"/>
+                                </Grid>
+                            </Border>
+                            <!--#endregion-->
+                            <!--#region ShowTrendButton -->
+                            <Button Grid.Column="4"  Style="{StaticResource TypicalButton0}"/>
                             <!--#endregion-->
                         </Grid>
                         <!--#endregion-->
@@ -100,7 +152,7 @@
                    IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
                    StaysOpen="False"                   
                    Placement="MousePoint">
-                <uc:TrendSettingsControl/>
+                <trends:TrendSettingsControl/>
             </Popup>
             <!--#endregion-->
             <!--#endregion-->

@@ -12,13 +12,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IDensity.Views.Resourses.UserControls
+namespace IDensity.Core.Views.UserControls.DateTimes
 {
     /// <summary>
-    /// Логика взаимодействия для DateTimeParameter.xaml
+    /// Interaction logic for DateTimeParameter.xaml
     /// </summary>
     public partial class DateTimeParameter : UserControl
     {
+        public DateTimeParameter()
+        {
+            InitializeComponent();
+        }
+
         #region Ширина поля DateTime
         public int DateTimeWidth
         {
@@ -69,9 +74,6 @@ namespace IDensity.Views.Resourses.UserControls
             DependencyProperty.Register("PopupOpenedCommand", typeof(RelayCommand), typeof(DateTimeParameter), new PropertyMetadata(null));
 
 
-        public DateTimeParameter()
-        {
-            InitializeComponent();
-        }
+       
     }
 }

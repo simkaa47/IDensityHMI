@@ -36,7 +36,7 @@ namespace IDensity.Core.Views.Pages
         }
         private void BrowseLogPath(object sender, RoutedEventArgs e)
         {
-            //FileDialogOpen(LogPath);
+            FileDialogOpen(LogPath);
         }
     }
 }

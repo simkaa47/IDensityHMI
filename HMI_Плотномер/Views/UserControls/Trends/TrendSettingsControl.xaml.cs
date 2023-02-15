@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace IDensity.Core.Views.Resourses.UserControls
+namespace IDensity.Core.Views.UserControls.Trends
 {
     /// <summary>
     /// Логика взаимодействия для TrendSettingsControl.xaml

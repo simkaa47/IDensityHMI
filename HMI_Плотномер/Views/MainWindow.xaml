@@ -13,6 +13,7 @@
         xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
         xmlns:adc="clr-namespace:IDensity.Views.Resourses.UserControls.AdcControls"
         xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
+        xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
         mc:Ignorable="d"  
         Background="#000000"
         Title="MainWindow" Height="450" Width="800" WindowState="Maximized">    
@@ -823,11 +824,11 @@
                             <!--#region Панель фильтров -->
                             <Grid Grid.Row="0">
                                 <UniformGrid Columns="5">
-                                    <uc:DateTimeParameter Description="Начальная точка событий"
+                                    <dt:DateTimeParameter Description="Начальная точка событий"
                                                   DateTimeWidth="200"
                                                   Margin="2"
                                                   DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <uc:DateTimeParameter Description="Конечная точка событий"
+                                    <dt:DateTimeParameter Description="Конечная точка событий"
                                                   DateTimeWidth="200"                                              
                                                   Margin="2"
                                                   DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
