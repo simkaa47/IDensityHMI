@@ -7,19 +7,16 @@
         xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:fa="http://schemas.fontawesome.io/icons/" 
-        xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"         
         xmlns:add="clr-namespace:IDensity.AddClasses"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
         xmlns:adc="clr-namespace:IDensity.Views.Resourses.UserControls.AdcControls"
         xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
+        xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
         mc:Ignorable="d"  
         Background="#000000"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">
-    <Window.Resources>
-        
-    </Window.Resources>
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">    
     <Window.DataContext>
         <vm:VM/>
     </Window.DataContext>    
@@ -35,7 +32,8 @@
                      Tag="..\Pictures\MeasIcon.png"
                      Name="MainTab" 
                      IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
-                <Grid>
+                <pages:MainPage/>
+                <!--<Grid>
                     <Grid.Resources>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
                         <Style TargetType="Border">
@@ -44,7 +42,7 @@
                             <Setter Property="Margin" Value="5"/>
                         </Style>
                     </Grid.Resources>
-                    <!--#region Развбивка на 4 части экрана -->
+                    --><!--#region Развбивка на 4 части экрана --><!--
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
@@ -53,296 +51,14 @@
                         <RowDefinition Height="1.5*"></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <!--#endregion-->
+                    --><!--#endregion-->
 
-                    <!--#region Тренды -->
-                    <TabControl TabStripPlacement="Bottom">
-                        <!--#region Текущй тренд -->
-                        <TabItem Header="Текущий тренд" BorderBrush="Yellow">
-                            <!--#region Текущий тренд -->
-                            <Grid>
-                                <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
-                                                     LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
-                                                     LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
-                                                     LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
-                                                     LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
-                                                     LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
-                                                     LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
-                                                     LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
-                                                     LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
-                                                     LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
-                                                     LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
-                            </Grid>
-                            <!--#endregion-->
-                        </TabItem>
-                        <!--#endregion-->
-                        <!--#region Настройки отображения -->
-                        <TabItem Header="Настройки отображения">
-                            <TabItem.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                            </TabItem.Resources>
-                            <ListBox HorizontalContentAlignment="Stretch">
-                                <!--#region запись в график вне режима измерения -->
-                                <DockPanel>
-                                    <TextBlock Text="Запись данных в график вне режима измекрения"/>
-                                    <CheckBox IsChecked="{Binding TrendSettings.WriteIfNoMeasState}" HorizontalAlignment="Right"/>
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Временоой интервал -->
-                                <ListBoxItem Template="{StaticResource TextBoxParameter}" Tag="Максимальное время отображения, мин" 
-                                                 Content="{Binding TrendSettings.PlotTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                </ListBoxItem>
-                                <!--#endregion-->
-                                <!--#region Процесс 0 - значение счетчика -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="TrendName1">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Значение счетчика">
-                                                    <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
-                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <Rectangle x:Name="trendColor1" Fill="Red" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine1" IsChecked="{Binding TrendsVisible.VisLine1}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Процесс 0 - мгновенное значение -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Name="TrendName2">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Мгновенное значение">
-                                                    <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
-                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <Rectangle x:Name="trendColor2" Fill="Blue" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine2" IsChecked="{Binding TrendsVisible.VisLine2}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Процесс 0 - усредненное значение -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Name="TrendName3">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Усредненное значение">
-                                                    <Binding Path="mainModel.MeasResults[0].MeasProcessNum.Value" Mode="OneWay"/>
-                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <Rectangle x:Name="trendColor3" Fill="Green" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine3" IsChecked="{Binding TrendsVisible.VisLine3}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Процесс 1 - значение счетчика -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Name="TrendName4">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Значение счетчика">
-                                                    <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
-                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <Rectangle x:Name="trendColor4" Fill="Brown" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine4" IsChecked="{Binding TrendsVisible.VisLine4}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Процесс 1 - мгновенное значение -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Name="TrendName5">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Мгновенное значение">
-                                                    <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
-                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <Rectangle x:Name="trendColor5" Fill="Black" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine5" IsChecked="{Binding TrendsVisible.VisLine5}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Процесс 1 - усредненное значение -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Name="TrendName6">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource EnumCustomConverter}" StringFormat="{}{0} : Усредненное значение">
-                                                    <Binding Path="mainModel.MeasResults[1].MeasProcessNum.Value" Mode="OneWay"/>
-                                                    <Binding Path="MeasProcNames.Data" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <Rectangle x:Name="trendColor6" Fill="Pink" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine6" IsChecked="{Binding TrendsVisible.VisLine6}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Аналог 0 -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="TrendName7" Text="Значение тока на AI0, мкA"/>
-                                        <Rectangle x:Name="trendColor7" Fill="Yellow" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine7" IsChecked="{Binding TrendsVisible.VisLine7}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region Аналог 1 -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="TrendName8" Text="Значение тока на AI1, мкA"/>
-                                        <Rectangle x:Name="trendColor8" Fill="Aqua" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine8" IsChecked="{Binding TrendsVisible.VisLine8}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region HV -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="TrendName9" Text="Значение HV, вольт"/>
-                                        <Rectangle x:Name="trendColor9" Fill="Purple" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine9" IsChecked="{Binding TrendsVisible.VisLine9}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                                <!--#region T -->
-                                <DockPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="TrendName10" Text="Значение температуры, С "/>
-                                        <Rectangle x:Name="trendColor10" Fill="Orange" Width="16" Margin="10,0,0,10" Height="16"/>
-                                    </StackPanel>
-                                    <CheckBox  x:Name="VisibleLine10" IsChecked="{Binding TrendsVisible.VisLine10}" HorizontalAlignment="Right" />
-                                </DockPanel>
-                                <!--#endregion-->
-                            </ListBox>
-                        </TabItem>
-                        <!--#endregion-->
-                        <!--#region Архивный тренд -->
-                        <TabItem Header="Архивный тренд">
-                            <Grid>
-                                <Grid.Resources>
-                                    <Style TargetType="Border" BasedOn="{StaticResource BorderLight}"/>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                                </Grid.Resources>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                    <!--#region Тренды --><!--
+                    <TabControl TabStripPlacement="Bottom">                       
+                        
+                       
 
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.1*"/>
-                                    <RowDefinition Height="0.1*"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <!--#region Тренд -->
-                                <trends:MainTrendControl Grid.Row="2" 
-                                                     Grid.ColumnSpan="6" 
-                                                     DataSource="{Binding ArchivalDataPotnts}"
-                                                     LineVisibility1="{Binding ElementName=VisibleLine1, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle1="{Binding ElementName=TrendName1, Path=Text}"
-                                                     LineVisibility2="{Binding ElementName=VisibleLine2, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle2="{Binding ElementName=TrendName2, Path=Text}"
-                                                     LineVisibility3="{Binding ElementName=VisibleLine3, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle3="{Binding ElementName=TrendName3, Path=Text}"
-                                                     LineVisibility4="{Binding ElementName=VisibleLine4, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle4="{Binding ElementName=TrendName4, Path=Text}"
-                                                     LineVisibility5="{Binding ElementName=VisibleLine5, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle5="{Binding ElementName=TrendName5, Path=Text}"
-                                                     LineVisibility6="{Binding ElementName=VisibleLine6, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle6="{Binding ElementName=TrendName6, Path=Text}"
-                                                     LineVisibility7="{Binding ElementName=VisibleLine7, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle7="{Binding ElementName=TrendName7, Path=Text}"
-                                                     LineVisibility8="{Binding ElementName=VisibleLine8, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle8="{Binding ElementName=TrendName8, Path=Text}"
-                                                     LineVisibility9="{Binding ElementName=VisibleLine9, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle9="{Binding ElementName=TrendName9, Path=Text}"
-                                                     LineVisibility10="{Binding ElementName=VisibleLine10, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineTitle10="{Binding ElementName=TrendName10, Path=Text}"/>
-                                <fa:ImageAwesome Grid.Row="2" Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"    Grid.ColumnSpan="6" Height="30"   Icon="Refresh" />
-                                <!--#endregion-->
-                                <!--#region Стартовая точка тренда -->
-                                <uc:DateTimeParameter Grid.ColumnSpan="2"
-                                                          Description="Стартовая точка тренда"
-                                                          PopupOpenedCommand="{Binding SelectDatesCommand}"
-                                                          DateTimeWidth="180"
-                                                          DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                <!--#endregion-->
-                                <!--#region Конечная точка тренда -->
-                                <uc:DateTimeParameter Grid.Column="2"
-                                                          Grid.ColumnSpan="2"
-                                                          PopupOpenedCommand="{Binding SelectDatesCommand}"
-                                                          Description="Конечная точка тренда"
-                                                          DateTimeWidth="180"
-                                                          DateTime="{Binding DisplayDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                <!--#endregion-->
-                                <!--#region Кнопка "Показать тренд" -->
-                                <Button Grid.Column="4" Margin="2" Command="{Binding ShowArchivalTrendCommand}">
-                                    <TextBlock  Text="Показать тренд" TextWrapping="Wrap"></TextBlock>
-                                </Button>
-                                <!--#endregion-->
-                                <!--#region Путь к файлу -->
-                                <Border Grid.Row="1" Grid.ColumnSpan="3" Margin="2">
-                                    <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" VerticalAlignment="Center"></TextBlock>
-                                </Border>
-                                <!--#endregion-->
-                                <!--#region Кнопка Browse -->
-                                <Button Grid.Row="1" Click="BrowseLogPath" Grid.Column="3" Margin="2">
-                                    <DockPanel>
-                                        <fa:ImageAwesome Icon="FolderOutlinepenOutline" Margin="2"/>
-                                        <TextBlock Text="Browse" Margin="2" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                                    </DockPanel>
-                                </Button>
-                                <!--#endregion-->
-                                <!--#region Кнопка "Запись" -->
-                                <Button Grid.Row="1" 
-                                            Command="{Binding WriteLogCommand}" 
-                                            HorizontalContentAlignment="Stretch" 
-                                            Grid.Column="4" Margin="2" 
-                                            IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}">
-                                    <DockPanel>
-                                        <fa:ImageAwesome 
-                                                Margin="2" 
-                                                Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleConverter}}" 
-                                                Icon="Refresh" HorizontalAlignment="Center"                                             
-                                                Spin="{Binding ArchivalTrendUploading}"/>
-                                        <TextBlock Text="Запись" 
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"/>
-                                    </DockPanel>
-                                </Button>
-                                <!--#endregion-->
-
-                            </Grid>
-                        </TabItem>
-                        <!--#endregion-->
-                    </TabControl>
-                    <!--#endregion-->
-
-                    <!--#region Числовая индикация ФВ -->
+                    
                     <ListBox ItemsSource="{Binding mainModel.MeasResults}"
                                  Grid.Column="1"
                                  HorizontalContentAlignment="Stretch"
@@ -350,14 +66,14 @@
                                  Grid.RowSpan="2">
                     </ListBox>
 
-                    <!--#endregion-->
+                    --><!--#endregion-->
 
-                    <!--#region Кнопки управления -->
+                    <!--#region Кнопки управления --><!--
                     <UniformGrid  Grid.Row="2" 
                                       Grid.Column="0" 
                                       Columns="2"
                                       Rows="2">
-                        <!--#region Кнопка Вкл-выкл измерения -->
+                        --><!--#region Кнопка Вкл-выкл измерения --><!--
                         <Button Margin="5" 
                                     Height="Auto"
                                     Command="{Binding SwitchMeasCommand}" 
@@ -367,8 +83,8 @@
                                            IsEnabled="{Binding mainModel.Connecting}"
                                            TextWrapping="Wrap"/>
                         </Button>
-                        <!--#endregion-->
-                        <!--#region Напряжение HV -->
+                        --><!--#endregion-->
+                        <!--#region Напряжение HV --><!--
                         <Border Margin="5"
                                     BorderThickness="2"
                                     BorderBrush="WhiteSmoke">
@@ -380,8 +96,8 @@
                                                VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
-                        <!--#endregion-->
-                        <!--#region Температура -->
+                        --><!--#endregion-->
+                        <!--#region Температура --><!--
                         <Border Margin="5"
                                     BorderThickness="2"
                                     BorderBrush="WhiteSmoke">
@@ -393,13 +109,13 @@
                                                VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
-                        <!--#endregion-->
+                        --><!--#endregion--><!--
                     </UniformGrid>
 
 
-                    <!--#endregion-->
+                    --><!--#endregion--><!--
 
-                </Grid>
+                </Grid>-->
             </TabItem>
             <!--#endregion-->
             <!--#region НАСТРОЙКИ -->
@@ -1007,11 +723,11 @@
                             <!--#region Панель фильтров -->
                             <Grid Grid.Row="0">
                                 <UniformGrid Columns="5">
-                                    <uc:DateTimeParameter Description="Начальная точка событий"
+                                    <dt:DateTimeParameter Description="Начальная точка событий"
                                                   DateTimeWidth="200"
                                                   Margin="2"
                                                   DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <uc:DateTimeParameter Description="Конечная точка событий"
+                                    <dt:DateTimeParameter Description="Конечная точка событий"
                                                   DateTimeWidth="200"                                              
                                                   Margin="2"
                                                   DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

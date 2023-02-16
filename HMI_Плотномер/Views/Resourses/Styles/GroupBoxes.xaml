@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Styles">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--#region Стиль для GroupBox -->
     <Style TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignGroupBox}">
         <Setter Property="FontSize" Value="14"/>
@@ -8,4 +7,8 @@
         <Setter Property="Foreground" Value="WhiteSmoke"/>
     </Style>
     <!--#endregion-->
+    <Style TargetType="GroupBox" x:Key="GroupBoxTrendStyle">
+        <Setter Property="BorderThickness" Value="0.1"/>
+
+    </Style>
 </ResourceDictionary>

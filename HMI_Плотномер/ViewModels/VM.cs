@@ -309,7 +309,7 @@ namespace IDensity.ViewModels
         }
         #endregion
         #region Путь к логируемому файлу
-        string _logPath;
+        string _logPath="Выберите файл";
         public string LogPath { get => _logPath; set => Set(ref _logPath, value); }
         #endregion
 
@@ -464,6 +464,7 @@ namespace IDensity.ViewModels
         async void WriteArchivalTrendToText()
         {
             if (ArchivalTrendUploading) return;
+            if (ArchivalDataPotnts == null) return;
             try
             {
                 ArchivalTrendUploading = true;

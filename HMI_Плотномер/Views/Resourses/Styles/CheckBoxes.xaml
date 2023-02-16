@@ -1,4 +1,28 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignAccentCheckBox}"/>
+    <Style TargetType="CheckBox" x:Key="NoStyleCheckBox"/>
+
+    <x:Array Type="sys:String"   x:Key="CheckBoxColors">
+        <sys:String>#00FFFFFF</sys:String>
+        <sys:String>#FF00FFFF</sys:String>        
+    </x:Array>
+    <x:Array Type="sys:String"   x:Key="CheckBoxBorderColors">
+        <sys:String>#33FFFFFF</sys:String>
+        <sys:String>#FF00FFFF</sys:String>
+    </x:Array>
+    <Style TargetType="CheckBox" x:Key="CheckBoxAqvaStyle">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#33FFFFFF"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" Value="True">
+                <Setter Property="BorderBrush" Value="#FF00FFFF"/>
+                <Setter Property="Background"  Value="#FF00FFFF"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
