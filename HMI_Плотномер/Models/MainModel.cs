@@ -2,20 +2,11 @@
 using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.AddClasses.Settings;
 using IDensity.Core.AddClasses.Settings;
-using IDensity.Services.ComminicationServices;
 using IDensity.Services.InitServices;
-using IDensity.Services.XML;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace IDensity.Models
 {
@@ -94,7 +85,7 @@ namespace IDensity.Models
         {
             Init();// Инициализация параметров  
             MeasProccessInit();
-        }        
+        }
 
         #region RTC контроллера платы        
         public Parameter<DateTime> Rtc { get; set; } = new Parameter<DateTime>("Rtc", "Часы реального времени", DateTime.MinValue, DateTime.MaxValue, 19, "hold");
@@ -111,7 +102,7 @@ namespace IDensity.Models
         #region Данные измерения
         public MeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new MeasResult($"MeasResult{i}")).ToArray();
         /// <summary>
-        
+
 
         #region Статус циклических измерений
         public Parameter<bool> CycleMeasStatus { get; } = new Parameter<bool>("CycleMeasStatus", "Статус циклических измерений", false, true, 1, "hold");
@@ -169,7 +160,7 @@ namespace IDensity.Models
         [DataMember]
         public MeasProcSettings[] MeasProcSettings
         {
-            get=> _measProcSettings;
+            get => _measProcSettings;
             set => _measProcSettings = value;
         }
         /// <summary>
@@ -180,14 +171,14 @@ namespace IDensity.Models
             if (_measProcSettings == null)
             {
                 _measProcSettings = Enumerable.Range(0, MeasProcNum)
-                    .Select(i => new MeasProcSettings(i))                    
+                    .Select(i => new MeasProcSettings(i))
                     .ToArray();
             }
         }
         #endregion        
 
         #region Настройки платы АЦП        
-        public AdcParameters AdcBoard { get;  } = new AdcParameters();
+        public AdcParameters AdcBoard { get; } = new AdcParameters();
         #endregion
 
         #region Настройки аналоговых модулей
@@ -205,7 +196,7 @@ namespace IDensity.Models
                 }
                 return _analogGroups;
             }
-            set=>_analogGroups=value;
+            set => _analogGroups = value;
         }
         #endregion 
 
@@ -393,25 +384,25 @@ namespace IDensity.Models
         #region Инициализация
         void Init()
         {
-            TcpConnectData = XmlInit.ClassInit<TcpConnectData>(); 
+            TcpConnectData = XmlInit.ClassInit<TcpConnectData>();
             CheckSum = XmlInit.ClassInit<CheckSum>();
-            Connecting.PropertyChanged += (obj, args) => SettingsReaded = false;           
-        }        
+            Connecting.PropertyChanged += (obj, args) => SettingsReaded = false;
+        }
 
         #region Парсинг битовых значений устройств
         public void GetDeviceData()
         {
             AdcBoard.CommState.Value = (CommStates.Value & 1) == 0;
             TempTelemetry.TempBoardCommState.Value = (CommStates.Value & 2) == 0;
-            TelemetryHV.HvCommState.Value = (CommStates.Value & 4) == 0;            
+            TelemetryHV.HvCommState.Value = (CommStates.Value & 4) == 0;
             for (int i = 0; i < 2; i++)
             {
                 AnalogGroups[i].AO.PwrState.Value = (AnalogStateGroups[i].Value & 1) != 1;
                 AnalogGroups[i].AI.PwrState.Value = (AnalogStateGroups[i].Value & 2) != 2;
                 AnalogGroups[i].AO.CommState.Value = (AnalogStateGroups[i].Value & 4) != 4;
                 AnalogGroups[i].AI.CommState.Value = (AnalogStateGroups[i].Value & 8) != 8;
-                
-            }            
+
+            }
         }
         #endregion
 
@@ -428,7 +419,7 @@ namespace IDensity.Models
         //    if(CommMode.RsEnable) rs.SetAdcBoardSettings(settings);
         //}
 
-        
+
 
         #region Команда "Переключить реле"
         public void SwitchRelay(ushort value)

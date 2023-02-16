@@ -39,7 +39,7 @@ namespace IDensity.Core.Views.Converters
             }
             var stringFormat = "";
             if (!(p is null)) stringFormat = p.ToString();
-            return y.ToString(stringFormat);
+            return y.ToString(stringFormat, CultureInfo.GetCultureInfo("en-gb"));
 
         }
 

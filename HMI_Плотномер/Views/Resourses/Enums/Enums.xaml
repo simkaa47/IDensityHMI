@@ -199,7 +199,7 @@
         <sys1:String>Плотномер</sys1:String>
         <sys1:String>Уровнемер</sys1:String>
     </col1:ArrayList>
-    <col1:ArrayList   x:Key="DensityCalculation">
+    <x:Array Type="sys1:String"   x:Key="DensityCalculation">
         <sys1:String>Плотность</sys1:String>
         <sys1:String>Массовая концентрация фазы 1</sys1:String>
         <sys1:String>Массовая концентрация фазы 2</sys1:String>
@@ -207,13 +207,13 @@
         <sys1:String>Относительная концентрация фазы 2</sys1:String>
         <sys1:String>Отношение фазы 1 к фазе 2</sys1:String>
         <sys1:String>Отношение фазы 2 к фазе 1</sys1:String>
-    </col1:ArrayList>
-    <col1:ArrayList   x:Key="LevelCalculation">
+    </x:Array>
+    <x:Array Type="sys1:String"   x:Key="LevelCalculation">
         <sys1:String>Длина</sys1:String>
         <sys1:String>Заполнение - доля</sys1:String>
         <sys1:String>Обьем</sys1:String>
         <sys1:String>Скорость заполнения</sys1:String>
-    </col1:ArrayList>
+    </x:Array>
     <col1:ArrayList   x:Key="BlockStatuses">
         <sys1:String>Не все условия проверки выполняются</sys1:String>
         <sys1:String>Все условия выполнены</sys1:String>        

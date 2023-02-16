@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
+             xmlns:add="clr-namespace:IDensity.AddClasses"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasResults"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=add:MeasResult}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <conv:MeasUnitMultiplyConverter x:Key="GetMeasNumConverterResult"/>
@@ -14,111 +16,121 @@
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
     </UserControl.Resources>
     <Grid>
-        <Viewbox >
-            <Border   Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}" BorderBrush="WhiteSmoke" BorderThickness="1">
-                <StackPanel HorizontalAlignment="Stretch">
-                    <!--#region Название измренительного процесса -->
-                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="30" FontWeight="Bold">
+        <Viewbox Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!--#region Meas Type-->
+                    <TextBlock VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="30">
                         <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource EnumCustomConverter}">
-                                <Binding Path="MeasProcessNum.Value" Mode="OneWay"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasProcNames.Data"  Mode="OneWay"/>
+                            <MultiBinding Converter="{StaticResource GetMeasProcType}">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
+                                <Binding Path="Settings.MeasType.Value"/>
+                                <Binding Source="{StaticResource DensityCalculation}"/>
+                                <Binding Source="{StaticResource LevelCalculation}"/>
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
                     <!--#endregion-->
-                    <StackPanel Orientation="Horizontal" >
-                        <!--#region Мгновенное значение измеряемой величины -->
-                        <StackPanel>
-                            <TextBlock  Foreground="Aqua" FontSize="80">
-                                <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource Multyply}" 
-                                                  ConverterParameter="f1">
-                                        <Binding Path="PhysValueCur.Value"/>
-                                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                                        <Binding Path="MeasUnitMemoryId"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Мгновенное"                           
-                                    FontSize="30"
-                                    Foreground="Aqua"/>
-                                <Rectangle  Fill="Aqua"
-                                    Stretch="UniformToFill"
-                                    Height="20"
-                                    Margin="10"
-                                    Width="300"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <!--#endregion-->
-                        <!--#region Счетчик -->
-                        <StackPanel Orientation="Horizontal"
-                            Margin="100,0,0,0">
-                            <TextBlock Text="(" FontSize="60" Foreground="Aqua"/>
-                            <TextBlock
-                           HorizontalAlignment="Center"
-                           TextWrapping="Wrap"
-                           Foreground="Aqua">
-                    <Run Text="{Binding CounterValue.Value, StringFormat=f1}" FontSize="50"/>
-                    <LineBreak/>
-                    <Run Text="каунтов/c." FontSize="20"/>
-                            </TextBlock>
-                            <TextBlock Text=")" FontSize="60" Foreground="Aqua"/>
-                        </StackPanel>
-                        <!--#endregion-->
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox DisplayMemberPath="Name" 
-                                  Name="MUnit" Width="200"
+                    <!--#region Meas Unit-->
+                    <ComboBox DisplayMemberPath="Name" 
+                              Grid.Column="1"
+                              Foreground="White"
+                                  Name="MUnit"                             
+                                  Margin="20,0,200,0"
                                   VerticalAlignment="Center"
-                                  FontSize="40">
-                            <!--#region ЕИ -->
-                            <ComboBox.ItemsSource>
-                                <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
-                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
-                                    <Binding Path="Settings.MeasType.Value"/>
-                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
-                                </MultiBinding>
-                            </ComboBox.ItemsSource>
-                            <ComboBox.SelectedItem>
-                                <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
-                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
-                                    <Binding Path="Settings.MeasType.Value"/>
-                                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                              VerticalContentAlignment="Bottom"
+                                  FontSize="20"
+                                  Height="40">
+                        <ComboBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                                <Binding Path="Settings.MeasType.Value"/>
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                            </MultiBinding>
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedItem>
+                            <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                                <Binding Path="Settings.MeasType.Value"/>
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                                <Binding Path="MeasUnitMemoryId"/>
+                            </MultiBinding>
+                        </ComboBox.SelectedItem>
+                    </ComboBox>
+                    <!--#endregion-->
+                    <!--#region Counts-->
+                    <Border Grid.Column="2" Margin="0,0,20,0"                           
+                            Background="{StaticResource PanelBorderColor}">
+                        <TextBlock 
+                               Text="{Binding CounterValue.Value, StringFormat={}{0:f1} каунтов/c}" 
+                               VerticalAlignment="Center" 
+                               Margin="12"
+                               HorizontalAlignment="Center"
+                               Foreground="White"/>
+                    </Border>
+                    
+                    <!--#endregion-->
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Bottom" Grid.Column="1">
+                        <TextBlock Text="Усредненное" FontSize="30" FontWeight="Bold"  Foreground="#32DB4B" HorizontalAlignment="Left"/>
+                        <Rectangle Fill="#32DB4B"                                    
+                                   Height="10" />
+                    </StackPanel>
+                    <StackPanel  VerticalAlignment="Bottom">
+                        <TextBlock FontWeight="Bold"  FontSize="80" Foreground="#32DB4B" HorizontalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource Multyply}" 
+                                                  ConverterParameter="f1">
+                                    <Binding Path="PhysValueAvg.Value"/>
+                                    <Binding ElementName="MUnit" Path="SelectedItem"/>
                                     <Binding Path="MeasUnitMemoryId"/>
                                 </MultiBinding>
-                            </ComboBox.SelectedItem>
-
-                        </ComboBox>
-                        <!--#endregion-->
-                        <!--#region Усредненное значение ФВ -->
-                        <StackPanel>
-                            <TextBlock  Foreground="Orange" FontSize="80">
-                                <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource Multyply}" 
-                                                  ConverterParameter="f1">
-                                        <Binding Path="PhysValueAvg.Value"/>
-                                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                                        <Binding Path="MeasUnitMemoryId"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Усредненное"                           
-                                    FontSize="30"
-                                    Foreground="Orange"/>
-                                <Rectangle  Fill="Orange"
-                                    Stretch="UniformToFill"
-                                    Height="20"
-                                    Margin="10"
-                                    Width="300"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <!--#endregion-->
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <Rectangle Fill="#32DB4B" Height="1"/>
                     </StackPanel>
-                </StackPanel>
-            </Border>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <TextBlock Text="Мгновенное" FontSize="30" FontWeight="Bold"  Foreground="Orange" HorizontalAlignment="Right"/>
+                        <Rectangle Fill="Orange"                                    
+                                   Height="10" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+                        <TextBlock FontWeight="Bold"  FontSize="80" Foreground="Orange" HorizontalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource Multyply}" 
+                                                  ConverterParameter="f1">
+                                    <Binding Path="PhysValueCur.Value"/>
+                                    <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                    <Binding Path="MeasUnitMemoryId"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <Rectangle Fill="Orange" Height="1"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>           
         </Viewbox>
     </Grid>
 </UserControl>
