@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IDensity.Core.Views.Resourses.UserControls
+namespace IDensity.Core.Views.UserControls.MeasResults
 {
     /// <summary>
-    /// Логика взаимодействия для MeasResultIndicator.xaml
+    /// Логика взаимодействия для MeasResult.xaml
     /// </summary>
-    public partial class MeasResultIndicator : UserControl
+    public partial class MeasResult : UserControl
     {
-        public MeasResultIndicator()
+        public MeasResult()
         {
             InitializeComponent();
         }

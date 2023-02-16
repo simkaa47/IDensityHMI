@@ -14,7 +14,7 @@
                 <xctk:ButtonSpinner HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"   x:Name="PART_Spinner" ShowButtonSpinner="False"  AllowSpin="False" BorderThickness="0" Background="Transparent" IsTabStop="False" >
 
                     <!--I removed setters of Background and Foreground properties here-->
-                    <xctk:WatermarkTextBox  x:Name="PART_TextBox"  AcceptsReturn="False" Foreground="White" BorderThickness="0" HorizontalAlignment="Left"    FontSize="16" FontFamily="Roboto" HorizontalContentAlignment="Left" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="20" Padding="0" TextAlignment="{TemplateBinding TextAlignment}" TextWrapping="NoWrap" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="{TemplateBinding TabIndex}"  Watermark="{TemplateBinding Watermark}">
+                    <xctk:WatermarkTextBox  x:Name="PART_TextBox"  AcceptsReturn="False" Foreground="White" BorderThickness="0" HorizontalAlignment="Left"    FontSize="14" FontFamily="Roboto" HorizontalContentAlignment="Left" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="20" Padding="0" TextAlignment="{TemplateBinding TextAlignment}" TextWrapping="NoWrap" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="{TemplateBinding TabIndex}"  Watermark="{TemplateBinding Watermark}">
                         <xctk:WatermarkTextBox.Template>
                             <ControlTemplate TargetType="{x:Type xctk:WatermarkTextBox}">
                                 <Grid>
