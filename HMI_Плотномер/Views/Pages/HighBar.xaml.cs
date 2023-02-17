@@ -1,4 +1,5 @@
-﻿using IDensity.ViewModels;
+﻿using IDensity.Core.Views.DialogWindows.Authorization;
+using IDensity.ViewModels;
 using IDensity.Views;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,7 +19,7 @@ namespace IDensity.Core.Views.Pages
         private void Logout_click(object sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as VM;
-            Password password = new Password(vm);
+            AuthorizationWindow password = new AuthorizationWindow(vm);
             password.Show();
         }
     }

@@ -1,0 +1,98 @@
+﻿<Window x:Class="IDensity.Core.Views.DialogWindows.Authorization.AuthorizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IDensity.Core.Views.DialogWindows.Authorization"
+        mc:Ignorable="d"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        Topmost="True"
+        BorderThickness="1"
+        BorderBrush="Aqua"
+        Background="Black"
+        Title="AuthorizationWindow" WindowStyle="None" Height="390" Width="460">
+    <Window.Resources>
+        <!--#region Colors -->
+        <SolidColorBrush x:Key="InputBackgroundColor" Color="#4FFFFFFF"/>
+        <SolidColorBrush x:Key="SelectionColor" Color="#2BBCBA"/>
+        <SolidColorBrush x:Key="InputTextColor" Color="#dddddd"/>
+        <!--#endregion-->
+        
+        <!--#region Общий стиль для textBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+        <!--#endregion-->
+
+        <!--#region Общий стиль для passwordbox -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+        <!--#endregion-->
+
+        <!--#region Логин -->
+        <ControlTemplate TargetType="TextBox" x:Key="WatermarkLogin">
+            <Border BorderThickness="0,0,0,2" Background="{TemplateBinding Background}" BorderBrush="{StaticResource SelectionColor}"
+                    CornerRadius="3,3,0,0">
+                <Grid>
+                    <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                    <TextBlock  Visibility="Hidden" x:Name="WatermarkText" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" 
+                              Background="Transparent" Foreground="{StaticResource InputTextColor}" Text="Введите логин" />
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Text" Value="">
+                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--#endregion-->
+
+        <!--#region Пароль -->
+        <ControlTemplate TargetType="{x:Type PasswordBox}" x:Key="pboxTemplate">
+            <Border BorderThickness="0,0,0,2" Background="{TemplateBinding Background}" BorderBrush="{StaticResource SelectionColor}"
+                    CornerRadius="3,3,0,0">
+                <Grid>
+                    <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                    <TextBlock Visibility="Hidden" x:Name="WatermarkText" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{StaticResource InputTextColor}" Text="Введите пароль"  />
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property ="Tag"  Value="">
+                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--#endregion-->
+
+        
+
+    </Window.Resources>
+    <Grid>
+        <Image Source="..\..\Resourses\Pictures\Clear.png"
+               Height="40"
+               MouseLeftButtonDown="CloseWindowHandler"                       
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               Width="40">
+        </Image>
+        <StackPanel VerticalAlignment="Center">
+            
+            <TextBlock Text="VISSMA / Авторизация" Foreground="White" HorizontalAlignment="Center" FontFamily="Regular" FontSize="34"/>
+            <TextBox  x:Name="Login"  
+                      Background="{StaticResource InputBackgroundColor}"  
+                      Template="{StaticResource WatermarkLogin}" 
+                      HorizontalContentAlignment="Center" MouseEnter="Login_MouseEnter" 
+                      VerticalContentAlignment="Center" Height="56" Width="380" 
+                      Margin="10"/>
+            <PasswordBox Background="{StaticResource InputBackgroundColor}" 
+                         KeyUp="Pword_KeyUp" x:Name="Pword" Tag="" 
+                         Template="{StaticResource pboxTemplate}" 
+                         HorizontalContentAlignment="Center" 
+                         VerticalContentAlignment="Center" Width="380" Height="56" PasswordChanged="Password_PasswordChanged"/>
+            <Button Background="{StaticResource SelectionColor}" Content="ВОЙТИ" Width="380" Height="55" Margin="10" Click="EnterClick"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
