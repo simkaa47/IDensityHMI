@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace IDensity.Views
+namespace IDensity.Core.Views.DialogWindows.Authorization
 {
     /// <summary>
-    /// Логика взаимодействия для Password.xaml
+    /// Interaction logic for AuthorizationWindow.xaml
     /// </summary>
-    public partial class Password : Window
+    public partial class AuthorizationWindow : Window
     {
-        VM vM;       
-
-        internal Password(VM vM)
+        VM vM;
+        public AuthorizationWindow(VM vM)
         {
             InitializeComponent();
             if (vM == null) return;
@@ -54,21 +53,28 @@ namespace IDensity.Views
 
         private void Login_MouseEnter(object sender, MouseEventArgs e)
         {
-            Pword.Foreground = Brushes.Black;
-            Login.Foreground = Brushes.Black;
+            var brush = (SolidColorBrush)Resources["InputTextColor"];
+            Pword.Foreground = brush;
+            Login.Foreground = brush;
         }
         private void Password_PasswordChanged(object sender, RoutedEventArgs e)
         {
             this.Pword.Tag = this.Pword.Password;
-            Pword.Foreground = Brushes.Black;
-            Login.Foreground = Brushes.Black;
+            var brush = (SolidColorBrush)Resources["InputTextColor"];
+            Pword.Foreground = brush;
+            Login.Foreground = brush;
         }
 
-       
+
 
         private void Pword_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) Check();
+        }
+
+        private void CloseWindowHandler(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
