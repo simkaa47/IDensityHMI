@@ -1,12 +1,9 @@
 ﻿using IDensity.AddClasses.Settings;
 using IDensity.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDensity.AddClasses
 {
-    public class MeasResult:PropertyChangedBase
+    public class MeasResult : PropertyChangedBase
     {
         public MeasResult(string measMemoryId)
         {
@@ -43,7 +40,7 @@ namespace IDensity.AddClasses
         public MeasProcSettings Settings
         {
             get { return _settings; }
-            set { Set(ref _settings,value); }
+            set { Set(ref _settings, value); }
         }
 
         #endregion
@@ -72,6 +69,6 @@ namespace IDensity.AddClasses
             PhysValueAvg.Value = 0;
         }
 
-        
+
     }
 }

@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="Views/Resourses/Styles/TabControls.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/TabItems.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Styles/Colors.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/GroupBoxes.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/Compoboxes.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/RadioButtons.xaml"/>

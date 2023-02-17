@@ -185,7 +185,7 @@
             <!--#endregion-->
             <!--#endregion-->
             <!--#region Bottom Indication -->
-            <Grid Grid.Column="0" Grid.Row="1" Background="#2C2C2E" Margin="20">
+            <Grid Grid.Column="0" Grid.Row="1" Background="{StaticResource PanelBorderColor}" Margin="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
