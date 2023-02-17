@@ -19,8 +19,8 @@ namespace IDensity.Core.Views.Pages
         private void Logout_click(object sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as VM;
-            AuthorizationWindow password = new AuthorizationWindow(vm);
-            password.Show();
+            AuthorizationWindow password = new AuthorizationWindow(vm);            
+            password.ShowDialog();
         }
     }
 }
