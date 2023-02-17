@@ -237,12 +237,15 @@
             
         </Grid>
         <!--#region Meas Indication -->
-        <ListBox ItemsSource="{Binding mainModel.MeasResults}"
-                                 Grid.Column="1"
+        <Viewbox Grid.Column="1">
+            <ListBox ItemsSource="{Binding mainModel.MeasResults}"
+                                 
                                  HorizontalContentAlignment="Stretch"
                                  VerticalContentAlignment="Stretch"
                                  Grid.RowSpan="2">
-        </ListBox>
+            </ListBox>
+        </Viewbox>
+        
         <!--#endregion-->
     </Grid>
 </UserControl>
