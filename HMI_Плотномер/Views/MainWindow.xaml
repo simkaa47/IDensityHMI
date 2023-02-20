@@ -35,6 +35,12 @@
                 <pages:MainPage/>
             </TabItem>
             <!--#endregion-->
+            <!--#region Вкладка Настройки -->
+            <TabItem Header="Настройки"
+                             Tag="..\Pictures\TuneIcon.png">
+                <pages:SettingsPage/>
+            </TabItem>
+            <!--#endregion-->
             <!--#region НАСТРОЙКИ -->
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 <TabItem.Resources>

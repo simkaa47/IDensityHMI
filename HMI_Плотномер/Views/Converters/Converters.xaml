@@ -22,4 +22,5 @@
     <conv:SelectStringByBoolConverter x:Key="SelectStringByBoolConverter"/>
     <conv:GetByIndexConverter x:Key="GetByIndex"/>
     <conv:GetIfTrueConverter x:Key="GetIfTrue"/>
+    <conv:GetByIndexFromParameterConverter x:Key="GetByIndexFromParameterConverter"/>
 </ResourceDictionary>

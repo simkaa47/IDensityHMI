@@ -9,7 +9,9 @@
   <ItemGroup>
     <None Remove="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <None Remove="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <None Remove="Views\Resourses\Pictures\ArrDowm.png" />
     <None Remove="Views\Resourses\Pictures\Arrow.png" />
+    <None Remove="Views\Resourses\Pictures\ArrUp.png" />
     <None Remove="Views\Resourses\Pictures\Clear.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Fail.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Ok.png" />
@@ -53,7 +55,9 @@
   <ItemGroup>
     <Resource Include="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <Resource Include="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <Resource Include="Views\Resourses\Pictures\ArrDowm.png" />
     <Resource Include="Views\Resourses\Pictures\Arrow.png" />
+    <Resource Include="Views\Resourses\Pictures\ArrUp.png" />
     <Resource Include="Views\Resourses\Pictures\Clear.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Fail.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Ok.png" />

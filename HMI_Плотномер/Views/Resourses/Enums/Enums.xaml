@@ -175,6 +175,10 @@
         <sys1:String>0.25</sys1:String>
         <sys1:String>1</sys1:String>
     </x:Array>
+    <x:Array Type="sys1:String" x:Key="MeasProcTabItemOpacities">
+        <sys1:String>0.66</sys1:String>
+        <sys1:String>1</sys1:String>
+    </x:Array>
     <col1:ArrayList   x:Key="TempSrc">
         <sys1:String>AI0</sys1:String>
         <sys1:String>AI1</sys1:String>
