@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:mp="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
@@ -11,12 +12,12 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <x:Array Type="UserControl" x:Key="MeasPages">
-            <local:HighBar/>
+            <mp:MeasProcMain/>
             <local:MainPage/>            
         </x:Array>
         <x:Array Type="sys:String" x:Key="MeasProcTabIcons">
+            <sys:String>..\Resourses\Pictures\ArrDowm.png</sys:String>
             <sys:String>..\Resourses\Pictures\ArrUp.png</sys:String>
-            <sys:String>..\Resourses\Pictures\ArrDown.png</sys:String>
         </x:Array>
         <Style TargetType="ListBoxItem" x:Key="MeasProcSettItem">
             <Setter Property="Background" Value="#33FFFFFF"/>
@@ -25,7 +26,8 @@
     <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">
         <!--#region Измерительные процессы -->
         <TabItem Name="MeasProcTab"  
-                 Style="{StaticResource MeasProcSettingsStyle}" >
+                 Style="{StaticResource MeasProcSettingsStyle}"
+                 Content="{Binding ElementName=MeasSettSelector, Path=SelectedIndex, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource MeasPages}}">
             <TabItem.Header>
                 <StackPanel HorizontalAlignment="Left">
                     <Viewbox MaxHeight="0.5 in">
@@ -38,7 +40,8 @@
                                HorizontalAlignment="Left" 
                                HorizontalContentAlignment="Left"
                                VerticalAlignment="Center"></Label>
-                            <Image Source="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasProcTabIcons}}"/>
+                            <Image Source="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasProcTabIcons}}"
+                                   HorizontalAlignment="Center"/>
                         </DockPanel>
                     </Viewbox>
 
