@@ -31,6 +31,70 @@ namespace IDensity.ViewModels
         }
         #endregion
 
+        #region Write counter number
+        /// <summary>
+        /// Write counter number
+        /// </summary>
+        RelayCommand _writeCounterNumCommand;
+        /// <summary>
+        /// Write counter number
+        /// </summary>
+        public RelayCommand WriteCounterNumCommand => _writeCounterNumCommand ?? (_writeCounterNumCommand = new RelayCommand(execPar => 
+        { 
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},cntr={SelectedProcess.MeasProcCounterNum.WriteValue}#";
+            SelectedProcess.MeasProcCounterNum.IsWriting= true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str , SelectedProcess.Num);
+        }, canExecPar => true));
+        #endregion
+
+        #region WriteMeasDuration
+        /// <summary>
+        /// WriteMeasDuration
+        /// </summary>
+        RelayCommand _writeMeasDurationCommand;
+        /// <summary>
+        /// WriteMeasDuration
+        /// </summary>
+        public RelayCommand WriteMeasDurationCommand => _writeMeasDurationCommand ?? (_writeMeasDurationCommand = new RelayCommand(execPar => 
+        {
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},duration={SelectedProcess.MeasDuration.WriteValue*10}#";
+            SelectedProcess.MeasDuration.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => true));
+        #endregion
+
+        #region Write Meas Deep
+        /// <summary>
+        /// Write Meas Deep
+        /// </summary>
+        RelayCommand _writeMeasDeepCommand;
+        /// <summary>
+        /// Write Meas Deep
+        /// </summary>
+        public RelayCommand WriteMeasDeepCommand => _writeMeasDeepCommand ?? (_writeMeasDeepCommand = new RelayCommand(execPar => 
+        {
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},aver_depth={SelectedProcess.MeasDeep.WriteValue}#";
+            SelectedProcess.MeasDeep.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => true));
+        #endregion
+
+        #region Change type of measure
+        /// <summary>
+        /// Change type of measure
+        /// </summary>
+        RelayCommand _changeMeasTypeCommand;
+        /// <summary>
+        /// Change type of measure
+        /// </summary>
+        public RelayCommand ChangeMeasTypeCommand => _changeMeasTypeCommand ?? (_changeMeasTypeCommand = new RelayCommand(execPar =>
+        {
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},type={SelectedProcess.MeasType.WriteValue}#";
+            SelectedProcess.MeasType.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => true));
+        #endregion
+
         #region Записать настройки компенсации температуры
         RelayCommand _writeTempCompensationCommand;
         public RelayCommand WriteTempCompensationCommand => _writeTempCompensationCommand ?? (_writeTempCompensationCommand = new RelayCommand(exec =>
@@ -103,6 +167,9 @@ namespace IDensity.ViewModels
               CopyMeasProcess(SelectedProcess, (ushort)par);
           }, canExec => VM.mainModel.Connecting.Value));
         #endregion
+
+        
+
         void Describe()
         {
             foreach (var mp in VM.mainModel.MeasProcSettings)

@@ -17,8 +17,6 @@ namespace IDensity.AddClasses.Settings
         public MeasProcSettings(int num)
         {
             Num = (ushort)num;
-            // Действие по измерению значения счетчика
-            MeasProcCounterNum.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"cntr={MeasProcCounterNum.WriteValue}");
             // Подписка на события настроек стандартизаций
             foreach (var std in MeasStandSettings)
             {
@@ -42,18 +40,14 @@ namespace IDensity.AddClasses.Settings
                 };
             }
             // Подписка на собтия записи данных калибровочгных кривых
-            CalibrCurve.NeedWriteEvent += OnWriteCommandExecuted;
-            //Действие по изменению продолжительности и глубины измерения
-            MeasDuration.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"duration={MeasDuration.WriteValue * 10}");
-            MeasDeep.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"aver_depth={MeasDeep.WriteValue}");
+            CalibrCurve.NeedWriteEvent += OnWriteCommandExecuted;            
             // Действия по изменению настроек плотности
             DensityLiqD1.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
             DensitySolD2.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
             // Действия по изменению настроек компенсаций
             
             SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");
-            // Подписка на изменение типа измерения
-            MeasType.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"type={MeasType.WriteValue}");
+            
             // Подписка на изменение настроек быстрых измерений
             FastChange.NeedWriteEvent += OnWriteCommandExecuted;
             //Подписка на измерение диаметра трубы

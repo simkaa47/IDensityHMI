@@ -404,14 +404,7 @@ namespace IDensity.Models
 
             }
         }
-        #endregion
-
-        #region Команда принудиельного запроса набора стандартизации после стандартизации
-        //public void GetStdSelection(ushort index)
-        //{
-        //    if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);           
-        //}
-        #endregion
+        #endregion       
 
         #region Команды изменения настроек платы АЦП
         //public void SetAdcBoardSettings(AdcBoardSettings settings)

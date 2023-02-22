@@ -4,13 +4,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type=vm:VM}"
+             d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ListBox HorizontalContentAlignment="Stretch">
-            <local:MeasProcSelector DataContext="{Binding MeasProcessVm}"/>
+            <!--#region Meas Proc Selector -->
+            <local:MeasProcSelector/>
+            <!--#endregion-->
+            <!--#region Counter Number -->
+            <p:TextParameter DataContext="{Binding SelectedProcess.MeasProcCounterNum}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteCounterNumCommand}"/>
+            <!--#endregion-->
+            <!--#region Measuring Duration -->
+            <p:TextParameter DataContext="{Binding SelectedProcess.MeasDuration}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteMeasDurationCommand}"/>
+            <!--#endregion-->
+            <!--#region Measuring Deep -->
+            <p:TextParameter DataContext="{Binding SelectedProcess.MeasDeep}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteMeasDeepCommand}"/>
+            <!--#endregion-->
+            <!--#region Measuring Type -->
+            <p:CompoBoxParameter DataContext="{Binding SelectedProcess.MeasType}"
+                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.ChangeMeasTypeCommand}">
+                <p:CompoBoxParameter.ItemsSource>
+                    <MultiBinding Converter="{StaticResource Multiselector}">
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                        <Binding Source="{StaticResource DensityCalculationArrList}"/>
+                        <Binding Source="{StaticResource LevelCalculationArrList}"/>
+                    </MultiBinding>
+                </p:CompoBoxParameter.ItemsSource>
+            </p:CompoBoxParameter>
+            <!--#endregion-->
         </ListBox>    
     </Grid>
 </UserControl>

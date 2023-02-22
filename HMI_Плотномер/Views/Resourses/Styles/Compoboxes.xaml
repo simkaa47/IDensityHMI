@@ -86,8 +86,8 @@
             <Border x:Name="Border"
                     Grid.ColumnSpan="2"
                     CornerRadius="2"
-                    BorderThickness="1"
-                    BorderBrush="#5EFFFFFF"
+                    BorderThickness="2"
+                    BorderBrush="{StaticResource BorderNonActiveColor}"
                     Background="Transparent"/>
             <Border Grid.Column="0"
             CornerRadius="2,0,0,2"
@@ -106,6 +106,11 @@
                 </Path.Fill>
             </Path>
         </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="BorderBrush" Value="Aqua"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="ComboBoxTextBox"
@@ -148,14 +153,15 @@
                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                             Margin="3,3,23,3"
-                            VerticalAlignment="Stretch"
+                            VerticalAlignment="Center"
                             HorizontalAlignment="Left">
                         </ContentPresenter>
                         <TextBox x:Name="PART_EditableTextBox"
                    Style="{x:Null}"
                    Template="{StaticResource ComboBoxTextBox}"
                    HorizontalAlignment="Left"
-                   VerticalAlignment="Bottom"
+                   VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
                    Margin="3,3,23,3"
                    Focusable="True"
                    Background="Transparent"
@@ -230,8 +236,27 @@
                 SnapsToDevicePixels="true"
                 Background="Transparent">
                         <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="SelectionStates">
-                                <VisualState x:Name="Unselected" />
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).
+                    (SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                         Value="Transparent" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).
+                    (SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0"
+                                         Value="{StaticResource BorderLightColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
                                 <VisualState x:Name="Selected">
                                     <Storyboard>
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"

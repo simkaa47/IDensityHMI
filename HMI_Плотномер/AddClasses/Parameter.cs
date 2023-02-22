@@ -94,6 +94,7 @@ namespace IDensity.AddClasses
                 if (Set(ref _value, value) && !isChanged)
                 {
                     WriteValue = value;
+                    IsWriting = false;
                 }
             }
         }
@@ -158,6 +159,23 @@ namespace IDensity.AddClasses
         bool _onlyRead;
         public bool OnlyRead { get => _onlyRead; set => Set(ref _onlyRead, value); }
         #endregion
+
+
+        #region Writing Process Indicator
+        /// <summary>
+        /// Writing Process Indicator
+        /// </summary>
+        private bool _isWriting;
+        /// <summary>
+        /// Writing Process Indicator
+        /// </summary>
+        public bool IsWriting
+        {
+            get => _isWriting;
+            set => Set(ref _isWriting, value);
+        }
+        #endregion
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -180,6 +198,7 @@ namespace IDensity.AddClasses
             WriteValue = Value;
         }
         #endregion
+
         #region Добавить в глобальный лист параметров
         void AddToParamList()
         {

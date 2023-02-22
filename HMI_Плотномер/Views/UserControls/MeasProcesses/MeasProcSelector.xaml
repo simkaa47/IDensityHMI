@@ -20,7 +20,7 @@
             <ListBox ItemsSource="{Binding VM.mainModel.MeasProcSettings}"
                      HorizontalContentAlignment="Stretch"
                      SelectedIndex="0"
-                     SelectedItem="{Binding SelectedProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                     SelectedItem="{Binding SelectedProcess, UpdateSourceTrigger=PropertyChanged}">
                 <ListBox.Resources>
                     <x:Array Type="sys:String" x:Key="CheckBoxItems">
                         <sys:String>..\..\Resourses\Pictures\RadioButtonUnChecked.png</sys:String>
@@ -35,7 +35,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel Margin="10,0,10,0" >
-                            <Image Source="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxItems}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Image Height="16" Source="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxItems}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="№ " VerticalAlignment="Center" Foreground="Gray" FontSize="8"/>
                                 <TextBlock Text="{Binding Num, StringFormat=0{0}}" FontWeight="Normal"
