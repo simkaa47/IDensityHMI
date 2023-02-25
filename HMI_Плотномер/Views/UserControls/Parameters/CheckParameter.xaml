@@ -5,9 +5,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              mc:Ignorable="d" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"    
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
         <TextBlock Style="{StaticResource Common}"
                    Text="{Binding Description}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"
+                      Height="25"
+                      Command="{Binding RelativeSource={RelativeSource AncestorType=local:CheckParameter}, Path=Command}"
+                      IsChecked="{Binding WriteValue}"
+                      VerticalAlignment="Center">
+            </CheckBox>
+            <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
+                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
+                             Spin="{Binding IsWriting}"
+                             Height="25"
+                             Margin="5"
+                             Foreground="Aqua"/>
+        </StackPanel>
     </DockPanel>
 </local:CommandExtention>

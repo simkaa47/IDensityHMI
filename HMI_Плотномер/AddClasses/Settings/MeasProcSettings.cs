@@ -48,10 +48,8 @@ namespace IDensity.AddClasses.Settings
             
             SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");
             
-            // Подписка на изменение настроек быстрых измерений
-            FastChange.NeedWriteEvent += OnWriteCommandExecuted;
-            //Подписка на измерение диаметра трубы
-            PipeDiameter.CommandEcecutedEvent += (o) => OnWriteCommandExecuted($"pipe_diam={(ushort)(PipeDiameter.WriteValue * 10)}");
+            
+            
             // Настройка таймера
             singleMeasTimer.Elapsed += (o, e) =>
             {
@@ -93,7 +91,7 @@ namespace IDensity.AddClasses.Settings
         /// Номер счетчика
         /// </summary>
         [DataMember]
-        public Parameter<ushort> MeasProcCounterNum { get; set; } = new Parameter<ushort>("MeasProcCounterNum", "Номер счетчика", 0, 8, 0, "hold");
+        public Parameter<ushort> MeasProcCounterNum { get; set; } = new Parameter<ushort>("MeasProcCounterNum", "Номер счетчика", 0, 2, 0, "hold");
         #endregion
         #region Данные стандартизаций
         /// <summary>

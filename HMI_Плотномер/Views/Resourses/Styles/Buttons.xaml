@@ -7,11 +7,10 @@
                 <ControlTemplate TargetType="Button">
                     <Border CornerRadius="4" Name="Border"                            
                              Background="Transparent"
-                             Height="{TemplateBinding Height}"
-                            
+                             Height="{TemplateBinding Height}"                            
                              Width="{TemplateBinding Width}"
-                             BorderThickness="1"
-                             BorderBrush="Aqua">
+                             BorderThickness="2"
+                             BorderBrush="#33FFFFFF">
 
                         <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"
                                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -20,6 +19,7 @@
                         <Trigger Property="IsMouseOver" Value="True" >
                             <Trigger.Setters>
                                 <Setter Property="Background" TargetName="Border" Value="#16FFFFFF"/>
+                                <Setter Property="BorderBrush" TargetName="Border" Value="Aqua"/>
                             </Trigger.Setters>
                         </Trigger> 
                     </ControlTemplate.Triggers>

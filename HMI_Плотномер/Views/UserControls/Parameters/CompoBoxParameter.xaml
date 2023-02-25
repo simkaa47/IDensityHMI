@@ -9,13 +9,7 @@
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel>
-        <DockPanel.Resources>
-            <x:Array Type="sys:String" x:Key="CompoboxColors">
-                <sys:String>#33FFFFFF</sys:String>
-                <sys:String>#FFFFFF</sys:String>
-            </x:Array>
-        </DockPanel.Resources>
+    <DockPanel>        
         <TextBlock Style="{StaticResource Common}" 
                    Text="{Binding Description}"
                    HorizontalAlignment="Left"
@@ -29,10 +23,11 @@
                   SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                   SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=Index}"
                   HorizontalAlignment="Right"
-                  HorizontalContentAlignment="Center"
+                  HorizontalContentAlignment="Left"
                   VerticalContentAlignment="Center"                  
                   FontSize="16"
                   Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
+                  Background="Transparent"
                   FontFamily="Roboto"
                   FontWeight="Regular"                  
                   VerticalAlignment="Center">

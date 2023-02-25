@@ -125,10 +125,12 @@ namespace IDensity.AddClasses
                         else
                         {
                             errorsDict["WriteValue"] = null;
+                            
                             ValidationOk = true;
-                        } 
+                        }
+                        Set(ref _writeValue, value);
                     }
-                    Set(ref _writeValue, value); 
+                    
                 }
             }
         }

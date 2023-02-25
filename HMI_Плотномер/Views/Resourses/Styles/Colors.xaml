@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:IDensity.Core.Views.Resourses.Styles">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="PanelBorderColor" Color="#FF2C2C2E"/>
     <SolidColorBrush x:Key="BorderNonActiveColor" Color="#33FFFFFF"/>
 </ResourceDictionary>

@@ -56,14 +56,16 @@
                          VerticalAlignment="Center"
                          FontSize="16"
                          FontWeight="Regular">
+                   
                     <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=Command}"
-                                    Key="Enter"  
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=CommanDParameter}"/>
+                        <KeyBinding  Key="Enter" Command="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=CommanDParameter }"> 
+                           
+                        </KeyBinding>
                     </TextBox.InputBindings>
-                    <MultiBinding Converter="{StaticResource StringFormatConverter}"  
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}" UpdateSourceTrigger="PropertyChanged" 
                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
-                        <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged">
+                        <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                             <Binding.ValidationRules>
                                 <DataErrorValidationRule />
                                 <ExceptionValidationRule/>

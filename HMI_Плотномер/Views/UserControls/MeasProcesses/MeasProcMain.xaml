@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              mc:Ignorable="d" 
@@ -11,6 +12,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ListBox HorizontalContentAlignment="Stretch">
+            <ListBox.Resources>
+                <conv:PipeDiameterConverter x:Key="PipeDiameterVisibilityConverter"/>
+            </ListBox.Resources>
             <!--#region Meas Proc Selector -->
             <local:MeasProcSelector/>
             <!--#endregion-->
@@ -38,6 +42,83 @@
                     </MultiBinding>
                 </p:CompoBoxParameter.ItemsSource>
             </p:CompoBoxParameter>
+            <!--#endregion-->
+            <!--#region Fast Change Activity -->
+            <p:CheckParameter DataContext="{Binding SelectedProcess.FastChange.Activity}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteFastChangeActivityCommand}"/>
+            <!--#endregion-->
+            <!--#region Fast Change Threshold -->
+            <p:TextParameter DataContext="{Binding SelectedProcess.FastChange.Threshold}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteFastChangeThresholdCommand}"/>
+            <!--#endregion-->
+            <!--#region Pipe diameter -->
+            <p:TextParameter DataContext="{Binding SelectedProcess.PipeDiameter}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WritePipeDiameterCommand}">
+                <p:TextParameter.Visibility>
+                    <MultiBinding Converter="{StaticResource PipeDiameterVisibilityConverter}">
+                        <Binding Path="Value"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.CurUser"/>
+                    </MultiBinding>
+                </p:TextParameter.Visibility>
+            </p:TextParameter>
+            <!--#endregion-->
+            <!--#region Meas Proc Activity -->
+            <p:CheckParameter DataContext="{Binding SelectedProcess.IsActive}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteActivityCommand}"/>
+            <!--#endregion-->
+            <!--#region Attenuatuin coeefs -->
+            <p:TextParameter DataContext="{Binding SelectedProcess.AttCoeffs[0]}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+           
+            
+            <p:TextParameter DataContext="{Binding SelectedProcess.AttCoeffs[1]}"
+                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+            <!--#endregion-->
+            <!--#region Volume Coeefs -->
+            <GroupBox Style="{StaticResource GroupBoxTrendStyle}"
+                      Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
+                <GroupBox.Header>
+                    <TextBlock Text="Коэффициенты обьема" Style="{StaticResource Common}"/>
+                </GroupBox.Header>
+                <ListBox HorizontalContentAlignment="Stretch">
+                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[0]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[1]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[2]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[3]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                </ListBox>
+            </GroupBox>
+            
+            <!--#endregion-->
+            <!--#region Calculation type -->
+            <p:CompoBoxParameter DataContext="{Binding SelectedProcess.CalculationType}"
+                                 Index="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteCalcTypeCommand}"
+                                 ItemsSource="{StaticResource CalcTypes}"/>
+            <!--#endregion-->
+            <!--#region Copy to other process -->
+            <DockPanel>
+                <TextBlock Text="Скопировать на другой измерительный процесс"
+                           Style="{StaticResource Common}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ComboBox Name="MeasNumSelector"  ItemsSource="{StaticResource  MeasProcNums}"
+                              Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
+                              FontSize="16"
+                              Height="40"
+                              VerticalContentAlignment="Center"
+                              Background="Transparent"
+                              Width="75"
+                              SelectedIndex="0">                        
+                    </ComboBox>
+                    <Button Width="80" 
+                            FontSize="16"
+                            Style="{StaticResource TypicalButton0}"
+                            Margin="5" 
+                            Height="40"
+                            Content="Copy" 
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.CopyMeasProcessCommand}"
+                            CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
+                </StackPanel>
+            </DockPanel>
             <!--#endregion-->
         </ListBox>    
     </Grid>

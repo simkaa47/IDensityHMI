@@ -22,7 +22,7 @@
         </x:Array>
         <Style TargetType="ListBoxItem" x:Key="MeasProcSettItem">
             <Setter Property="Background" Value="#33FFFFFF"/>
-        </Style>
+        </Style>        
     </UserControl.Resources>
     <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">
         <!--#region Измерительные процессы -->
@@ -58,7 +58,7 @@
         <!--#endregion-->
         <!--#region Счетчики -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Счетчики"  >
-
+            
         </TabItem>
         <!--#endregion-->
         <!--#region Общие настройки -->

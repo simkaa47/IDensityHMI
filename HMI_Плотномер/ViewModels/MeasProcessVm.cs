@@ -44,7 +44,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},cntr={SelectedProcess.MeasProcCounterNum.WriteValue}#";
             SelectedProcess.MeasProcCounterNum.IsWriting= true;
             VM.CommService.Tcp.WriteMeasProcSettings(str , SelectedProcess.Num);
-        }, canExecPar => true));
+        }, canExecPar => SelectedProcess.MeasProcCounterNum.ValidationOk));
         #endregion
 
         #region WriteMeasDuration
@@ -60,7 +60,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},duration={SelectedProcess.MeasDuration.WriteValue*10}#";
             SelectedProcess.MeasDuration.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => true));
+        }, canExecPar => SelectedProcess.MeasDuration.ValidationOk));
         #endregion
 
         #region Write Meas Deep
@@ -76,7 +76,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},aver_depth={SelectedProcess.MeasDeep.WriteValue}#";
             SelectedProcess.MeasDeep.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => true));
+        }, canExecPar => SelectedProcess.MeasDeep.ValidationOk));
         #endregion
 
         #region Change type of measure
@@ -93,6 +93,70 @@ namespace IDensity.ViewModels
             SelectedProcess.MeasType.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
         }, canExecPar => true));
+        #endregion
+
+        #region Write Activity Command
+        /// <summary>
+        /// Write Activity Command
+        /// </summary>
+        RelayCommand _writeActivityCommand;
+        /// <summary>
+        /// Write Activity Command
+        /// </summary>
+        public RelayCommand WriteActivityCommand => _writeActivityCommand ?? (_writeActivityCommand = new RelayCommand(execPar => 
+        {
+            VM.CommService.SetMeasProcActivity();
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
+        #region Write Fast Change Settings Command
+        /// <summary>
+        /// Write Fast Change Settings Command
+        /// </summary>
+        RelayCommand _writeFastChangeActivityCommand;
+        /// <summary>
+        /// Write Fast Change Settings Command
+        /// </summary>
+        public RelayCommand WriteFastChangeActivityCommand => _writeFastChangeActivityCommand ?? (_writeFastChangeActivityCommand = new RelayCommand(execPar => 
+        {
+            var fast = SelectedProcess.FastChange;
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},fast_chg={(fast.Activity.WriteValue ? 1 : 0)},{fast.Threshold.Value}#";
+            fast.Activity.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);            
+        }, canExecPar => true));
+        #endregion
+
+        #region Write Fast Change Settings Command
+        /// <summary>
+        /// Write Fast Change Settings Command
+        /// </summary>
+        RelayCommand _writeFastChangeThresholdCommand;
+        /// <summary>
+        /// Write Fast Change Settings Command
+        /// </summary>
+        public RelayCommand WriteFastChangeThresholdCommand => _writeFastChangeThresholdCommand ?? (_writeFastChangeThresholdCommand = new RelayCommand(execPar =>
+        {
+            var fast = SelectedProcess.FastChange;
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},fast_chg={(fast.Activity.Value ? 1 : 0)},{fast.Threshold.WriteValue}#";
+            fast.Threshold.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => SelectedProcess.FastChange.Threshold.ValidationOk));
+        #endregion
+
+        #region WritePipeDiameter
+        /// <summary>
+        /// WritePipeDiameter
+        /// </summary>
+        RelayCommand _writePipeDiameterCommand;
+        /// <summary>
+        /// WritePipeDiameter
+        /// </summary>
+        public RelayCommand WritePipeDiameterCommand => _writePipeDiameterCommand ?? (_writePipeDiameterCommand = new RelayCommand(execPar => 
+        {            
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},pipe_diam={(ushort)(SelectedProcess.PipeDiameter.WriteValue * 10)}#";
+            SelectedProcess.PipeDiameter.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => SelectedProcess.PipeDiameter.ValidationOk));
         #endregion
 
         #region Записать настройки компенсации температуры
@@ -118,6 +182,10 @@ namespace IDensity.ViewModels
         public RelayCommand WriteAttenuationCommand => _writeAttenuationCommand ?? (_writeAttenuationCommand = new RelayCommand(exec =>
         {            
             if (SelectedProcess is null) return;
+            foreach (var att in SelectedProcess.AttCoeffs)
+            {
+                att.IsWriting = true;
+            }
             string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},att_coeffs={(SelectedProcess.AttCoeffs[0].WriteValue.ToStringPoint())},{(SelectedProcess.AttCoeffs[1].WriteValue.ToStringPoint())}");           
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
@@ -135,7 +203,7 @@ namespace IDensity.ViewModels
             string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},calc_type={SelectedProcess.CalculationType.WriteValue}");
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
-
+            SelectedProcess.CalculationType.IsWriting = true;
 
         }, canExec => VM.mainModel.Connecting.Value));
         #endregion
@@ -151,6 +219,7 @@ namespace IDensity.ViewModels
             foreach (var volume in SelectedProcess.VolumeCoeefs)
             {
                 cmd += $"{volume.WriteValue.ToStringPoint()},";
+                volume.IsWriting = true;
             }
             cmd = cmd.Remove(cmd.Length - 1);
             cmd += "#";
@@ -175,7 +244,7 @@ namespace IDensity.ViewModels
             foreach (var mp in VM.mainModel.MeasProcSettings)
             {
                 mp.NeedWriteEvent += VM.CommService.WriteMeasProcSettings;
-                mp.IsActive.CommandEcecutedEvent += (s) => VM.CommService.SetMeasProcActivity();
+                
                 mp.NeedMakeStand += VM.CommService.MakeStand;
                 mp.StandFinishEvent += (num) => VM.CommService.Tcp.GetMeasSettingsExternal(num);
                 mp.NeedMakeSingleMeasEvent += VM.CommService.MakeSingleMeasure;

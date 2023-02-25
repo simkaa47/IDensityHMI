@@ -6,6 +6,7 @@
         <Setter Property="FontWeight" Value="Regular"/>
         <Setter Property="FontFamily" Value="Roboto"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="MasterConnect">
