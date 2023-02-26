@@ -14,7 +14,7 @@
     <UserControl.Resources>
         <x:Array Type="UserControl" x:Key="MeasPages">
             <mp:MeasProcMain/>
-            <local:MainPage/>            
+            <mp:MeasProcStandartisation/>            
         </x:Array>
         <x:Array Type="sys:String" x:Key="MeasProcTabIcons">
             <sys:String>..\Resourses\Pictures\ArrDowm.png</sys:String>

@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              xmlns:fa="http://schemas.fontawesome.io/icons/"    
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel>
+    <DockPanel MinHeight="50">
         <TextBlock Style="{StaticResource Common}"
                    Text="{Binding Description}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

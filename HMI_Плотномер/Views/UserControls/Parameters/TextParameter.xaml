@@ -14,7 +14,7 @@
         <conv:ToStringFormatConverter x:Key="StringFormatConverter"/>
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
     </local:CommandExtention.Resources>
-    <DockPanel>
+    <DockPanel MinHeight="50">
         <DockPanel.Resources>
             <Style TargetType="Border">
                 <Style.Triggers>
