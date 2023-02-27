@@ -228,6 +228,12 @@ namespace IDensity.ViewModels
         }, canExec => VM.mainModel.Connecting.Value));
         #endregion
 
+        #region Команды стандартизации
+
+       
+
+        #endregion
+
         #region Скопировтаь измерительный процесс
         private RelayCommand _copyMeasProcessCommand;
         public RelayCommand CopyMeasProcessCommand => _copyMeasProcessCommand ?? (_copyMeasProcessCommand = new RelayCommand(exec =>
