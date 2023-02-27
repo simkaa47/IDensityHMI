@@ -65,7 +65,20 @@ namespace IDensity.AddClasses.Settings
         public Parameter<float> HalfLifeCorr { get; set; } = new Parameter<float>("StandHalfLifeCorr", "Значение с учетом полураспада", float.MinValue, float.MaxValue, 0, "");
 
         #endregion
-
+        #region Standartisation flag
+        /// <summary>
+        /// Standartisation flag
+        /// </summary>
+        private bool _isStandartisation;
+        /// <summary>
+        /// Standartisation flag
+        /// </summary>
+        public bool IsStandartisation
+        {
+            get => _isStandartisation;
+            set => Set(ref _isStandartisation, value);
+        }
+        #endregion
         #region ID ЕИ
         private string _measUnitMemoryId;
         public string MeasUnitMemoryId

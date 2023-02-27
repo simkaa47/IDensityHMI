@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"    
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              mc:Ignorable="d" 
@@ -156,9 +158,22 @@
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button>
-                                
-                            </Button>
+                            <Grid MaxHeight="40">
+                                <fa:ImageAwesome Icon="CheckCircle"  
+                                                 Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
+                                                 Visibility="{Binding IsStandartisation, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </fa:ImageAwesome>
+                                <fa:ImageAwesome Icon="StopCircle"  
+                                                 Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
+                                                 Visibility="{Binding IsStandartisation, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
+                                    
+                                </fa:ImageAwesome>
+                            </Grid>
 
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
