@@ -135,10 +135,13 @@
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <p:TextParameter DataContext="{Binding StandPhysValue}"
+                            <StackPanel Orientation="Horizontal">
+                                <p:TextParameter DataContext="{Binding StandPhysValue}"
                                              DescriptionNotVisible="True"
                                              HorizontalAlignment="Left"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
+                            </StackPanel>
+                            
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

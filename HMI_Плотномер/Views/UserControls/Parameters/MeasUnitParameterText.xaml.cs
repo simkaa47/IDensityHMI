@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDensity.Views.Resourses.UserControls;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -16,11 +17,35 @@ namespace IDensity.Core.Views.UserControls.Parameters
     /// <summary>
     /// Interaction logic for MeasUnitParameterText.xaml
     /// </summary>
-    public partial class MeasUnitParameterText : UserControl
+    public partial class MeasUnitParameterText : CommandExtention
     {
         public MeasUnitParameterText()
         {
             InitializeComponent();
         }
+
+        #region Тип измерения
+        public int MeasType
+        {
+            get { return (int)GetValue(MeasTypeProperty); }
+            set { SetValue(MeasTypeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MeasType.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MeasTypeProperty =
+            DependencyProperty.Register(nameof(MeasType), typeof(int), typeof(MeasUnitParameterText), new PropertyMetadata(0));
+        #endregion
+
+        #region Идентификатор
+        public string MeasUnitMemoryId
+        {
+            get { return (string)GetValue(MeasUnitMemoryIdProperty); }
+            set { SetValue(MeasUnitMemoryIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MeasUnitMemoryId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MeasUnitMemoryIdProperty =
+            DependencyProperty.Register(nameof(MeasUnitMemoryId), typeof(string), typeof(MeasUnitParameterText), new PropertyMetadata(string.Empty));
+        #endregion
     }
 }
