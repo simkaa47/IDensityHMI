@@ -74,11 +74,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True"
+                                              HorizontalAlignment="Left"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!--#endregion-->
+                <!--#region Last stand date -->
                 <DataGridTemplateColumn MaxWidth="200">
                     <DataGridTemplateColumn.Header>
                         <TextBlock Text="Время последней стандартизации"
@@ -92,6 +94,55 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Result -->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="РЕЗУЛЬТАТ"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:TextParameter DataContext="{Binding StandResult}"
+                                             DescriptionNotVisible="True"
+                                             HorizontalAlignment="Left"
+                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.ResultWriteCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Half life value -->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА" MaxWidth="200"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:TextParameter DataContext="{Binding HalfLifeCorr}"
+                                             DescriptionNotVisible="True"
+                                             HorizontalAlignment="Left"
+                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.HalfLifeCorrWriteCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Phys value -->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="ФИЗИЧЕСКАЯ ВЕЛИЧИНА" MaxWidth="200"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:TextParameter DataContext="{Binding StandPhysValue}"
+                                             DescriptionNotVisible="True"
+                                             HorizontalAlignment="Left"
+                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->
