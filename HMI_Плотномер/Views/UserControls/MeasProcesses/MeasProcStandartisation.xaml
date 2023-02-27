@@ -65,6 +65,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!--#endregion-->
+                <!--#region Stand duartion -->
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
                         <TextBlock Text="Длительность стандартизации, x0.1 c."  MaxWidth="190"
@@ -74,6 +75,19 @@
                         <DataTemplate>
                             <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <DataGridTemplateColumn MaxWidth="200">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Время последней стандартизации"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:DateTimeParameter DataContext="{Binding LastStandDate}"
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.LastStandDateWriteCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

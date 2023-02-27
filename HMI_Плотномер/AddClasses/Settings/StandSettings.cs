@@ -11,57 +11,13 @@ namespace IDensity.AddClasses.Settings
     public class StandSettings:PropertyChangedBase
     {
         Timer standTimer = new Timer();
-        const string TcpArg = "std=id,stdMeasUnit,duration,date,result,value,halfLifeValue";
+        
         public StandSettings(int id)
         {
-            this.Id = id;
-            DescribeOnCommands();
+            this.Id = id;            
             MeasUnitMemoryId = $"StandMeasMemory{id}";
-        }
-        /// <summary>
-        /// Подписка на изменения 
-        /// </summary>
-        void DescribeOnCommands()
-        {            
-            StandDuration.CommandEcecutedEvent += o => CallWriteEvent("duration", StandDuration.WriteValue);
-            LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:yy"));
-            StandResult.CommandEcecutedEvent += o => CallWriteEvent("result", StandResult.WriteValue);
-            StandPhysValue.CommandEcecutedEvent += o => CallWriteEvent("value", StandPhysValue.WriteValue);
-            HalfLifeCorr.CommandEcecutedEvent += o => CallWriteEvent("halfLifeValue", HalfLifeCorr.WriteValue);
-        }
-        void CallWriteEvent<T>(string parName, T value)
-        {
-            var arg = TcpArg.Replace(parName, value.ToString().Replace(",", "."));
-            var parameters = arg.Split(new char[] { ',', '=' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var par in parameters)
-            {
-                switch (par)
-                {
-                    case "id":
-                        arg = arg.Replace(par, Id.ToString());
-                        break;                   
-                    case "duration":
-                        arg = arg.Replace(par, StandDuration.Value.ToString());
-                        break;
-                    case "date":
-                        arg = arg.Replace(par, LastStandDate.Value.ToString("dd:MM:yy"));
-                        break;
-                    case "result":
-                        arg = arg.Replace(par, StandResult.Value.ToStringPoint());
-                        break;
-                    case "value":
-                        arg = arg.Replace(par, StandPhysValue.Value.ToStringPoint());
-                        break;
-                    case "halfLifeValue":
-                        arg = arg.Replace(par, HalfLifeCorr.Value.ToStringPoint());
-                        break;
-                    default:
-                        break;
-                }
-            }
-            NeedWriteEvent?.Invoke(arg);
-
-        }
+        }        
+        
         #region Id
         private int _id;
         /// <summary>
