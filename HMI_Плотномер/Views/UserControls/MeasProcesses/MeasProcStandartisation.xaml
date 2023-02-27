@@ -136,12 +136,30 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <p:TextParameter DataContext="{Binding StandPhysValue}"
+                                <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"
                                              DescriptionNotVisible="True"
                                              HorizontalAlignment="Left"
+                                             MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
+                                             MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
                             </StackPanel>
                             
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Make standartisation Command-->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="УПРАВЛЕНИЕ" MaxWidth="200"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button>
+                                
+                            </Button>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

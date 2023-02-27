@@ -16,14 +16,7 @@ namespace IDensity.AddClasses.Settings
     {
         public MeasProcSettings(int num)
         {
-            Num = (ushort)num;
-            // Подписка на события настроек стандартизаций
-            foreach (var std in MeasStandSettings)
-            {
-                std.NeedWriteEvent += s => OnWriteCommandExecuted(s);
-                std.NeedMakeStand += () => NeedMakeStand?.Invoke(Num, (ushort)std.Id);
-                std.StandFinishEvent += () => StandFinishEvent?.Invoke(Num);
-            }
+            Num = (ushort)num;            
             // Подписка на события настроек данных еденичных измерений
             foreach (var src in SingleMeasResults)
             {
@@ -44,12 +37,8 @@ namespace IDensity.AddClasses.Settings
             // Действия по изменению настроек плотности
             DensityLiqD1.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
             DensitySolD2.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
-            // Действия по изменению настроек компенсаций
-            
+            // Действия по изменению настроек компенсаций            
             SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");
-            
-            
-            
             // Настройка таймера
             singleMeasTimer.Elapsed += (o, e) =>
             {
@@ -397,16 +386,7 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Необходимо записать настройки измерительных процессов
         /// </summary>
-        public event Action<string, ushort> NeedWriteEvent;
-
-        /// <summary>
-        /// Необходимо произвести стандартизацию
-        /// </summary>
-        public event Action<ushort, ushort> NeedMakeStand;
-        /// <summary>
-        /// Стандартизация закончена
-        /// </summary>
-        public event Action<ushort> StandFinishEvent;
+        public event Action<string, ushort> NeedWriteEvent;        
 
         /// <summary>
         /// Необходимо произвести еденичное измерение

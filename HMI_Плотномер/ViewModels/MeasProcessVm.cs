@@ -264,9 +264,6 @@ namespace IDensity.ViewModels
             foreach (var mp in VM.mainModel.MeasProcSettings)
             {
                 mp.NeedWriteEvent += VM.CommService.WriteMeasProcSettings;
-                
-                mp.NeedMakeStand += VM.CommService.MakeStand;
-                mp.StandFinishEvent += (num) => VM.CommService.Tcp.GetMeasSettingsExternal(num);
                 mp.NeedMakeSingleMeasEvent += VM.CommService.MakeSingleMeasure;
                 mp.SingleMeasEventFinishedEvent += (num) => VM.CommService.Tcp.GetMeasSettingsExternal(num);
             }

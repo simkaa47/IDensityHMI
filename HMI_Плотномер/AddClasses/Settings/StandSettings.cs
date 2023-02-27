@@ -74,53 +74,6 @@ namespace IDensity.AddClasses.Settings
             set => Set(ref _measUnitMemoryId, value);
         } 
         #endregion
-
-
-        /// <summary>
-        /// Необходимо записать настройки стандартизаций
-        /// </summary>
-        public event Action<string> NeedWriteEvent;
-
-        #region Проведение стандартизации
-        #region Флаг стандартищации
-        private bool _isStandartisation;
-
-        public bool IsStandartisation
-        {
-            get { return _isStandartisation; }
-            set { Set(ref _isStandartisation, value); }
-        }
-        #endregion
-
-        private int _curStandTime;
-
-        public int CurStandTime
-        { 
-            get { return _curStandTime; }
-            set { Set(ref _curStandTime, value); }
-        }
-
-
-        RelayCommand _makeStandCommand;
-        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(par => {
-            if (!IsStandartisation)
-            {
-                NeedMakeStand?.Invoke();
-                standTimer.Elapsed += (o, e) => 
-                {
-                    IsStandartisation = false;
-                    StandFinishEvent?.Invoke();
-                    standTimer.Stop();
-                };
-                standTimer.Interval = StandDuration.Value*100+4000;
-                standTimer.Start();
-                IsStandartisation = true;
-            }
-
-        }, o => true));
-        public event Action NeedMakeStand;
-        public event Action StandFinishEvent;
-        #endregion        
-        
+       
     }
 }

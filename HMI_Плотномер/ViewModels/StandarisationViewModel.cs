@@ -1,6 +1,7 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.Settings;
 using IDensity.ViewModels.Commands;
+using System.Timers;
 
 namespace IDensity.ViewModels
 {
@@ -12,6 +13,25 @@ namespace IDensity.ViewModels
         {
             _vM = vM;
         }
+
+        #region Standartisation flag
+        /// <summary>
+        /// Standartisation flag
+        /// </summary>
+        private bool _isStandartisation;
+        /// <summary>
+        /// Standartisation flag
+        /// </summary>
+        public bool IsStandartisation
+        {
+            get => _isStandartisation;
+            set => Set(ref _isStandartisation, value);
+        }
+        #endregion
+
+        Timer standTimer = new Timer();
+
+
         #region Commands        
 
         #region Write Stand Duration Command
@@ -109,6 +129,38 @@ namespace IDensity.ViewModels
             _vM.CommService.Tcp.WriteMeasProcSettings(str, proc.Num);
         }, canExecPar => _vM.mainModel.Connecting.Value && _vM.MeasProcessVm.SelectedStandartisation.HalfLifeCorr.ValidationOk));
         #endregion
+
+
+        #region Make standartisation
+        /// <summary>
+        /// Make standartisation
+        /// </summary>
+        RelayCommand _makeStandCommand;
+        /// <summary>
+        /// Make standartisation
+        /// </summary>
+        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(execPar => 
+        {
+            if (!IsStandartisation)
+            {
+                var proc = _vM.MeasProcessVm.SelectedProcess;
+                var stand = _vM.MeasProcessVm.SelectedStandartisation;
+                if (proc is null || stand is null) return;
+                _vM.CommService.MakeStand(proc.Num, (ushort)stand.Id);
+                standTimer.Elapsed += (o, e) =>
+                {
+                    IsStandartisation = false;
+                    _vM.CommService.Tcp.GetMeasSettingsExternal(proc.Num);
+                    standTimer.Stop();
+                };
+                standTimer.Interval = stand.StandDuration.Value * 100 + 4000;
+                standTimer.Start();
+                IsStandartisation = true;
+            }
+
+        }, canExecPar => _vM.mainModel.Connecting.Value && !IsStandartisation));
+        #endregion
+
 
         private string GetWriteCommand(string id, MeasProcSettings proc, StandSettings stand)
         {
