@@ -37,12 +37,12 @@
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding Id}" Value="2"></Condition>
-                                <Condition Binding="{Binding ElementName=CalibrType, Path=Index, Converter={StaticResource NotEqual}, ConverterParameter=2}" Value="True"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectedProcess.CalibrCurve.Type.Value, Converter={StaticResource NotEqual}, ConverterParameter=2}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </MultiDataTrigger.Setters>
-                        </MultiDataTrigger>
+                        </MultiDataTrigger>                        
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
@@ -163,8 +163,8 @@
                                                  Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
                                                  Visibility="{Binding IsStandartisation, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
                                     <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
+                                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.MakeStandCommand}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </fa:ImageAwesome>

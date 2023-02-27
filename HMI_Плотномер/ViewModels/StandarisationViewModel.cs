@@ -150,12 +150,14 @@ namespace IDensity.ViewModels
                 standTimer.Elapsed += (o, e) =>
                 {
                     IsStandartisation = false;
+                    stand.IsStandartisation = false;
                     _vM.CommService.Tcp.GetMeasSettingsExternal(proc.Num);
                     standTimer.Stop();
                 };
                 standTimer.Interval = stand.StandDuration.Value * 100 + 4000;
                 standTimer.Start();
                 IsStandartisation = true;
+                stand.IsStandartisation = true;
             }
 
         }, canExecPar => _vM.mainModel.Connecting.Value && !IsStandartisation));
