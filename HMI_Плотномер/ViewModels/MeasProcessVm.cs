@@ -13,8 +13,11 @@ namespace IDensity.ViewModels
         {
             VM = vM;
             Describe();
+            StandVm = new StandarisationViewModel(VM);
         }
         public VM VM { get; }
+
+        public StandarisationViewModel StandVm { get; }
 
 
         #region Selected standartisation data

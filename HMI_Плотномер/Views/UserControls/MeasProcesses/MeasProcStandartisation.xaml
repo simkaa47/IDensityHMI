@@ -65,14 +65,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!--#endregion-->
-                <DataGridTemplateColumn MaxWidth="190">
+                <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
-                        <TextBlock Text="Длительность стандартизации, x0.1 c."
+                        <TextBlock Text="Длительность стандартизации, x0.1 c."  MaxWidth="190"
                                            TextWrapping="Wrap"/>
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True"/>
+                            <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True"
+                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
