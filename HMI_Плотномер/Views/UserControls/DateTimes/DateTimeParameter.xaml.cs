@@ -73,7 +73,15 @@ namespace IDensity.Core.Views.UserControls.DateTimes
         public static readonly DependencyProperty PopupOpenedCommandProperty =
             DependencyProperty.Register("PopupOpenedCommand", typeof(RelayCommand), typeof(DateTimeParameter), new PropertyMetadata(null));
 
+        internal RelayCommand PopupClosedCommand
+        {
+            get { return (RelayCommand)GetValue(PopupClosedCommandProperty); }
+            set { SetValue(PopupClosedCommandProperty, value); }
+        }
 
-       
+        // Using a DependencyProperty as the backing store for PopupOpenedCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupClosedCommandProperty =
+            DependencyProperty.Register("PopupClosedCommand", typeof(RelayCommand), typeof(DateTimeParameter), new PropertyMetadata(null));
+
     }
 }

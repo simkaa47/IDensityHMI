@@ -111,6 +111,9 @@
                     <i:EventTrigger EventName="Opened">
                         <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=dt:DateTimeParameter}, Path=PopupOpenedCommand}" CommandParameter="{Binding ElementName=PART_Calendar}"/>
                     </i:EventTrigger>
+                    <i:EventTrigger EventName="Closed">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=dt:DateTimeParameter}, Path=PopupClosedCommand}" CommandParameter="{Binding ElementName=PART_Calendar}"/>
+                    </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <Border BorderThickness="0" Padding="3">
                     <StackPanel>

@@ -87,6 +87,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:DateTimeParameter DataContext="{Binding LastStandDate}"
+                                                 DescriptionNotVisible="True"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.LastStandDateWriteCommand}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

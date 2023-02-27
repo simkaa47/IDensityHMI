@@ -47,7 +47,7 @@ namespace IDensity.ViewModels
             var stand = _vM.MeasProcessVm.SelectedStandartisation;
             if (proc is null || stand is null) return;
             var str = GetWriteCommand("date", proc, stand);
-            stand.StandDuration.IsWriting = true;
+            stand.LastStandDate.IsWriting = true;
             _vM.CommService.Tcp.WriteMeasProcSettings(str, proc.Num);
         }, canExecPar => _vM.mainModel.Connecting.Value && _vM.MeasProcessVm.SelectedStandartisation.LastStandDate.ValidationOk));
         #endregion
