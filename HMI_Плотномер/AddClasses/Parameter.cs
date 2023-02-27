@@ -91,10 +91,11 @@ namespace IDensity.AddClasses
             get => _value;
             set
             {
-                if (Set(ref _value, value) && !isChanged)
+                IsWriting = false;
+                if (Set(ref _value, value))
                 {
                     WriteValue = value;
-                    IsWriting = false;
+                   
                 }
             }
         }

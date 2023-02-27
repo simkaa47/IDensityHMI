@@ -55,6 +55,7 @@
                          Margin="10,0,0,0"                         
                          VerticalAlignment="Center"
                          FontSize="16"
+                         CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                          FontWeight="Regular">
                    
                     <TextBox.InputBindings>

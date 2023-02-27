@@ -237,7 +237,7 @@
             
         </Grid>
         <!--#region Meas Indication -->
-        <Viewbox Grid.Column="1">
+        <Viewbox Grid.Column="1" VerticalAlignment="Top">
             <ListBox ItemsSource="{Binding mainModel.MeasResults}"
                                  
                                  HorizontalContentAlignment="Stretch"

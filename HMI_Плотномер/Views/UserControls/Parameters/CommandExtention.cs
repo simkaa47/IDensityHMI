@@ -44,5 +44,7 @@ namespace IDensity.Core.Views.UserControls.Parameters
         public static readonly DependencyProperty CommanDParameterProperty =
             DependencyProperty.Register(nameof(CommanDParameter), typeof(object), typeof(CommandExtention));
         #endregion
+
+        
     }
 }

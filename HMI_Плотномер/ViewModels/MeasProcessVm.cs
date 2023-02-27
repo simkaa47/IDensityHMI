@@ -16,6 +16,23 @@ namespace IDensity.ViewModels
         }
         public VM VM { get; }
 
+
+        #region Selected standartisation data
+        /// <summary>
+        /// Selected standartisation data
+        /// </summary>
+        private StandSettings _selectedStandartisation;
+        /// <summary>
+        /// Selected standartisation data
+        /// </summary>
+        public StandSettings SelectedStandartisation
+        {
+            get => _selectedStandartisation;
+            set => Set(ref _selectedStandartisation, value);
+        }
+        #endregion
+
+
         #region Выбраннный процесс
         /// <summary>
         /// Выбраннный процесс
@@ -226,13 +243,7 @@ namespace IDensity.ViewModels
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
 
         }, canExec => VM.mainModel.Connecting.Value));
-        #endregion
-
-        #region Команды стандартизации
-
-       
-
-        #endregion
+        #endregion       
 
         #region Скопировтаь измерительный процесс
         private RelayCommand _copyMeasProcessCommand;

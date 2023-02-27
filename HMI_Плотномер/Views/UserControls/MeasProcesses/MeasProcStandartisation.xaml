@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}"
@@ -15,6 +16,64 @@
         </Grid.RowDefinitions>
         <!--#region Meas Proc Selector -->
         <local:MeasProcSelector HorizontalAlignment="Left"/>
+        <!--#endregion-->
+        <!--#region Standartisations-->
+        <DataGrid Grid.Row="1" 
+                  Background="Transparent"
+                  BorderBrush="Transparent"
+                  ItemsSource="{Binding SelectedProcess.MeasStandSettings}"
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding SelectedStandartisation}"
+                  CanUserAddRows="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Id}" Value="2"></Condition>
+                                <Condition Binding="{Binding ElementName=CalibrType, Path=Index, Converter={StaticResource NotEqual}, ConverterParameter=2}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <!--#region Type-->
+                <DataGridTemplateColumn MaxWidth="100">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Тип"
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextWrapping="Wrap">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringByIndex}">
+                                        <Binding Path="Id"/>
+                                        <Binding Source="{StaticResource StandTypes}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <DataGridTemplateColumn MaxWidth="190">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Длительность стандартизации, x0.1 c."
+                                           TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:TextParameter  DataContext="{Binding StandDuration}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <!--#endregion-->
     </Grid>
 </UserControl>
