@@ -39,6 +39,7 @@
         </DockPanel.Resources>
         <TextBlock Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                   Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"/>
         <StackPanel HorizontalAlignment="Right"
                     Orientation="Horizontal">

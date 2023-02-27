@@ -10,6 +10,9 @@
              d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
             <RowDefinition />
@@ -27,6 +30,7 @@
                   CanUserAddRows="False">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="Transparent"/>
                     <Style.Triggers>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
@@ -49,7 +53,7 @@
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap">
+                            <TextBlock TextWrapping="Wrap" Style="{StaticResource Common}">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource StringByIndex}">
                                         <Binding Path="Id"/>
@@ -68,7 +72,7 @@
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <p:TextParameter  DataContext="{Binding StandDuration}"/>
+                            <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
