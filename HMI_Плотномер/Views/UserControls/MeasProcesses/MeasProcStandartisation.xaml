@@ -17,7 +17,10 @@
             <StackPanel.Resources>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
                 <DataTemplate x:Key="DataGridHeaderTemplate">
-                    <TextBlock TextWrapping="Wrap">
+                    <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
+                               Margin="10"
+                               FontSize="14"
+                               MaxWidth="200">
                         <TextBlock.Text>
                             <Binding/>
                         </TextBlock.Text>
@@ -60,7 +63,9 @@
                     </DataGrid.RowHeaderStyle>
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="Transparent"/>                            
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.CellStyle>
@@ -72,11 +77,10 @@
                     </DataGrid.CellStyle>                   
                     <DataGrid.Columns>
                         <!--#region Type-->
-                        <DataGridTemplateColumn MaxWidth="100" Header="ТИП" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
-                            
+                        <DataGridTemplateColumn MaxWidth="100" Header="ТИП" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock TextWrapping="Wrap" Style="{StaticResource Common}" Margin="5">
+                                    <TextBlock TextWrapping="Wrap" Style="{StaticResource Common}" Margin="10">
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource StringByIndex}">
                                                 <Binding Path="Id"/>
@@ -89,14 +93,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Stand duartion -->
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ x 0.1 c."  MaxWidth="190"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ, x 0.1 C.">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True"
+                                    <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True" Margin="10"
                                               HorizontalAlignment="Center"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
                                 </DataTemplate>
@@ -104,14 +104,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Last stand date -->
-                        <DataGridTemplateColumn MaxWidth="200">
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="Время последней стандартизации"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДАТА ПОСЛЕДНЕЙ СТАНДАРТИЗАЦИИ">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <p:DateTimeParameter DataContext="{Binding LastStandDate}"
+                                    <p:DateTimeParameter DataContext="{Binding LastStandDate}" Margin="10"
                                                  DescriptionNotVisible="True"
                                                          HorizontalAlignment="Center"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.LastStandDateWriteCommand}"/>
@@ -120,11 +116,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Result -->
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="РЕЗУЛЬТАТ"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="РЕЗУЛЬТАТ">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DataContext="{Binding StandResult}"
@@ -136,11 +128,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Half life value -->
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА" MaxWidth="200"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DataContext="{Binding HalfLifeCorr}"
@@ -152,11 +140,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Phys value -->
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="ФИЗИЧЕСКАЯ ВЕЛИЧИНА" MaxWidth="200"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ФИЗИЧЕСКАЯ ВЕЛИЧИНА">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"
@@ -171,11 +155,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Make standartisation Command-->
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="УПРАВЛЕНИЕ" MaxWidth="200"
-                                           TextWrapping="Wrap"/>
-                            </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="УПРАВЛЕНИЕ">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid MaxHeight="40">

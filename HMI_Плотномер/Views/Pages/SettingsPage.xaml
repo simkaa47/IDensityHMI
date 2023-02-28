@@ -14,7 +14,8 @@
     <UserControl.Resources>
         <x:Array Type="UserControl" x:Key="MeasPages">
             <mp:MeasProcMain/>
-            <mp:MeasProcStandartisation/>            
+            <mp:MeasProcStandartisation/>
+            <mp:CalibrationCurve/>            
         </x:Array>
         <x:Array Type="sys:String" x:Key="MeasProcTabIcons">
             <sys:String>..\Resourses\Pictures\ArrDowm.png</sys:String>
@@ -52,6 +53,10 @@
                              Visibility="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Основное"/>
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Стандартизация"  />
+                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Калибровочная кривая"  />
+                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Калибровка"  />
+                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Настройки плотности"  />
+                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Компенсации"  />
                     </ListBox>                    
                 </StackPanel>
             </TabItem.Header>
