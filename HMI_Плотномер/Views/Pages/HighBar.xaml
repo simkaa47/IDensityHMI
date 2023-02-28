@@ -36,7 +36,7 @@
                 </x:Array>
                 <x:Array x:Key="MeasStatuses" Type="{x:Type sys:String}">
                     <sys:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys:String>
-                    <sys:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys:String>
+                    <sys:String>ИЗМЕРЕНИЯ ВКЛЮЧЕНЫ</sys:String>
                 </x:Array>
                 <x:Array x:Key="HvStatuses" Type="{x:Type sys:String}">
                     <sys:String>HV ВЫКЛЮЧЕНО</sys:String>

@@ -232,7 +232,8 @@
                         Width="200"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"/>
+                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
+                        Command="{Binding SwitchMeasCommand}"/>
                 <!--#endregion-->
             </Grid>
             <!--#endregion-->

@@ -35,7 +35,6 @@ namespace IDensity.ViewModels
         }
         #endregion
 
-
         #region Выбраннный процесс
         /// <summary>
         /// Выбраннный процесс
@@ -249,7 +248,72 @@ namespace IDensity.ViewModels
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
 
         }, canExec => VM.mainModel.Connecting.Value));
-        #endregion       
+        #endregion
+
+        #region Write calibration result
+        /// <summary>
+        /// Write calibration result
+        /// </summary>
+        RelayCommand _calibrResultWriteCommand;
+        /// <summary>
+        /// Write calibration result
+        /// </summary>
+        public RelayCommand CalibrResultWriteCommand => _calibrResultWriteCommand ?? (_calibrResultWriteCommand = new RelayCommand(execPar => 
+        {
+            WriteCalibrCurveData("result", SelectedProcess.CalibrCurve.Result);
+        }, canExecPar => GetCommandCondition(SelectedProcess.CalibrCurve.Result)));
+        #endregion
+
+        #region Write calibration type
+        /// <summary>
+        /// Write calibration type
+        /// </summary>
+        RelayCommand _calibrTypeWriteCommand;
+        /// <summary>
+        /// Write calibration type
+        /// </summary>
+        public RelayCommand CalibrTypeWriteCommand => _calibrTypeWriteCommand ?? (_calibrTypeWriteCommand = new RelayCommand(execPar => 
+        {
+            WriteCalibrCurveData("type", SelectedProcess.CalibrCurve.Type);
+        }, canExecPar => GetCommandCondition(SelectedProcess.CalibrCurve.Type)));
+        #endregion
+
+        #region Write calibration coeff
+        /// <summary>
+        /// Write calibration coeff
+        /// </summary>
+        RelayCommand _calibrCoeffWriteCommand;
+        /// <summary>
+        /// Write calibration coeff
+        /// </summary>
+        public RelayCommand CalibrCoeffWriteCommand => _calibrCoeffWriteCommand ?? (_calibrCoeffWriteCommand = new RelayCommand(execPar => 
+        {
+            int i = 0;
+            if (!int.TryParse(execPar.ToString(), out i)) return;
+            WriteCalibrCurveData(i.ToString(), SelectedProcess.CalibrCurve.Coeffs[i]);
+        }, canExecPar => VM.mainModel.Connecting.Value || SelectedProcess != null));
+        #endregion
+
+        private void WriteCalibrCurveData<T>(string key, Parameter<T> par) where T : IComparable
+        {
+            var curve = SelectedProcess.CalibrCurve;
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},calib_curve={(key=="type" ? curve.Type.WriteValue : curve.Type.Value)},0,";
+            for(int i = 0;i<SelectedProcess.CalibrCurve.Coeffs.Count;i++)
+            {
+                str += (key == i.ToString() ? curve.Coeffs[i].WriteValue : curve.Coeffs[i].Value).ToStringPoint();
+                str += ",";
+            }
+            str += $"{(key == "result" ? curve.Result.WriteValue : curve.Result.Value)}#";
+            par.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+
+        }
+
+        private bool GetCommandCondition<T>(Parameter<T> par) where T:IComparable
+        {
+            return VM.mainModel.Connecting.Value || SelectedProcess != null || par.ValidationOk;
+        }
+
 
         #region Скопировтаь измерительный процесс
         private RelayCommand _copyMeasProcessCommand;

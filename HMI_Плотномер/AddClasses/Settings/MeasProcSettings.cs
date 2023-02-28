@@ -31,9 +31,7 @@ namespace IDensity.AddClasses.Settings
                     }
                     OnWriteCommandExecuted(str);
                 };
-            }
-            // Подписка на собтия записи данных калибровочгных кривых
-            CalibrCurve.NeedWriteEvent += OnWriteCommandExecuted;            
+            }                      
             // Действия по изменению настроек плотности
             DensityLiqD1.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
             DensitySolD2.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");

@@ -12,6 +12,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <local:CommandExtention.Resources>
         <conv:ToStringFormatConverter x:Key="StringFormatConverter"/>
+        
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
     </local:CommandExtention.Resources>
     <DockPanel MinHeight="50">
@@ -60,14 +61,14 @@
                          FontWeight="Regular">
                    
                     <TextBox.InputBindings>
-                        <KeyBinding  Key="Enter" Command="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=Command}" 
+                        <KeyBinding  Key="Enter"   Command="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=Command}" 
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=CommanDParameter }"> 
                            
                         </KeyBinding>
                     </TextBox.InputBindings>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}" UpdateSourceTrigger="PropertyChanged" 
                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
-                        <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                        <Binding Path="WriteValue" StringFormat="N2" Converter="{StaticResource NumericConverter}" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                             <Binding.ValidationRules>
                                 <DataErrorValidationRule />
                                 <ExceptionValidationRule/>
@@ -85,8 +86,8 @@
                              Foreground="Aqua"/>
         </StackPanel>
         <DockPanel.ToolTip>
-            <ToolTip Placement="MousePoint">
-                <StackPanel>
+            <ToolTip Placement="MousePoint" BorderThickness="0">
+                <StackPanel Background="DarkGray">
                     <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
                     <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
                     <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>

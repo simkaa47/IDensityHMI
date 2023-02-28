@@ -18,14 +18,35 @@
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">           
             <!--#region Calibration result -->
             <p:CompoBoxParameter DataContext="{Binding SelectedProcess.CalibrCurve.Result}"
-                                 ItemsSource="{StaticResource CalibrResults}"/>
+                                 ItemsSource="{StaticResource CalibrResults}"
+                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrResultWriteCommand}"/>
             <!--#endregion-->
             <!--#region Calibration Type -->
             <p:CompoBoxParameter DataContext="{Binding SelectedProcess.CalibrCurve.Type}"
-                                 ItemsSource="{StaticResource CalibrTypes}"/>
+                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 ItemsSource="{StaticResource CalibrTypes}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrTypeWriteCommand}"/>
             <!--#endregion-->
             <!--#region COeffs -->
-            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[0]}"/>
+            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[0]}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrCoeffWriteCommand}"
+                              CommanDParameter="0"/>
+            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[1]}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrCoeffWriteCommand}"
+                              CommanDParameter="1"/>
+            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[2]}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrCoeffWriteCommand}"
+                              CommanDParameter="2"/>
+            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[3]}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrCoeffWriteCommand}"
+                              CommanDParameter="3"/>
+            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[4]}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrCoeffWriteCommand}"
+                              CommanDParameter="4"/>
+            <p:TextParameter DataContext="{Binding SelectedProcess.CalibrCurve.Coeffs[5]}"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrCoeffWriteCommand}"
+                              CommanDParameter="5"/>
             <!--#endregion-->
            
         </ListBox>

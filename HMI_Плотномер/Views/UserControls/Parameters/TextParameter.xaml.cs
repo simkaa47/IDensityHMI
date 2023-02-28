@@ -10,5 +10,7 @@
             InitializeComponent();
         }
         public string StringFormat { get; set; }
+
+        
     }
 }
