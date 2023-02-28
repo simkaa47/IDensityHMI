@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.Resources>
-            <Style TargetType="Button" x:Key="Control" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+            <Style TargetType="Button" x:Key="Control">
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="Height" Value="Auto"/>
             </Style>
@@ -80,7 +80,7 @@
                                                   Content="ЗАПИСЬ"
                                                   IsChecked="{Binding IsWritingToFile}"
                                                   Background="{Binding IsWritingToFile, Converter={StaticResource ColorToBool}, ConverterParameter=#FF6A5AcD}"
-                                                  Style="{StaticResource MaterialDesignRaisedButton}" />
+                                                 />
             </StackPanel>
 
         </DockPanel>

@@ -7,9 +7,7 @@
     <Application.Resources>       
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Views/Resourses/Styles/TextBlocks.xaml"/>                
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />                
+                <ResourceDictionary Source="Views/Resourses/Styles/TextBlocks.xaml"/>                             
                 <ResourceDictionary Source="Views/Resourses/Styles/TextBoxes.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/ToggleButtons.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/Borders.xaml"/>

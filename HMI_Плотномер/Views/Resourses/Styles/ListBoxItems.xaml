@@ -13,7 +13,7 @@
                     <Viewbox MaxHeight="0.5 in">
                         <StackPanel>
                             <Border Name="Border"  Width="320"  
-                            BorderBrush="#3F3F42" Background="#3F3F42" Height="60" BorderThickness="1" CornerRadius="2">
+                            BorderBrush="#3F3F42" Background="#3F3F42" Height="60" BorderThickness="0" CornerRadius="2">
                                 <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="10,0,0,0">
                                     <Label Name="L2"   
                                    Opacity="0.5"

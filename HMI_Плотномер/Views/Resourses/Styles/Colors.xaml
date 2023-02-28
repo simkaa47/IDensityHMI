@@ -2,4 +2,5 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="PanelBorderColor" Color="#FF2C2C2E"/>
     <SolidColorBrush x:Key="BorderNonActiveColor" Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="TabControlCommon" Color="#1C1C1E"/>
 </ResourceDictionary>

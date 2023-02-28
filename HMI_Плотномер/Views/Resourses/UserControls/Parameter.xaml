@@ -16,7 +16,7 @@
                    VerticalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBox x:Name="Write" Width="80" VerticalContentAlignment="Center"
-                     Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}">
+                     Visibility="{Binding OnlyRead, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
                 <TextBox.Text>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}"  
                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
@@ -32,7 +32,7 @@
             </TextBox>            
             <Button Width="50"
                     Content="-->"                    
-                    Visibility="{Binding OnlyRead, Converter={StaticResource InverseBoolToVisConverter}}"
+                    Visibility="{Binding OnlyRead, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                     Command="{Binding RelativeSource={RelativeSource AncestorType=local:Parameter}, Path=Command}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:Parameter}, Path=CommanDParameter}"
                     IsEnabled="{Binding ValidationOk}"

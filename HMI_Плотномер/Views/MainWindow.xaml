@@ -664,7 +664,7 @@
                                                                              Icon="Refresh" 
                                                                              Foreground="AliceBlue" 
                                                                              Spin="{Binding HistoryItemDownloading}" 
-                                                                             Visibility="{Binding HistoryItemDownloading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                                             Visibility="{Binding HistoryItemDownloading, Converter={StaticResource VisibleConverter}}"/>
                                                 <TextBlock Text="Показать" VerticalAlignment="Center"
                                                                        HorizontalAlignment="Center"/>
                                             </StackPanel>

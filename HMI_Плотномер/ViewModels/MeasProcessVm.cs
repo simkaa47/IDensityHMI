@@ -47,7 +47,10 @@ namespace IDensity.ViewModels
         public MeasProcSettings SelectedProcess
         {
             get => _selectedProcess;
-            set => Set(ref _selectedProcess, value);
+            set 
+            { 
+                if(value!=null) Set(ref _selectedProcess, value);
+            } 
         }
         #endregion
 

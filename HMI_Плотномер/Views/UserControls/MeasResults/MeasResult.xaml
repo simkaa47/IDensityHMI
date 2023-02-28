@@ -16,7 +16,7 @@
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
     </UserControl.Resources>
     <Grid>
-        <Viewbox Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Viewbox Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.25*"/>

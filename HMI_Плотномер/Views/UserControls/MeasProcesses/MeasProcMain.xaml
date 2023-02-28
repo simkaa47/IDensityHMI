@@ -10,16 +10,11 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <!--#region Meas Proc Selector -->
-        <local:MeasProcSelector HorizontalAlignment="Left"/>
-        <!--#endregion-->
-        <ListBox HorizontalContentAlignment="Stretch"  Width="687" Grid.Row="1"
-                 HorizontalAlignment="Left"              
+    <Grid> 
+        <ListBox HorizontalContentAlignment="Stretch"  Width="687" 
+                 HorizontalAlignment="Left" 
+                 Background="Transparent"
+                 BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">            
             <ListBox.Resources>

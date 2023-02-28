@@ -29,7 +29,7 @@
         <TabItem Name="MeasProcTab"
                  DataContext="{Binding MeasProcessVm}"
                  Style="{StaticResource MeasProcSettingsStyle}"
-                 Content="{Binding ElementName=MeasSettSelector, Path=SelectedIndex, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource MeasPages}}">
+                 >
             <TabItem.Header>
                 <StackPanel HorizontalAlignment="Left">
                     <Viewbox MaxHeight="0.5 in">
@@ -48,12 +48,23 @@
                     </Viewbox>
 
                     <ListBox x:Name="MeasSettSelector" SelectedIndex="0" HorizontalContentAlignment="Stretch"
+                             BorderThickness="0"
                              Visibility="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
-                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Основное"  />
+                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Основное"/>
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Стандартизация"  />
                     </ListBox>                    
                 </StackPanel>
             </TabItem.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.1*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--#region Meas Proc Selector -->
+                <mp:MeasProcSelector HorizontalAlignment="Left"/>
+                <!--#endregion-->
+                <UserControl Grid.Row="1" Content="{Binding ElementName=MeasSettSelector, Path=SelectedIndex, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource MeasPages}}"/>
+            </Grid>
         </TabItem>
         <!--#endregion-->
         <!--#region Счетчики -->
