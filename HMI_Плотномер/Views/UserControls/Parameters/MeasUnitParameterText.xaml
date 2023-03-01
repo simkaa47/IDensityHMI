@@ -50,13 +50,14 @@
                     Width="205"
                     BorderThickness="2"
                     Background="Transparent">
-                <DockPanel >
+                <DockPanel VerticalAlignment="Center">
                     <TextBox Background="Transparent"
                          Name="Input"                         
                          BorderThickness="0"                                                 
                          FontFamily="Roboto"
                          Margin="10,0,0,0"                         
                          VerticalAlignment="Center"
+                         VerticalContentAlignment="Center"
                          FontSize="16"
                          MaxWidth="65"
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
@@ -86,6 +87,7 @@
                               Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                               VerticalContentAlignment="Center"
                               FontSize="16"
+                              
                               HorizontalContentAlignment="Center"
                               Background="Transparent"
                               HorizontalAlignment="Right">
@@ -117,8 +119,8 @@
                              Foreground="Aqua"/>
         </StackPanel>
         <DockPanel.ToolTip>
-            <ToolTip Placement="MousePoint">
-                <StackPanel>
+            <ToolTip Placement="MousePoint" BorderThickness="0">
+                <StackPanel Background="DarkGray">
                     <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
                     <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
                     <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>
