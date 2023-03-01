@@ -85,55 +85,58 @@
                 </StackPanel>
             </DockPanel>
             <!--#endregion-->
-            <!--#region Single meas results panel -->
+            
+        </ListBox>
+        <!--#region Single meas results panel -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <WrapPanel Orientation="Horizontal">
                 <WrapPanel.Resources>
-                    <Style TargetType="DataGridRow">
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Aqua"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
+                    
                 </WrapPanel.Resources>
                 <GroupBox Header="Единичные измерения">
                     <!--#region Данные ед.измерений -->
                     <DataGrid CanUserAddRows="False" 
-                                          SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"
-                                          FontSize="16"
-                                          FontWeight="Bold"                                          
-                                          CanUserDeleteRows="False" 
-                                          ItemsSource="{Binding SelectedProcess.SingleMeasResults}"
-                                          AutoGenerateColumns="False">
+                             SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"
+                             Margin="10"  
+                             Background="Transparent"
+                             CanUserDeleteRows="False" 
+                             ItemsSource="{Binding SelectedProcess.SingleMeasResults}"
+                             AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <!--#region № -->
-                            <DataGridTextColumn Header="№" MaxWidth="50"
-                                                            Binding="{Binding Id}" IsReadOnly="True" />
-                            <!--#endregion-->
-                            <!--#region Дата измерения-->
-                            <DataGridTemplateColumn MaxWidth="140">
-                                <DataGridTemplateColumn.Header>
-                                    <TextBlock Text="Дата измерения" TextWrapping="Wrap"/>
-                                </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
+                                                           IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <DatePicker DataContext="{Binding Date}" SelectedDate="{Binding WriteValue}">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="CalendarClosed">
-                                                    <i:InvokeCommandAction Command="{Binding Command}"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </DatePicker>
+                                        <TextBlock Text="{Binding Id}" Margin="10"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                               
+                            <!--#endregion-->
+                            <!--#region Дата измерения-->
+                            <DataGridTemplateColumn Header="ДАТА ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">                                
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <p:DateTimeParameter DataContext="{Binding Date}"
+                                                             DescriptionNotVisible="True"
+                                                             Margin="10"
+                                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.DateWriteCommand}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <!--#endregion-->
-                            <!--#region Ослабление -->
-                            <DataGridTemplateColumn MaxWidth="200"
+                            <!--#region Weak -->
+                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                                     Header="Ослабление">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:MenuItemParameterText DataContext="{Binding Weak}" Command="{Binding Command}"/>
+                                        <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Weak}" Margin="10"
+                                                         Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.WeakWriteCommand}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -145,11 +148,12 @@
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:MeasUnitTextParameter 
-                                                        DataContext="{Binding CounterValue}" 
-                                                        Command="{Binding Command}"
-                                                        MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
-                                                        MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"/>
+                                        <p:MeasUnitParameterText DescriptionNotVisible="True"
+                                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.ValueWriteCommand}"
+                                                                 DataContext="{Binding CounterValue}"
+                                                                 MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
+                                                                 MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"/>
+                                        
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -171,7 +175,8 @@
                     </DataGrid>
                 </GroupBox>
             </WrapPanel>
-            <!--#endregion-->
-        </ListBox>
+        </Grid>
+        
+        <!--#endregion-->
     </Grid>
 </UserControl>

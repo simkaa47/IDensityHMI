@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.AddClasses.Settings;
 using IDensity.Models;
 using IDensity.Services.Calibration;
 using IDensity.ViewModels;
@@ -251,6 +252,82 @@ namespace IDensity.ViewModels
             get { return _singleMeasIndex; }
             set { Set(ref _singleMeasIndex, value); }
         }
+        #endregion
+
+        #region Single Meas Data Commands        
+
+        #region Write Date
+        /// <summary>
+        /// Write Date
+        /// </summary>
+        RelayCommand _dateWriteCommand;
+        /// <summary>
+        /// Write Date
+        /// </summary>
+        public RelayCommand DateWriteCommand => _dateWriteCommand ?? (_dateWriteCommand = new RelayCommand(execPar => 
+        {
+            if (SingleMeasIndex < 0 || SingleMeasIndex >= MeasProcSettings.SingleMeasResCount) return;
+            var par = _vM.MeasProcessVm.SelectedProcess.SingleMeasResults[SingleMeasIndex].Date;
+            if(par.ValidationOk)WriteSingleMeasData("date", par);
+        }, canExecPar => _vM.mainModel.Connecting.Value));
+        #endregion
+
+        #region Write weak
+        /// <summary>
+        /// Write weak
+        /// </summary>
+        RelayCommand _weakWriteCommand;
+        /// <summary>
+        /// Write weak
+        /// </summary>
+        public RelayCommand WeakWriteCommand => _weakWriteCommand ?? (_weakWriteCommand = new RelayCommand(execPar => 
+        {
+            if (SingleMeasIndex < 0 || SingleMeasIndex >= MeasProcSettings.SingleMeasResCount) return;
+            var par = _vM.MeasProcessVm.SelectedProcess.SingleMeasResults[SingleMeasIndex].Weak;
+            if (par.ValidationOk) WriteSingleMeasData("weak", par);
+        }, canExecPar => _vM.mainModel.Connecting.Value));
+        #endregion
+
+        #region Write value
+        /// <summary>
+        /// Write value
+        /// </summary>
+        RelayCommand _valueWriteCommand;
+        /// <summary>
+        /// Write value
+        /// </summary>
+        public RelayCommand ValueWriteCommand => _valueWriteCommand ?? (_valueWriteCommand = new RelayCommand(execPar => 
+        {
+            if (SingleMeasIndex < 0 || SingleMeasIndex >= MeasProcSettings.SingleMeasResCount) return;
+            var par = _vM.MeasProcessVm.SelectedProcess.SingleMeasResults[SingleMeasIndex].CounterValue;
+            if (par.ValidationOk) WriteSingleMeasData("value", par);
+        }, canExecPar => _vM.mainModel.Connecting.Value));
+        #endregion
+
+        void WriteSingleMeasData<T>(string id, Parameter<T> par) where T: IComparable
+        {
+            var proc = _vM.MeasProcessVm.SelectedProcess;
+            if (SingleMeasIndex < 0 || SingleMeasIndex >= MeasProcSettings.SingleMeasResCount) return;            
+            var str = $"*SETT,meas_proc={proc.Num},calib_src=";
+            for (int i = 0;i < MeasProcSettings.SingleMeasResCount;i++)
+            {
+                if(i!= SingleMeasIndex)
+                {
+                    str += $"{proc.SingleMeasResults[i].Date.Value.ToString("dd:MM:yy")},{proc.SingleMeasResults[i].Weak.Value.ToStringPoint()},{proc.SingleMeasResults[i].CounterValue.Value.ToStringPoint()}";
+                }
+                else
+                {
+                    str += $"{(id == "date" ? proc.SingleMeasResults[i].Date.WriteValue : proc.SingleMeasResults[i].Date.Value).ToString("dd:MM:yy")}," +
+                        $"{(id == "weak" ? proc.SingleMeasResults[i].Weak.WriteValue : proc.SingleMeasResults[i].Weak.Value).ToStringPoint()}," +
+                        $"{(id == "value" ? proc.SingleMeasResults[i].CounterValue.WriteValue : proc.SingleMeasResults[i].CounterValue.Value).ToStringPoint()}";
+                }
+                if (i < MeasProcSettings.SingleMeasResCount - 1) str += ",";
+            }
+            str += "#";
+            par.IsWriting = true;
+            _vM.CommService.Tcp.WriteMeasProcSettings(str, proc.Num);
+        }
+
         #endregion
     }
 }

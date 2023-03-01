@@ -58,19 +58,20 @@
                          Margin="10,0,0,0"                         
                          VerticalAlignment="Center"
                          FontSize="16"
+                         MaxWidth="65"
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                          FontWeight="Regular">
 
                         <TextBox.InputBindings>
-                            <KeyBinding  Key="Enter" Command="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=Command}" 
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=CommanDParameter }">
+                            <KeyBinding  Key="Enter" Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=CommanDParameter }">
 
                             </KeyBinding>
                         </TextBox.InputBindings>
                         <TextBox.Text>
-                            <MultiBinding Converter="{StaticResource Multyply}"  
+                            <MultiBinding Converter="{StaticResource Multyply}"  UpdateSourceTrigger="PropertyChanged"
                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
-                                <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged">
+                                <Binding Path="WriteValue" StringFormat="N2" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource NumericConverter}">
                                     <Binding.ValidationRules>
                                         <DataErrorValidationRule />
                                         <ExceptionValidationRule/>

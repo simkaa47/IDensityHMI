@@ -33,6 +33,7 @@ namespace IDensity.Core.Views.Converters
                 b = unit.Offset;
             }
             double y = k * result + b;
+            y = Math.Round(y, 5);
             if (v[2] is string memoryId && needToWriteMemory)
             {
                 SaveMemoryMeasUnit(memoryId, CurMeasUnit.Id);
@@ -48,7 +49,8 @@ namespace IDensity.Core.Views.Converters
             var k = CurMeasUnit is null ? 1 : CurMeasUnit.K;
             var b = CurMeasUnit is null ? 0 : CurMeasUnit.Offset;
             float value = 0;
-            if (!(float.TryParse(v.ToString(), out value))) value = 0;
+            if (v is null) return new object[] { v, CurMeasUnit };
+            if (!(float.TryParse(v.ToString(), out value))) return new object[] { v, CurMeasUnit };
             return new object[] { (value - b) / k, CurMeasUnit };
         }
 

@@ -15,7 +15,44 @@
             <DataTrigger Binding="{Binding Activity}" Value="False">
                 <Setter Property="Background" Value="{Binding Event.NonActiveBrush}"/>                
             </DataTrigger>
-        </Style.Triggers>
-        
+        </Style.Triggers>        
     </Style>
+
+    <DataTemplate x:Key="DataGridHeaderTemplate">
+        <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
+                               Margin="10"
+                               FontSize="14"
+                               MaxWidth="200">
+            <TextBlock.Text>
+                <Binding/>
+            </TextBlock.Text>
+        </TextBlock>
+    </DataTemplate>
+
+    <Style TargetType="DataGridRow">
+        <Setter Property="Background" Value="{DynamicResource TabControlCommon}"/>
+        <Style.Triggers>           
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource BorderNonActiveColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="DataGridRowHeader">
+        <Setter Property="Width" Value="0"/>
+    </Style>
+
+    <Style TargetType="DataGridColumnHeader" >
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style TargetType="DataGridCell" >
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1,0,1,0"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
+    </Style>
+
+
 </ResourceDictionary>

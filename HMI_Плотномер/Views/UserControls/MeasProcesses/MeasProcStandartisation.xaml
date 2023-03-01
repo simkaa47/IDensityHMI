@@ -15,17 +15,7 @@
         <!--#region Standartisations-->
         <StackPanel >
             <StackPanel.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                <DataTemplate x:Key="DataGridHeaderTemplate">
-                    <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
-                               Margin="10"
-                               FontSize="14"
-                               MaxWidth="200">
-                        <TextBlock.Text>
-                            <Binding/>
-                        </TextBlock.Text>
-                    </TextBlock>
-                </DataTemplate>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>                
             </StackPanel.Resources>
             <Border Background="Black" Margin="10,10,50,10">
                 <DataGrid Background="Transparent"
@@ -38,7 +28,7 @@
                   CanUserAddRows="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
-                            <Setter Property="Background" Value="{DynamicResource TabControlCommon}"/>                            
+                            <Setter Property="Background" Value="{DynamicResource TabControlCommon}"/>
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -55,26 +45,6 @@
                             </Style.Triggers>
                         </Style>
                     </DataGrid.RowStyle>
-                    <DataGrid.RowHeaderStyle>
-                        <Style TargetType="DataGridRowHeader">
-                            <Setter Property="Width" Value="0"/>
-                            
-                        </Style>
-                    </DataGrid.RowHeaderStyle>
-                    <DataGrid.ColumnHeaderStyle>
-                        <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                        </Style>
-                    </DataGrid.ColumnHeaderStyle>
-                    <DataGrid.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="1,0,1,0"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>                            
-                        </Style>
-                    </DataGrid.CellStyle>                   
                     <DataGrid.Columns>
                         <!--#region Type-->
                         <DataGridTemplateColumn MaxWidth="100" Header="ТИП" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">                            
