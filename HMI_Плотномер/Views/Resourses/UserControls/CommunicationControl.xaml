@@ -17,9 +17,9 @@
             <!--#region Параметры  Ethernet-->
             <GroupBox Header="Настройки Ethernet(TCP) соединения">
                 <ListBox HorizontalContentAlignment="Stretch">
-                    <ListBoxItem Content="{Binding VM.mainModel.TcpConnectData.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
+                    <!--<ListBoxItem Content="{Binding VM.mainModel.TcpConnectData.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="IP адрес устройства"></ListBoxItem>
                     <ListBoxItem Content="{Binding VM.mainModel.TcpConnectData.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Номер порта"></ListBoxItem>
-                    <ListBoxItem Content="{Binding VM.mainModel.TcpConnectData.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Пауза между запросами, мс."></ListBoxItem>
+                    <ListBoxItem Content="{Binding VM.mainModel.TcpConnectData.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Stretch" Template="{StaticResource TextBoxParameter}"  Tag="Пауза между запросами, мс."></ListBoxItem>-->
                     <DockPanel>
                         <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
                         <CheckBox IsChecked="{Binding VM.mainModel.TcpConnectData.CycicRequest}" HorizontalAlignment="Right"/>

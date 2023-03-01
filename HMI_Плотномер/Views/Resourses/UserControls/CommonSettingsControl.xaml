@@ -153,7 +153,7 @@
             <local:Parameter DataContext="{Binding VM.mainModel.CustNumber}" Command="{Binding Command}"/>
             <ListBoxItem  Content="{Binding VM.mainModel.CheckSum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}"
-                                          Template="{StaticResource TextBoxParameter}" 
+                                           
                                           Tag="Контрольная сумма ПО плотномера"/>
             <DockPanel Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                 <TextBlock Text="Запрос контрольной суммы ПО плотномера"/>

@@ -84,6 +84,7 @@
                     <ComboBox Width="100" Name="MeasUnitSelector"  DisplayMemberPath="Name" 
                               Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                               VerticalContentAlignment="Center"
+                              FontSize="16"
                               HorizontalContentAlignment="Center"
                               Background="Transparent"
                               HorizontalAlignment="Right">
