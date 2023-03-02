@@ -98,7 +98,7 @@
             <!--#endregion-->
             <!--#region Steam compensation -->
             <GroupBox Header="Компенсация паровой фазы"
-                      
+                      Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}"
                       FontSize="20"
                       HorizontalContentAlignment="Stretch"
                       BorderThickness="0">
@@ -109,19 +109,22 @@
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
                     <!--#region Activity -->
-                    <p:CheckParameter DataContext="{Binding SelectedProcess.SteamCompensation.Activity}" HorizontalAlignment="Stretch"/>
+                    <p:CheckParameter DataContext="{Binding SelectedProcess.SteamCompensation.Activity}" HorizontalAlignment="Stretch"
+                                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompActivityWriteCommand}"/>
                     <!--#endregion-->
                     <!--#region Source -->
                     <p:CompoBoxParameter DataContext="{Binding SelectedProcess.SteamCompensation.Sourse}"
                                          Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                         ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CompensationSrcNames.Data}"
-                                        DisplayMemberPath="Name"/>
+                                         Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompSourceWriteCommand}"
+                                         ItemsSource="{StaticResource TempSrc}"/>
                     <!--#endregion-->
                     <!--#region A -->
-                    <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.A}"/>
+                    <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.A}"
+                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompensationWriteACommand}"/>
                     <!--#endregion-->
                     <!--#region B -->
-                    <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.B}"/>
+                    <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.B}"
+                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompensationWriteBCommand}"/>
                     <!--#endregion-->
                 </ListBox>
             </GroupBox>

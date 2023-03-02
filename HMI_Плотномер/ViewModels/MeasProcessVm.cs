@@ -241,6 +241,8 @@ namespace IDensity.ViewModels
         #endregion
 
 
+
+
         void WriteTempCompensation<T>(string id, Parameter<T> par) where T : IComparable
         {
             var proc = SelectedProcess;
@@ -386,6 +388,78 @@ namespace IDensity.ViewModels
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.DensitySolD2.PhysValue)));
         #endregion
 
+        #region Write steam compensation activity
+        /// <summary>
+        /// Write steam compensation activity
+        /// </summary>
+        RelayCommand _steamCompActivityWriteCommand;
+        /// <summary>
+        /// Write steam compensation activity
+        /// </summary>
+        public RelayCommand SteamCompActivityWriteCommand => _steamCompActivityWriteCommand ?? (_steamCompActivityWriteCommand = new RelayCommand(execPar => 
+        {
+            WriteSteamCompensation("activity", SelectedProcess.SteamCompensation.Activity);
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.Activity)));
+        #endregion
+
+        #region Write steam compensation source
+        /// <summary>
+        /// Write steam compensation source
+        /// </summary>
+        RelayCommand _steamCompSourceWriteCommand;
+        /// <summary>
+        /// Write steam compensation source
+        /// </summary>
+        public RelayCommand SteamCompSourceWriteCommand => _steamCompSourceWriteCommand ?? (_steamCompSourceWriteCommand = new RelayCommand(execPar => 
+        {
+            WriteSteamCompensation("source", SelectedProcess.SteamCompensation.Sourse);
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.Sourse)));
+        #endregion
+
+        #region Write steam compensation A
+        /// <summary>
+        /// Write steam compensation A
+        /// </summary>
+        RelayCommand _steamCompensationWriteACommand;
+        /// <summary>
+        /// Write steam compensation A
+        /// </summary>
+        public RelayCommand SteamCompensationWriteACommand => _steamCompensationWriteACommand ?? (_steamCompensationWriteACommand = new RelayCommand(execPar => 
+        {
+            WriteSteamCompensation("A", SelectedProcess.SteamCompensation.A);
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.A)));
+        #endregion
+
+        #region Write steam compensation B
+        /// <summary>
+        /// Write steam compensation B
+        /// </summary>
+        RelayCommand _steamCompensationWriteBCommand;
+        /// <summary>
+        /// Write steam compensation B
+        /// </summary>
+        public RelayCommand SteamCompensationWriteBCommand => _steamCompensationWriteBCommand ?? (_steamCompensationWriteBCommand = new RelayCommand(execPar =>
+        {
+            WriteSteamCompensation("B", SelectedProcess.SteamCompensation.B);
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.B)));
+        #endregion
+
+
+
+        private void WriteSteamCompensation<T>(string id, Parameter<T> par) where T : IComparable
+        {
+            var proc = SelectedProcess;
+            var steam = SelectedProcess.SteamCompensation;
+            var str = $"*SETT,meas_proc={proc.Num}," +
+                $"comp_steam={((id == "activity" ? steam.Activity.WriteValue : steam.Activity.Value) ? 1 : 0)}," +
+                $"{steam.MeasUnitNum.WriteValue}," +
+                $"{(id == "source" ? steam.Sourse.WriteValue : steam.Sourse.Value)}," +
+                $"{(id == "A" ? steam.A.WriteValue : steam.A.Value).ToStringPoint()}," +
+                $"{(id == "B" ? steam.B.WriteValue : steam.B.Value).ToStringPoint()}#";
+            par.IsWriting = true;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }
+       
 
         private void WriteCalibrCurveData<T>(string key, Parameter<T> par) where T : IComparable
         {
