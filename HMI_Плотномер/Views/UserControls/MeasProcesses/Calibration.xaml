@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
+             xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -176,22 +177,38 @@
                     
                     <!--#endregion-->
                 </GroupBox>
+                <!--#region Coeffs -->
                 <GroupBox Header="Расчитанные к-ты полинома" Margin="5,0,0,0" BorderThickness="0">
-                    <Border Background="Black" Margin="10">
-                        <DataGrid AutoGenerateColumns="False"
+                    <StackPanel>
+                        <Border Background="Black" Margin="10">
+                            <DataGrid AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               BorderThickness="0"
                               Background="Transparent"
                               ItemsSource="{Binding CalibrationVm.CalculatedCoeefs}"
                               CanUserDeleteRows="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Cтепень" Binding="{Binding Deg}" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Величина" Binding="{Binding Coeff}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Border>
-                    
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="СТЕПЕНЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Deg}" Margin="10"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="ВЕЛИЧИНА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Coeff}" Margin="10"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </StackPanel>
+
                 </GroupBox>
+                <!--#endregion-->
             </WrapPanel>
             <!--#region Buttons -->
             <WrapPanel Orientation="Horizontal" Grid.Row="1">
@@ -223,28 +240,66 @@
                 </Button>
                 <!--#endregion-->
                 <!--#region Расчитать к-ты -->
-                <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}">
-                    <TextBlock Text="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ"/>
-                </Button>
+                <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}" Style="{StaticResource TypicalButton0}" Margin="5"
+                        Content="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ"/>
                 <!--#endregion-->
                 <!--#region Показать зависимость -->
                 <ToggleButton  Width="200"
-                               Margin="2"
-                              Height="60"
+                               Margin="5"
+                               Style="{StaticResource ToggleButtonLikeButton}"                              
                               Name="PopupOpen" 
-                              Command="{Binding ShowPolinomTrendCommand}">
-                    <TextBlock Text="ПОКАЗАТЬ ЗАВИСИМОСТЬ"/>
+                              Command="{Binding CalibrationVm.ShowPolinomTrendCommand}"
+                         Content="ПОКАЗАТЬ ЗАВИСИМОСТЬ">
+                    
                 </ToggleButton>
                 <!--#endregion-->
                 <!--#region Записать коэффиценты -->
-                <Button Command="{Binding WriteCalibrCoeefsCommand}">
-                    <TextBlock Text="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ"/>
-                </Button>
+                <Button Command="{Binding CalibrationVm.WriteCalibrCoeefsCommand}" Style="{StaticResource TypicalButton0}" 
+                        Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ" Margin="5"/>
                 <!--#endregion-->
             </WrapPanel>
             <!--#endregion-->
         </Grid>
-        
+        <!--#region Тренд -->
+        <Popup IsOpen="{Binding ElementName=PopupOpen, Path=IsChecked}" 
+                                               StaysOpen="False"
+                                               Placement="MousePoint">
+            <Grid>
+                <Border Style="{StaticResource BorderLight}"
+                                                        Height="600"
+                                                        Width="800">
+                    <oxy:Plot TextColor="WhiteSmoke"                                                          
+                                                          PlotAreaBorderColor="WhiteSmoke"
+                                                          SelectionColor="WhiteSmoke"
+                                                          LegendTextColor="WhiteSmoke" 
+                                                          IsLegendVisible="True"
+                                                          Background="Transparent"
+                                                          PlotAreaBackground="Transparent">
+                        <oxy:Plot.Axes>
+                            <oxy:LinearAxis Title="ФИЗИЧЕСКАЯ ВЕЛИЧИНА"                                                    
+                                                                            Position="Left"
+                                                                            MajorGridlineColor="WhiteSmoke"
+                                                                            MajorGridlineStyle="Dot"/>
+                            <oxy:LinearAxis Title="ОСЛАБЛЕНИЕ"
+                                                                             MajorGridlineColor="WhiteSmoke"
+                                                                            MajorGridlineStyle="Dot"
+                                                                            Position="Bottom"/>
+                        </oxy:Plot.Axes>
+                        <oxy:LineSeries    ItemsSource="{Binding MeasuredPointsCollection}"
+                                                                       DataFieldX="X" DataFieldY="Y"
+                                                                       Title="Измереннные точки"
+                                                                       Color="Red"/>
+                        <oxy:LineSeries    ItemsSource="{Binding CalculatedMeasCollection}"
+                                                                       DataFieldX="X" DataFieldY="Y"
+                                                                       Title="Кривая по полиному"
+                                                                       Color="Blue"/>
+
+                    </oxy:Plot>
+                </Border>
+
+            </Grid>
+        </Popup>
+        <!--#endregion-->
         <!--#endregion-->
     </Grid>
 </UserControl>

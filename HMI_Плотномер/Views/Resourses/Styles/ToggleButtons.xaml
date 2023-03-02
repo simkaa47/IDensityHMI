@@ -3,4 +3,37 @@
     <Style TargetType="ToggleButton" x:Key="NoStyle">
         
     </Style>
+    <Style TargetType="ToggleButton" x:Key="ToggleButtonLikeButton">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border CornerRadius="4" Name="Border"                            
+                             Background="Transparent"
+                             Height="{TemplateBinding Height}"                            
+                             Width="{TemplateBinding Width}"
+                             BorderThickness="2"                            
+                             BorderBrush="#33FFFFFF">
+                        <Grid>
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                          VerticalAlignment="Center"  
+                                          Margin="5"     
+                                          HorizontalAlignment="Center"/>
+                            <!--<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True" >
+                            <Trigger.Setters>
+                                <Setter Property="Background" TargetName="Border" Value="#16FFFFFF"/>
+                                <Setter Property="BorderBrush" TargetName="Border" Value="Aqua"/>
+                            </Trigger.Setters>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

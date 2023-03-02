@@ -9,12 +9,12 @@
                              Background="Transparent"
                              Height="{TemplateBinding Height}"                            
                              Width="{TemplateBinding Width}"
-                             BorderThickness="2"
+                             BorderThickness="2"                            
                              BorderBrush="#33FFFFFF">
                         <Grid>
                             <ContentPresenter Content="{TemplateBinding Content}"
                                           VerticalAlignment="Center"  
-                                               
+                                          Margin="5"     
                                           HorizontalAlignment="Center"/>
                             <!--<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"
                                    VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
