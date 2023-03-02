@@ -1,8 +1,10 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.Settings;
 using IDensity.ViewModels.Commands;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -37,6 +39,23 @@ namespace IDensity.ViewModels
             set => Set(ref _selectedStandartisation, value);
         }
         #endregion
+
+
+        #region Selected Temp Compensation index
+        /// <summary>
+        /// Selected Temp Compensation index
+        /// </summary>
+        private int _tempCompensationIndex;
+        /// <summary>
+        /// Selected Temp Compensation index
+        /// </summary>
+        public int TempCompensationIndex
+        {
+            get => _tempCompensationIndex;
+            set => Set(ref _tempCompensationIndex, value);
+        }
+        #endregion
+
 
         #region Выбраннный процесс
         /// <summary>
@@ -184,23 +203,58 @@ namespace IDensity.ViewModels
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.PipeDiameter)));
         #endregion
 
-        #region Записать настройки компенсации температуры
-        RelayCommand _writeTempCompensationCommand;
-        public RelayCommand WriteTempCompensationCommand => _writeTempCompensationCommand ?? (_writeTempCompensationCommand = new RelayCommand(exec =>
+
+        #region Write temperature compensation
+        /// <summary>
+        /// Write temperature compensation
+        /// </summary>
+        RelayCommand _tempCompensationActivityWriteCommand;
+        /// <summary>
+        /// Write temperature compensation
+        /// </summary>
+        public RelayCommand TempCompensationActivityWriteCommand => _tempCompensationActivityWriteCommand ?? (_tempCompensationActivityWriteCommand = new RelayCommand(execPar => 
         {
-            if (!(exec is int index)) return;
-            if (SelectedProcess is null) return;
-            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},comp_temp={index},{(SelectedProcess.TempCompensations[index].Activity.WriteValue ? 1 : 0)},0");
-            foreach (var coeff in SelectedProcess.TempCompensations[index].Coeffs)
+            if (SelectedProcess is null || TempCompensationIndex < 0) return;
+            var par = SelectedProcess.TempCompensations[TempCompensationIndex].Activity;
+            if (par.ValidationOk) WriteTempCompensation("activity", par);
+
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
+        #region Write temp comp coeff
+        /// <summary>
+        /// Write temp comp coeff
+        /// </summary>
+        RelayCommand _tempCompensationCoeffCommand;
+        /// <summary>
+        /// Write temp comp coeff
+        /// </summary>
+        public RelayCommand TempCompensationCoeffCommand => _tempCompensationCoeffCommand ?? (_tempCompensationCoeffCommand = new RelayCommand(execPar => 
+        {
+            if (SelectedProcess is null || TempCompensationIndex < 0) return;
+            if (execPar is null) return;
+            int i = 0;
+            if (!int.TryParse(execPar.ToString(), out i)) return;
+            var par = SelectedProcess.TempCompensations[TempCompensationIndex].Coeffs[i];
+            if (par.ValidationOk) WriteTempCompensation("activity", par);
+        }, canExecPar => true));
+        #endregion
+
+
+        void WriteTempCompensation<T>(string id, Parameter<T> par) where T : IComparable
+        {
+            var proc = SelectedProcess;
+            string cmd = ($"*SETT,meas_proc={proc.Num}," +
+                $"comp_temp={TempCompensationIndex}," +
+                $"{((id=="activity" ? proc.TempCompensations[TempCompensationIndex].Activity.WriteValue : proc.TempCompensations[TempCompensationIndex].Activity.Value) ? 1 : 0)},0");
+            var coeffs = SelectedProcess.TempCompensations[TempCompensationIndex].Coeffs;
+            for (int i = 0; i < coeffs.Count; i++)
             {
-                cmd += $",{coeff.WriteValue.ToStringPoint()}";
+                cmd += $",{(id == i.ToString() ? coeffs[i].WriteValue : coeffs[i].Value).ToStringPoint()}";
             }
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
-
-
-        }, canExec => VM.mainModel.Connecting.Value));
-        #endregion
+        }        
 
         #region Записать-кты ослабления
         RelayCommand _writeAttenuationCommand;

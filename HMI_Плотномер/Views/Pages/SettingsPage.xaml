@@ -18,6 +18,7 @@
             <mp:CalibrationCurve/>
             <mp:Calibration/>
             <mp:DensitySettings/>
+            <mp:CompensationsSettings/>
         </x:Array>
         <x:Array Type="sys:String" x:Key="MeasProcTabIcons">
             <sys:String>..\Resourses\Pictures\ArrDowm.png</sys:String>
