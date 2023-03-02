@@ -13,7 +13,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Common}">
+                
+            </Style>
             <Style TargetType="DockPanel">
                 <Setter Property="MinHeight" Value="50"/>
             </Style>
@@ -191,14 +193,18 @@
                                     <DataGridTemplateColumn Header="СТЕПЕНЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Deg}" Margin="10"/>
+                                                <TextBlock Text="{Binding Deg}" Margin="10"
+                                                           Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver,
+                                                Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Header="ВЕЛИЧИНА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Coeff}" Margin="10"/>
+                                                <TextBlock Text="{Binding Coeff}" Margin="10"
+                                                           Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver,
+                                                Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -285,11 +291,11 @@
                                                                             MajorGridlineStyle="Dot"
                                                                             Position="Bottom"/>
                         </oxy:Plot.Axes>
-                        <oxy:LineSeries    ItemsSource="{Binding MeasuredPointsCollection}"
+                        <oxy:LineSeries    ItemsSource="{Binding CalibrationVm.MeasuredPointsCollection}"
                                                                        DataFieldX="X" DataFieldY="Y"
                                                                        Title="Измереннные точки"
                                                                        Color="Red"/>
-                        <oxy:LineSeries    ItemsSource="{Binding CalculatedMeasCollection}"
+                        <oxy:LineSeries    ItemsSource="{Binding CalibrationVm.CalculatedMeasCollection}"
                                                                        DataFieldX="X" DataFieldY="Y"
                                                                        Title="Кривая по полиному"
                                                                        Color="Blue"/>

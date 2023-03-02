@@ -236,6 +236,7 @@ namespace IDensity.ViewModels
             for (int i = 0; i < 6; i++)
             {
                 arg += "," + (i < CalculatedCoeefs.Count ? ((float)CalculatedCoeefs[i].Coeff).ToStringPoint() : "0");
+                proc.CalibrCurve.Coeffs[i].IsWriting = true;
             }
             arg += "#";
             _vM.CommService.Tcp.WriteMeasProcSettings(arg, proc.Num);
