@@ -19,12 +19,14 @@
             <GroupBox Header="Плотность жидкого"
                       FontSize="20"
                       BorderThickness="0">
-                <p:TextParameter DataContext="{Binding SelectedProcess.DensityLiqD1.PhysValue}"/>
+                <p:TextParameter DataContext="{Binding SelectedProcess.DensityLiqD1.PhysValue}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DensityLiqSettingsCommand}"/>
             </GroupBox>
             <GroupBox Header="Плотность твердого"
                       FontSize="20"
                       BorderThickness="0">
-                <p:TextParameter DataContext="{Binding SelectedProcess.DensitySolD2.PhysValue}"/>
+                <p:TextParameter DataContext="{Binding SelectedProcess.DensitySolD2.PhysValue}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DensitySolidSettingsCommand}"/>
             </GroupBox>
         </ListBox>      
     </Grid>

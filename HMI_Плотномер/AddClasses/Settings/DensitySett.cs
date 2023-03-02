@@ -11,13 +11,7 @@ namespace IDensity.AddClasses.Settings
     /// </summary>
     [DataContract]
     public class DensitySett:PropertyChangedBase
-    {
-        #region Команда записи
-        
-        private RelayCommand _outMeasNumWriteCommand;
-
-        public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnWriteExecuted(), o => true));
-        #endregion
+    {        
         #region Физическая величина
         /// <summary>
         /// Физическая величина

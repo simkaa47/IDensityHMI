@@ -117,7 +117,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},type={SelectedProcess.MeasType.WriteValue}#";
             SelectedProcess.MeasType.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => true));
+        }, canExecPar => SelectedProcess.MeasType.ValidationOk));
         #endregion
 
         #region Write Activity Command
@@ -148,7 +148,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},fast_chg={(fast.Activity.WriteValue ? 1 : 0)},{fast.Threshold.Value}#";
             fast.Activity.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);            
-        }, canExecPar => true));
+        }, canExecPar => SelectedProcess.FastChange.Activity.ValidationOk));
         #endregion
 
         #region Write Fast Change Settings Command
@@ -294,7 +294,7 @@ namespace IDensity.ViewModels
             int i = 0;
             if (!int.TryParse(execPar.ToString(), out i)) return;
             WriteCalibrCurveData(i.ToString(), SelectedProcess.CalibrCurve.Coeffs[i]);
-        }, canExecPar => VM.mainModel.Connecting.Value || SelectedProcess != null));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedProcess != null));
         #endregion
 
         #region Write density liq settings
@@ -311,7 +311,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={proc.Num},dens_liq=0,{proc.DensityLiqD1.PhysValue.WriteValue}#";
             proc.DensityLiqD1.PhysValue.IsWriting = true; ;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => VM.mainModel.Connecting.Value || SelectedProcess != null));
+        }, canExecPar => GetCommandCondition(SelectedProcess.DensityLiqD1.PhysValue)));
         #endregion
 
         #region Write density solid settings
@@ -328,7 +328,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={proc.Num},dens_solid=0,{proc.DensitySolD2.PhysValue.WriteValue}#";
             proc.DensitySolD2.PhysValue.IsWriting = true; ;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => true));
+        }, canExecPar => GetCommandCondition(SelectedProcess.DensitySolD2.PhysValue)));
         #endregion
 
 
@@ -349,7 +349,7 @@ namespace IDensity.ViewModels
 
         private bool GetCommandCondition<T>(Parameter<T> par) where T:IComparable
         {
-            return VM.mainModel.Connecting.Value || SelectedProcess != null || par.ValidationOk;
+            return VM.mainModel.Connecting.Value && SelectedProcess != null && par.ValidationOk;
         }
 
 
