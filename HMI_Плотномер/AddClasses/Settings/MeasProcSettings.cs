@@ -16,10 +16,7 @@ namespace IDensity.AddClasses.Settings
     {
         public MeasProcSettings(int num)
         {
-            Num = (ushort)num; 
-            // Действия по изменению настроек плотности
-            DensityLiqD1.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
-            DensitySolD2.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
+            Num = (ushort)num;            
             // Действия по изменению настроек компенсаций            
             SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");            
         }

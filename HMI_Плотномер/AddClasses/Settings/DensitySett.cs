@@ -24,21 +24,7 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         [DataMember]
         public Parameter<float> PhysValue { get; set; } = new Parameter<float>("DensitySettValue", "Физическая величина", float.MinValue, float.MaxValue, 0, "");
-        #endregion
-
-        public DensitySett()
-        {
-            //Подписка на изменение свойств            
-            PhysValue.CommandEcecutedEvent += (o) => OnWriteExecuted();
-        }
-        void OnWriteExecuted()
-        {
-            NeedWriteEvent?.Invoke($"0,{PhysValue.WriteValue.ToStringPoint()}");
-        }
-        /// <summary>
-        /// Необходимо записать настройки стандартизаций
-        /// </summary>
-        public event Action<string> NeedWriteEvent;
+        #endregion        
         
     }
 }

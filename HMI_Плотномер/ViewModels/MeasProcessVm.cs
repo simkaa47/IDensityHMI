@@ -3,6 +3,7 @@ using IDensity.AddClasses.Settings;
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace IDensity.ViewModels
@@ -295,6 +296,41 @@ namespace IDensity.ViewModels
             WriteCalibrCurveData(i.ToString(), SelectedProcess.CalibrCurve.Coeffs[i]);
         }, canExecPar => VM.mainModel.Connecting.Value || SelectedProcess != null));
         #endregion
+
+        #region Write density liq settings
+        /// <summary>
+        /// Write density liq settings
+        /// </summary>
+        RelayCommand _densityLiqSettingsCommand;
+        /// <summary>
+        /// Write density liq settings
+        /// </summary>
+        public RelayCommand DensityLiqSettingsCommand => _densityLiqSettingsCommand ?? (_densityLiqSettingsCommand = new RelayCommand(execPar => 
+        {
+            var proc = SelectedProcess;
+            var str = $"*SETT,meas_proc={proc.Num},dens_liq=0,{proc.DensityLiqD1.PhysValue.WriteValue}#";
+            proc.DensityLiqD1.PhysValue.IsWriting = true; ;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => VM.mainModel.Connecting.Value || SelectedProcess != null));
+        #endregion
+
+        #region Write density solid settings
+        /// <summary>
+        /// Write density solid settings
+        /// </summary>
+        RelayCommand _densitySolidSettingsCommand;
+        /// <summary>
+        /// Write density solid settings
+        /// </summary>
+        public RelayCommand DensitySolidSettingsCommand => _densitySolidSettingsCommand ?? (_densitySolidSettingsCommand = new RelayCommand(execPar => 
+        {
+            var proc = SelectedProcess;
+            var str = $"*SETT,meas_proc={proc.Num},dens_solid=0,{proc.DensitySolD2.PhysValue.WriteValue}#";
+            proc.DensitySolD2.PhysValue.IsWriting = true; ;
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => true));
+        #endregion
+
 
         private void WriteCalibrCurveData<T>(string key, Parameter<T> par) where T : IComparable
         {
