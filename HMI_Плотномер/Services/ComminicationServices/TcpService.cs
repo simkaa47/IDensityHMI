@@ -568,11 +568,7 @@ namespace IDensity.Services.ComminicationServices
             if (list == null) return;
             _model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
             list = GetNumber("adc_single_meas_time", 1, 1, str);
-            if (list == null) return;
-            foreach (var mp in _model.MeasProcSettings)
-            {
-                mp.SingleMeasTime.Value = (ushort)list[0][0];
-            }
+            if (list == null) return;           
             _model.SettingsReaded = true;
         }
         #endregion                

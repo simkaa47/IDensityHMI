@@ -11,9 +11,15 @@
                              Width="{TemplateBinding Width}"
                              BorderThickness="2"
                              BorderBrush="#33FFFFFF">
-
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"
-                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Grid>
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                          VerticalAlignment="Center"  
+                                               
+                                          HorizontalAlignment="Center"/>
+                            <!--<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+                        </Grid>
+                       
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True" >

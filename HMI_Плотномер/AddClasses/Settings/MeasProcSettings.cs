@@ -16,37 +16,12 @@ namespace IDensity.AddClasses.Settings
     {
         public MeasProcSettings(int num)
         {
-            Num = (ushort)num;            
-            // Подписка на события настроек данных еденичных измерений
-            foreach (var src in SingleMeasResults)
-            {
-                src.NeedWriteEvent += (arg, i) =>
-                {
-                    var str = "calib_src=";
-                    for (int j = 0; j < SingleMeasResCount; j++)
-                    {
-                        if (j != i) str += $"{SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{SingleMeasResults[j].Weak.Value.ToStringPoint()},{SingleMeasResults[j].CounterValue.Value.ToStringPoint()}";
-                        else str += arg;
-                        if (j < SingleMeasResCount - 1) str += ",";
-                    }
-                    OnWriteCommandExecuted(str);
-                };
-            }                      
+            Num = (ushort)num; 
             // Действия по изменению настроек плотности
             DensityLiqD1.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_liq={s}");
             DensitySolD2.NeedWriteEvent += (s) => OnWriteCommandExecuted($"dens_solid={s}");
             // Действия по изменению настроек компенсаций            
-            SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");
-            // Настройка таймера
-            singleMeasTimer.Elapsed += (o, e) =>
-            {
-                if (--SingleMeasTimeLeft <= 0)
-                {
-                    singleMeasTimer?.Stop();
-                    SingleMeasFlag = false;
-                    SingleMeasEventFinishedEvent?.Invoke(Num);
-                }
-            };
+            SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");            
         }
         #region Константы
         #region Количество стандартизаций
@@ -174,208 +149,7 @@ namespace IDensity.AddClasses.Settings
         #region К-ты расчета обьема
         [DataMember]
         public List<Parameter<float>> VolumeCoeefs { get; set; } = Enumerable.Range(0, 4).Select(i => new Parameter<float>($"VolumeCoeff{i}", $"К-т расчета обьема {i}", float.MinValue, float.MaxValue, 0, "")).ToList();
-        #endregion
-
-        #region Настройки единичного измерения
-        #region ID ЕИ
-        private string _measUnitMemoryId = "SingleMeasMemoryId";
-        public string MeasUnitMemoryId
-        {
-            get => _measUnitMemoryId;
-            set => Set(ref _measUnitMemoryId, value);
-        }
-        #endregion
-
-        Timer singleMeasTimer = new Timer();
-        #region Время единичного измерния
-        [DataMember]
-        public Parameter<ushort> SingleMeasTime { get; set; } = new Parameter<ushort>("SingleMeasTime", "Время еденичного измерения, c.", 1, ushort.MaxValue, 0, "");
-        #endregion
-
-        #region Осталось времени еденичного измерения
-        private int _singleMeasTimeLeft;
-
-        public int SingleMeasTimeLeft
-        {
-            get { return _singleMeasTimeLeft; }
-            set { Set(ref _singleMeasTimeLeft, value); }
-        }
-
-        #endregion
-
-        #region Степень полинома
-        private int _singleMeasDeg = 1;
-        [DataMember]
-        public int SingleMeasDeg
-        {
-            get { return _singleMeasDeg; }
-            set
-            {
-                CalibrationService.PolDegree = value;
-                Set(ref _singleMeasDeg, CalibrationService.PolDegree);
-            }
-        }
-        #endregion
-
-        #region ФВ
-        private float _singleMeasPhysValue;
-
-        public float SingleMeasPhysValue
-        {
-            get { return _singleMeasPhysValue; }
-            set { Set(ref _singleMeasPhysValue, value); }
-        }
-        #endregion
-
-        #region Флаг измерения
-        private bool _singleMeasFlag;
-
-        public bool SingleMeasFlag
-        {
-            get { return _singleMeasFlag; }
-            set { Set(ref _singleMeasFlag, value); }
-        }
-
-        #endregion
-
-        #region Команда - произвести еденичное измерение
-        private RelayCommand _singleMeasCommand;
-
-        public RelayCommand SingleMeasCommand
-        {
-            get
-            {
-                return _singleMeasCommand ?? (_singleMeasCommand = new RelayCommand(par =>
-                {
-                    if (!SingleMeasFlag)
-                    {
-                        NeedMakeSingleMeasEvent?.Invoke(SingleMeasTime.Value, Num, SingleMeasIndex);
-                        singleMeasTimer.Interval = 1000;
-                        singleMeasTimer.Start();
-                        SingleMeasFlag = true;
-                        SingleMeasTimeLeft = SingleMeasTime.Value / 10 + 4;
-                    }
-
-                }, can => IsActive.Value));
-            }
-        }
-
-        #endregion
-
-        #region Выбранная ячейка для записи
-        private byte _singleMeasIndex;
-
-        public byte SingleMeasIndex
-        {
-            get { return _singleMeasIndex; }
-            set { Set(ref _singleMeasIndex, value); }
-        }
-        #endregion
-
-
-
-        #endregion
-
-        #region Расчет к-тов полинома
-        RelayCommand _calculatePolinomCommand;
-        public RelayCommand CalculatePolinomCommand => _calculatePolinomCommand ?? (_calculatePolinomCommand = new RelayCommand(par =>
-        {
-            try
-            {
-                var measPoints = SingleMeasResults.Where(smr => smr.Selected)
-                                 .Select(smr => new Point(smr.Weak.Value, smr.CounterValue.Value))
-                                 .ToList();
-                if (measPoints.Count > 0)
-                {
-                    CalculatedCoeefs.Clear();
-                    var result = CalibrationService.GetCoeffs(measPoints);
-                    for (int i = 0; i < result.Count; i++)
-                    {
-                        CalculatedCoeefs.Add((new CalibrationCoeff(i, result[i])));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message);
-            }
-
-        }, o => true));
-
-        public ObservableCollection<CalibrationCoeff> CalculatedCoeefs { get; } = new ObservableCollection<CalibrationCoeff>();
-
-        #endregion
-
-        #region Команда посчитать график для проверки полинома
-        RelayCommand _showPolinomTrend;
-        public RelayCommand ShowPolinomTrendCommand => _showPolinomTrend ?? (_showPolinomTrend = new RelayCommand(par =>
-        {
-            var measList = SingleMeasResults.Where(sm => sm.Selected).
-            OrderBy(sm => sm.Weak.Value).Select(sm => new Point(sm.Weak.Value, sm.CounterValue.Value)).ToList();
-            if (measList.Count >= 2)
-            {
-                var startWeak = measList[0].X;
-                var finishWeak = measList[measList.Count - 1].X;
-                if (startWeak != finishWeak)
-                {
-                    int cnt = 50;
-                    double diff = (finishWeak - startWeak) / cnt;
-                    var calcList = Enumerable.Range(0, cnt).
-                    Select(i => new Point(startWeak + i * diff, GetPhysvalueByWeak(startWeak + i * diff))).ToList();
-                    MeasuredPointsCollection = measList;
-                    CalculatedMeasCollection = calcList;
-                }
-            }
-        }, canExecPar => true));
-
-        double GetPhysvalueByWeak(double weak)
-        {
-            double result = 0;
-            for (int i = 0; i < CalculatedCoeefs.Count; i++)
-            {
-                result += (Math.Pow(weak, i) * CalculatedCoeefs[i].Coeff);
-            }
-            return result;
-        }
-
-        #region Коллекция измеренных значений для тренда
-        private List<Point> _measuredPointsCollection;
-
-        public List<Point> MeasuredPointsCollection
-        {
-            get { return _measuredPointsCollection; }
-            set { Set(ref _measuredPointsCollection, value); }
-        }
-        #endregion
-
-        #region Коллекция рассичтанных значений для тренда
-        private List<Point> _сalculatedMeasCollection;
-
-        public List<Point> CalculatedMeasCollection
-        {
-            get { return _сalculatedMeasCollection; }
-            set { Set(ref _сalculatedMeasCollection, value); }
-        }
-        #endregion
-
-
-        #endregion
-
-        #region КОманда записать рассчитанные к-ты в память
-        private RelayCommand _writeCalibrCoeefsCommand;
-
-        public RelayCommand WriteCalibrCoeefsCommand => _writeCalibrCoeefsCommand ?? (_writeCalibrCoeefsCommand = new RelayCommand(par =>
-        {
-            var arg = $"calib_curve={CalibrCurve.Type.Value},0";
-            for (int i = 0; i < 6; i++)
-            {
-                arg += "," + (i < CalculatedCoeefs.Count ? ((float)CalculatedCoeefs[i].Coeff).ToStringPoint() : "0");
-            }
-            OnWriteCommandExecuted(arg);
-
-        }, o => true));
-
-        #endregion 
+        #endregion               
 
         void OnWriteCommandExecuted(string argument)
         {
@@ -384,23 +158,12 @@ namespace IDensity.AddClasses.Settings
         /// <summary>
         /// Необходимо записать настройки измерительных процессов
         /// </summary>
-        public event Action<string, ushort> NeedWriteEvent;        
-
-        /// <summary>
-        /// Необходимо произвести еденичное измерение
-        /// </summary>
-        public event Action<int, ushort, ushort> NeedMakeSingleMeasEvent;
-
-        /// <summary>
-        /// Закончилось ЕИ
-        /// </summary>
-        public event Action<ushort> SingleMeasEventFinishedEvent;
+        public event Action<string, ushort> NeedWriteEvent;  
 
         #region Тип расчета
         [DataMember]
         public Parameter<ushort> CalculationType { get; set; } = new Parameter<ushort>("CalculationType", "Тип расчета", 0, 3, 0, "");
-        #endregion
-        
+        #endregion        
 
     }
 }

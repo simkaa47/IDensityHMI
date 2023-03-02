@@ -87,7 +87,7 @@
                               Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                               VerticalContentAlignment="Center"
                               FontSize="16"
-                              
+                              Height="{Binding ElementName=Border, Path=Height}"
                               HorizontalContentAlignment="Center"
                               Background="Transparent"
                               HorizontalAlignment="Right">

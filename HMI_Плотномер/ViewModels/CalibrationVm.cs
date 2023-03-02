@@ -49,7 +49,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Single Meas Time
         /// </summary>
-        private int _singleMeasTime = 30;
+        private int _singleMeasTime = 300;
 		/// <summary>
 		/// Single Meas Time
 		/// </summary>
