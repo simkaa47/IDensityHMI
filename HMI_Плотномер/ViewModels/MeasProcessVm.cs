@@ -236,7 +236,7 @@ namespace IDensity.ViewModels
             int i = 0;
             if (!int.TryParse(execPar.ToString(), out i)) return;
             var par = SelectedProcess.TempCompensations[TempCompensationIndex].Coeffs[i];
-            if (par.ValidationOk) WriteTempCompensation("activity", par);
+            if (par.ValidationOk) WriteTempCompensation(i.ToString(), par);
         }, canExecPar => true));
         #endregion
 
@@ -252,6 +252,7 @@ namespace IDensity.ViewModels
             {
                 cmd += $",{(id == i.ToString() ? coeffs[i].WriteValue : coeffs[i].Value).ToStringPoint()}";
             }
+            par.IsWriting = true;
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
         }        

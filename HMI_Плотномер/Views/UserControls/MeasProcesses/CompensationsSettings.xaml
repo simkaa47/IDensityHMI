@@ -66,7 +66,7 @@
                         <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ 0" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <p:CheckParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[0]}"
+                                    <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[0]}"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationCoeffCommand}"
                                                       CommanDParameter="0"
                                                       HorizontalAlignment="Center"
@@ -80,7 +80,7 @@
                         <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ 1"  HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <p:CheckParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[1]}"
+                                    <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[1]}"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationCoeffCommand}"
                                                       CommanDParameter="1"
                                                       HorizontalAlignment="Center"
