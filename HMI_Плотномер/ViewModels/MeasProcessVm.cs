@@ -69,7 +69,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},cntr={SelectedProcess.MeasProcCounterNum.WriteValue}#";
             SelectedProcess.MeasProcCounterNum.IsWriting= true;
             VM.CommService.Tcp.WriteMeasProcSettings(str , SelectedProcess.Num);
-        }, canExecPar => SelectedProcess.MeasProcCounterNum.ValidationOk));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasProcCounterNum)));
         #endregion
 
         #region WriteMeasDuration
@@ -85,7 +85,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},duration={SelectedProcess.MeasDuration.WriteValue*10}#";
             SelectedProcess.MeasDuration.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => SelectedProcess.MeasDuration.ValidationOk));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasDuration)));
         #endregion
 
         #region Write Meas Deep
@@ -101,7 +101,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},aver_depth={SelectedProcess.MeasDeep.WriteValue}#";
             SelectedProcess.MeasDeep.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => SelectedProcess.MeasDeep.ValidationOk));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasDeep)));
         #endregion
 
         #region Change type of measure
@@ -117,7 +117,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},type={SelectedProcess.MeasType.WriteValue}#";
             SelectedProcess.MeasType.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => SelectedProcess.MeasType.ValidationOk));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasType)));
         #endregion
 
         #region Write Activity Command
@@ -131,7 +131,7 @@ namespace IDensity.ViewModels
         public RelayCommand WriteActivityCommand => _writeActivityCommand ?? (_writeActivityCommand = new RelayCommand(execPar => 
         {
             VM.CommService.SetMeasProcActivity();
-        }, canExecPar => VM.mainModel.Connecting.Value));
+        }, canExecPar => SelectedProcess != null && VM.mainModel.Connecting.Value));
         #endregion
 
         #region Write Fast Change Settings Command
@@ -148,7 +148,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},fast_chg={(fast.Activity.WriteValue ? 1 : 0)},{fast.Threshold.Value}#";
             fast.Activity.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);            
-        }, canExecPar => SelectedProcess.FastChange.Activity.ValidationOk));
+        }, canExecPar => SelectedProcess!= null && GetCommandCondition(SelectedProcess.FastChange.Activity)));
         #endregion
 
         #region Write Fast Change Settings Command
@@ -165,7 +165,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},fast_chg={(fast.Activity.Value ? 1 : 0)},{fast.Threshold.WriteValue}#";
             fast.Threshold.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => SelectedProcess.FastChange.Threshold.ValidationOk));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.FastChange.Threshold)));
         #endregion
 
         #region WritePipeDiameter
@@ -181,7 +181,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={SelectedProcess.Num},pipe_diam={(ushort)(SelectedProcess.PipeDiameter.WriteValue * 10)}#";
             SelectedProcess.PipeDiameter.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => SelectedProcess.PipeDiameter.ValidationOk));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.PipeDiameter)));
         #endregion
 
         #region Записать настройки компенсации температуры
@@ -230,7 +230,7 @@ namespace IDensity.ViewModels
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
             SelectedProcess.CalculationType.IsWriting = true;
 
-        }, canExec => VM.mainModel.Connecting.Value));
+        }, canExec => SelectedProcess != null && GetCommandCondition(SelectedProcess.CalculationType)));
         #endregion
 
         #region Записать к-ты расчета обьема
@@ -250,7 +250,7 @@ namespace IDensity.ViewModels
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
 
-        }, canExec => VM.mainModel.Connecting.Value));
+        }, canExec => SelectedProcess != null && VM.mainModel.Connecting.Value));
         #endregion
 
         #region Write calibration result
@@ -264,7 +264,7 @@ namespace IDensity.ViewModels
         public RelayCommand CalibrResultWriteCommand => _calibrResultWriteCommand ?? (_calibrResultWriteCommand = new RelayCommand(execPar => 
         {
             WriteCalibrCurveData("result", SelectedProcess.CalibrCurve.Result);
-        }, canExecPar => GetCommandCondition(SelectedProcess.CalibrCurve.Result)));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.CalibrCurve.Result)));
         #endregion
 
         #region Write calibration type
@@ -278,7 +278,7 @@ namespace IDensity.ViewModels
         public RelayCommand CalibrTypeWriteCommand => _calibrTypeWriteCommand ?? (_calibrTypeWriteCommand = new RelayCommand(execPar => 
         {
             WriteCalibrCurveData("type", SelectedProcess.CalibrCurve.Type);
-        }, canExecPar => GetCommandCondition(SelectedProcess.CalibrCurve.Type)));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.CalibrCurve.Type)));
         #endregion
 
         #region Write calibration coeff
@@ -311,7 +311,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={proc.Num},dens_liq=0,{proc.DensityLiqD1.PhysValue.WriteValue}#";
             proc.DensityLiqD1.PhysValue.IsWriting = true; ;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => GetCommandCondition(SelectedProcess.DensityLiqD1.PhysValue)));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.DensityLiqD1.PhysValue)));
         #endregion
 
         #region Write density solid settings
@@ -328,7 +328,7 @@ namespace IDensity.ViewModels
             var str = $"*SETT,meas_proc={proc.Num},dens_solid=0,{proc.DensitySolD2.PhysValue.WriteValue}#";
             proc.DensitySolD2.PhysValue.IsWriting = true; ;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
-        }, canExecPar => GetCommandCondition(SelectedProcess.DensitySolD2.PhysValue)));
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.DensitySolD2.PhysValue)));
         #endregion
 
 
