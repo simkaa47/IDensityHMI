@@ -55,15 +55,19 @@
                              Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteFastChangeThresholdCommand}"/>
             <!--#endregion-->
             <!--#region Pipe diameter -->
-            <p:TextParameter DataContext="{Binding SelectedProcess.PipeDiameter}"
-                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WritePipeDiameterCommand}">
-                <p:TextParameter.Visibility>
+            <ListBoxItem>
+                <ListBoxItem.Visibility>
                     <MultiBinding Converter="{StaticResource PipeDiameterVisibilityConverter}">
                         <Binding Path="Value"/>
                         <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.CurUser"/>
                     </MultiBinding>
-                </p:TextParameter.Visibility>
-            </p:TextParameter>
+                </ListBoxItem.Visibility>
+                <p:TextParameter DataContext="{Binding SelectedProcess.PipeDiameter}"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WritePipeDiameterCommand}">
+
+                </p:TextParameter>
+            </ListBoxItem>
+            
             <!--#endregion-->
             <!--#region Meas Proc Activity -->
             <p:CheckParameter DataContext="{Binding SelectedProcess.IsActive}"
@@ -78,19 +82,20 @@
                                   Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
             <!--#endregion-->
             <!--#region Volume Coeefs -->
-            <GroupBox Style="{StaticResource GroupBoxTrendStyle}"
-                      Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
-                <GroupBox.Header>
-                    <TextBlock Text="Коэффициенты обьема" Style="{StaticResource Common}"/>
-                </GroupBox.Header>
-                <ListBox HorizontalContentAlignment="Stretch">
-                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[0]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
-                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[1]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
-                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[2]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
-                    <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[3]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
-                </ListBox>
-            </GroupBox>
-            
+            <ListBoxItem Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
+                <GroupBox Style="{StaticResource GroupBoxTrendStyle}">
+                    <GroupBox.Header>
+                        <TextBlock Text="Коэффициенты обьема" Style="{StaticResource Common}"/>
+                    </GroupBox.Header>
+                    <ListBox HorizontalContentAlignment="Stretch" Background="Transparent" ItemContainerStyle="{StaticResource   ParameterListBoxItem}"
+                             BorderThickness="0">
+                        <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[0]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                        <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[1]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                        <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[2]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                        <p:TextParameter DataContext="{Binding SelectedProcess.VolumeCoeefs[3]}" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteVolumeCoeffsCommand}"/>
+                    </ListBox>
+                </GroupBox>
+            </ListBoxItem>
             <!--#endregion-->
             <!--#region Calculation type -->
             <p:CompoBoxParameter DataContext="{Binding SelectedProcess.CalculationType}"

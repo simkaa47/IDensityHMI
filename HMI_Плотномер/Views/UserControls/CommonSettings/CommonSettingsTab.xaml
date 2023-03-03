@@ -58,7 +58,8 @@
                                     <DataTemplate>
                                         <p:TextParameter DescriptionNotVisible="True"
                                                          DataContext="{Binding Speed}"
-                                                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSettingsCommand}"
+                                                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSpeedCommand}"
+                                                         CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"
                                                          HorizontalAlignment="Center"
                                                          Margin="10"/>
                                     </DataTemplate>
@@ -71,7 +72,8 @@
                                     <DataTemplate>
                                         <p:TextParameter DescriptionNotVisible="True"
                                                          DataContext="{Binding Smooth}"
-                                                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSettingsCommand}"
+                                                         CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"
+                                                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSmoothCommand}"
                                                          HorizontalAlignment="Center"
                                                          Margin="10"/>
                                     </DataTemplate>
@@ -84,7 +86,7 @@
             </GroupBox>
             <!--#endregion-->
             <!--#region Get temperature settings -->
-            <GroupBox Header="Настройки фильтра Калмана"
+            <GroupBox Header="Настройки получения температуры"
                       BorderThickness="0"
                       DataContext="{Binding VM.mainModel.GetTemperature}"
                       Margin="0,20,0,20"
@@ -211,16 +213,16 @@
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceExpirationDateCommand}"/>
             <!--#endregion-->
             <!--#region Serial number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}" Command="{Binding Command}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}"/>
             <!--#endregion-->
             <!--#region Order number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}" Command="{Binding Command}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}"/>
             <!--#endregion-->
             <!--#region FW version -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}" Command="{Binding Command}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}"/>
             <!--#endregion-->
             <!--#region Customer number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}" Command="{Binding Command}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}"/>
             <!--#endregion-->
             <!--#region Software shecksum SV -->
             <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">

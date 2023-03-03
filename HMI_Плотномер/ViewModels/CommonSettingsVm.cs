@@ -120,7 +120,7 @@ namespace IDensity.ViewModels
         /// Записать настройки периода полураспада
         /// </summary>
         public RelayCommand WriteHalfLifeCommand => _writeHalfLifeCommand ?? (_writeHalfLifeCommand = new RelayCommand(execPar =>
-        {
+        {            
             WriteHalfLife(VM.mainModel);
         }, canExecPar => true));
         #endregion
@@ -154,17 +154,26 @@ namespace IDensity.ViewModels
         }, canExecPar => true));
         #endregion
 
-        #region Записать настройки калмана
-        private RelayCommand _writeKalmanSettingsCommand;
-        public RelayCommand WriteKalmanSettingsCommand => _writeKalmanSettingsCommand ?? (_writeKalmanSettingsCommand = new RelayCommand(exec =>
+        #region Записать настройки калмана (Speed)
+        private RelayCommand _writeKalmanSpeedCommand;
+        public RelayCommand WriteKalmanSpeedCommand => _writeKalmanSpeedCommand ?? (_writeKalmanSpeedCommand = new RelayCommand(exec =>
+        {
+            if (!(exec is int index)) return;
+            if (index > 1) return;
+            var kalman = VM.mainModel.KalmanSettings[index];           
+            WriteCalmanSettingsById(kalman, "speed", index, kalman.Speed);            
+        }, canExec => VM.mainModel.Connecting.Value));
+        #endregion
+
+        #region Записать настройки калмана (smooth)
+        private RelayCommand _writeKalmanSmoothCommand;
+        public RelayCommand WriteKalmanSmoothCommand => _writeKalmanSmoothCommand ?? (_writeKalmanSmoothCommand = new RelayCommand(exec =>
         {
             if (!(exec is int index)) return;
             if (index > 1) return;
             var kalman = VM.mainModel.KalmanSettings[index];
-            WriteCalmanSettings(kalman, index);            
-        }, canExec => true));
-
-
+            WriteCalmanSettingsById(kalman, "smooth", index, kalman.Smooth);
+        }, canExec => VM.mainModel.Connecting.Value));
         #endregion
 
         #region Записать настройки пересчета температуры
@@ -173,6 +182,8 @@ namespace IDensity.ViewModels
         {
             if (!(exec is int index)) return;
             if (index > 1) return;
+            VM.mainModel.GetTemperature.Coeffs[index].A.IsWriting = true;
+            VM.mainModel.GetTemperature.Coeffs[index].B.IsWriting = true;
             WriteTempRecalculateSettings(VM.mainModel.GetTemperature, index);
         }, canExec => true));
         #endregion
@@ -189,6 +200,7 @@ namespace IDensity.ViewModels
         private RelayCommand _writeDeviceTypeCommand;
         public RelayCommand WriteDeviceTypeCommand => _writeDeviceTypeCommand ?? (_writeDeviceTypeCommand = new RelayCommand(exec =>
         {
+            VM.mainModel.DeviceType.IsWriting = true;
             WriteDeviceType(VM.mainModel.DeviceType.WriteValue);
         }, canExec => true));
         #endregion
@@ -197,6 +209,7 @@ namespace IDensity.ViewModels
         private RelayCommand _writeLevelLengthCommand;
         public RelayCommand WiteLevelLengthCommand => _writeLevelLengthCommand ?? (_writeLevelLengthCommand = new RelayCommand(exec =>
         {
+            VM.mainModel.LevelLength.IsWriting = true;
             WiteLevelLength(VM.mainModel.LevelLength.WriteValue);
         }, canExec => true));
         #endregion
@@ -276,32 +289,51 @@ namespace IDensity.ViewModels
 
         void WriteHalfLife(MainModel model)
         {
+            VM.mainModel.HalfLife.IsWriting = true;
             VM.CommService.WriteCommonSettings($"half_life={model.HalfLife.WriteValue.ToStringPoint()}");
         }
 
         void WriteDeviceName(MainModel model)
         {
+            model.DeviceName.IsWriting = true;
             VM.CommService.WriteCommonSettings($"name={model.DeviceName.WriteValue.Substring(0, Math.Min(model.DeviceName.WriteValue.Length, 10))}");
         }
 
         void WriteIsotope(MainModel model)
         {
-            VM.CommService.WriteCommonSettings($"isotope={model.IsotopName.WriteValue.Substring(0, Math.Min(model.IsotopName.WriteValue.Length, 10))}");
+            model.IsotopName.IsWriting = true;
+            var len = Math.Min(model.IsotopName.WriteValue.Length, 10);
+            VM.CommService.WriteCommonSettings($"isotope={model.IsotopName.WriteValue.Substring(0, len)}");
         }
 
         void WriteSourceInstallDate(MainModel model)
         {
+            model.SourceInstallDate.IsWriting = true;
             VM.CommService.WriteCommonSettings($"src_inst_date={model.SourceInstallDate.WriteValue.ToString("dd:MM:yy")}");
         }
 
         void WriteSourceExpirationDate(MainModel model)
         {
+            model.SourceExpirationDate.IsWriting = true;
             VM.CommService.WriteCommonSettings($"src_exp_date={model.SourceExpirationDate.WriteValue.ToString("dd:MM:yy")}");
         }
 
-        void WriteCalmanSettings(Kalman kalman, int index)
+        void WriteCalmanSettingsById<T>(Kalman kalman, string id, int index, Parameter<T> par) where T: IComparable
         {
-            string arg = $"*SETT,kalman_sett={index},{kalman.Speed.WriteValue.ToStringPoint()},{kalman.Smooth.WriteValue.ToStringPoint()}#";
+            string arg = $"*SETT,kalman_sett={index}," +
+                $"{(id == "speed" ? kalman.Speed.WriteValue : kalman.Speed.Value).ToStringPoint()}," +
+                $"{(id == "smooth" ? kalman.Smooth.WriteValue : kalman.Smooth.Value).ToStringPoint()}#";
+            par.IsWriting = true;
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }
+
+        void WriteCalmanSettings(Kalman kalman,  int index)
+        {
+            string arg = $"*SETT,kalman_sett={index}," +
+                $"{kalman.Speed.WriteValue.ToStringPoint()}," +
+                $"{kalman.Smooth.WriteValue.ToStringPoint()}#";
+            kalman.Smooth.IsWriting = true;
+            kalman.Speed.IsWriting = true;
             VM.CommService.Tcp.SetFsrd8(arg);
         }
 
