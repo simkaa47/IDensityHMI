@@ -846,7 +846,7 @@ namespace IDensity.Services.ComminicationServices
         #region Отправить настройки аналоговых входов
         public void SendAnalogInSwttings(int groupNum, int moduleNum, AnalogInput value)
         {
-            var str = $"*SETT,am_in_sett={groupNum},{value.Activity.Value}#";
+            var str = $"*SETT,am_in_sett={groupNum},{value.Activity.WriteValue}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion        

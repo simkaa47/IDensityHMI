@@ -1,5 +1,6 @@
 ﻿using IDensity.AddClasses;
 using IDensity.Models;
+using IDensity.ViewModels.Commands;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +15,43 @@ namespace IDensity.ViewModels
 
         }
 
+        #region Команды
+
+        #region Switch power
+        /// <summary>
+        /// Switch power
+        /// </summary>
+        RelayCommand _swithPowerCommand;
+        /// <summary>
+        /// Switch power
+        /// </summary>
+        public RelayCommand SwithPowerCommand => _swithPowerCommand ?? (_swithPowerCommand = new RelayCommand(execPar => 
+        {
+            if (!(execPar is AnalogData analog)) return;
+            VM.CommService.SwitchAm(analog.GroupNum, analog.ModulNum, !analog.CommState.Value);
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
+        #region AI switch activity
+        /// <summary>
+        /// AI switch activity
+        /// </summary>
+        RelayCommand _aiSwitchActivityCommand;
+        /// <summary>
+        /// AI switch activity
+        /// </summary>
+        public RelayCommand AiSwitchActivityCommand => _aiSwitchActivityCommand ?? (_aiSwitchActivityCommand = new RelayCommand(execPar => 
+        {
+            if (!(execPar is AnalogInput input)) return;
+            VM.CommService.ChangeAdcAct(input.GroupNum, input.ModulNum, input);
+            input.Activity.IsWriting = true;
+
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
+
+        #endregion
+
         public VM VM { get; }
 
         void Init()
@@ -21,9 +59,9 @@ namespace IDensity.ViewModels
             var commService = VM.CommService;
             foreach (var gr in VM.mainModel.AnalogGroups)
             {
-                gr.AI.SwitchPwrEvent += commService.SwitchAm;
+               
                 gr.AI.ChangeSettCallEvent += commService.ChangeAdcAct;
-                gr.AO.SwitchPwrEvent += commService.SwitchAm;
+                
                 gr.AO.SetTestValueCallEvent += commService.SetTestValueAm;
                 gr.AO.ChangeSettCallEvent += commService.ChangeDacAct;
             }

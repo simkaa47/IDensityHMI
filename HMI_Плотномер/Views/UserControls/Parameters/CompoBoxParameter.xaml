@@ -30,7 +30,8 @@
                   Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                   Background="Transparent"
                   FontFamily="Roboto"
-                  FontWeight="Regular"                  
+                  FontWeight="Regular"
+                  x:Name="Compo"
                   VerticalAlignment="Center">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="DropDownClosed">
@@ -45,15 +46,6 @@
                              Height="25"
                              Margin="5"
                              Foreground="Aqua"/>
-        </StackPanel>
-        <DockPanel.ToolTip>
-            <ToolTip Placement="MousePoint">
-                <StackPanel>
-                    <TextBlock Text="{Binding Id, StringFormat=Идентификатор параметра: {0}}"/>
-                    <TextBlock Text="{Binding MinValue, StringFormat=Минимальное значение: {0}}"/>
-                    <TextBlock Text="{Binding MaxValue, StringFormat=Максимальное значение: {0}}"/>
-                </StackPanel>
-            </ToolTip>
-        </DockPanel.ToolTip>
+        </StackPanel>        
     </DockPanel>
 </local:CommandExtention>
