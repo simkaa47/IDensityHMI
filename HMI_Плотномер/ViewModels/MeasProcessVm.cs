@@ -14,8 +14,7 @@ namespace IDensity.ViewModels
     {
         public MeasProcessVm(VM vM)
         {
-            VM = vM;
-            Describe();
+            VM = vM;            
             StandVm = new StandarisationViewModel(VM);
             CalibrationVm = new CalibrationVm(VM);
         }
@@ -481,7 +480,6 @@ namespace IDensity.ViewModels
             return VM.mainModel.Connecting.Value && SelectedProcess != null && par.ValidationOk;
         }
 
-
         #region Скопировтаь измерительный процесс
         private RelayCommand _copyMeasProcessCommand;
         public RelayCommand CopyMeasProcessCommand => _copyMeasProcessCommand ?? (_copyMeasProcessCommand = new RelayCommand(exec =>
@@ -489,18 +487,9 @@ namespace IDensity.ViewModels
               int par = (int)exec;
               CopyMeasProcess(SelectedProcess, (ushort)par);
           }, canExec => VM.mainModel.Connecting.Value));
-        #endregion
+        #endregion       
 
         
-
-        void Describe()
-        {
-            foreach (var mp in VM.mainModel.MeasProcSettings)
-            {
-                mp.NeedWriteEvent += VM.CommService.WriteMeasProcSettings;               
-            }
-        }
-
         public void CopyMeasProcess(MeasProcSettings settings, ushort number)
         {
             var header = $"*SETT,meas_proc={number}";

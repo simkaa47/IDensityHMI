@@ -16,9 +16,7 @@ namespace IDensity.AddClasses.Settings
     {
         public MeasProcSettings(int num)
         {
-            Num = (ushort)num;            
-            // Действия по изменению настроек компенсаций            
-            SteamCompensation.NeedWriteEvent += (s) => OnWriteCommandExecuted($"comp_steam={s}");            
+            Num = (ushort)num; 
         }
         #region Константы
         #region Количество стандартизаций
@@ -146,16 +144,7 @@ namespace IDensity.AddClasses.Settings
         #region К-ты расчета обьема
         [DataMember]
         public List<Parameter<float>> VolumeCoeefs { get; set; } = Enumerable.Range(0, 4).Select(i => new Parameter<float>($"VolumeCoeff{i}", $"К-т расчета обьема {i}", float.MinValue, float.MaxValue, 0, "")).ToList();
-        #endregion               
-
-        void OnWriteCommandExecuted(string argument)
-        {
-            NeedWriteEvent?.Invoke($"*SETT,meas_proc={Num},{argument}#", Num);
-        }
-        /// <summary>
-        /// Необходимо записать настройки измерительных процессов
-        /// </summary>
-        public event Action<string, ushort> NeedWriteEvent;  
+        #endregion 
 
         #region Тип расчета
         [DataMember]

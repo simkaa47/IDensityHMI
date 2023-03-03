@@ -13,6 +13,7 @@
         <TextBlock Style="{StaticResource Common}" 
                    Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                   Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"/>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">

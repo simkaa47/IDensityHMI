@@ -55,23 +55,7 @@
                     </Style>
                     <!--#endregion-->
                 </TabItem.Resources>
-                <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">
-                    <!--#region Измерительные процессы -->
-                    <TabItem Header="ИЗМЕРИТЕЛЬНЫЕ ПРОЦЕССЫ" DataContext="{Binding MeasProcessVm}">
-                        <TabControl TabStripPlacement="Top"
-                                                ContentTemplate="{StaticResource TabItemMeasProc}"
-                                                ItemsSource="{Binding VM.mainModel.MeasProcSettings}"
-                                                SelectedItem="{Binding SelectedProcess}">
-                            <TabControl.ItemContainerStyle>
-                                <Style TargetType="TabItem"  BasedOn="{StaticResource MeasProcTabItemStyle}">
-                                    <Setter Property="Header" Value="{Binding Num}"/>
-                                    <Setter Property="HeaderStringFormat" Value="Процесс №{0}"/>
-                                    <Setter Property="Tag" Value="{Binding IsActive.WriteValue}"/>
-                                </Style>
-                            </TabControl.ItemContainerStyle>
-                        </TabControl>
-                    </TabItem>
-                    <!--#endregion-->
+                <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                    
                     <!--#region Счетчики -->
                     <TabItem Header="СЧЕТЧИКИ">
                         <UserControl Template="{StaticResource CountersTemplate}" DataContext="{Binding AdcViewModel}"/>

@@ -26,10 +26,8 @@
                 <ResourceDictionary Source="Views/Resourses/Templates/BitIndicator.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/TextBoxTemplates.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/DaTeTimePicker.xaml"/>
-                <ResourceDictionary Source="Views/Resourses/Templates/MeasResult.xaml"/>
-                <ResourceDictionary Source="Views/Resourses/Templates/MenuItem.xaml"/>
-                <ResourceDictionary Source="Views/Resourses/Styles/DataGridRows.xaml"/>
-                <ResourceDictionary Source="Views/Resourses/Templates/MeasProcess.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Templates/MeasResult.xaml"/>                
+                <ResourceDictionary Source="Views/Resourses/Styles/DataGridRows.xaml"/>                
                 <ResourceDictionary Source="Views/Resourses/Templates/CountDiapasone.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/Analogs.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/CountDiapasone.xaml"/>
