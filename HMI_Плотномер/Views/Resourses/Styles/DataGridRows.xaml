@@ -24,7 +24,7 @@
                                FontSize="14"
                                 MinHeight="30"
                                  VerticalAlignment="Center"
-                               MaxWidth="200">
+                               MaxWidth="160">
             <TextBlock.Text>
                 <Binding/>
             </TextBlock.Text>

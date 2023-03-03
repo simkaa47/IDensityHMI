@@ -90,6 +90,20 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!--#endregion-->
+                <!--#region Set test value -->
+                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
+                                        Header="ТЕСТОВОЕ ЗНАЧЕНИЕ, МКА">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:TextParameter DescriptionNotVisible="True"
+                                             DataContext="{Binding AmTestValue}"
+                                             HorizontalContentAlignment="Center"
+                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SendTestValueCommand}"
+                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
                 <!--#region Activity -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                         Header="АКТИВНОСТЬ АЦП">
@@ -100,7 +114,7 @@
                                                  DataContext="{Binding Activity}"
                                                  DescriptionNotVisible="True"
                                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.AiSwitchActivityCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.AoSwitchActivityCommand}"
                                                 CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

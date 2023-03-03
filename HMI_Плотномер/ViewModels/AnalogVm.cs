@@ -10,8 +10,7 @@ namespace IDensity.ViewModels
     {
         public AnalogVm(VM vM)
         {
-            VM = vM;
-            Init();
+            VM = vM;           
 
         }
 
@@ -49,23 +48,47 @@ namespace IDensity.ViewModels
         }, canExecPar => VM.mainModel.Connecting.Value));
         #endregion
 
+        #region AO switch activity
+        /// <summary>
+        /// AI switch activity
+        /// </summary>
+        RelayCommand _aoSwitchActivityCommand;
+        /// <summary>
+        /// AI switch activity
+        /// </summary>
+        public RelayCommand AoSwitchActivityCommand => _aoSwitchActivityCommand ?? (_aoSwitchActivityCommand = new RelayCommand(execPar =>
+        {
+            if (!(execPar is AnalogOutput output)) return;
+            VM.CommService.ChangeDacAct(output.GroupNum, output.ModulNum, output);
+            output.Activity.IsWriting = true;
+
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
+
+        #region Send Test value
+        /// <summary>
+        /// Send Test value
+        /// </summary>
+        RelayCommand _sendTestValueCommand;
+        /// <summary>
+        /// Send Test value
+        /// </summary>
+        public RelayCommand SendTestValueCommand => _sendTestValueCommand ?? (_sendTestValueCommand = new RelayCommand(execPar => 
+        {
+            if (!(execPar is AnalogOutput output)) return;
+            if (!output.AmTestValue.ValidationOk) return;
+            output.AmTestValue.Value = output.AmTestValue.Value;
+            VM.CommService.SetTestValueAm(output.GroupNum, output.ModulNum, output.AmTestValue.WriteValue);
+            
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
 
         #endregion
 
         public VM VM { get; }
 
-        void Init()
-        {
-            var commService = VM.CommService;
-            foreach (var gr in VM.mainModel.AnalogGroups)
-            {
-               
-                gr.AI.ChangeSettCallEvent += commService.ChangeAdcAct;
-                
-                gr.AO.SetTestValueCallEvent += commService.SetTestValueAm;
-                gr.AO.ChangeSettCallEvent += commService.ChangeDacAct;
-            }
-        }
+       
 
         #region Аналоговые входы
         public List<AnalogInput> AnalogInputs => VM.mainModel.AnalogGroups.Select(g => g.AI).ToList();

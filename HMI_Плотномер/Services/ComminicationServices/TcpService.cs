@@ -831,14 +831,14 @@ namespace IDensity.Services.ComminicationServices
         public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
         {
             var str = $"*CMND,AMV,{groupNum},{value}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf);}, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
         #region Отправить настройки аналоговых выходов
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
-            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},0,{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
+            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.WriteValue},{value.DacType.WriteValue},0,{value.AnalogMeasProcNdx.WriteValue},{value.VarNdx.WriteValue},{value.DacLowLimit.WriteValue.ToStringPoint()},{value.DacHighLimit.WriteValue.ToStringPoint()},{value.DacLowLimitMa.WriteValue.ToStringPoint()},{value.DacHighLimitMa.WriteValue.ToStringPoint()}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
