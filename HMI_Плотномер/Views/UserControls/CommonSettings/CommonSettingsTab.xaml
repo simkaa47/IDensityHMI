@@ -176,6 +176,19 @@
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
+            <!--#region Device type -->
+            <p:CompoBoxParameter DataContext="{Binding VM.mainModel.DeviceType}"
+                                 ItemsSource="{StaticResource DeviceTypes}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CommonSettingsVm.WriteDeviceTypeCommand}"
+                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <!--#endregion-->
+            <!--#region Levelmeter length -->
+            <ListBoxItem  Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
+                <p:TextParameter DataContext="{Binding VM.mainModel.LevelLength}"        
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WiteLevelLengthCommand}"/>
+                
+            </ListBoxItem>
+            <!--#endregion-->
             <!--#region Hilf life -->
             <p:TextParameter DataContext="{Binding VM.mainModel.HalfLife}" 
                              HorizontalAlignment="Stretch"
@@ -202,6 +215,12 @@
             <!--#endregion-->
             <!--#region Order number -->
             <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}" Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region FW version -->
+            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}" Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region Customer number -->
+            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}" Command="{Binding Command}"/>
             <!--#endregion-->
             <!--#region Software shecksum SV -->
             <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
