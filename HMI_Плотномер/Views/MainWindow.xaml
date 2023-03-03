@@ -43,30 +43,9 @@
             <!--#endregion-->
             <!--#region НАСТРОЙКИ -->
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
-                <TabItem.Resources>
-                    <!--#region Общий стиль для DaraGrid -->
-                    <Style TargetType="DataGrid">
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="VerticalGridLinesBrush" Value="DarkGray"/>
-                        <Setter Property="GridLinesVisibility" Value="Vertical"/>
-                        <Setter Property="AlternatingRowBackground" Value="AliceBlue"/>
-                        <Setter Property="AutoGenerateColumns" Value="False"/>
-                    </Style>
-                    <!--#endregion-->
-                </TabItem.Resources>
+                
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                    
-                    <!--#region Счетчики -->
-                    <TabItem Header="СЧЕТЧИКИ">
-                        <UserControl Template="{StaticResource CountersTemplate}" DataContext="{Binding AdcViewModel}"/>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region Общие настройки -->
-                    <TabItem Header="ОБЩИЕ НАСТРОЙКИ">
-                        <uc:CommonSettingsControl DataContext="{Binding CommonSettingsVm}"/>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region Аналоги -->
+                   <!--#region Аналоги -->
                     <TabItem Header="АНАЛОГОВЫЕ МОДУЛИ">
                         <TabItem.Resources>
                             <DataTemplate x:Key="AnalogHeaderTemplate">

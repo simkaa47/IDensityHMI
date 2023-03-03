@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:a="clr-namespace:IDensity.Core.Views.UserControls.Analogs"
              xmlns:common="clr-namespace:IDensity.Core.Views.UserControls.CommonSettings"
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
              xmlns:mp="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
@@ -87,7 +88,11 @@
             <common:CommonSettingsTab DataContext="{Binding CommonSettingsVm}"/>
         </TabItem>
         <!--#endregion-->
-
+        <!--#region Analogs -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Аналоговые модули"  >
+            <a:AnalogTab DataContext="{Binding AnalogVm}"/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     

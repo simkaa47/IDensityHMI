@@ -1,4 +1,7 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IDensity.ViewModels
 {
@@ -25,5 +28,13 @@ namespace IDensity.ViewModels
                 gr.AO.ChangeSettCallEvent += commService.ChangeDacAct;
             }
         }
+
+        #region Аналоговые входы
+        public List<AnalogInput> AnalogInputs => VM.mainModel.AnalogGroups.Select(g => g.AI).ToList();
+        #endregion
+
+        #region Аналоговые выходы
+        public List<AnalogOutput> AnalogOutputs => VM.mainModel.AnalogGroups.Select(g => g.AO).ToList();
+        #endregion
     }
 }

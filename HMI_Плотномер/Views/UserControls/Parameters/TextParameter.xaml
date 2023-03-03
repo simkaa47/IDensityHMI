@@ -51,7 +51,8 @@
                     BorderThickness="2"
                     Background="Transparent">
                 <TextBox Background="Transparent"
-                         Name="Input"                         
+                         Name="Input"
+                         IsReadOnly="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=IsOnlyRead}"
                          BorderThickness="0"                                                 
                          FontFamily="Roboto"
                          Margin="10,0,0,0"                         

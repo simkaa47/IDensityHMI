@@ -239,13 +239,7 @@ namespace IDensity.ViewModels
         public string[] ComPorts { get => _comPorts ?? (_comPorts = SerialPort.GetPortNames()); set => Set(ref _comPorts, value); }
         #endregion
 
-        #region Аналоговые входы
-        public List<AnalogInput> AnalogInputs => mainModel.AnalogGroups.Select(g => g.AI).ToList();
-        #endregion
-
-        #region Аналоговые выходы
-        public List<AnalogOutput> AnalogOutputs => mainModel.AnalogGroups.Select(g => g.AO).ToList();
-        #endregion
+       
 
         #region Данные для текущего тренда
         #region Алгоритм интерполяции

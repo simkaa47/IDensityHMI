@@ -213,16 +213,16 @@
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceExpirationDateCommand}"/>
             <!--#endregion-->
             <!--#region Serial number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}" IsOnlyRead="True"/>
             <!--#endregion-->
             <!--#region Order number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}" IsOnlyRead="True"/>
             <!--#endregion-->
             <!--#region FW version -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}" IsOnlyRead="True"/>
             <!--#endregion-->
             <!--#region Customer number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}" IsOnlyRead="True"/>
             <!--#endregion-->
             <!--#region Software shecksum SV -->
             <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">

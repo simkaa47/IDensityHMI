@@ -45,6 +45,7 @@ namespace IDensity.Core.Views.UserControls.Parameters
             DependencyProperty.Register(nameof(CommanDParameter), typeof(object), typeof(CommandExtention));
         #endregion
 
+        #region Не видно описания параметра
         public bool DescriptionNotVisible
         {
             get { return (bool)GetValue(DescriptionNotVisibleProperty); }
@@ -54,6 +55,21 @@ namespace IDensity.Core.Views.UserControls.Parameters
         // Using a DependencyProperty as the backing store for DescriptionNotVisible.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DescriptionNotVisibleProperty =
             DependencyProperty.Register("DescriptionNotVisible", typeof(bool), typeof(CommandExtention), new PropertyMetadata(false));
+
+        #endregion
+
+        #region Only read
+        public bool IsOnlyRead
+        {
+            get { return (bool)GetValue(IsOnlyReadProperty); }
+            set { SetValue(IsOnlyReadProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsOnlyRead.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsOnlyReadProperty =
+            DependencyProperty.Register("IsOnlyRead", typeof(bool), typeof(CommandExtention), new PropertyMetadata(false));
+        #endregion
+
 
 
     }
