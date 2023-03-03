@@ -193,6 +193,35 @@
             <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceInstallDate}"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceInstallDateCommand}"/>
             <!--#endregion-->
+            <!--#region Source expiration date date -->
+            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceExpirationDate}"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceExpirationDateCommand}"/>
+            <!--#endregion-->
+            <!--#region Serial number -->
+            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}" Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region Order number -->
+            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}" Command="{Binding Command}"/>
+            <!--#endregion-->
+            <!--#region Software shecksum SV -->
+            <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                <DockPanel>
+                    <TextBlock Text="Задание контрольной суммы ПО прибора"/>
+                    <TextBox Width="165" Height="40" Template="{StaticResource TextBoxTemplate}" HorizontalAlignment="Right" Text="{Binding VM.mainModel.CheckSum.Value}"/>
+                </DockPanel>
+            </ListBoxItem>
+            <!--#endregion-->
+            <!--#region GetCheckSum -->
+            <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                <DockPanel>
+                    <TextBlock Text="Запрос контрольной суммы ПО плотномера"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBox Text="{Binding VM.mainModel.CurCheckSum}" Width="125" Height="40" Template="{StaticResource TextBoxTemplate}"/>
+                        <Button Content="-->" Command="{Binding GetCheckSumCommand}" Margin="5,5,0,5" Style="{StaticResource TypicalButton0}"/>
+                    </StackPanel>
+                </DockPanel>
+            </ListBoxItem>
+            <!--#endregion-->
         </ListBox>
         <!--#endregion-->
     </Grid>
