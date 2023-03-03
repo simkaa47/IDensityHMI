@@ -13,5 +13,9 @@
                   BorderThickness="0" FontSize="20">
             <local:AnalogInputs/>
         </GroupBox>
+        <GroupBox Header="Аналоговые выходы" Margin="20"
+                  BorderThickness="0" FontSize="20">
+            <local:AnalogOutput/>
+        </GroupBox>
     </StackPanel>
 </UserControl>

@@ -56,47 +56,7 @@
                                 </TextBlock>
                             </DataTemplate>
                         </TabItem.Resources>
-                        <StackPanel >
-                            <!--#region Аналоговые входы -->
-                            <GroupBox  Header="АНАЛОГОВЫЕ ВХОДЫ">
-                                <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding AnalogInputs}">
-                                    <DataGrid.Columns>
-                                        <!--#region Id -->
-                                        <DataGridTextColumn IsReadOnly="True"  Header="№" Binding="{Binding GroupNum}"/>
-                                        <!--#endregion-->
-                                        <!--#region Питание -->
-                                        <DataGridTemplateColumn Header="Питание">
-                                            <DataGridTemplateColumn.CellTemplate >
-                                                <DataTemplate DataType="add:AnalogInput">
-                                                    <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
-                                                                            Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
-                                                                            Command="{Binding SwitchPwrAmCommand}"></Button>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region АЦП -->
-                                        <DataGridTextColumn Header="Ток AI, мкА" Binding="{Binding AdcValue.Value}" IsReadOnly="True"/>
-                                        <!--#endregion-->
-                                        <!--#region Активность -->
-                                        <DataGridTemplateColumn Width="120" Header="Активность АЦП" HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="add:AnalogInput">
-                                                    <ComboBox ItemsSource="{StaticResource On/Off}" SelectedIndex="{Binding Activity.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="DropDownClosed">
-                                                                <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </ComboBox>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </GroupBox>
-                            <!--#endregion-->
+                        <StackPanel >                            
                             <!--#region AO -->
                             <GroupBox Header="АНАЛОГОВЫЕ ВЫХОДЫ">
                                 <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding AnalogOutputs}">
