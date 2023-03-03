@@ -228,31 +228,150 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Записать данные дипазона счетчика
+
+        #region Write counter mode
         /// <summary>
-        /// Записать данные дипазона счетчика
+        /// Write counter mode
         /// </summary>
-        RelayCommand _writeCountDiapasoneCommand;
+        RelayCommand _writeCounterModeCommand;
         /// <summary>
-        /// Записать данные дипазона счетчика
+        /// Write counter mode
         /// </summary>
-        public RelayCommand WriteCountDiapasoneCommand => 
-            _writeCountDiapasoneCommand ?? 
-            (_writeCountDiapasoneCommand = new RelayCommand(execPar => 
+        public RelayCommand WriteCounterModeCommand => _writeCounterModeCommand ?? (_writeCounterModeCommand = new RelayCommand(execPar => 
+        { 
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.CounterMode));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone!=null && SelectedCountDiapasone.CounterMode.ValidationOk));
+        #endregion
+
+        #region Write counter start
+        /// <summary>
+        /// Write counter start
+        /// </summary>
+        RelayCommand _writeCounterStartCommand;
+        /// <summary>
+        /// Write counter start
+        /// </summary>
+        public RelayCommand WriteCounterStartCommand => _writeCounterStartCommand ?? (_writeCounterStartCommand = new RelayCommand(execPar => 
+        {
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.Start));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone != null && SelectedCountDiapasone.Start.ValidationOk));
+        #endregion
+
+        #region Write counter width
+        /// <summary>
+        /// Write counter width
+        /// </summary>
+        RelayCommand _writeCounterWidthCommand;
+        /// <summary>
+        /// Write counter width
+        /// </summary>
+        public RelayCommand WriteCounterWidthCommand => _writeCounterWidthCommand ?? (_writeCounterWidthCommand = new RelayCommand(execPar => 
+        {
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.Width));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone != null && SelectedCountDiapasone.Width.ValidationOk));
+        #endregion
+
+        #region Write counter peak find
+        /// <summary>
+        /// Write counter peak find
+        /// </summary>
+        RelayCommand _writeCounterPeakFindCommand;
+        /// <summary>
+        /// Write counter peak find
+        /// </summary>
+        public RelayCommand WriteCounterPeakFindCommand => _writeCounterPeakFindCommand ?? (_writeCounterPeakFindCommand = new RelayCommand(execPar => 
+        {
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.CountPeakFind));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone != null && SelectedCountDiapasone.CountPeakFind.ValidationOk));
+        #endregion
+
+        #region Write counter smooth
+        /// <summary>
+        /// Write counter smooth
+        /// </summary>
+        RelayCommand _writeCounterSmoothCommand;
+        /// <summary>
+        /// Write counter smooth
+        /// </summary>
+        public RelayCommand WriteCounterSmoothCommand => _writeCounterSmoothCommand ?? (_writeCounterSmoothCommand = new RelayCommand(execPar => 
+        {
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.CountPeakSmooth));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone != null && SelectedCountDiapasone.CountPeakSmooth.ValidationOk));
+        #endregion
+
+        #region Write deviation down
+        /// <summary>
+        /// Write deviation down
+        /// </summary>
+        RelayCommand _writeCounterDevDownCommand;
+        /// <summary>
+        /// Write deviation down
+        /// </summary>
+        public RelayCommand WriteCounterDevDownCommand => _writeCounterDevDownCommand ?? (_writeCounterDevDownCommand = new RelayCommand(execPar => 
+        {
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.CountBotPerc));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone != null && SelectedCountDiapasone.CountBotPerc.ValidationOk));
+        #endregion
+
+        #region Write deviation up
+        /// <summary>
+        /// Write deviation up
+        /// </summary>
+        RelayCommand _writeCounterDevUpCommand;
+        /// <summary>
+        /// Write deviation up
+        /// </summary>
+        public RelayCommand WriteCounterDevUpCommand => _writeCounterDevUpCommand ?? (_writeCounterDevUpCommand = new RelayCommand(execPar => 
+        {
+            WriteCountDiapasone(nameof(SelectedCountDiapasone.CountTopPerc));
+        }, canExecPar => VM.mainModel.Connecting.Value && SelectedCountDiapasone != null && SelectedCountDiapasone.CountTopPerc.ValidationOk));
+        #endregion
+
+
+
+
+
+        private void WriteCountDiapasone(string id)
+        {
+            if (SelectedCountDiapasone == null) return;
+            if (SelectedCountDiapasone.Clone() is CountDiapasone diapasone)
             {
-                if (SelectedCountDiapasone == null) return;
-                if (SelectedCountDiapasone.Clone() is CountDiapasone diapasone)
+                switch(id)
                 {
-                    diapasone.CounterMode.Value = SelectedCountDiapasone.CounterMode.WriteValue;
-                    diapasone.Start.Value = SelectedCountDiapasone.Start.WriteValue;
-                    diapasone.Width.Value = SelectedCountDiapasone.Width.WriteValue;
-                    diapasone.CountPeakFind.Value = SelectedCountDiapasone.CountPeakFind.WriteValue;
-                    diapasone.CountPeakSmooth.Value = SelectedCountDiapasone.CountPeakSmooth.WriteValue;
-                    diapasone.CountTopPerc.Value = SelectedCountDiapasone.CountTopPerc.WriteValue;
-                    diapasone.CountBotPerc.Value = SelectedCountDiapasone.CountBotPerc.WriteValue;
-                    VM.CommService.WriteCounterSettings(diapasone);
+                    case nameof(SelectedCountDiapasone.CounterMode):
+                        diapasone.CounterMode.Value = SelectedCountDiapasone.CounterMode.WriteValue;
+                        SelectedCountDiapasone.CounterMode.IsWriting = true;
+                        break;
+                    case nameof(SelectedCountDiapasone.Start):
+                        diapasone.Start.Value = SelectedCountDiapasone.Start.WriteValue;
+                        SelectedCountDiapasone.Start.IsWriting = true;
+                        break;
+                    case nameof(SelectedCountDiapasone.Width):
+                        diapasone.Width.Value = SelectedCountDiapasone.Width.WriteValue;
+                        SelectedCountDiapasone.Width.IsWriting = true;
+                        break;
+                    case nameof(SelectedCountDiapasone.CountPeakFind):
+                        diapasone.CountPeakFind.Value = SelectedCountDiapasone.CountPeakFind.WriteValue;
+                        SelectedCountDiapasone.CountPeakFind.IsWriting = true;
+                        break;
+                    case nameof(SelectedCountDiapasone.CountPeakSmooth):
+                        diapasone.CountPeakSmooth.Value = SelectedCountDiapasone.CountPeakSmooth.WriteValue;
+                        SelectedCountDiapasone.CountPeakSmooth.IsWriting = true;
+                        break;
+                    case nameof(SelectedCountDiapasone.CountTopPerc):
+                        diapasone.CountTopPerc.Value = SelectedCountDiapasone.CountTopPerc.WriteValue;
+                        SelectedCountDiapasone.CountTopPerc.IsWriting = true;
+                        break;
+                    case nameof(SelectedCountDiapasone.CountBotPerc):
+                        diapasone.CountBotPerc.Value = SelectedCountDiapasone.CountBotPerc.WriteValue;
+                        SelectedCountDiapasone.CountBotPerc.IsWriting = true;
+                        break;
+                    default:return;
                 }
-               
-            }, canExecPar => true));
+                VM.CommService.WriteCounterSettings(diapasone);
+
+            }
+        }
         #endregion
 
         #region Очистить статистику импульсов в режиме осцилографа

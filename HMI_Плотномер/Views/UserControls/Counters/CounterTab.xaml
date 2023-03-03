@@ -44,7 +44,7 @@
                                                      Index="{Binding WriteValue}"
                                                      Margin="10"
                                                      HorizontalAlignment="Center"
-                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterModeCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -56,7 +56,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding Start}"
                                                  HorizontalAlignment="Center"
-                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterStartCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -68,7 +68,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding Width}"
                                                  HorizontalAlignment="Center"
-                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterWidthCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -80,7 +80,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountPeakFind}"
                                                  HorizontalAlignment="Center"
-                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterPeakFindCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -92,7 +92,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountPeakSmooth}"
                                                  HorizontalAlignment="Center"
-                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterSmoothCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -104,7 +104,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountBotPerc}"
                                                  HorizontalAlignment="Center"
-                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterDevDownCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -116,7 +116,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountTopPerc}"
                                                  HorizontalAlignment="Center"
-                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCountDiapasoneCommand}"/>
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterDevUpCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
