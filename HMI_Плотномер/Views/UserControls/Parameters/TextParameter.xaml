@@ -47,7 +47,7 @@
             <Border CornerRadius="4"
                     Height="40"
                     Name="Border"                    
-                    Width="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=ParameterWidth, TargetNullValue=165}"
+                    Width="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=ParameterWidth, TargetNullValue=165}"
                     BorderThickness="2"
                     Background="Transparent">
                 <TextBox Background="Transparent"
