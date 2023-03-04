@@ -14,11 +14,7 @@ namespace IDensity.AddClasses
         public AnalogOutput(int groupNum) : base(groupNum)
         {
             ModulNum = 0;
-            AmTestValue.CommandEcecutedEvent += (par) => 
-            {
-                AmTestValue.Value = AmTestValue.WriteValue;
-                SetTestValueCallEvent?.Invoke(GroupNum, ModulNum, (ushort)(AmTestValue.WriteValue));
-            };
+            MeasUnitMemoryId = $"StandMeasMemory{groupNum}";
         }
         #endregion
 
@@ -75,13 +71,7 @@ namespace IDensity.AddClasses
         public Parameter<float> DacHighLimitMa { get; set; } = new Parameter<float>("DacHighLimitMa", "Верхний предел для ЦАП(mA)", float.MinValue, float.MaxValue, 0, "");
         #endregion
 
-        #region Команды      
-
-        #region Команда "Записать настройки ЦАП"
-        RelayCommand _setSettings;
-        public RelayCommand SetSettingsCommand => _setSettings ?? (_setSettings = new RelayCommand(o => ChangeSettCallEvent?.Invoke(GroupNum, 0, Clone()), o => true));
-        #endregion
-        #endregion
+        
 
         public AnalogOutput Clone()
         {
@@ -97,13 +87,17 @@ namespace IDensity.AddClasses
             return output;
         }
 
-        #region Событие вызова команды установки тестового напряжения
-        public event Action<int, int, ushort> SetTestValueCallEvent;
+        #region ID ЕИ
+        private string _measUnitMemoryId;
+        public string MeasUnitMemoryId
+        {
+            get => _measUnitMemoryId;
+            set => Set(ref _measUnitMemoryId, value);
+        }
         #endregion
 
-        #region Событие вызова команды "Изменить настройки данных"
-        public event Action<int, int, AnalogOutput> ChangeSettCallEvent;
-        #endregion
+
+
 
     }
 }

@@ -47,7 +47,7 @@
             <Border CornerRadius="4"
                     Height="40"
                     Name="Border"                    
-                    Width="205"
+                    Width="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=ParameterWidth, TargetNullValue=205}"
                     BorderThickness="2"
                     Background="Transparent">
                 <DockPanel VerticalAlignment="Center">

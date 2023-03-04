@@ -70,11 +70,13 @@
                 <!--#endregion-->
                 <!--#region Activity -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="АКТИВНОСТЬ АЦП">
+                                        Header="АКТИВНОСТЬ АЦП"
+                                        Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:CompoBoxParameter ItemsSource="{StaticResource On/Off}" 
                                                 HorizontalAlignment="Center"
+                                                 ParameterWidth="80"
                                                  DataContext="{Binding Activity}"
                                                  DescriptionNotVisible="True"
                                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

@@ -72,5 +72,18 @@ namespace IDensity.Core.Views.UserControls.Parameters
 
 
 
+        public object ParameterWidth
+        {
+            get { return (object)GetValue(ParameterWidthProperty); }
+            set { SetValue(ParameterWidthProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ParameterWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ParameterWidthProperty =
+            DependencyProperty.Register("ParameterWidth", typeof(object), typeof(CommandExtention), new PropertyMetadata(null));
+
+
+
+
     }
 }

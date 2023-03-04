@@ -17,7 +17,7 @@
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"/>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-            <ComboBox Width="165"
+            <ComboBox Width="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=ParameterWidth, TargetNullValue=165}"
                   Height="40"
                   DisplayMemberPath="{Binding RelativeSource= {RelativeSource AncestorType=local:CompoBoxParameter}, Path=DisplayMemberPath}"
                   ItemsSource="{Binding RelativeSource= {RelativeSource AncestorType=local:CompoBoxParameter}, Path=ItemsSource}"
