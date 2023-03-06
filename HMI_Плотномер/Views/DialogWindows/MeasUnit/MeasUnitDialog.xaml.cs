@@ -1,17 +1,5 @@
-﻿using IDensity.AddClasses;
-using IDensity.Core.ViewModels.MeasUnits;
-using IDensity.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess.Models;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IDensity.Core.Views
 {
