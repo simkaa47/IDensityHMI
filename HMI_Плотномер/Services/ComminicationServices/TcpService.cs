@@ -815,7 +815,7 @@ namespace IDensity.Services.ComminicationServices
         public void SetHv(ushort value)
         {
             var str = $"*SETT,hv_target={value * 20}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 

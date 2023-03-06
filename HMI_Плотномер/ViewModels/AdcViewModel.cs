@@ -112,8 +112,9 @@ namespace IDensity.ViewModels
         /// </summary>
         public RelayCommand SetHvCommand => _setHvCommand ?? (_setHvCommand = new RelayCommand(execPar => 
         {
+            VM.mainModel.TelemetryHV.VoltageSV.IsWriting = true;
             VM.CommService.SetHv(VM.mainModel.TelemetryHV.VoltageSV.WriteValue);
-        }, canExecPar => true));
+        }, canExecPar => VM.mainModel.Connecting.Value));
         #endregion
 
         #region Запуск-останов платы АЦП
