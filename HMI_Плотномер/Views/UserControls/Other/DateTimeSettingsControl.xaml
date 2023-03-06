@@ -29,14 +29,14 @@
                 </TextBlock>
                 <fa:ImageAwesome Visibility="{Binding mainModel.Rtc.IsWriting, Converter={StaticResource VisibleConverter}}" 
                              Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
+                             Spin="{Binding mainModel.Rtc.IsWriting}"
                              Height="25"
                              Margin="5"
                              Foreground="Aqua"/>
                 <Button Style="{StaticResource TypicalButton0}" Height="40" Width="40" Content="-->" FontSize="16"
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                         Command="{Binding SyncRtcCommand}"
-                        />
+                        Margin="5,0,0,0"/>
             </StackPanel>
         </DockPanel>
         <!--#endregion-->

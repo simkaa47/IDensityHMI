@@ -162,6 +162,7 @@ namespace IDensity.ViewModels
         RelayCommand _setRtcCommand;
         public RelayCommand SetRtcCommand => _setRtcCommand ?? (_setRtcCommand = new RelayCommand(execPar =>
         {
+            mainModel.Rtc.IsWriting = true;
             CommService.SetRtc(mainModel.Rtc.WriteValue);
         }, canExecPar => true));
         #endregion
@@ -169,6 +170,7 @@ namespace IDensity.ViewModels
         RelayCommand _syncRtcCommand;
         public RelayCommand SyncRtcCommand => _syncRtcCommand ?? (_syncRtcCommand = new RelayCommand(execPar =>
         {
+            mainModel.Rtc.IsWriting = true;
             CommService.SetRtc(DateTime.Now);
         }, canExecPar => true));
         #endregion
