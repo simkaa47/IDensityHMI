@@ -21,6 +21,19 @@
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
-        
+        <!--#region External temp -->
+        <p:TextParameter DataContext="{Binding mainModel.TempTelemetry.TempExternal}"
+                         IsOnlyRead="True"/>
+        <!--#endregion-->
+        <!--#region Comm Indicator-->
+        <DockPanel MinHeight="50" DataContext="{Binding mainModel.TempTelemetry.TempBoardCommState}">
+            <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
+            <Image Source="{Binding Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Center"
+                   MaxHeight="30"
+                   MaxWidth="34"/>
+        </DockPanel>
+        <!--#endregion-->
     </ListBox>
 </UserControl>
