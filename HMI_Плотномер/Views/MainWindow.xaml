@@ -46,36 +46,7 @@
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                    
-                   
-                    <!--#region Настройки платы HV -->
-                    <TabItem Header="ПЛАТА HV" >
-                        <ListBox HorizontalContentAlignment="Stretch" >
-                            
-                            <!--#region Входное напряжение -->
-                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}"/>
-                            <!--#endregion-->
-                            <!--#region Выходное напряжение -->
-                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurOut}"/>
-                            <!--#endregion-->
-                            <!--#region Индикатор связи -->
-                            <UserControl DataContext="{Binding mainModel.TelemetryHV.HvCommState}" 
-                                                         Template="{StaticResource BitIndicator}"/>
-                            <!--#endregion-->
-                            <!--#region Кнопка включения-выключения HV -->
-                            <DockPanel>
-                                <TextBlock Style="{StaticResource Common}" 
-                                                           Text="Управление Высоким напряжением"/>
-                                <Button Width="220" Height="Auto" HorizontalAlignment="Right"
-                                                        Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource ColorToBool}, ConverterParameter=#FFFF0000}"
-                                                        Command="{Binding AdcViewModel.switchHvCommandCommand}">
-                                    <TextBlock TextWrapping="Wrap" 
-                                                               Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource HvButn}}"/>
-                                </Button>
-                            </DockPanel>
-                            <!--#endregion-->
-                        </ListBox>
-                    </TabItem>
-                    <!--#endregion-->
+                                       
                     <!--#region Плата питания -->
                     <TabItem Header="ПЛАТА ПИТАНИЯ">
                         <ListBox HorizontalContentAlignment="Stretch">

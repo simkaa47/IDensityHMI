@@ -7,6 +7,7 @@
              xmlns:a="clr-namespace:IDensity.Core.Views.UserControls.Analogs"
              xmlns:adc ="clr-namespace:IDensity.Core.Views.UserControls.AdcControls"
              xmlns:mu="clr-namespace:IDensity.Core.Views.UserControls.MeasNums"
+             xmlns:oth="clr-namespace:IDensity.Core.Views.UserControls.Other"
              xmlns:common="clr-namespace:IDensity.Core.Views.UserControls.CommonSettings"
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
              xmlns:mp="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
@@ -103,6 +104,11 @@
         <!--#region Hv -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Плата HV"  >
             <adc:HvControl/>
+        </TabItem>
+        <!--#endregion-->
+        <!--#region Supply board settings -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Плата питания"  >
+            <oth:SupplyBoardControl/>
         </TabItem>
         <!--#endregion-->
     </TabControl>
