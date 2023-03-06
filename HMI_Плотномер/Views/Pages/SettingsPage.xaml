@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:a="clr-namespace:IDensity.Core.Views.UserControls.Analogs"
+             xmlns:adc ="clr-namespace:IDensity.Core.Views.UserControls.AdcControls"
              xmlns:mu="clr-namespace:IDensity.Core.Views.UserControls.MeasNums"
              xmlns:common="clr-namespace:IDensity.Core.Views.UserControls.CommonSettings"
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
