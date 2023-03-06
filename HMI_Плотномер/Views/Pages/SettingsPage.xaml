@@ -111,6 +111,11 @@
             <oth:SupplyBoardControl/>
         </TabItem>
         <!--#endregion-->
+        <!--#region Date and time settings -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Дата и время"  >
+            <oth:DateTimeSettingsControl/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     

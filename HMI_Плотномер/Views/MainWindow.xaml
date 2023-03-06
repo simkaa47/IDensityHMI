@@ -46,24 +46,8 @@
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                    
-                                       
-                    <!--#region Плата питания -->
-                    <TabItem Header="ПЛАТА ПИТАНИЯ">
-                        <ListBox HorizontalContentAlignment="Stretch">
-                            <!--#region Температура -->
-                            <ListBoxItem DataContext="{Binding mainModel.TempTelemetry.TempInternal}" >
-                                <uc:Parameter/>
-                            </ListBoxItem>
-                            <!--#endregion-->
-
-                            <!--#region Индикатор связи -->
-                            <ListBoxItem DataContext="{Binding mainModel.TempTelemetry.TempBoardCommState}">
-                                <UserControl Template="{StaticResource BitIndicator}"/>
-                            </ListBoxItem>
-                            <!--#endregion-->
-                        </ListBox>
-                    </TabItem>
-                    <!--#endregion-->
+                                      
+                    
                     <!--#region ДАТА И ВРЕМЯ -->
                     <TabItem Header="ДАТА И ВРЕМЯ">
                         <ListBox HorizontalContentAlignment="Stretch">
