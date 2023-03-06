@@ -17,7 +17,7 @@
             <Setter Property="MinHeight" Value="50"/>
         </Style>
     </UserControl.Resources>
-    <ListBox Width="600" Background="Transparent"
+    <ListBox Width="750" Background="Transparent"
              BorderThickness="0"
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
@@ -80,20 +80,21 @@
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center">
                             <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding SetUpsAddrCommand}"/>
+                                <KeyBinding Key="Enter"  Command="{Binding SetUpsAddrCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
-                        <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  MinWidth="80"
                                  Height="40"
                                  Margin="5"
-                                 Template="{StaticResource TextBoxTemplate}"
+                                Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding SetUpsAddrCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
+                        
                         <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
                              Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
                              Spin="{Binding VM.mainModel.UdpWriting}"
@@ -189,6 +190,38 @@
             </ListBox>
         </GroupBox>
         <!--#endregion-->
+        <!--#region Serial port settings -->
+        <GroupBox Header="Настройки последовательного порта плотномера"
+                  FontSize="20"
+                  Margin="0,20,0,10"
+                  BorderThickness="0">
+            <ListBox Background="Transparent"
+                     BorderThickness="0"
+                     HorizontalAlignment="Stretch"                     
+                     HorizontalContentAlignment="Stretch"
+                     ItemContainerStyle="{StaticResource ParameterListBoxItem}">
+                <!--#region baudrate -->
+                <p:CompoBoxParameter DataContext="{Binding VM.mainModel.PortBaudrate}"
+                                     ItemsSource="{StaticResource PortSpeeds}"
+                                     Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
+                                     SelectedItem="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ConnectSettingsVm.ChangeBaudrateCommand}"
+                                     CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItem}"/>
+                
+                <!--#endregion-->
+                <!--#region serial mode -->
+                <p:CompoBoxParameter DataContext="{Binding VM.mainModel.PortSelectMode}"
+                                     ItemsSource="{StaticResource PortModes}"
+                                     Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ConnectSettingsVm.ChangeSerialSelectCommand}"
+                                     CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=Index}"/>
+                <!--#endregion-->                
+            </ListBox>
+        </GroupBox>
+        <!--#endregion-->
+        <Button Style="{StaticResource TypicalButton0}" Height="40" FontSize="16" Command="{Binding RstBoardCommand}">
+            ПЕРЕЗАГРУЗИТЬ ПЛАТУ
+        </Button>
     </ListBox>
         
 

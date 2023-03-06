@@ -20,14 +20,22 @@ namespace IDensity.ViewModels
         RelayCommand _changeSerialSelectCommand;
         public RelayCommand ChangeSerialSelectCommand => 
             _changeSerialSelectCommand ?? 
-            (_changeSerialSelectCommand = new RelayCommand(o => VM.CommService.ChangeSerialSelect((int)o), o => o != null));
+            (_changeSerialSelectCommand = new RelayCommand(o =>
+            {
+                VM.mainModel.PortSelectMode.IsWriting = true;
+                VM.CommService.ChangeSerialSelect((int)o); 
+            }, o => o != null));
         #endregion
 
         #region Сменить баудрейт 
         RelayCommand _changeBaudrateCommand;
         public RelayCommand ChangeBaudrateCommand => 
             _changeBaudrateCommand ?? 
-            (_changeBaudrateCommand = new RelayCommand(o => VM.CommService.ChangeBaudrate((uint)(o)), o => o != null));
+            (_changeBaudrateCommand = new RelayCommand(o => 
+            { 
+                VM.CommService.ChangeBaudrate((uint)(o));
+                VM.mainModel.PortBaudrate.IsWriting = true;
+            }, o => o != null));
         #endregion
         #endregion      
 

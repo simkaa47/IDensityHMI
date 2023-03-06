@@ -118,7 +118,7 @@
         <!--#endregion-->
         <!--#region Communication -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Коммуникация"  >
-            <oth:CommunicationControl DataContext="{Binding CommonSettingsVm}"/>
+            <oth:CommunicationControl DataContext="{Binding ConnectSettingsVm}"/>
         </TabItem>
         <!--#endregion-->
     </TabControl>

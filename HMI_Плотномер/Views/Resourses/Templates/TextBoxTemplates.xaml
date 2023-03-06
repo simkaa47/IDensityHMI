@@ -8,7 +8,8 @@
                 BorderThickness="2"
                 BorderBrush="{DynamicResource BorderNonActiveColor}"
                 Background="Transparent">
-            <TextBox Background="Transparent"
+            <Grid>
+                <TextBox Background="Transparent"
                          Name="Input"                         
                          BorderThickness="0"                                                 
                          FontFamily="Roboto"
@@ -16,10 +17,13 @@
                          VerticalAlignment="Center"
                          Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text}"
                          FontSize="16"
+                         
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                          FontWeight="Regular">
-                
-            </TextBox>
+                </TextBox>
+                <ContentPresenter/>
+            </Grid>
+            
         </Border>
         <ControlTemplate.Triggers>
             <Trigger  Property="IsMouseOver" Value="True">
