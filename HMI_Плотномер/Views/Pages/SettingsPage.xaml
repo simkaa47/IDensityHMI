@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:a="clr-namespace:IDensity.Core.Views.UserControls.Analogs"
+             xmlns:mu="clr-namespace:IDensity.Core.Views.UserControls.MeasNums"
              xmlns:common="clr-namespace:IDensity.Core.Views.UserControls.CommonSettings"
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
              xmlns:mp="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
@@ -91,6 +92,11 @@
         <!--#region Analogs -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Аналоговые модули"  >
             <a:AnalogTab DataContext="{Binding AnalogVm}"/>
+        </TabItem>
+        <!--#endregion-->
+        <!--#region MeasNums -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Единицы измерения"  >
+            <mu:MeasNumControl DataContext="{Binding MeasUnitSettingsVm}"/>
         </TabItem>
         <!--#endregion-->
     </TabControl>

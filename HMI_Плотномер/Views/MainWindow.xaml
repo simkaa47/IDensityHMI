@@ -7,7 +7,8 @@
         xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"
         xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"         
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        
         xmlns:add="clr-namespace:IDensity.AddClasses"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
@@ -45,201 +46,7 @@
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                    
-                   <!--#region Аналоги -->
-                    <TabItem Header="АНАЛОГОВЫЕ МОДУЛИ">
-                        <TabItem.Resources>
-                            <DataTemplate x:Key="AnalogHeaderTemplate">
-                                <TextBlock TextWrapping="Wrap">
-                                    <TextBlock.Text>
-                                        <Binding/>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </TabItem.Resources>
-                        <StackPanel >                            
-                            <!--#region AO -->
-                            <GroupBox Header="АНАЛОГОВЫЕ ВЫХОДЫ">
-                                <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" ItemsSource="{Binding AnalogOutputs}">
-                                    <DataGrid.Columns>
-                                        <!--#region Id -->
-                                        <DataGridTextColumn IsReadOnly="True"  Header="№" Binding="{Binding GroupNum}"/>
-                                        <!--#endregion-->
-                                        <!--#region Питание -->
-                                        <DataGridTemplateColumn Header="Питание">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="add:AnalogOutput">
-                                                    <Button Content="{Binding CommState.Value, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource PwrBtnStatus}}"
-                                                                            Background="{Binding CommState.Value, Converter={StaticResource ColorToBool}}"
-                                                                            Command="{Binding SwitchPwrAmCommand}" ></Button>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region ЦАП -->
-                                        <DataGridTextColumn IsReadOnly="True"
-                                                                        HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                        Header="Напряжение ЦАП, каунтов"
-                                                                        Binding="{Binding VoltageDac.Value}" 
-                                                                        Width="120"/>
-                                        <!--#endregion-->
-                                        <!--#region Напряжение TEST, мВ -->
-                                        <DataGridTextColumn IsReadOnly="True"
-                                                                        Header="Напряжение TEST, каунтов"
-                                                                        HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                        Width="120" 
-                                                                        Binding="{Binding AdcValue.Value}"/>
-                                        <!--#endregion-->
-                                        <!--#region Напряжение RX, мВ -->
-                                        <DataGridTextColumn Width="120"
-                                                                        IsReadOnly="True" 
-                                                                        Header="Напряжение RX, каунтов"
-                                                                        HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                        Binding="{Binding VoltageTest.Value}"/>
-                                        <!--#endregion-->
-                                        <!--#region Тестовое значение, мВ -->
-                                        <DataGridTemplateColumn Width="135"
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                            Header="Тестовое значение, мкА">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="add:AnalogOutput">
-                                                    <DockPanel>
-                                                        <StackPanel Orientation="Horizontal" DataContext="{Binding AmTestValue}">
-                                                            <TextBox  Width="50" HorizontalAlignment="Left">
-                                                                <TextBox.Text>
-                                                                    <Binding Path="WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                                                        <Binding.ValidationRules>
-                                                                            <DataErrorValidationRule />
-                                                                        </Binding.ValidationRules>
-                                                                    </Binding>
-                                                                </TextBox.Text>
-                                                            </TextBox>
-                                                            <Button Width="50" Margin="2,0,2,0" Command="{Binding Command}">--></Button>
-                                                        </StackPanel>
-                                                    </DockPanel>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Активность -->
-                                        <DataGridTemplateColumn Width="120"
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                            Header="Активность ЦАП">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <ComboBox ItemsSource="{StaticResource On/Off}" SelectedIndex="{Binding Activity.WriteValue, UpdateSourceTrigger=PropertyChanged}">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="DropDownClosed">
-                                                                <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </ComboBox>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Тип ЦАП -->
-                                        <DataGridTemplateColumn Width="120"
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                            Header="Тип значения">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="add:AnalogOutput">
-                                                    <ComboBox ItemsSource="{StaticResource DacSources}" SelectedIndex="{Binding DacType.WriteValue, UpdateSourceTrigger=PropertyChanged}">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="DropDownClosed">
-                                                                <i:InvokeCommandAction Command="{Binding SetSettingsCommand}"/>
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </ComboBox>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Номер изм. процесса -->
-                                        <DataGridTemplateColumn Header="№ изм. процесса" Width="200">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding AnalogMeasProcNdx}"
-                                                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <DataGridTemplateColumn Width="120"
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}"
-                                                                            Header="Тип переменной">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemCompoboxParameter DataContext="{Binding VarNdx}"
-                                                                                              CompoboxWidth="100"                                                                                  
-                                                                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"
-                                                                                              ItemSource="{StaticResource VarTypes}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-
-                                        </DataGridTemplateColumn>
-                                        <!--#region Нижний предел переменной -->
-                                        <DataGridTemplateColumn Header="Нижний предел переменной" 
-                                                                            Width="200" 
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding DacLowLimit}"
-                                                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Верхний предел переменной -->
-                                        <DataGridTemplateColumn Header="Верхний предел переменной" 
-                                                                            Width="200" 
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding DacHighLimit}"
-                                                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                        <!--#region Нижний предел переменной(mA) -->
-                                        <DataGridTemplateColumn Header="Нижний предел тока" 
-                                                                            Width="200" 
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding DacLowLimitMa}"
-                                                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-
-                                        <!--#region Верхний предел тока -->
-                                        <DataGridTemplateColumn Header="Верхний предел тока" 
-                                                                            Width="200" 
-                                                                            HeaderTemplate="{StaticResource AnalogHeaderTemplate}">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <uc:MenuItemParameterText DataContext="{Binding DacHighLimitMa}"
-                                                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.SetSettingsCommand}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--#endregion-->
-                                    </DataGrid.Columns>
-
-                                </DataGrid>
-                            </GroupBox>
-                            <!--#endregion-->
-                        </StackPanel>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region ЕДИНИЦЫ ИЗМЕРЕНИЯ -->
-                    <TabItem Header="ЕДИНИЦЫ ИЗМЕРЕНИЯ">
-                        <uc:MeasUnitControl DataContext="{Binding MeasUnitSettingsVm}"/>
-                    </TabItem>
-                    <!--#endregion-->
+                   
                     <!--#region Настройки платы HV -->
                     <TabItem Header="ПЛАТА HV" >
                         <ListBox HorizontalContentAlignment="Stretch" >
@@ -324,7 +131,7 @@
                     <!--#endregion-->
                     <!--#region Коммуникация -->
                     <TabItem Header="КОММУНИКАЦИЯ" DataContext="{Binding ConnectSettingsVm}">
-                        <uc:CommunicationControl/>
+                        <!--<uc:CommunicationControl/>-->
                     </TabItem>
                     <!--#endregion-->
                     <!--#region События -->

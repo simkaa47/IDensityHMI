@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <None Remove="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <None Remove="Views\Resourses\Pictures\AddCircleOutline.png" />
     <None Remove="Views\Resourses\Pictures\AlertReportProblemRed.png" />
     <None Remove="Views\Resourses\Pictures\ArrDowm.png" />
     <None Remove="Views\Resourses\Pictures\Arrow.png" />
@@ -17,7 +18,9 @@
     <None Remove="Views\Resourses\Pictures\Comm_Fail.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Ok.png" />
     <None Remove="Views\Resourses\Pictures\ControlIcon.png" />
+    <None Remove="Views\Resourses\Pictures\DeleteIcon.png" />
     <None Remove="Views\Resourses\Pictures\DriveFileMove.png" />
+    <None Remove="Views\Resourses\Pictures\EditIcon.png" />
     <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
     <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
@@ -56,6 +59,7 @@
   <ItemGroup>
     <Resource Include="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <Resource Include="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <Resource Include="Views\Resourses\Pictures\AddCircleOutline.png" />
     <Resource Include="Views\Resourses\Pictures\AlertReportProblemRed.png" />
     <Resource Include="Views\Resourses\Pictures\ArrDowm.png" />
     <Resource Include="Views\Resourses\Pictures\Arrow.png" />
@@ -64,7 +68,9 @@
     <Resource Include="Views\Resourses\Pictures\Comm_Fail.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Ok.png" />
     <Resource Include="Views\Resourses\Pictures\ControlIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\DeleteIcon.png" />
     <Resource Include="Views\Resourses\Pictures\DriveFileMove.png" />
+    <Resource Include="Views\Resourses\Pictures\EditIcon.png" />
     <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />
     <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />

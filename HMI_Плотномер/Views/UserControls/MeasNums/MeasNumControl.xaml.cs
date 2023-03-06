@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IDensity.Views.Resourses.UserControls
+namespace IDensity.Core.Views.UserControls.MeasNums
 {
     /// <summary>
-    /// Interaction logic for MeasUnitControl.xaml
+    /// Interaction logic for MeasNumControl.xaml
     /// </summary>
-    public partial class MeasUnitControl : UserControl
+    public partial class MeasNumControl : UserControl
     {
-        public MeasUnitControl()
+        public MeasNumControl()
         {
             InitializeComponent();
         }
