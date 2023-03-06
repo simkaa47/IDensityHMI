@@ -121,6 +121,11 @@
             <oth:CommunicationControl DataContext="{Binding ConnectSettingsVm}"/>
         </TabItem>
         <!--#endregion-->
+        <!--#region Event settings -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Настройки событий"  >
+            <oth:EventSettingsControl/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     
