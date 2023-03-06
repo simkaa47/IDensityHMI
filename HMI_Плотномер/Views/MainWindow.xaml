@@ -50,10 +50,7 @@
                     <!--#region Настройки платы HV -->
                     <TabItem Header="ПЛАТА HV" >
                         <ListBox HorizontalContentAlignment="Stretch" >
-                            <!--#region Уставка напряжения -->
-                            <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageSV}" 
-                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AdcViewModel.SetHvCommand}" />
-                            <!--#endregion-->
+                            
                             <!--#region Входное напряжение -->
                             <uc:Parameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}"/>
                             <!--#endregion-->
