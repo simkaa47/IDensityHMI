@@ -37,7 +37,11 @@ namespace IDensity.ViewModels
         {
             byte num = 0;
             var nums = (VM.mainModel.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
-            if (nums.Length == 4) VM.CommService.SetUdpAddr(nums, VM.mainModel.PortUdp);
+            if (nums.Length == 4)
+            {
+                VM.mainModel.UdpWriting = true;
+                VM.CommService.SetUdpAddr(nums, VM.mainModel.PortUdp);
+            }
         },
             canExecPar => VM.mainModel.Connecting.Value));
 
@@ -48,6 +52,7 @@ namespace IDensity.ViewModels
         public RelayCommand WriteEthParamsCommand => _writeEthParamsCommand ?? (_writeEthParamsCommand = new RelayCommand(par =>
         {
             VM.CommService.SetTcpSettings(VM.mainModel.IP, VM.mainModel.Mask, VM.mainModel.GateWay);
+            VM.mainModel.TcpWriting = true;
         },
             o => VM.mainModel.Connecting.Value));
         #endregion

@@ -116,6 +116,11 @@
             <oth:DateTimeSettingsControl/>
         </TabItem>
         <!--#endregion-->
+        <!--#region Communication -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Коммуникация"  >
+            <oth:CommunicationControl DataContext="{Binding CommonSettingsVm}"/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     

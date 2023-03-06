@@ -181,19 +181,7 @@ namespace IDensity.ViewModels
 
         public RelayCommand ShowEventsCommand => _showEventsCommand ?? (_showEventsCommand = new RelayCommand(exec => AddHistoryItemsFromDb(), canExex => true));
 
-        #endregion
-
-        #region Переключить реле
-        RelayCommand _switchRelayCommand;
-        public RelayCommand SwitchRelayCommand => _switchRelayCommand ?? (_switchRelayCommand = new RelayCommand(par =>
-        {
-            ushort temp = 0;
-            if (par != null && ushort.TryParse(par.ToString(), out temp))
-            {
-                mainModel.SwitchRelay(temp);
-            }
-        }, canExec => true));
-        #endregion               
+        #endregion                
 
         #endregion
         public MainModel mainModel { get; }
