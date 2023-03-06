@@ -77,7 +77,7 @@ namespace IDensity.ViewModels
         {
             if (!(execPar is AnalogOutput output)) return;
             if (!output.AmTestValue.ValidationOk) return;
-            output.AmTestValue.Value = output.AmTestValue.Value;
+            output.AmTestValue.Value = output.AmTestValue.WriteValue;
             VM.CommService.SetTestValueAm(output.GroupNum, output.ModulNum, output.AmTestValue.WriteValue);
             
         }, canExecPar => VM.mainModel.Connecting.Value));

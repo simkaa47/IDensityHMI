@@ -219,6 +219,7 @@
                         <DataTemplate>
                             <p:TextParameter DescriptionNotVisible="True"
                                              ParameterWidth="80"
+                                             CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.LowLimitMaWriteCommand}"
                                              DataContext="{Binding DacLowLimitMa}"
                                              HorizontalAlignment="Center"/>
@@ -234,6 +235,7 @@
                         <DataTemplate>
                             <p:TextParameter DescriptionNotVisible="True"
                                              ParameterWidth="80"
+                                             CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.HighLimitMaWriteCommand}"
                                              DataContext="{Binding DacHighLimitMa}"
                                              HorizontalAlignment="Center"/>
