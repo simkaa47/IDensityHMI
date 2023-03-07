@@ -131,6 +131,11 @@
             <oth:AdministrationControl/>
         </TabItem>
         <!--#endregion-->
+        <!--#region parameters -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Параметры" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" >
+            <oth:Parameters/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     

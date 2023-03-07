@@ -46,23 +46,7 @@
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                   
-                    
-                    <!--#region Параметры -->
-                    <TabItem Header="ПАРАМЕТРЫ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                        <TabItem.Resources>
-                            <add:ParamList x:Key="paramsList"/>
-                        </TabItem.Resources>
-                        <DataGrid ItemsSource="{Binding Source={StaticResource paramsList}, Path=ParameterList}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Описание" Binding="{Binding Description}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Мин. величина" Binding="{Binding MinValue}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Макс. величина" Binding="{Binding MaxValue}"></DataGridTextColumn>
-
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
-                    <!--#endregion-->
+                   
                     <!--#region Логирование на SD карту -->
                     <TabItem Header="SD КАРТА">
                         <uc:SdCardControl DataContext="{Binding SdCardVm}"/>
