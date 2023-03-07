@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Соединение с плотномером установлено. Для того, чтобы выйти из мастера соединения, нажмите кнопку 'Далее'"
+        <TextBlock Text="Соединение с прибором установлено. Для того, чтобы выйти из мастера соединения, нажмите кнопку 'Далее'"
                    Style="{StaticResource MasterConnect}"/>
     </Grid>
 </UserControl>

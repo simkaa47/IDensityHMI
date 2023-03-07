@@ -141,6 +141,11 @@
             <oth:SdCardControl DataContext="{Binding SdCardVm}"/>
         </TabItem>
         <!--#endregion-->
+        <!--#region Master settings -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Мастер настроек" >
+            <oth:MasterSettingsControl DataContext="{Binding MasterSettingsViewModel}"/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     

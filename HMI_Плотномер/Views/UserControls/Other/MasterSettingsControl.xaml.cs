@@ -11,10 +11,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IDensity.Views.Resourses.UserControls
+namespace IDensity.Core.Views.UserControls.Other
 {
     /// <summary>
-    /// Interaction logic for MasterSettingsControl.xaml
+    /// Логика взаимодействия для MasterSettingsControl.xaml
     /// </summary>
     public partial class MasterSettingsControl : UserControl
     {

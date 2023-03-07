@@ -34,7 +34,7 @@
                 <ResourceDictionary Source="Views/Resourses/Templates/ScrolableTabControlTemplate.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Templates/TrendAdc.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/GridViewColumnHeader.xaml"/>
-                <ResourceDictionary Source="Views\Resourses\UserControls\CheckMaster\Analog\AnalogMeasPointTemplate.xaml"/>
+                <ResourceDictionary Source="Views\CheckMaster\AnalogMeasPointTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
         

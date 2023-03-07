@@ -12,6 +12,10 @@
         <Grid.Resources>
             <Style TargetType="ListBoxItem">
                 <Setter Property="Margin" Value="0"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+            <Style TargetType="ListBox">
+                <Setter Property="BorderThickness" Value="0"/>
             </Style>
             <Style TargetType="TextBlock" BasedOn="{StaticResource CheckMaster}" x:Key="ResultStyle">
                 <Style.Triggers>
@@ -31,7 +35,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="{Binding Num, StringFormat=Аналоговый выход {0}}" TextWrapping="Wrap"/>
-        <CheckBox Grid.Column="1" IsEnabled="False" IsChecked="{Binding IsError, Converter={StaticResource InvertBooleanConverter}}"/>
+        <CheckBox Grid.Column="1" IsEnabled="False" IsChecked="{Binding IsError, Converter={StaticResource NotEqual}, ConverterParameter=True}"/>
         <ListBox Margin="0" Grid.Column="2" HorizontalContentAlignment="Stretch">
             <ListBox Margin="-20,0,0,0"   ItemsSource="{Binding MeasPoints}" ItemTemplate="{StaticResource AnalogMeasPointTemplate}"/>
             <TextBlock Style="{StaticResource ResultStyle}"/>
