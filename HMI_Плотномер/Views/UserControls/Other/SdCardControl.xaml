@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="IDensity.Core.Views.UserControls.Other.SdCardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:IDensity.ViewModels.SdCard"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Other"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:SdCardVm}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>            
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--#region Table -->
+        <Border Background="Black" Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <DataGrid CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  Margin="10"
+                  BorderThickness="0"
+                  Background="Transparent"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding FileNames}"
+                  SelectedItem="{Binding SelectedFileInfo}">
+                <DataGrid.Columns>
+                    <!--#region № -->
+                    <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="№">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Id}" Style="{StaticResource Common}" Margin="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region File name -->
+                    <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ИМЯ ФАЙЛА">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Style="{StaticResource Common}" Margin="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region Count -->
+                    <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЛИЧЕСТВО ЗАПИСЕЙ">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding WriteNumber}" Style="{StaticResource Common}" Margin="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region Start num -->
+                    <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="СТАРТОВЫЙ НОМЕР ДЛЯ ЧТЕНИЯ">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <!--#endregion-->
+    </Grid>
+</UserControl>

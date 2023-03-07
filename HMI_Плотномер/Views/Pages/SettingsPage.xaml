@@ -136,6 +136,11 @@
             <oth:Parameters/>
         </TabItem>
         <!--#endregion-->
+        <!--#region Sd card -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="SD карта" >
+            <oth:SdCardControl/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     
