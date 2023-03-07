@@ -37,29 +37,18 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Вкладка Настройки -->
-            <TabItem Header="Настройки"
+            <TabItem Header="Настройки" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
                              Tag="..\Pictures\TuneIcon.png">
                 <pages:SettingsPage/>
             </TabItem>
-            <!--#endregion-->
-            <!--#region НАСТРОЙКИ -->
-            <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
-                
-                <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                   
-                   
-                    <!--#region Сохранить json -->
-                    <TabItem Header="SAVE-LOAD JSON" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                        <uc:SaveLoadMainModelControl DataContext="{Binding CommonSettingsVm}"/>
-                    </TabItem>
-                    <!--#endregion-->
-                </TabControl>
+            <!--#endregion-->            
+            <!--#region Вкладка Управление -->
+            <TabItem Header="Управление" 
+                             Tag="..\Pictures\ManageAccounts.png">
+                <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
             </TabItem>
             <!--#endregion-->
-            <!--#region Управление -->
-            <TabItem Header="УПРАВЛЕНИЕ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
-                <adc:SpectrTuneControl DataContext="{Binding AdcViewModel}"/>
-            </TabItem>
-            <!--#endregion-->
+            
             <!--#region События -->
             <TabItem Header="СОБЫТИЯ">
                 <TabControl TabStripPlacement="Top">
