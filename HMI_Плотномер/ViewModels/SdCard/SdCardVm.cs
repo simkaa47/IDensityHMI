@@ -22,6 +22,11 @@ namespace IDensity.ViewModels.SdCard
               {
                   if (IsReading) GetWritesRequest();
               };
+            FileNames = new List<SdFileInfo>
+            {
+                new SdFileInfo{Name="Гамарджоба", WriteNumber=787},
+                new SdFileInfo{Name="s,cjnkldcnj"},
+            };
 
         }
         /// <summary>
@@ -176,7 +181,7 @@ namespace IDensity.ViewModels.SdCard
 
         void GetWritesRequest()
         {
-            VM.CommService.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.finish}#", (str) =>
+            VM.CommService.Tcp.GetResponce($"*CMND,FMR,{readFile.Name},{readFile.Start},{readFile.Finish}#", (str) =>
             {
                 if (str == "")
                 {
@@ -184,13 +189,13 @@ namespace IDensity.ViewModels.SdCard
                     return;
                 }
                 Write(str);
-                if (readFile.Start >= readFile.finish)
+                if (readFile.Start >= readFile.Finish)
                 {
                     IsReading = false;
                 }
                 if (IsReading)
                 {
-                    readFile.Start += readFile.finish - readFile.Start > 1 ? 2 : 1;
+                    readFile.Start += readFile.Finish - readFile.Start > 1 ? 2 : 1;
                     GetWritesRequest();
                 }
 

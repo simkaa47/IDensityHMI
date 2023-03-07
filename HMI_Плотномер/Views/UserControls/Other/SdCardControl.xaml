@@ -19,6 +19,8 @@
             <DataGrid CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   Margin="10"
+                      FontSize="16"
+                      Foreground="White"
                   BorderThickness="0"
                   Background="Transparent"
                   AutoGenerateColumns="False"
@@ -29,7 +31,7 @@
                     <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="№">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Id}" Style="{StaticResource Common}" Margin="5"/>
+                                <TextBlock Text="{Binding Id}" Style="{StaticResource Common}" Margin="10"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -53,13 +55,18 @@
                     </DataGridTemplateColumn>
                     <!--#endregion-->
                     <!--#region Start num -->
-                    <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="СТАРТОВЫЙ НОМЕР ДЛЯ ЧТЕНИЯ">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="СТАРТОВЫЙ НОМЕР ДЛЯ ЧТЕНИЯ"
+                                        Binding="{Binding Start, UpdateSourceTrigger=PropertyChanged}">
+                        
+                        
+                    </DataGridTextColumn>
+                    <!--#endregion-->
+                    <!--#region Finish num num -->
+                    <DataGridTextColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОНЕЧНЫЙ НОМЕР ДЛЯ ЧТЕНИЯ"
+                                        Binding="{Binding Finish, UpdateSourceTrigger=PropertyChanged}">
+
+
+                    </DataGridTextColumn>
                     <!--#endregion-->
                 </DataGrid.Columns>
             </DataGrid>
