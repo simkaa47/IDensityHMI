@@ -122,7 +122,7 @@
         </TabItem>
         <!--#endregion-->
         <!--#region Event settings -->
-        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Настройки событий"  >
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Настройки событий" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" >
             <oth:EventSettingsControl/>
         </TabItem>
         <!--#endregion-->

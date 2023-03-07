@@ -46,61 +46,7 @@
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                   
-                  
-                    <!--#region События -->
-                    <TabItem Header="СОБЫТИЯ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                        <DataGrid ItemsSource="{Binding Events.EventDevices}" 
-                                                    AutoGenerateColumns="False"                                        
-                                                    CanUserAddRows="False">
-                            <DataGrid.Columns>
-                                <!--#region ID -->
-                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/>
-                                <!--#endregion-->
-                                <DataGridTextColumn Header="Номер" Binding="{Binding Num, StringFormat=d4}"></DataGridTextColumn>
-                                <!--#region Заголовок -->
-                                <DataGridTextColumn Header="Заголовок" Binding="{Binding Title}"/>
-                                <!--#endregion-->
-                                <!--#region Описание события -->
-                                <DataGridTextColumn Header="Описание события" Binding="{Binding Description}" />
-                                <!--#endregion-->
-                                <!--#region Активный фон -->
-                                <DataGridTemplateColumn Width="120">
-                                    <DataGridTemplateColumn.Header>
-                                        <TextBlock Text="Активный фон"
-                                                               TextWrapping="Wrap"/>
-                                    </DataGridTemplateColumn.Header>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <wpftool:ColorPicker SelectedColor="{Binding ActiveColor, UpdateSourceTrigger=LostFocus}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <!--#endregion-->
-                                <!--#region Неактивный фон -->
-                                <DataGridTemplateColumn Width="120">
-                                    <DataGridTemplateColumn.Header>
-                                        <TextBlock Text="Неактивный фон"
-                                                               TextWrapping="Wrap"/>
-                                    </DataGridTemplateColumn.Header>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <wpftool:ColorPicker SelectedColor="{Binding NotActiveColor, UpdateSourceTrigger=LostFocus}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Тип" Width="120">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ComboBox ItemsSource="{StaticResource EventTypes}" SelectedIndex="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridCheckBoxColumn Binding="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}"/>
-                                <!--#endregion-->
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
-                    <!--#endregion-->
+                                     
                     <!--#region Управление пользователями -->
                     <TabItem Header="ПОЛЬЗОВАТЕЛИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                         <DataGrid  ItemsSource="{Binding Users.Data}">

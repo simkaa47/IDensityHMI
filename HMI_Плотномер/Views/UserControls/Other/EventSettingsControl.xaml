@@ -5,15 +5,106 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Other"
              mc:Ignorable="d" 
+             xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:vm="clr-namespace:IDensity.ViewModels"
               d:DataContext="{d:DesignInstance vm:VM}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+       
+    </UserControl.Resources>
+    <Border Margin="20" Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top">
         <DataGrid Background="Transparent"
                   CanUserAddRows="False"
-                 CanUserDeleteRows="False"                          
-                 AutoGenerateColumns="False">
-            
+                  Margin="10"
+                  BorderThickness="0"
+                  ItemsSource="{Binding Events.EventDevices}" 
+                  CanUserDeleteRows="False"                          
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                
+                <!--#region ID -->
+                <DataGridTemplateColumn Header="ID" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Common}" Text="{Binding Id}" Margin="10"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>                
+                <!--#endregion-->
+                <!--#region Num -->
+                <DataGridTemplateColumn Header="НОМЕР" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Common}" Text="{Binding Num, StringFormat=d4}" Margin="10"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Title -->
+                <DataGridTemplateColumn Header="ЗАГОЛОВОК" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Common}" Text="{Binding Title}" Margin="10"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Description -->
+                <DataGridTemplateColumn Header="ОПИСАНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource Common}" Text="{Binding Description}" Margin="10"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->                
+                <!--#region Активный фон -->
+                <DataGridTemplateColumn Width="120" Header="АКТИВНЫЙ ФОН" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">                    
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpftool:ColorPicker SelectedColor="{Binding ActiveColor, UpdateSourceTrigger=LostFocus}"
+                                                 Background="{StaticResource TabControlCommon}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region неактивный фон -->
+                <DataGridTemplateColumn Width="120" Header="НЕАКТИВНЫЙ ФОН" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpftool:ColorPicker SelectedColor="{Binding NotActiveColor, UpdateSourceTrigger=LostFocus}"
+                                                 Background="{StaticResource TabControlCommon}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Type -->
+                <DataGridTemplateColumn Header="ТИП" Width="120" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{StaticResource EventTypes}" 
+                                      SelectedIndex="{Binding Type, UpdateSourceTrigger=PropertyChanged}"
+                                      Foreground="White"
+                                      VerticalContentAlignment="Center"
+                                      FontSize="16"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region IsActive -->
+                <DataGridTemplateColumn Header="АКТИВНОСТЬ СОБЫТИЯ" Width="120" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"
+                                      HorizontalAlignment="Center"
+                                      IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->                
+                
+            </DataGrid.Columns>
         </DataGrid>
     </Border>
 </UserControl>
