@@ -46,51 +46,7 @@
             <TabItem Header="НАСТРОЙКИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}">
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                   
-                                     
-                    <!--#region Управление пользователями -->
-                    <TabItem Header="ПОЛЬЗОВАТЕЛИ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                        <DataGrid  ItemsSource="{Binding Users.Data}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
-                                <DataGridTextColumn Header="Имя" Binding="{Binding Path=Name}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Somename}"></DataGridTextColumn>
-                                <DataGridComboBoxColumn Header="Уровень доступа" ItemsSource="{StaticResource users}" SelectedItemBinding="{Binding Path=Level}" ></DataGridComboBoxColumn>
-                                <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region Перечисления -->
-                    <TabItem Header="ПЕРЕЧИСЛЕНИЯ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                        <TabItem.Resources>
-                            <!--#region Общий шаблон для таблички -->
-                            <ControlTemplate x:Key="Enums">
-                                <GroupBox Header="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}">
-                                    <DataGrid ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"   >
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn  Header="Id" Binding="{Binding Id}" IsReadOnly="True"></DataGridTextColumn>
-                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </GroupBox>
-
-                            </ControlTemplate>
-                            <!--#endregion-->
-                        </TabItem.Resources>
-                        <WrapPanel>
-                            <!--#region Названия Источников компенсаций -->
-                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding CompensationSrcNames.Data}" Tag="Источники компенсаций"></DataGrid>
-                            <!--#endregion-->
-                            <!--#region Единицы измерения -->
-                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding UnitNames.Data}" Tag="Единицы измерения"></DataGrid>
-                            <!--#endregion-->
-                            <!--#region Название измерительных процессов -->
-                            <DataGrid Template="{StaticResource Enums}" DataContext="{Binding MeasProcNames.Data}" Tag="Измерительные процессы"></DataGrid>
-                            <!--#endregion-->
-                        </WrapPanel>
-
-                    </TabItem>
-                    <!--#endregion-->
+                    
                     <!--#region Параметры -->
                     <TabItem Header="ПАРАМЕТРЫ" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                         <TabItem.Resources>

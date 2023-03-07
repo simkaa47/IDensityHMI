@@ -126,6 +126,11 @@
             <oth:EventSettingsControl/>
         </TabItem>
         <!--#endregion-->
+        <!--#region User settings -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Пользователи" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" >
+            <oth:AdministrationControl/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     
