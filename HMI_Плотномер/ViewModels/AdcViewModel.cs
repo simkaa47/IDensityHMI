@@ -42,7 +42,7 @@ namespace IDensity.ViewModels
         #region Записать режим измерения АЦП
         RelayCommand _setAdcModeChange;
         public RelayCommand SetAdcModeChangeCommand => _setAdcModeChange ?? (_setAdcModeChange = new RelayCommand(p => {
-            
+            VM.mainModel.AdcBoardSettings.AdcMode.IsWriting = true;
             VM.CommService.SetAdcMode(VM.mainModel.AdcBoardSettings.AdcMode.WriteValue);
         }, p => true));
         #endregion
@@ -50,7 +50,7 @@ namespace IDensity.ViewModels
         #region Записать Режим синхронизации
         RelayCommand _setAdcSyncModeChangeCommand;
         public RelayCommand SetAdcSyncModeChangeCommand => _setAdcSyncModeChangeCommand ?? (_setAdcSyncModeChangeCommand = new RelayCommand(p => {
-            
+            VM.mainModel.AdcBoardSettings.AdcSyncMode.IsWriting = true;
             VM.CommService.SetAdcSyncMode(VM.mainModel.AdcBoardSettings.AdcSyncMode.WriteValue);
         }, p => true));
         #endregion
@@ -58,7 +58,7 @@ namespace IDensity.ViewModels
         #region Записать Уровень синхронизации
         RelayCommand _setAdcSyncLevelChangeCommand;
         public RelayCommand SetAdcSyncLevelChangeCommand => _setAdcSyncLevelChangeCommand ?? (_setAdcSyncLevelChangeCommand = new RelayCommand(p => {
-            
+            VM.mainModel.AdcBoardSettings.AdcSyncLevel.IsWriting = true;
             VM.CommService.SetAdcSyncLevel(VM.mainModel.AdcBoardSettings.AdcSyncLevel.WriteValue);
         }, p => true));
         #endregion
@@ -66,7 +66,7 @@ namespace IDensity.ViewModels
         #region Записать Режим обработки при регистрировании максимальных амплитуд
         RelayCommand _setAdcProcModeChangeCommand;
         public RelayCommand SetAdcProcModeChangeCommand => _setAdcProcModeChangeCommand ?? (_setAdcProcModeChangeCommand = new RelayCommand(p => {
-            
+            VM.mainModel.AdcBoardSettings.AdcProcMode.IsWriting = true;
             VM.CommService.SetAdcProcMode(VM.mainModel.AdcBoardSettings.AdcProcMode.WriteValue);
         }, p => true));
         #endregion
@@ -74,7 +74,7 @@ namespace IDensity.ViewModels
         #region Записать Таймер выдачи данных
         RelayCommand _setTimerMaxChangeCommand;
         public RelayCommand SetTimerMaxChangeCommand => _setTimerMaxChangeCommand ?? (_setTimerMaxChangeCommand = new RelayCommand(p => {
-            
+            VM.mainModel.AdcBoardSettings.TimerMax.IsWriting = true;
             VM.CommService.SetAdcTimerMax(VM.mainModel.AdcBoardSettings.TimerMax.WriteValue);
         }, p => true));
         #endregion
@@ -82,7 +82,7 @@ namespace IDensity.ViewModels
         #region Записать К-т предусиления
         RelayCommand _setPreampGainChangeCommand;
         public RelayCommand SetPreampGainChangeCommand => _setPreampGainChangeCommand ?? (_setPreampGainChangeCommand = new RelayCommand(p => {
-            
+            VM.mainModel.AdcBoardSettings.PreampGain.IsWriting = true;
             VM.CommService.SetPreampGain(VM.mainModel.AdcBoardSettings.PreampGain.WriteValue);
         }, p => true));
         #endregion
