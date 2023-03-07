@@ -125,8 +125,8 @@
         
     </x:Array>
     <col1:ArrayList   x:Key="SdBtnStatus">
-        <sys1:String>Записать.</sys1:String>
-        <sys1:String>Отмена</sys1:String>
+        <sys1:String>ЗАПИСАТЬ</sys1:String>
+        <sys1:String>ОТМЕНА</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList x:Key="MeasProcNums">
         <sys1:String>0</sys1:String>

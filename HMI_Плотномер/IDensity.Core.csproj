@@ -14,6 +14,7 @@
     <None Remove="Views\Resourses\Pictures\ArrDowm.png" />
     <None Remove="Views\Resourses\Pictures\Arrow.png" />
     <None Remove="Views\Resourses\Pictures\ArrUp.png" />
+    <None Remove="Views\Resourses\Pictures\BroeseAquaIcon.png" />
     <None Remove="Views\Resourses\Pictures\Clear.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Fail.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Ok.png" />
@@ -27,6 +28,7 @@
     <None Remove="Views\Resourses\Pictures\MeasIcon.png" />
     <None Remove="Views\Resourses\Pictures\RadioButtonChecked.png" />
     <None Remove="Views\Resourses\Pictures\RadioButtonUnchecked.png" />
+    <None Remove="Views\Resourses\Pictures\ReadAquaIcon.png" />
     <None Remove="Views\Resourses\Pictures\ResetTv.png" />
     <None Remove="Views\Resourses\Pictures\SystemUpdateAlt.png" />
     <None Remove="Views\Resourses\Pictures\TuneIcon.png" />
@@ -64,6 +66,7 @@
     <Resource Include="Views\Resourses\Pictures\ArrDowm.png" />
     <Resource Include="Views\Resourses\Pictures\Arrow.png" />
     <Resource Include="Views\Resourses\Pictures\ArrUp.png" />
+    <Resource Include="Views\Resourses\Pictures\BroeseAquaIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Clear.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Fail.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Ok.png" />
@@ -77,6 +80,7 @@
     <Resource Include="Views\Resourses\Pictures\MeasIcon.png" />
     <Resource Include="Views\Resourses\Pictures\RadioButtonChecked.png" />
     <Resource Include="Views\Resourses\Pictures\RadioButtonUnchecked.png" />
+    <Resource Include="Views\Resourses\Pictures\ReadAquaIcon.png" />
     <Resource Include="Views\Resourses\Pictures\ResetTv.png" />
     <Resource Include="Views\Resourses\Pictures\SystemUpdateAlt.png" />
     <Resource Include="Views\Resourses\Pictures\TuneIcon.png" />

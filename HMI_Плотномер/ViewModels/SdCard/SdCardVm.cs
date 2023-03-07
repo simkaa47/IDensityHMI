@@ -21,12 +21,7 @@ namespace IDensity.ViewModels.SdCard
             VM.CommService.Tcp.TcpEvent += (s) =>
               {
                   if (IsReading) GetWritesRequest();
-              };
-            FileNames = new List<SdFileInfo>
-            {
-                new SdFileInfo{Name="Гамарджоба", WriteNumber=787},
-                new SdFileInfo{Name="s,cjnkldcnj"},
-            };
+              };            
 
         }
         /// <summary>

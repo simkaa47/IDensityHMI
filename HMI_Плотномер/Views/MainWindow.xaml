@@ -47,11 +47,6 @@
                 
                 <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">                   
                    
-                    <!--#region Логирование на SD карту -->
-                    <TabItem Header="SD КАРТА">
-                        <uc:SdCardControl DataContext="{Binding SdCardVm}"/>
-                    </TabItem>
-                    <!--#endregion-->
                     <!--#region Мастер настроек -->
                     <TabItem Header="МАСТЕР НАСТРОЕК" DataContext="{Binding MasterSettingsViewModel}">
                         <uc:MasterSettingsControl/>
