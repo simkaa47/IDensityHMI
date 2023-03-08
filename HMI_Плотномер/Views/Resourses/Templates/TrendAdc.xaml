@@ -6,14 +6,15 @@
     <ControlTemplate x:Key="AdcTrend" TargetType="UserControl" >
         <Grid>
             <!--#region Тренд в режиме осциллографа-->
-            <oxy:Plot PlotMargins="30,0,0,30"  
-                                      Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=3}"
-                                      Grid.Row="1"
-                                      PlotType="XY"                                         
-                                      PlotAreaBorderThickness="0" 
-                                      TextColor="WhiteSmoke"                               
-                                      Background="DarkSlateGray"   
-                                      PlotAreaBackground="DarkGray">
+            <oxy:Plot PlotMargins="50,0,40,50"  
+                      Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=3}"
+                      PlotType="XY"                                         
+                      PlotAreaBorderThickness="1" 
+                      PlotAreaBorderColor="WhiteSmoke"                      
+                      TextColor="#FFFFFF" 
+                      Opacity="0.5"
+                      Background="#2C2C2E"   
+                      PlotAreaBackground="#2C2C2E">
 
                 <oxy:Plot.Annotations>                    
                     <oxy:LineAnnotation Name="LowLine"  Type="Vertical" X="{Binding SelectedCountDiapasone.Start.Value}" Color="Blue" Text="Старт" StrokeThickness="4" />
@@ -22,29 +23,30 @@
                     </oxy:LineAnnotation>                    
                 </oxy:Plot.Annotations>
                 <oxy:Plot.Axes>
-                    <oxy:LinearAxis  
-                                        TextColor="WhiteSmoke"
-                                        FontSize="14"
-                                        MajorGridlineColor="WhiteSmoke"
-                                        MajorGridlineStyle="Dot"
-                                        Position ="Left">                        
+                    <oxy:LinearAxis  TextColor="WhiteSmoke"                                     
+                                     AxisDistance="1"
+                                     MajorGridlineColor="WhiteSmoke"
+                                     MajorGridlineStyle="Dot"
+                                     Position ="Left">                        
                     </oxy:LinearAxis>
                 </oxy:Plot.Axes>                
-                <oxy:LineSeries                                            
-                                               ItemsSource="{Binding AdcDataTrend}"
-                                               DataFieldX="X" DataFieldY="Y"                                           
-                                               Color="Black"/>                
+                <oxy:LineSeries   ItemsSource="{Binding AdcDataTrend}"
+                                  DataFieldX="X" DataFieldY="Y"
+                                  FontSize="12"
+                                  Color="White"/>                
             </oxy:Plot>
             <!--#endregion-->
             <!--#region Гистограмма в режиме максимальных амплитуд -->
-            <oxy:Plot Grid.Row="1"
-                                      TextColor="WhiteSmoke"
-                                      PlotAreaBorderColor="WhiteSmoke"
+            <oxy:Plot Grid.Row="1"    PlotMargins="50,0,40,50" 
+                                      TextColor="#FFFFFF"                                      
                                       SelectionColor="WhiteSmoke"
+                                      PlotAreaBorderColor="WhiteSmoke"         
+                                      PlotAreaBorderThickness="1" 
                                       LegendTextColor="WhiteSmoke"
                                       Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=3}"
-                                      Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
-                                      PlotAreaBackground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}">
+                                      Opacity="0.5"
+                                      Background="#2C2C2E"   
+                                      PlotAreaBackground="#2C2C2E">
                 <oxy:Plot.Axes>
                     <oxy:LinearAxis Title="Значение"                                                    
                                                     Position="Left"

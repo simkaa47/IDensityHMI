@@ -14,6 +14,7 @@
                       TextColor="#FFFFFF" 
                       Opacity="0.5"
                       x:Name="plot" 
+                      PlotAreaBorderColor="WhiteSmoke"
                       IsLegendVisible="True"
                       Background="#2C2C2E"   
                       PlotAreaBackground="#2C2C2E">
@@ -21,14 +22,14 @@
             <oxy:Plot.Axes>
                 <oxy:LinearAxis  
                         Font="Roboto"                        
-                        FontSize="12"                       
+                        FontSize="12"                      
                         MajorGridlineColor="WhiteSmoke"
                         MajorGridlineStyle="Dot"
                         Position ="Left" />
                 <oxy:DateTimeAxis FontWeight="Bold"
                                   MaximumRange="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=MaximumRange}"
                                   MajorGridlineColor="WhiteSmoke"
-                                  MajorGridlineStyle="Dot"
+                                  MajorGridlineStyle="Dot"                                  
                                   FontSize="12"/>
             </oxy:Plot.Axes>
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"

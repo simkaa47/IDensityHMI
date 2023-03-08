@@ -28,7 +28,7 @@
                                             Header="№">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Num.Value}" Margin="10"
+                                    <TextBlock Text="{Binding Num.Value}" Margin="5" HorizontalAlignment="Center"
                                            Style="{StaticResource Common}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -42,7 +42,7 @@
                                                      ItemsSource="{StaticResource CountModes}"
                                                      DataContext="{Binding CounterMode}"
                                                      Index="{Binding WriteValue}"
-                                                     Margin="10"
+                                                     Margin="5"
                                                      HorizontalAlignment="Center"
                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterModeCommand}"/>
                                 </DataTemplate>
@@ -55,7 +55,7 @@
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding Start}"
-                                                 HorizontalAlignment="Center"
+                                                 HorizontalAlignment="Center" Margin="5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterStartCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -66,7 +66,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
-                                                 DataContext="{Binding Width}"
+                                                 DataContext="{Binding Width}" Margin="5"
                                                  HorizontalAlignment="Center"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterWidthCommand}"/>
                                 </DataTemplate>
@@ -79,7 +79,7 @@
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountPeakFind}"
-                                                 HorizontalAlignment="Center"
+                                                 HorizontalAlignment="Center" Margin="5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterPeakFindCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -91,7 +91,7 @@
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountPeakSmooth}"
-                                                 HorizontalAlignment="Center"
+                                                 HorizontalAlignment="Center" Margin="5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterSmoothCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -103,7 +103,7 @@
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountBotPerc}"
-                                                 HorizontalAlignment="Center"
+                                                 HorizontalAlignment="Center" Margin="5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterDevDownCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -115,7 +115,7 @@
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountTopPerc}"
-                                                 HorizontalAlignment="Center"
+                                                 HorizontalAlignment="Center" Margin="5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterDevUpCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

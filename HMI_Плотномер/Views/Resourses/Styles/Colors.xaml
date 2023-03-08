@@ -3,4 +3,5 @@
     <SolidColorBrush x:Key="PanelBorderColor" Color="#FF2C2C2E"/>
     <SolidColorBrush x:Key="BorderNonActiveColor" Color="#33FFFFFF"/>
     <SolidColorBrush x:Key="TabControlCommon" Color="#1C1C1E"/>
+    <SolidColorBrush x:Key="AquaColor" Color="#28BCBA"/>
 </ResourceDictionary>
