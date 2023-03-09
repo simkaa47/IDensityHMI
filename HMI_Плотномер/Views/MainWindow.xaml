@@ -4,9 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"               
         xmlns:vm="clr-namespace:IDensity.ViewModels"
-        xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"
-        xmlns:oxy="http://oxyplot.org/wpf" xmlns:col1="clr-namespace:System.Collections;assembly=System.Runtime.Extensions" xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
-        xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"     
+        xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
         xmlns:fa="http://schemas.fontawesome.io/icons/"        
         xmlns:add="clr-namespace:IDensity.AddClasses"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
@@ -41,12 +40,17 @@
             </TabItem>
             <!--#endregion-->            
             <!--#region Вкладка Управление -->
-            <TabItem Header="Управление" 
+            <TabItem Header="Управление" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
                              Tag="..\Pictures\ManageAccounts.png">
                 <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
             </TabItem>
+            <!--#endregion--> 
+            <!--#region Вкладка События -->
+            <TabItem Header="События" 
+                             Tag="..\Pictures\ListIcon.png">
+                <pages:EventPage/>
+            </TabItem>
             <!--#endregion-->
-            
             <!--#region События -->
             <TabItem Header="СОБЫТИЯ">
                 <TabControl TabStripPlacement="Top">

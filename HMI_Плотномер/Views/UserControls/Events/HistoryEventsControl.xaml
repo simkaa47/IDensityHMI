@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="IDensity.Core.Views.UserControls.Events.HistoryEventsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             d:DataContext="{d:DesignInstance vm:VM}"
+             xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Events"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Border Background="Black">
+            <DataGrid Background="Transparent"
+                      Margin="10"
+                      BorderThickness="0"
+                      IsReadOnly="True" 
+                     AutoGenerateColumns="False" 
+                     ItemsSource="{Binding SelectedEventItems}" 
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                      CanUserAddRows="False" 
+                      CanUserDeleteRows="False">
+                <DataGrid.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </DataGrid.ItemsPanel>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}"/>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding EventTime, StringFormat=F,ConverterCulture=ru-RU}"/>
+                    <DataGridTextColumn Header="ПОЛЬЗОВАТЕЛЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding UserName}"/>
+                    <DataGridTextColumn Header="КОД СОБЫТИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding Event.Num, StringFormat=d4}"/>
+                    <DataGridTextColumn Header="СООБЩЕНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding Event.Title}"/>
+                    <DataGridTextColumn Header="АКТИВНОСТЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding Activity, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource Activities}}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>    
+    </Grid>
+</UserControl>

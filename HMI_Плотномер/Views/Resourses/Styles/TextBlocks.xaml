@@ -7,6 +7,7 @@
         <Setter Property="FontFamily" Value="Roboto"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="MasterConnect">

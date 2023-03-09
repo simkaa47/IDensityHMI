@@ -58,7 +58,8 @@
                     </Viewbox>
 
                     <ListBox x:Name="MeasSettSelector" SelectedIndex="0" HorizontalContentAlignment="Stretch"
-                             BorderThickness="0"
+                             BorderThickness="0"                             
+                             Background="Transparent"
                              Visibility="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Основное"/>
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Стандартизация"  />

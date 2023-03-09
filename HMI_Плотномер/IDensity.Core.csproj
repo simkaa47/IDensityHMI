@@ -24,6 +24,7 @@
     <None Remove="Views\Resourses\Pictures\EditIcon.png" />
     <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
+    <None Remove="Views\Resourses\Pictures\ListIcon.png" />
     <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
     <None Remove="Views\Resourses\Pictures\ManageAccounts.png" />
     <None Remove="Views\Resourses\Pictures\MeasIcon.png" />
@@ -33,6 +34,7 @@
     <None Remove="Views\Resourses\Pictures\ResetTv.png" />
     <None Remove="Views\Resourses\Pictures\SystemUpdateAlt.png" />
     <None Remove="Views\Resourses\Pictures\TuneIcon.png" />
+    <None Remove="Views\Resourses\Styles\Search.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,6 +79,7 @@
     <Resource Include="Views\Resourses\Pictures\EditIcon.png" />
     <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />
+    <Resource Include="Views\Resourses\Pictures\ListIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
     <Resource Include="Views\Resourses\Pictures\ManageAccounts.png" />
     <Resource Include="Views\Resourses\Pictures\MeasIcon.png" />
@@ -86,6 +89,7 @@
     <Resource Include="Views\Resourses\Pictures\ResetTv.png" />
     <Resource Include="Views\Resourses\Pictures\SystemUpdateAlt.png" />
     <Resource Include="Views\Resourses\Pictures\TuneIcon.png" />
+    <Resource Include="Views\Resourses\Styles\Search.png" />
   </ItemGroup>
 
   <ItemGroup>
