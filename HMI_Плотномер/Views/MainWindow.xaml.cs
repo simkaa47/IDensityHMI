@@ -30,6 +30,9 @@ namespace IDensity
             CultureInfo.CurrentCulture = new CultureInfo("ru-RU", true);
             CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator = ",";
 
+            CultureInfo.CurrentUICulture = new CultureInfo("ru-RU", true);
+            CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator = ",";
+
             InitializeComponent();
                                    
         }       

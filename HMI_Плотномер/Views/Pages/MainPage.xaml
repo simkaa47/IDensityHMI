@@ -14,6 +14,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DataContext="{d:DesignInstance Type=vm:VM}"
              d:DesignHeight="450" d:DesignWidth="800">
+   
     <Grid Background="Transparent">        
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -29,24 +30,25 @@
                 <!--#region Current Trend-->
                 <TabItem Header="Текущий тренд">
                     <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
-                                                     LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource VisibleConverter}}"
+                                                     LineTitle1="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
+                                                     LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle2="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=1}"
-                                                     LineVisibility3="{Binding TrendsVisible.VisLine3, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility3="{Binding TrendsVisible.VisLine3, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle3="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=2}"
-                                                     LineVisibility4="{Binding TrendsVisible.VisLine4, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility4="{Binding TrendsVisible.VisLine4, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle4="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=3}"
-                                                     LineVisibility5="{Binding TrendsVisible.VisLine5, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility5="{Binding TrendsVisible.VisLine5, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle5="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=4}"
-                                                     LineVisibility6="{Binding TrendsVisible.VisLine6, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility6="{Binding TrendsVisible.VisLine6, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle6="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=5}"
-                                                     LineVisibility7="{Binding TrendsVisible.VisLine7, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility7="{Binding TrendsVisible.VisLine7, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle7="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=6}"
-                                                     LineVisibility8="{Binding TrendsVisible.VisLine8, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility8="{Binding TrendsVisible.VisLine8, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle8="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=7}"
-                                                     LineVisibility9="{Binding TrendsVisible.VisLine9, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility9="{Binding TrendsVisible.VisLine9, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle9="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
-                                                     LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle10="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"/>
                 </TabItem>
                 <!--#endregion-->                
@@ -134,24 +136,25 @@
                         <!--#endregion-->
                         <!--#region Trend -->
                         <trends:MainTrendControl DataSource="{Binding ArchivalDataPotnts}" Margin="10"                                                 
-                                                     LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                     LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource VisibleConverter}}"
+                                                     LineTitle1="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
+                                                     LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle2="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=1}"
-                                                     LineVisibility3="{Binding TrendsVisible.VisLine3, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility3="{Binding TrendsVisible.VisLine3, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle3="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=2}"
-                                                     LineVisibility4="{Binding TrendsVisible.VisLine4, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility4="{Binding TrendsVisible.VisLine4, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle4="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=3}"
-                                                     LineVisibility5="{Binding TrendsVisible.VisLine5, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility5="{Binding TrendsVisible.VisLine5, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle5="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=4}"
-                                                     LineVisibility6="{Binding TrendsVisible.VisLine6, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility6="{Binding TrendsVisible.VisLine6, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle6="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=5}"
-                                                     LineVisibility7="{Binding TrendsVisible.VisLine7, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility7="{Binding TrendsVisible.VisLine7, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle7="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=6}"
-                                                     LineVisibility8="{Binding TrendsVisible.VisLine8, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility8="{Binding TrendsVisible.VisLine8, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle8="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=7}"
-                                                     LineVisibility9="{Binding TrendsVisible.VisLine9, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility9="{Binding TrendsVisible.VisLine9, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle9="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
-                                                     LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle10="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"/>
                         <!--#endregion-->
                         <!--#region Load Indicator -->
@@ -176,7 +179,7 @@
                 </ToggleButton.ToolTip>
                 <Image Source="..\Resourses\Pictures\TuneIcon.png"/>                
             </ToggleButton>
-            <Popup Height="480" Width="600"                   
+            <Popup Height="Auto" Width="600"                   
                    IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
                    StaysOpen="False"                   
                    Placement="MousePoint">
@@ -200,10 +203,17 @@
                     <TextBlock Text="ТЕМПЕРАТУРА ПРИБОРА, °С" Foreground="Aqua" FontSize="14" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"/>
-                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1}" Foreground="White"  
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
+                                    Name="InternalTempIndicator"
+                                Foreground="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource InternalTempColors}}"  
                                HorizontalAlignment="Center"
                                FontSize="80"
                                VerticalAlignment="Center"/>
+                        <Image Source="..\Resourses\Pictures\AlertReportProblemRed.png"  Height="{Binding ElementName=InternalTempIndicator, Path=ActualHeight}"
+                               Visibility="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource VisibleConverter}}"/>
+                    </StackPanel>
+                    
 
                 </Grid>
                 <!--#endregion-->
@@ -216,7 +226,7 @@
                     <TextBlock Text="НАПРЯЖЕНИЕ HV, В" Foreground="Aqua" FontSize="14" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"/>
-                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value}" Foreground="White"  
+                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
                                HorizontalAlignment="Center"
                                FontSize="80"
                                VerticalAlignment="Center"/>
@@ -230,19 +240,41 @@
                         Width="200"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"/>
+                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
+                        Command="{Binding SwitchMeasCommand}"/>
                 <!--#endregion-->
             </Grid>
             <!--#endregion-->
             
         </Grid>
         <!--#region Meas Indication -->
-        <Viewbox Grid.Column="1">
+        <Viewbox Grid.Column="1" VerticalAlignment="Top">
             <ListBox ItemsSource="{Binding mainModel.MeasResults}"
-                                 
-                                 HorizontalContentAlignment="Stretch"
-                                 VerticalContentAlignment="Stretch"
-                                 Grid.RowSpan="2">
+                     Background="Transparent"
+                     BorderBrush="Transparent"                     
+                     HorizontalContentAlignment="Stretch"
+                     VerticalContentAlignment="Stretch"
+                     Grid.RowSpan="2">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Foreground" Value="Transparent"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="False">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
         </Viewbox>
         

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDensity.AddClasses
 {
-    public class TempBoardTelemetry
+    public class TempBoardTelemetry:PropertyChangedBase
     {
         #region Температура с внешнего датчика, С
         public Parameter<float> TempInternal { get; } = new Parameter<float>("TempInternal", "Температура с внешнего датчика, С", 0, float.PositiveInfinity, 8, "read")
@@ -23,5 +23,29 @@ namespace IDensity.AddClasses
         #region Статус связи с платой питания
         public Parameter<bool> TempBoardCommState { get; } = new Parameter<bool>("TempBoardCommState", "Статус связи с платой питания", false, true, 0, "");
         #endregion
+
+        #region OverTemp
+        /// <summary>
+        /// OverTemp
+        /// </summary>
+        private bool _overTemp;
+        /// <summary>
+        /// OverTemp
+        /// </summary>
+        public bool OverTemp
+        {
+            get => _overTemp;
+            set => Set(ref _overTemp, value);
+        }
+        #endregion
+
+        public TempBoardTelemetry()
+        {
+            TempInternal.PropertyChanged += (obj, args) => 
+            {
+                OverTemp = TempInternal.Value >= 80 || TempInternal.Value <= -40;
+            };
+        }
+
     }
 }

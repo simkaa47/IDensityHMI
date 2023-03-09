@@ -1,0 +1,205 @@
+﻿<UserControl x:Class="IDensity.Core.Views.UserControls.Other.SdCardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:IDensity.ViewModels.SdCard"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Other"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:SdCardVm}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <x:Array Type="sys:String"   x:Key="ButtonColorsSdCard">
+                <sys:String>#28BCBA</sys:String>
+                <sys:String>#FFFF0000</sys:String>
+            </x:Array>
+            <x:Array Type="sys:String"   x:Key="ButtonColorsSdCardInverse">
+                <sys:String>#FFFF0000</sys:String>
+                <sys:String>#28BCBA</sys:String>                
+            </x:Array>
+        </Grid.Resources>
+        <Grid.RowDefinitions>            
+            <RowDefinition Height="0.6*"/>            
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--#region Table -->
+        <Border Background="Black" Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel>
+                <!--#region Table -->
+                <DataGrid CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  Margin="10"
+                      FontSize="16"
+                      Foreground="White"
+                  BorderThickness="0"
+                  Background="Transparent"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding FileNames}"
+                  SelectedItem="{Binding SelectedFileInfo}">
+                    <DataGrid.Columns>
+                        <!--#region № -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="№">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id}" Style="{StaticResource Common}" Margin="10"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region File name -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ИМЯ ФАЙЛА">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Common}" Margin="10"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Count -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЛИЧЕСТВО ЗАПИСЕЙ">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding WriteNumber}" Style="{StaticResource Common}" Margin="10"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Start num -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="СТАРТОВЫЙ НОМЕР ДЛЯ ЧТЕНИЯ">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Foreground="White" Template="{StaticResource TextBoxTemplate}" Text="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Finish num -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОНЕЧНЫЙ НОМЕР ДЛЯ ЧТЕНИЯ">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Foreground="White" Template="{StaticResource TextBoxTemplate}" Text="{Binding Finish, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region To read -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ПРОЧИТАТЬ">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Background="Transparent" Margin="5" BorderThickness="0" >
+                                        <StackPanel Orientation="Horizontal" Margin="5">
+                                            <Image Source="..\..\Resourses\Pictures\ReadAquaIcon.png"/>
+                                            <Label FontSize="14" Foreground="Aqua" Content="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.IsReading, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--#endregion-->
+                <!--#region Buttons -->
+                <Grid Height="60">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!--#region Запуск логирования -->
+                    <Button Style="{StaticResource ButtonWithBackground}"
+                                   Command="{Binding SwitchSdCardLogCommand}"
+                                   Background="{Binding VM.mainModel.IsSdWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}"
+                                   Content="ЗАПУСК ЛОГИРОВАНИЯ"/>
+                    <!--#endregion-->
+                    <!--#region Запрос имен файлов -->
+                    <Button Style="{StaticResource ButtonWithBackground}"
+                            Grid.Column="1"
+                            Background="#28BCBA"
+                            Command="{Binding GetFilesSdCommand}"
+                            Content="ЗАПРОС ИМЕН ФАЙЛОВ"/>  
+                    <!--#endregion-->
+                    <!--#region Очистить список файлов -->
+                    <Button Content="ОЧИСТИТЬ СПИСОК ФАЙЛОВ"
+                            Grid.Column="2"
+                            Background="#28BCBA"
+                            Style="{StaticResource ButtonWithBackground}"
+                            Command="{Binding ClearSdFileListCommand}"/>    
+                    <!--#endregion-->
+                    <!--#region File Browse-->
+                    <Border Grid.Column="3" Margin="5,0,5,0"  CornerRadius="4,4,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.3*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="SdCardWritePath" Text="{Binding WriteToFilePath, Mode=TwoWay, TargetNullValue=ВЫБРАТЬ ФАЙЛ}" 
+                                               TextWrapping="Wrap" Foreground="#B1FFFFFF" 
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"/>
+                            <Image Margin="2" Grid.Column="1" Source="..\..\Resourses\Pictures\BroeseAquaIcon.png" Opacity="0.5"
+                                           MouseLeftButtonDown="SdCardWritePathShow"/>
+                        </Grid>
+                    </Border>
+                    <!--#endregion-->
+                    <!--#region Write -->
+                    <ToggleButton IsChecked="{Binding IsWritingToFile}" Background="Transparent" Margin="5" BorderThickness="0" Grid.Column="4"
+                                 Style="{StaticResource ToggleButtonLikeButtonWithBackround}" >
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <Image Source="..\..\Resourses\Pictures\ReadAquaIcon.png"/>
+                            <Label FontSize="14" Foreground="{Binding IsWritingToFile, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}" 
+                                   Content="{Binding IsWritingToFile, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}"/>
+                        </StackPanel>
+                    </ToggleButton>
+                    <!--#endregion-->
+                </Grid>               
+                
+            </StackPanel>
+        </Border>
+        <!--#endregion-->
+        <!--#region Meas results -->
+        <Border Background="Black" Margin="20" Grid.Row="1" HorizontalAlignment="Left">
+            <ListView Grid.Row="3" 
+                      ItemsSource="{Binding SdCardMeasDatas}"
+                      Visibility="{Binding RelativeSource={RelativeSource Self}, Path=AlternationCount, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=0}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time, StringFormat=dd.MM.yyyy hh:mm:ss}"/>
+                        <GridViewColumn Header="№ проц. 1" DisplayMemberBinding="{Binding MeasResults[0].ProcNum}" Width="60"/>
+                        <GridViewColumn Header="Счетчик 1" DisplayMemberBinding="{Binding MeasResults[0].CounterValue}" Width="80"/>
+                        <GridViewColumn Header="Мгнов. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhysValueCur, StringFormat=f1}" Width="80"/>
+                        <GridViewColumn Header="Усред. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhusValueAvg, StringFormat=f1}" Width="80"/>
+                        <GridViewColumn Header="Акт. проц. 1" DisplayMemberBinding="{Binding MeasResults[0].IsActive}" Width="60"/>
+                        <GridViewColumn Header="№ проц. 2" DisplayMemberBinding="{Binding MeasResults[1].ProcNum}" Width="60"/>
+                        <GridViewColumn Header="Счетчик 2" DisplayMemberBinding="{Binding MeasResults[1].CounterValue}" Width="80"/>
+                        <GridViewColumn Header="Мгнов. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhysValueCur, StringFormat=f1}" Width="80"/>
+                        <GridViewColumn Header="Усред. ФВ 2:" DisplayMemberBinding="{Binding MeasResults[1].PhusValueAvg, StringFormat=f1}" Width="80"/>
+                        <GridViewColumn Header="Акт. проц. 2" DisplayMemberBinding="{Binding MeasResults[1].IsActive}" Width="60"/>
+                        <GridViewColumn Header="t внутр, С" DisplayMemberBinding="{Binding TempInt, StringFormat=f1}" Width="60"/>
+                        <GridViewColumn Header="HV in, В" DisplayMemberBinding="{Binding HvInput}" Width="60"/>
+                        <GridViewColumn Header="HV out, В" DisplayMemberBinding="{Binding HvOutU}" Width="60"/>
+                        <GridViewColumn Header="HV ток" DisplayMemberBinding="{Binding HvCurrent}" Width="60"/>
+                        <GridViewColumn Header="AO0, ЦАП" DisplayMemberBinding="{Binding AnalogData[0].Dac}" Width="60"/>
+                        <GridViewColumn Header="AO0, RX" DisplayMemberBinding="{Binding AnalogData[0].Rx}" Width="60"/>
+                        <GridViewColumn Header="AO0, test" DisplayMemberBinding="{Binding AnalogData[0].test}" Width="60"/>
+                        <GridViewColumn Header="AI0, ток, мкА" DisplayMemberBinding="{Binding AnalogData[0].Adc}" Width="60"/>
+                        <GridViewColumn Header="AO1, ЦАП" DisplayMemberBinding="{Binding AnalogData[1].Dac}" Width="60"/>
+                        <GridViewColumn Header="AO1, RX" DisplayMemberBinding="{Binding AnalogData[1].Rx}" Width="60"/>
+                        <GridViewColumn Header="AO1, test" DisplayMemberBinding="{Binding AnalogData[1].test}" Width="60"/>
+                        <GridViewColumn Header="AI1, ток, мкА" DisplayMemberBinding="{Binding AnalogData[1].Adc}" Width="60"/>
+                        <GridViewColumn Header="Физ. пар. сост." DisplayMemberBinding="{Binding PhysParamState}" Width="60"/>
+                        <GridViewColumn Header="Сост. связи" DisplayMemberBinding="{Binding CommState}" Width="60"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+        <!--#endregion-->
+    </Grid>
+</UserControl>

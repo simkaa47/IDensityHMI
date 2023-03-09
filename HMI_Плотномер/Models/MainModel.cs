@@ -46,6 +46,7 @@ namespace IDensity.Models
             set
             {
                 if (MainModel.CheckIp(value)) Set(ref _ip, value);
+                TcpWriting = false;
             }
         }
         #endregion
@@ -61,6 +62,7 @@ namespace IDensity.Models
             set
             {
                 if (MainModel.CheckIp(value)) Set(ref _mask, value);
+                TcpWriting = false;
             }
         }
         #endregion
@@ -76,9 +78,27 @@ namespace IDensity.Models
             set
             {
                 if (MainModel.CheckIp(value)) Set(ref _gateway, value);
+                TcpWriting = false;
             }
         }
         #endregion
+
+
+        #region Флаг записи
+        /// <summary>
+        /// Флаг записи
+        /// </summary>
+        private bool _tcpWriting;
+        /// <summary>
+        /// Флаг записи
+        /// </summary>
+        public bool TcpWriting
+        {
+            get => _tcpWriting;
+            set => Set(ref _tcpWriting, value);
+        }
+        #endregion
+
         #endregion
 
         public MainModel()
@@ -215,11 +235,27 @@ namespace IDensity.Models
         [DataMember]
         public Parameter<ushort> PortSelectMode { get; set; } = new Parameter<ushort>("PortSelectMode", "Режим работы последовательного порта", 0, 1, 50, "hold");
         #endregion
-        #endregion           
+        #endregion
 
         #region Настройки платы АЦП
 
-        #region Адрес UDP приемника        
+        #region Адрес UDP приемника 
+
+        #region Флаг записи Udp настроек
+        /// <summary>
+        /// Флаг записи Udp настроек
+        /// </summary>
+        private bool _udpWriting;
+        /// <summary>
+        /// Флаг записи Udp настроек
+        /// </summary>
+        public bool UdpWriting
+        {
+            get => _udpWriting;
+            set => Set(ref _udpWriting, value);
+        }
+        #endregion
+
         private string _udpAddrString = "0.0.0.0";
         /// <summary>
         /// Адрес UDP приемника
@@ -233,6 +269,7 @@ namespace IDensity.Models
                 if (CheckIp(value))
                 {
                     Set(ref _udpAddrString, value);
+                    UdpWriting = false;
                 }
             }
         }
@@ -244,7 +281,7 @@ namespace IDensity.Models
         public int PortUdp
         {
             get { return _portUdp; }
-            set { Set(ref _portUdp, value); }
+            set { Set(ref _portUdp, value); UdpWriting = false; }
         }
 
 
@@ -404,32 +441,10 @@ namespace IDensity.Models
 
             }
         }
-        #endregion
+        #endregion      
 
-        #region Команда принудиельного запроса набора стандартизации после стандартизации
-        //public void GetStdSelection(ushort index)
-        //{
-        //    if (CommMode.EthEnable) Tcp.GetMeasSettingsExternal(index);           
-        //}
         #endregion
-
-        #region Команды изменения настроек платы АЦП
-        //public void SetAdcBoardSettings(AdcBoardSettings settings)
-        //{            
-        //    if(CommMode.RsEnable) rs.SetAdcBoardSettings(settings);
-        //}
-
-
-
-        #region Команда "Переключить реле"
-        public void SwitchRelay(ushort value)
-        {
-            //if (CommMode.EthEnable) Tcp.SwitchRelay(value);
-            //else if (CommMode.RsEnable) rs.SetMeasUnitsSettings(settings);
-        }
-        #endregion
-        #endregion
-        #endregion
+        
 
     }
 }

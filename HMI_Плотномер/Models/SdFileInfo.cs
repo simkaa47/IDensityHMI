@@ -71,7 +71,7 @@ namespace IDensity.Models
             {
                 if (value >= 0 && value <= WriteNumber)
                 {
-                    if (value > finish) finish = value;
+                    if (value > Finish) Finish = value;
                     Set(ref _start, value);
                 } 
             } 
@@ -87,7 +87,7 @@ namespace IDensity.Models
         /// <summary>
         /// Конечный номер для чтения
         /// </summary>
-        public int finish
+        public int Finish
         {
             get => _finish;
             set 

@@ -32,7 +32,8 @@ namespace IDensity.AddClasses
         string ConnectionString { get => $"Data Source={DbName}.db;Mode=ReadWriteCreate"; }
 
         #endregion
-        bool isChanged;
+        
+        
         Dictionary<string, string> errorsDict = new Dictionary<string, string>();
         public string this[string columnName] => errorsDict.ContainsKey(columnName) ? errorsDict[columnName] : null;
 
@@ -70,14 +71,7 @@ namespace IDensity.AddClasses
 
         }
         #endregion
-
-        #region Команда
-        RelayCommand _command;
-        public RelayCommand Command => _command ?? (_command = new RelayCommand(par => CommandEcecutedEvent?.Invoke(par), canExecPar => true));
-        #endregion
-        #region Событие 
-        public event Action<object> CommandEcecutedEvent;
-        #endregion
+        
         #region Описание
         string _description = "";
         public string Description{ get => _description; set => Set(ref _description, value); }       
@@ -91,9 +85,11 @@ namespace IDensity.AddClasses
             get => _value;
             set
             {
-                if (Set(ref _value, value) && !isChanged)
+                IsWriting = false;
+                if (Set(ref _value, value))
                 {
                     WriteValue = value;
+                   
                 }
             }
         }
@@ -113,7 +109,7 @@ namespace IDensity.AddClasses
                     {
                         if (value.CompareTo(this.Value) != 0)
                         {
-                            isChanged = true;
+                            
                             RestartTimer();
                         }
                         if (value.CompareTo(MinValue) < 0 || value.CompareTo(MaxValue) > 0)
@@ -124,10 +120,12 @@ namespace IDensity.AddClasses
                         else
                         {
                             errorsDict["WriteValue"] = null;
+                            
                             ValidationOk = true;
-                        } 
+                        }
+                        Set(ref _writeValue, value);
                     }
-                    Set(ref _writeValue, value); 
+                    
                 }
             }
         }
@@ -158,6 +156,23 @@ namespace IDensity.AddClasses
         bool _onlyRead;
         public bool OnlyRead { get => _onlyRead; set => Set(ref _onlyRead, value); }
         #endregion
+
+
+        #region Writing Process Indicator
+        /// <summary>
+        /// Writing Process Indicator
+        /// </summary>
+        private bool _isWriting;
+        /// <summary>
+        /// Writing Process Indicator
+        /// </summary>
+        public bool IsWriting
+        {
+            get => _isWriting;
+            set => Set(ref _isWriting, value);
+        }
+        #endregion
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -175,11 +190,11 @@ namespace IDensity.AddClasses
 
         void OnTimerElapsed(Object source, ElapsedEventArgs e)
         {
-            timer.Stop();
-            isChanged = false;
+            timer.Stop();            
             WriteValue = Value;
         }
         #endregion
+
         #region Добавить в глобальный лист параметров
         void AddToParamList()
         {

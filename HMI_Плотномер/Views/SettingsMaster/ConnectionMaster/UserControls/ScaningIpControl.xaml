@@ -8,6 +8,10 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:MasterConnectViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="DataGridCell"/>
+        <Style TargetType="DataGridRow"/>        
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
@@ -25,10 +29,12 @@
                 
             </ProgressBar>
         </DockPanel>
-        <ListView Grid.Row="2" ItemsSource="{Binding FoundedDevicesIp}" SelectedItem="{Binding SelectedIP}" >
+        <ListView Grid.Row="2" ItemsSource="{Binding FoundedDevicesIp}" 
+                  Foreground="Black"
+                  SelectedItem="{Binding SelectedIP}" >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Найденные плотномеры" DisplayMemberBinding="{Binding}"/>
+                    <GridViewColumn Header="Найденные приборы" DisplayMemberBinding="{Binding}"/>
                 </GridView>
             </ListView.View>
         </ListView>

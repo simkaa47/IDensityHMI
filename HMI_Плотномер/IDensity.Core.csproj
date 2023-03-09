@@ -9,26 +9,37 @@
   <ItemGroup>
     <None Remove="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <None Remove="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <None Remove="Views\Resourses\Pictures\AddCircleOutline.png" />
+    <None Remove="Views\Resourses\Pictures\AlertReportProblemRed.png" />
+    <None Remove="Views\Resourses\Pictures\ArrDowm.png" />
     <None Remove="Views\Resourses\Pictures\Arrow.png" />
+    <None Remove="Views\Resourses\Pictures\ArrUp.png" />
+    <None Remove="Views\Resourses\Pictures\BroeseAquaIcon.png" />
     <None Remove="Views\Resourses\Pictures\Clear.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Fail.png" />
     <None Remove="Views\Resourses\Pictures\Comm_Ok.png" />
     <None Remove="Views\Resourses\Pictures\ControlIcon.png" />
+    <None Remove="Views\Resourses\Pictures\DeleteIcon.png" />
     <None Remove="Views\Resourses\Pictures\DriveFileMove.png" />
+    <None Remove="Views\Resourses\Pictures\EditIcon.png" />
     <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
+    <None Remove="Views\Resourses\Pictures\ListIcon.png" />
     <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
+    <None Remove="Views\Resourses\Pictures\ManageAccounts.png" />
     <None Remove="Views\Resourses\Pictures\MeasIcon.png" />
+    <None Remove="Views\Resourses\Pictures\RadioButtonChecked.png" />
+    <None Remove="Views\Resourses\Pictures\RadioButtonUnchecked.png" />
+    <None Remove="Views\Resourses\Pictures\ReadAquaIcon.png" />
     <None Remove="Views\Resourses\Pictures\ResetTv.png" />
     <None Remove="Views\Resourses\Pictures\SystemUpdateAlt.png" />
     <None Remove="Views\Resourses\Pictures\TuneIcon.png" />
+    <None Remove="Views\Resourses\Styles\Search.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.1.0" />
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.2.1" />
-    <PackageReference Include="MaterialMenu" Version="0.0.4.5" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.29">
@@ -53,19 +64,32 @@
   <ItemGroup>
     <Resource Include="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <Resource Include="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
+    <Resource Include="Views\Resourses\Pictures\AddCircleOutline.png" />
+    <Resource Include="Views\Resourses\Pictures\AlertReportProblemRed.png" />
+    <Resource Include="Views\Resourses\Pictures\ArrDowm.png" />
     <Resource Include="Views\Resourses\Pictures\Arrow.png" />
+    <Resource Include="Views\Resourses\Pictures\ArrUp.png" />
+    <Resource Include="Views\Resourses\Pictures\BroeseAquaIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Clear.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Fail.png" />
     <Resource Include="Views\Resourses\Pictures\Comm_Ok.png" />
     <Resource Include="Views\Resourses\Pictures\ControlIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\DeleteIcon.png" />
     <Resource Include="Views\Resourses\Pictures\DriveFileMove.png" />
+    <Resource Include="Views\Resourses\Pictures\EditIcon.png" />
     <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />
+    <Resource Include="Views\Resourses\Pictures\ListIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
+    <Resource Include="Views\Resourses\Pictures\ManageAccounts.png" />
     <Resource Include="Views\Resourses\Pictures\MeasIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\RadioButtonChecked.png" />
+    <Resource Include="Views\Resourses\Pictures\RadioButtonUnchecked.png" />
+    <Resource Include="Views\Resourses\Pictures\ReadAquaIcon.png" />
     <Resource Include="Views\Resourses\Pictures\ResetTv.png" />
     <Resource Include="Views\Resourses\Pictures\SystemUpdateAlt.png" />
     <Resource Include="Views\Resourses\Pictures\TuneIcon.png" />
+    <Resource Include="Views\Resourses\Styles\Search.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,12 +97,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\CheckMaster\CancelByUserPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Resourses\UserControls\MenuItemCompoboxParameter.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Resourses\UserControls\MenuItemParameterText.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -99,12 +117,6 @@
     </Page>
     <Page Update="Views\CheckMaster\CancelByUserPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Resourses\UserControls\MenuItemCompoboxParameter.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Resourses\UserControls\MenuItemParameterText.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

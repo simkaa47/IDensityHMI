@@ -568,11 +568,7 @@ namespace IDensity.Services.ComminicationServices
             if (list == null) return;
             _model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
             list = GetNumber("adc_single_meas_time", 1, 1, str);
-            if (list == null) return;
-            foreach (var mp in _model.MeasProcSettings)
-            {
-                mp.SingleMeasTime.Value = (ushort)list[0][0];
-            }
+            if (list == null) return;           
             _model.SettingsReaded = true;
         }
         #endregion                
@@ -819,7 +815,7 @@ namespace IDensity.Services.ComminicationServices
         public void SetHv(ushort value)
         {
             var str = $"*SETT,hv_target={value * 20}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
@@ -835,14 +831,14 @@ namespace IDensity.Services.ComminicationServices
         public void SetTestValueAm(int groupNum, int moduleNum, ushort value)
         {
             var str = $"*CMND,AMV,{groupNum},{value}#";
-            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf);}, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 
         #region Отправить настройки аналоговых выходов
         public void SendAnalogOutSwttings(int groupNum, int moduleNum, AnalogOutput value)
         {
-            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.Value},{value.DacType.Value},0,{value.AnalogMeasProcNdx.Value},{value.VarNdx.Value},{value.DacLowLimit.Value.ToStringPoint()},{value.DacHighLimit.Value.ToStringPoint()},{value.DacLowLimitMa.Value.ToStringPoint()},{value.DacHighLimitMa.Value.ToStringPoint()}#";
+            var str = $"*SETT,am_out_sett={groupNum},{value.Activity.WriteValue},{value.DacType.WriteValue},0,{value.AnalogMeasProcNdx.WriteValue},{value.VarNdx.WriteValue},{value.DacLowLimit.WriteValue.ToStringPoint()},{value.DacHighLimit.WriteValue.ToStringPoint()},{value.DacLowLimitMa.WriteValue.ToStringPoint()},{value.DacHighLimitMa.WriteValue.ToStringPoint()}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
@@ -850,7 +846,7 @@ namespace IDensity.Services.ComminicationServices
         #region Отправить настройки аналоговых входов
         public void SendAnalogInSwttings(int groupNum, int moduleNum, AnalogInput value)
         {
-            var str = $"*SETT,am_in_sett={groupNum},{value.Activity.Value}#";
+            var str = $"*SETT,am_in_sett={groupNum},{value.Activity.WriteValue}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); _model.SettingsReaded = false; }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion        

@@ -11,34 +11,14 @@ namespace IDensity.AddClasses.Settings
     /// </summary>
     [DataContract]
     public class DensitySett:PropertyChangedBase
-    {
-        #region Команда записи
-        
-        private RelayCommand _outMeasNumWriteCommand;
-
-        public RelayCommand OutMeasNumWriteCommand => _outMeasNumWriteCommand ?? (_outMeasNumWriteCommand = new RelayCommand(par => OnWriteExecuted(), o => true));
-        #endregion
+    {        
         #region Физическая величина
         /// <summary>
         /// Физическая величина
         /// </summary>
         [DataMember]
         public Parameter<float> PhysValue { get; set; } = new Parameter<float>("DensitySettValue", "Физическая величина", float.MinValue, float.MaxValue, 0, "");
-        #endregion
-
-        public DensitySett()
-        {
-            //Подписка на изменение свойств            
-            PhysValue.CommandEcecutedEvent += (o) => OnWriteExecuted();
-        }
-        void OnWriteExecuted()
-        {
-            NeedWriteEvent?.Invoke($"0,{PhysValue.WriteValue.ToStringPoint()}");
-        }
-        /// <summary>
-        /// Необходимо записать настройки стандартизаций
-        /// </summary>
-        public event Action<string> NeedWriteEvent;
+        #endregion        
         
     }
 }

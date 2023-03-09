@@ -17,7 +17,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <!--#region Trends Visibility-->
-            <ListBox  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" >
+            <ListBox  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0">
                 <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}" 
                                        Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
                                        Check="{Binding TrendsVisible.VisLine1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -53,12 +53,14 @@
             <!--#region Other trend settings-->
             <ListBox Grid.Column="1" 
                      HorizontalContentAlignment="Stretch"
-                     VerticalAlignment="Center">
+                     VerticalAlignment="Center"
+                     BorderThickness="0"
+                     Background="Transparent">
                <!--#region Write Data if no measuring mode-->               
                 <DockPanel>
                     <TextBlock Foreground="White"
                            TextWrapping="Wrap"
-                               Margin="0,0,50,0"
+                           MaxWidth="200"
                            VerticalAlignment="Center"
                            Text="Запись данных в график вне режима измерения"/>
                     <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"                              
@@ -72,7 +74,7 @@
                 <DockPanel>
                     <TextBlock Foreground="White"
                            TextWrapping="Wrap"
-                               Margin="0,0,100,0"
+                           MaxWidth="200"
                            VerticalAlignment="Center"
                            Text="Максимальное время отображения, мин"/>
                     <GroupBox Style="{StaticResource GroupBoxTrendStyle}" 

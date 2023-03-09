@@ -162,6 +162,7 @@ namespace IDensity.ViewModels
         RelayCommand _setRtcCommand;
         public RelayCommand SetRtcCommand => _setRtcCommand ?? (_setRtcCommand = new RelayCommand(execPar =>
         {
+            mainModel.Rtc.IsWriting = true;
             CommService.SetRtc(mainModel.Rtc.WriteValue);
         }, canExecPar => true));
         #endregion
@@ -169,6 +170,7 @@ namespace IDensity.ViewModels
         RelayCommand _syncRtcCommand;
         public RelayCommand SyncRtcCommand => _syncRtcCommand ?? (_syncRtcCommand = new RelayCommand(execPar =>
         {
+            mainModel.Rtc.IsWriting = true;
             CommService.SetRtc(DateTime.Now);
         }, canExecPar => true));
         #endregion
@@ -179,19 +181,7 @@ namespace IDensity.ViewModels
 
         public RelayCommand ShowEventsCommand => _showEventsCommand ?? (_showEventsCommand = new RelayCommand(exec => AddHistoryItemsFromDb(), canExex => true));
 
-        #endregion
-
-        #region Переключить реле
-        RelayCommand _switchRelayCommand;
-        public RelayCommand SwitchRelayCommand => _switchRelayCommand ?? (_switchRelayCommand = new RelayCommand(par =>
-        {
-            ushort temp = 0;
-            if (par != null && ushort.TryParse(par.ToString(), out temp))
-            {
-                mainModel.SwitchRelay(temp);
-            }
-        }, canExec => true));
-        #endregion               
+        #endregion                
 
         #endregion
         public MainModel mainModel { get; }
@@ -239,13 +229,7 @@ namespace IDensity.ViewModels
         public string[] ComPorts { get => _comPorts ?? (_comPorts = SerialPort.GetPortNames()); set => Set(ref _comPorts, value); }
         #endregion
 
-        #region Аналоговые входы
-        public List<AnalogInput> AnalogInputs => mainModel.AnalogGroups.Select(g => g.AI).ToList();
-        #endregion
-
-        #region Аналоговые выходы
-        public List<AnalogOutput> AnalogOutputs => mainModel.AnalogGroups.Select(g => g.AO).ToList();
-        #endregion
+       
 
         #region Данные для текущего тренда
         #region Алгоритм интерполяции
@@ -277,7 +261,7 @@ namespace IDensity.ViewModels
 
         #region Данные для архивного тренда
         #region Коллекция
-        IEnumerable<TimePoint> _archivalDataPotnts;
+        IEnumerable<TimePoint> _archivalDataPotnts = new List<TimePoint> { new TimePoint { time=new DateTime(2020,1,1) }, new TimePoint { time = DateTime.Now } };
         public IEnumerable<TimePoint> ArchivalDataPotnts { get => _archivalDataPotnts; private set { Set(ref _archivalDataPotnts, value); } }
         #endregion
 

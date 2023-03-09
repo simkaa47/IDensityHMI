@@ -11,57 +11,13 @@ namespace IDensity.AddClasses.Settings
     public class StandSettings:PropertyChangedBase
     {
         Timer standTimer = new Timer();
-        const string TcpArg = "std=id,stdMeasUnit,duration,date,result,value,halfLifeValue";
+        
         public StandSettings(int id)
         {
-            this.Id = id;
-            DescribeOnCommands();
+            this.Id = id;            
             MeasUnitMemoryId = $"StandMeasMemory{id}";
-        }
-        /// <summary>
-        /// Подписка на изменения 
-        /// </summary>
-        void DescribeOnCommands()
-        {            
-            StandDuration.CommandEcecutedEvent += o => CallWriteEvent("duration", StandDuration.WriteValue);
-            LastStandDate.CommandEcecutedEvent += o => CallWriteEvent("date", LastStandDate.WriteValue.ToString("dd:MM:yy"));
-            StandResult.CommandEcecutedEvent += o => CallWriteEvent("result", StandResult.WriteValue);
-            StandPhysValue.CommandEcecutedEvent += o => CallWriteEvent("value", StandPhysValue.WriteValue);
-            HalfLifeCorr.CommandEcecutedEvent += o => CallWriteEvent("halfLifeValue", HalfLifeCorr.WriteValue);
-        }
-        void CallWriteEvent<T>(string parName, T value)
-        {
-            var arg = TcpArg.Replace(parName, value.ToString().Replace(",", "."));
-            var parameters = arg.Split(new char[] { ',', '=' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var par in parameters)
-            {
-                switch (par)
-                {
-                    case "id":
-                        arg = arg.Replace(par, Id.ToString());
-                        break;                   
-                    case "duration":
-                        arg = arg.Replace(par, StandDuration.Value.ToString());
-                        break;
-                    case "date":
-                        arg = arg.Replace(par, LastStandDate.Value.ToString("dd:MM:yy"));
-                        break;
-                    case "result":
-                        arg = arg.Replace(par, StandResult.Value.ToStringPoint());
-                        break;
-                    case "value":
-                        arg = arg.Replace(par, StandPhysValue.Value.ToStringPoint());
-                        break;
-                    case "halfLifeValue":
-                        arg = arg.Replace(par, HalfLifeCorr.Value.ToStringPoint());
-                        break;
-                    default:
-                        break;
-                }
-            }
-            NeedWriteEvent?.Invoke(arg);
-
-        }
+        }        
+        
         #region Id
         private int _id;
         /// <summary>
@@ -109,7 +65,20 @@ namespace IDensity.AddClasses.Settings
         public Parameter<float> HalfLifeCorr { get; set; } = new Parameter<float>("StandHalfLifeCorr", "Значение с учетом полураспада", float.MinValue, float.MaxValue, 0, "");
 
         #endregion
-
+        #region Standartisation flag
+        /// <summary>
+        /// Standartisation flag
+        /// </summary>
+        private bool _isStandartisation;
+        /// <summary>
+        /// Standartisation flag
+        /// </summary>
+        public bool IsStandartisation
+        {
+            get => _isStandartisation;
+            set => Set(ref _isStandartisation, value);
+        }
+        #endregion
         #region ID ЕИ
         private string _measUnitMemoryId;
         public string MeasUnitMemoryId
@@ -118,53 +87,6 @@ namespace IDensity.AddClasses.Settings
             set => Set(ref _measUnitMemoryId, value);
         } 
         #endregion
-
-
-        /// <summary>
-        /// Необходимо записать настройки стандартизаций
-        /// </summary>
-        public event Action<string> NeedWriteEvent;
-
-        #region Проведение стандартизации
-        #region Флаг стандартищации
-        private bool _isStandartisation;
-
-        public bool IsStandartisation
-        {
-            get { return _isStandartisation; }
-            set { Set(ref _isStandartisation, value); }
-        }
-        #endregion
-
-        private int _curStandTime;
-
-        public int CurStandTime
-        { 
-            get { return _curStandTime; }
-            set { Set(ref _curStandTime, value); }
-        }
-
-
-        RelayCommand _makeStandCommand;
-        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(par => {
-            if (!IsStandartisation)
-            {
-                NeedMakeStand?.Invoke();
-                standTimer.Elapsed += (o, e) => 
-                {
-                    IsStandartisation = false;
-                    StandFinishEvent?.Invoke();
-                    standTimer.Stop();
-                };
-                standTimer.Interval = StandDuration.Value*100+4000;
-                standTimer.Start();
-                IsStandartisation = true;
-            }
-
-        }, o => true));
-        public event Action NeedMakeStand;
-        public event Action StandFinishEvent;
-        #endregion        
-        
+       
     }
 }

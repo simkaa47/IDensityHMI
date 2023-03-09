@@ -3,6 +3,7 @@
                     xmlns:sys1="clr-namespace:System;assembly=System.Runtime"
                     xmlns:media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     <!--#region Баудрейт -->
     <col1:ArrayList x:Key="baudrates">
         <sys1:String>2400</sys1:String>
@@ -80,10 +81,10 @@
         <sys1:String>RS485</sys1:String>
         <sys1:String>RS232</sys1:String>
     </col1:ArrayList>
-    <col1:ArrayList x:Key="HvButn">
+    <x:Array Type="sys1:String" x:Key="HvButn">
         <sys1:String>ВКЛЮЧИТЬ HV</sys1:String>
         <sys1:String>ВЫКЛЮЧИТЬ HV</sys1:String>
-    </col1:ArrayList>
+    </x:Array>
     <col1:ArrayList x:Key="EventTypes">
         <sys1:String>Ошибка</sys1:String>
         <sys1:String>Событие</sys1:String>
@@ -124,18 +125,18 @@
         
     </x:Array>
     <col1:ArrayList   x:Key="SdBtnStatus">
-        <sys1:String>Записать.</sys1:String>
-        <sys1:String>Отмена</sys1:String>
+        <sys1:String>ЗАПИСАТЬ</sys1:String>
+        <sys1:String>ОТМЕНА</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList x:Key="MeasProcNums">
-        <sys1:Int32>0</sys1:Int32>
-        <sys1:Int32>1</sys1:Int32>
-        <sys1:Int32>2</sys1:Int32>
-        <sys1:Int32>3</sys1:Int32>
-        <sys1:Int32>4</sys1:Int32>
-        <sys1:Int32>5</sys1:Int32>
-        <sys1:Int32>6</sys1:Int32>
-        <sys1:Int32>7</sys1:Int32>
+        <sys1:String>0</sys1:String>
+        <sys1:String>1</sys1:String>
+        <sys1:String>2</sys1:String>
+        <sys1:String>3</sys1:String>
+        <sys1:String>4</sys1:String>
+        <sys1:String>5</sys1:String>
+        <sys1:String>6</sys1:String>
+        <sys1:String>7</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList   x:Key="CountModes">
         <sys1:String>Фиксированный</sys1:String>
@@ -175,6 +176,10 @@
         <sys1:String>0.25</sys1:String>
         <sys1:String>1</sys1:String>
     </x:Array>
+    <x:Array Type="sys1:String" x:Key="MeasProcTabItemOpacities">
+        <sys1:String>0.66</sys1:String>
+        <sys1:String>1</sys1:String>
+    </x:Array>
     <col1:ArrayList   x:Key="TempSrc">
         <sys1:String>AI0</sys1:String>
         <sys1:String>AI1</sys1:String>
@@ -195,10 +200,10 @@
         <sys1:String>Ослабление</sys1:String>
         <sys1:String>Без</sys1:String>
     </col1:ArrayList>
-    <col1:ArrayList   x:Key="DeviceTypes">
+    <x:Array Type="sys1:String"   x:Key="DeviceTypes">
         <sys1:String>Плотномер</sys1:String>
         <sys1:String>Уровнемер</sys1:String>
-    </col1:ArrayList>
+    </x:Array>
     <x:Array Type="sys1:String"   x:Key="DensityCalculation">
         <sys1:String>Плотность</sys1:String>
         <sys1:String>Массовая концентрация фазы 1</sys1:String>
@@ -214,6 +219,22 @@
         <sys1:String>Обьем</sys1:String>
         <sys1:String>Скорость заполнения</sys1:String>
     </x:Array>
+    <col1:ArrayList x:Key="DensityCalculationArrList">
+        <sys1:String>Плотность</sys1:String>
+        <sys1:String>Массовая концентрация фазы 1</sys1:String>
+        <sys1:String>Массовая концентрация фазы 2</sys1:String>
+        <sys1:String>Относительная концентрация фазы 1</sys1:String>
+        <sys1:String>Относительная концентрация фазы 2</sys1:String>
+        <sys1:String>Отношение фазы 1 к фазе 2</sys1:String>
+        <sys1:String>Отношение фазы 2 к фазе 1</sys1:String>
+    </col1:ArrayList>
+    <col1:ArrayList x:Key="LevelCalculationArrList">
+        <sys1:String>Длина</sys1:String>
+        <sys1:String>Заполнение - доля</sys1:String>
+        <sys1:String>Обьем</sys1:String>
+        <sys1:String>Скорость заполнения</sys1:String>
+    </col1:ArrayList>
+    
     <col1:ArrayList   x:Key="BlockStatuses">
         <sys1:String>Не все условия проверки выполняются</sys1:String>
         <sys1:String>Все условия выполнены</sys1:String>        
@@ -246,4 +267,8 @@
         <sys1:String>Вывод: иммитационная поверка не пройдена</sys1:String>
         <sys1:String>Вывод: иммитационная поверка пройдена успешно</sys1:String>
     </col1:ArrayList>
+    <x:Array Type="sys1:String"   x:Key="InternalTempColors">
+        <sys1:String>#FFFFFFFF</sys1:String>
+        <sys1:String>#FFFF0000</sys1:String>
+    </x:Array>
 </ResourceDictionary>

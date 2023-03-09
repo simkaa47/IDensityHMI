@@ -1,0 +1,138 @@
+﻿<UserControl x:Class="IDensity.Core.Views.UserControls.MeasNums.MeasNumControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:IDensity.Core.ViewModels.MeasUnits"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasNums"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:MeasUnitVm}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        
+        <!--#region Table -->
+        <Border Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="20">
+            <StackPanel>
+                <DataGrid AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      IsReadOnly="True"
+                      Margin="10"
+                      AlternationCount="{Binding MeasUnits.Count}"
+                      ItemsSource="{Binding MeasUnits}"
+                      SelectedItem="{Binding SelectedMeasUnit}">
+                    <DataGrid.Columns>
+                        <!--#region Name -->
+                        <DataGridTemplateColumn Header="ИМЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" Margin="10" Style="{StaticResource Common}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Coeff k -->
+                        <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding K}" Margin="10" Style="{StaticResource Common}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Offset -->
+                        <DataGridTemplateColumn Header="СМЕЩЕНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Offset}" Margin="10" Style="{StaticResource Common}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Device type -->
+                        <DataGridTemplateColumn Header="ТИП УСТРОЙСТВА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="10" Style="{StaticResource Common}" 
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource DeviceTypes}}">
+
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Meas type -->
+                        <DataGridTemplateColumn Header="ТИП ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <ComboBox IsEnabled="False" Name="MeasNameSelector"
+                                              Visibility="Collapsed"
+                                          SelectedIndex="{Binding Mode}">
+                                            <ComboBox.ItemsSource>
+                                                <MultiBinding Converter="{StaticResource Multiselector}">
+                                                    <Binding Path="DeviceType"/>
+                                                    <Binding Source="{StaticResource DensityCalculation}"/>
+                                                    <Binding Source="{StaticResource LevelCalculation}"/>
+                                                </MultiBinding>
+                                            </ComboBox.ItemsSource>
+                                        </ComboBox>
+                                        <TextBlock Margin="10" Style="{StaticResource Common}" 
+                                           Text="{Binding ElementName=MeasNameSelector, Path=SelectedItem}">
+
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region COmmands -->
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--#region Edit -->
+                                        <Button BorderThickness="0" Background="Transparent" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditMeasNumCommand}">
+                                            <Image Source="..\..\Resourses\Pictures\EditIcon.png" Margin="10" />
+                                            <Button.ToolTip>
+                                                <TextBlock Text="Редактировать"/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <!--#endregion-->
+                                        <!--#region Remove -->
+                                        <Button BorderThickness="0" Background="Transparent" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DelMeasNumCommand}">
+                                            <Image Source="..\..\Resourses\Pictures\DeleteIcon.png" Margin="10" />
+                                            <Button.ToolTip>
+                                                <TextBlock Text="Удалить"/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <!--#endregion-->
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--#region Add new item -->
+                <Button  Style="{StaticResource TypicalButton0}" Width="Auto" HorizontalAlignment="Center"
+                         Command="{Binding AddMeasUnitCommand}">
+                    <DockPanel Margin="5" VerticalAlignment="Center">
+                        <Image Source="..\..\Resourses\Pictures\AddCircleOutline.png"  Height="30"/>
+                        <TextBlock Text="ДОБАВИТЬ НОВУЮ ЕДИНИЦУ ИЗМЕРЕНИЯ" Margin="10,0,0,0" FontSize="16"
+                                   VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Button>
+                <!--#endregion-->
+            </StackPanel>
+            
+        </Border>
+        <!--#endregion-->
+        
+    </Grid>
+</UserControl>

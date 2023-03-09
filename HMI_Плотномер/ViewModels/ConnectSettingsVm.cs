@@ -20,14 +20,22 @@ namespace IDensity.ViewModels
         RelayCommand _changeSerialSelectCommand;
         public RelayCommand ChangeSerialSelectCommand => 
             _changeSerialSelectCommand ?? 
-            (_changeSerialSelectCommand = new RelayCommand(o => VM.CommService.ChangeSerialSelect((int)o), o => o != null));
+            (_changeSerialSelectCommand = new RelayCommand(o =>
+            {
+                VM.mainModel.PortSelectMode.IsWriting = true;
+                VM.CommService.ChangeSerialSelect((int)o); 
+            }, o => o != null));
         #endregion
 
         #region Сменить баудрейт 
         RelayCommand _changeBaudrateCommand;
         public RelayCommand ChangeBaudrateCommand => 
             _changeBaudrateCommand ?? 
-            (_changeBaudrateCommand = new RelayCommand(o => VM.CommService.ChangeBaudrate((uint)(o)), o => o != null));
+            (_changeBaudrateCommand = new RelayCommand(o => 
+            { 
+                VM.CommService.ChangeBaudrate((uint)(o));
+                VM.mainModel.PortBaudrate.IsWriting = true;
+            }, o => o != null));
         #endregion
         #endregion      
 
@@ -37,7 +45,11 @@ namespace IDensity.ViewModels
         {
             byte num = 0;
             var nums = (VM.mainModel.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
-            if (nums.Length == 4) VM.CommService.SetUdpAddr(nums, VM.mainModel.PortUdp);
+            if (nums.Length == 4)
+            {
+                VM.mainModel.UdpWriting = true;
+                VM.CommService.SetUdpAddr(nums, VM.mainModel.PortUdp);
+            }
         },
             canExecPar => VM.mainModel.Connecting.Value));
 
@@ -48,6 +60,7 @@ namespace IDensity.ViewModels
         public RelayCommand WriteEthParamsCommand => _writeEthParamsCommand ?? (_writeEthParamsCommand = new RelayCommand(par =>
         {
             VM.CommService.SetTcpSettings(VM.mainModel.IP, VM.mainModel.Mask, VM.mainModel.GateWay);
+            VM.mainModel.TcpWriting = true;
         },
             o => VM.mainModel.Connecting.Value));
         #endregion

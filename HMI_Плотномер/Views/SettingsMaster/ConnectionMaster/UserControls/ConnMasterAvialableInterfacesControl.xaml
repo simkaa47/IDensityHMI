@@ -8,17 +8,24 @@
              d:DataContext="{d:DesignInstance Type=vm:MasterConnectViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="DataGridCell"/>
+        <Style TargetType="DataGridRow"/>
+
+        <Style TargetType="CheckBox"/>
+    </UserControl.Resources>
     <Grid>        
         <Grid.RowDefinitions>
             <RowDefinition Height="0.25*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Выберите соответсвующие сетевые адаптеры, для того, чтобы сканировать подсеть на предмет наличия плотномера IDensity"
+        <TextBlock Text="Выберите соответсвующие сетевые адаптеры, для того, чтобы сканировать подсеть на предмет наличия прибора"
                    Grid.Row="0"
                    Style="{StaticResource MasterConnect}"/>
-        <DataGrid Grid.Row="1"
+        <DataGrid Grid.Row="1"                  
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
+                  Foreground="Black"
                   CanUserDeleteRows="False"
                   ItemsSource="{Binding Adapters}">
             <DataGrid.Columns>
@@ -29,7 +36,8 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource MaterialDesignDarkCheckBox}"/>
+                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource CheckBoxAqvaStyle}"
+                                      BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

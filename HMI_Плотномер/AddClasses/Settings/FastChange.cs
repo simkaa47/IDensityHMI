@@ -11,8 +11,7 @@ namespace IDensity.AddClasses.Settings
     {
         public FastChange()
         {
-            Activity.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            Threshold.CommandEcecutedEvent += (o) => OnWriteExecuted();
+            
         }
         #region Активность
         /// <summary>
@@ -27,15 +26,7 @@ namespace IDensity.AddClasses.Settings
         /// </summary>
         [DataMember]
         public Parameter<ushort> Threshold { get; set; } = new Parameter<ushort>("FastChangeThreshold", "Порог реакции", 0, ushort.MaxValue, 0, "");
-        #endregion
-        void OnWriteExecuted()
-        {
-            NeedWriteEvent?.Invoke($"fast_chg={(Activity.WriteValue ? 1 : 0)},{Threshold.WriteValue.ToString()}");
-        }
-        /// <summary>
-        /// Необходимо записать настройки стандартизаций
-        /// </summary>
-        public event Action<string> NeedWriteEvent;
+        #endregion       
 
     }
 }

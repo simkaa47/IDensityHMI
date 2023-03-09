@@ -10,14 +10,10 @@ namespace IDensity.AddClasses.Settings
     /// </summary>
     [DataContract]
     public class CalibCurveCrcValue:PropertyChangedBase
-    {
-        const string TcpArg = "date,weak,value";
+    {        
         public CalibCurveCrcValue(int id)
         {
-            this.Id = id;
-            Date.CommandEcecutedEvent += o => CallWriteEvent("date", Date.WriteValue.ToString("dd:MM:yy"));
-            Weak.CommandEcecutedEvent += o => CallWriteEvent("weak", Weak.WriteValue);
-            CounterValue.CommandEcecutedEvent += o => CallWriteEvent("value", CounterValue.WriteValue);
+            this.Id = id;           
             MeasUnitMemoryId = $"SingleSrcMeasUnitMemory{id}";
         }
         #region Id
@@ -65,38 +61,7 @@ namespace IDensity.AddClasses.Settings
             get => _measUnitMemoryId;
             set => Set(ref _measUnitMemoryId, value);
         }
-        #endregion
-        void CallWriteEvent<T>(string parName, T value)
-        {
-            var arg = TcpArg.Replace(parName, value.ToString().Replace(",", "."));
-            var parameters = arg.Split(new char[] { ',', '=' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var par in parameters)
-            {
-                switch (par)
-                {
-                    case "date":
-                        arg = arg.Replace(par, Date.Value.ToString("dd:MM:yy"));
-                        break;
-                    case "weak":
-                        arg = arg.Replace(par, Weak.Value.ToStringPoint());
-                        break;
-                    case "value":
-                        arg = arg.Replace(par, CounterValue.Value.ToStringPoint());
-                        break;                    
-                    default:
-                        break;
-                }
-            }
-            NeedWriteEvent?.Invoke(arg, Id);
-
-        }
-
-        /// <summary>
-        /// Необходимо записать данные еденичных измерений
-        /// </summary>
-        public event Action<string, int> NeedWriteEvent;
-
-        
+        #endregion        
     }
    
 

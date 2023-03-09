@@ -8,18 +8,7 @@ namespace IDensity.AddClasses.Settings
     [DataContract]
     public class Compensation :PropertyChangedBase
     {
-        public Compensation()
-        {
-            Activity.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            MeasUnitNum.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            Sourse.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            A.CommandEcecutedEvent += (o) => OnWriteExecuted();
-            B.CommandEcecutedEvent += (o) => OnWriteExecuted();            
-        }
-        void OnWriteExecuted()
-        {
-            NeedWriteEvent?.Invoke($"{(Activity.WriteValue ? 1:0)},{MeasUnitNum.WriteValue},{Sourse.WriteValue},{A.WriteValue.ToStringPoint()},{B.WriteValue.ToStringPoint()}");
-        }
+        
         #region Активность компенсации
         /// <summary>
         /// Активность компенсации
@@ -62,7 +51,6 @@ namespace IDensity.AddClasses.Settings
         [DataMember]
         public Parameter<float> C { get; set; } = new Parameter<float>("CompensationC", "Коэффициент C", float.MinValue, float.MaxValue, 0, "");
         #endregion
-
         #region Коэффициент D
         /// <summary>
         /// Коэффициент D
@@ -70,11 +58,6 @@ namespace IDensity.AddClasses.Settings
         [DataMember]
         public Parameter<float> D { get; set; } = new Parameter<float>("CompensationD", "Коэффициент D", float.MinValue, float.MaxValue, 0, "");
         #endregion
-
-        /// <summary>
-        /// Необходимо записать настройки стандартизаций
-        /// </summary>
-        public event Action<string> NeedWriteEvent;
 
         public string Copy()
         {

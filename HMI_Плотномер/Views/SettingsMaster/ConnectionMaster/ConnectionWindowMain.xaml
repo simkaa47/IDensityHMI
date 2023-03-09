@@ -24,7 +24,7 @@
             <RowDefinition/>
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Мастер покдлючения к плотномеру"
+        <TextBlock Text="Мастер покдлючения к прибору"
                    FontSize="20"
                    VerticalAlignment="Center" 
                    HorizontalAlignment="Center"/>
@@ -94,7 +94,7 @@
                         {StaticResource VisibleIfNotEqual}, 
                         ConverterParameter={x:Static cm:StateConnectionMaster.Exit}}"
                     Command="{Binding NextCommand}"
-                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+                    IsEnabled="{Binding IsProcessing, Converter={StaticResource NotEqual}, ConverterParameter=True}"/>
             <!--#endregion-->
         </StackPanel>
     </Grid>
