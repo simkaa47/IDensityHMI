@@ -178,13 +178,13 @@
                 <DockPanel>
                     <TextBlock Text="Расчет пределов с заданными отклонениями" TextWrapping="Wrap"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Text="{Binding AdcAvgSettings.LeftCounterCoeff, StringFormat=f2, UpdateSourceTrigger=LostFocus}" 
+                        <TextBox Text="{Binding AdcAvgSettings.LeftCounterCoeff, StringFormat=f2,ConverterCulture=RU-ru, UpdateSourceTrigger=LostFocus}" 
                                          Width="50" Height="40" 
                                  Margin="0,5,5,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                          HorizontalAlignment="Right"
                                          VerticalContentAlignment="Center"/>
-                        <TextBox Text="{Binding AdcAvgSettings.RightCounterCoeff, StringFormat=f2, UpdateSourceTrigger=LostFocus}" 
+                        <TextBox Text="{Binding AdcAvgSettings.RightCounterCoeff, StringFormat=f2, ConverterCulture=RU-ru, UpdateSourceTrigger=LostFocus}" 
                                          Width="55" Height="40" 
                                  Margin="0,5,5,0"
                                  Template="{StaticResource TextBoxTemplate}"

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,7 +13,9 @@ namespace IDensity.Core.Views.Pages
     {
         public MainPage()
         {
+            
             InitializeComponent();
+
         }
 
         private void FileDialogOpen(TextBlock tb)

@@ -204,7 +204,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"/>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1}" 
+                        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
                                     Name="InternalTempIndicator"
                                 Foreground="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource InternalTempColors}}"  
                                HorizontalAlignment="Center"
@@ -226,7 +226,7 @@
                     <TextBlock Text="НАПРЯЖЕНИЕ HV, В" Foreground="Aqua" FontSize="14" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"/>
-                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value}" Foreground="White"  
+                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
                                HorizontalAlignment="Center"
                                FontSize="80"
                                VerticalAlignment="Center"/>

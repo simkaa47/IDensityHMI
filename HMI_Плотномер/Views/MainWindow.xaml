@@ -13,6 +13,7 @@
         xmlns:sett="clr-namespace:IDensity.AddClasses.Settings"
         xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
         mc:Ignorable="d"  
+        
         Background="#000000"
         Title="MainWindow" Height="450" Width="800" WindowState="Maximized">    
     <Window.DataContext>

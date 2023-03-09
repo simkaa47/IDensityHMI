@@ -54,7 +54,7 @@
             <DockPanel>
                 <TextBlock Text="К-т" 
                    VerticalAlignment="Center"/>
-                <TextBox Text="{Binding K}" Template="{StaticResource TextBoxTemplate}"
+                <TextBox Text="{Binding K, ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
                    VerticalAlignment="Center" Width="165" HorizontalAlignment="Right" />
             </DockPanel>
            
@@ -63,7 +63,7 @@
             <DockPanel>
                 <TextBlock Text="Смещение" 
                    VerticalAlignment="Center"/>
-                <TextBox Text="{Binding Offset}" Template="{StaticResource TextBoxTemplate}"
+                <TextBox Text="{Binding Offset,  ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
                    VerticalAlignment="Center" Width="165" HorizontalAlignment="Right" />
             </DockPanel>            
             <!--#endregion-->

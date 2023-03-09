@@ -20,8 +20,8 @@ namespace IDensity.Core.Views.Converters
         public object Convert(object[] v, Type t, object p, CultureInfo c)
         {
 
-            double k = 1;
-            double b = 0;
+            float k = 1;
+            float b = 0;
             bool needToWriteMemory = false;
             if (v.Length < 3) return 0;
             if (!(v[0] is float result)) return 0;
@@ -32,15 +32,15 @@ namespace IDensity.Core.Views.Converters
                 k = unit.K;
                 b = unit.Offset;
             }
-            double y = k * result + b;
-            y = Math.Round(y, 5);
+            float y = k * result + b;
+            
             if (v[2] is string memoryId && needToWriteMemory)
             {
                 SaveMemoryMeasUnit(memoryId, CurMeasUnit.Id);
             }
             var stringFormat = "";
             if (!(p is null)) stringFormat = p.ToString();
-            return y.ToString(stringFormat, CultureInfo.GetCultureInfo("en-gb"));
+            return y.ToString(stringFormat, CultureInfo.GetCultureInfo("RU-ru"));
 
         }
 
@@ -50,7 +50,11 @@ namespace IDensity.Core.Views.Converters
             var b = CurMeasUnit is null ? 0 : CurMeasUnit.Offset;
             float value = 0;
             if (v is null) return new object[] { v, CurMeasUnit };
-            if (!(float.TryParse(v.ToString(), out value))) return new object[] { v, CurMeasUnit };
+            if(IsValid(v))return new object[] { ",", CurMeasUnit };
+            if (!(float.TryParse(v.ToString(),  out value)))
+            {
+                return new object[] { v, CurMeasUnit };
+            }
             return new object[] { (value - b) / k, CurMeasUnit };
         }
 
@@ -62,6 +66,12 @@ namespace IDensity.Core.Views.Converters
                 memory.MeasUnitId = newId;
                 _memoryRepository.Update(memory);
             }
+        }
+
+        private bool IsValid(object value)
+        {
+            return value.ToString().EndsWith(",") ||
+               (value.ToString().EndsWith("0") && value.ToString().Contains(","));
         }
 
 

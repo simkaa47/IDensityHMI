@@ -68,6 +68,7 @@
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <!--#region Название прибора -->
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Название прибора"/>
@@ -89,6 +90,11 @@
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Версия ПО HMI"/>
                             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DeviceInfo.HmiSoftwareNumber}"/>
                             <!--#endregion-->
+                            <!--#region Версия ПО PLC -->
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Версия ПО прибора"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding VM.mainModel.FwVersion.Value}"/>
+                            <!--#endregion-->
+                            
                         </Grid>
                     </GroupBox>
                     <!--#endregion-->
@@ -268,21 +274,21 @@
                                 <DataGridTemplateColumn Header="Мин. величина" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding MinValue, StringFormat=f1}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding MinValue, StringFormat=f1, ConverterCulture=RU-ru}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="Акт. величина" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Value, StringFormat=f1}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Value, StringFormat=f1, ConverterCulture=RU-ru}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="Макс. величина" MaxWidth="100"  HeaderTemplate="{StaticResource LocalHeaderTemplate}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate >
-                                            <TextBlock Text="{Binding MaxValue, StringFormat=f1}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding MaxValue, StringFormat=f1, ConverterCulture=RU-ru}" Width="100" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>                               

@@ -72,7 +72,7 @@
                     <Border Grid.Column="2" Margin="0,0,20,0"                           
                             Background="{StaticResource PanelBorderColor}">
                         <TextBlock 
-                               Text="{Binding CounterValue.Value, StringFormat={}{0:f1} каунтов/c}" 
+                               Text="{Binding CounterValue.Value, StringFormat={}{0:f1} импульсов/c, ConverterCulture=RU-ru}" 
                                VerticalAlignment="Center" 
                                Margin="12"
                                HorizontalAlignment="Center"
@@ -96,7 +96,7 @@
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                                    <Binding Path="PhysValueAvg.Value"/>
+                                    <Binding Path="PhysValueAvg.Value" />
                                     <Binding ElementName="MUnit" Path="SelectedItem"/>
                                     <Binding Path="MeasUnitMemoryId"/>
                                 </MultiBinding>

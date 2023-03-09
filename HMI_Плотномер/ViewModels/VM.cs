@@ -261,7 +261,7 @@ namespace IDensity.ViewModels
 
         #region Данные для архивного тренда
         #region Коллекция
-        IEnumerable<TimePoint> _archivalDataPotnts;
+        IEnumerable<TimePoint> _archivalDataPotnts = new List<TimePoint> { new TimePoint { time=new DateTime(2020,1,1) }, new TimePoint { time = DateTime.Now } };
         public IEnumerable<TimePoint> ArchivalDataPotnts { get => _archivalDataPotnts; private set { Set(ref _archivalDataPotnts, value); } }
         #endregion
 

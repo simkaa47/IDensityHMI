@@ -21,7 +21,7 @@
             <ListBoxItem  Visibility="{Binding Status, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=BreakError}">
                 <TextBlock Style="{StaticResource ErrorStyle}">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="{} Уставка {0} mA: измеренное значение  {1:f3} mA">
+                        <MultiBinding StringFormat="{} Уставка {0} mA: измеренное значение  {1:f3} mA" ConverterCulture="RU-ru">
                             <Binding Path="SetValue"/>
                             <Binding Path="MeasValue"/>
                         </MultiBinding>
@@ -31,7 +31,7 @@
             <ListBoxItem  Visibility="{Binding Status, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=BreakError}">
                 <TextBlock Style="{StaticResource ErrorStyle}">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="{} Условие проверки: значение токового выхода должно быть не больше  {0}± {1:f3} mA">
+                        <MultiBinding StringFormat="{} Условие проверки: значение токового выхода должно быть не больше  {0}± {1:f3} mA" ConverterCulture="RU-ru">
                             <Binding Path="SetValue"/>
                             <Binding Path="MaxDeviation"/>
                         </MultiBinding>

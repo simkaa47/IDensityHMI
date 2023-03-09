@@ -67,9 +67,9 @@
                            
                         </KeyBinding>
                     </TextBox.InputBindings>
-                    <MultiBinding Converter="{StaticResource StringFormatConverter}" UpdateSourceTrigger="PropertyChanged" 
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}" UpdateSourceTrigger="PropertyChanged" ConverterCulture="RU-ru"
                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
-                        <Binding Path="WriteValue" StringFormat="N2" Converter="{StaticResource NumericConverter}" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                        <Binding Path="WriteValue" StringFormat="N2" Converter="{StaticResource NumericConverter}"  ConverterCulture="RU-ru" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                             <Binding.ValidationRules>
                                 <DataErrorValidationRule />
                                 <ExceptionValidationRule/>

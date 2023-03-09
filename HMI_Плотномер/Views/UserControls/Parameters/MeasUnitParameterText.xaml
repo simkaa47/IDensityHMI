@@ -71,8 +71,8 @@
                         </TextBox.InputBindings>
                         <TextBox.Text>
                             <MultiBinding Converter="{StaticResource Multyply}"  UpdateSourceTrigger="PropertyChanged"
-                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="">
-                                <Binding Path="WriteValue" StringFormat="N2" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource NumericConverter}">
+                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="" ConverterCulture="RU-ru">
+                                <Binding Path="WriteValue" ConverterCulture="RU-ru" StringFormat="N2" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource NumericConverter}">
                                     <Binding.ValidationRules>
                                         <DataErrorValidationRule />
                                         <ExceptionValidationRule/>
