@@ -179,7 +179,7 @@
                 </ToggleButton.ToolTip>
                 <Image Source="..\Resourses\Pictures\TuneIcon.png"/>                
             </ToggleButton>
-            <Popup Height="480" Width="600"                   
+            <Popup Height="Auto" Width="600"                   
                    IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
                    StaysOpen="False"                   
                    Placement="MousePoint">

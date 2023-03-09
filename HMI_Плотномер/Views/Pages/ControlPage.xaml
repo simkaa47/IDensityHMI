@@ -31,7 +31,7 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition/>                
-                <RowDefinition Height="0.7*"/>
+                <RowDefinition Height="0.5*"/>
                 
             </Grid.RowDefinitions>
             <Grid Background="#2C2C2E">
@@ -110,7 +110,10 @@
                 <!--#endregion-->
             </Grid>
             <!--#region Counters -->
-            <c:CounterTab Grid.Row="2"/>
+            <Viewbox Grid.Row="2">
+                <c:CounterTab Grid.Row="2"/>
+            </Viewbox>
+            
             <!--#endregion-->
         </Grid>
         <!--#endregion-->

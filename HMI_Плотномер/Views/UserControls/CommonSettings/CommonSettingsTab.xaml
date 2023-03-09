@@ -47,7 +47,7 @@
                                                     Header="№">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Index}" Style="{StaticResource Common}" Margin="10"/>
+                                        <TextBlock Text="{Binding Index}" Style="{StaticResource Common}" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -61,7 +61,7 @@
                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSpeedCommand}"
                                                          CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"
                                                          HorizontalAlignment="Center"
-                                                         Margin="10"/>
+                                                         Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -75,7 +75,7 @@
                                                          CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"
                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSmoothCommand}"
                                                          HorizontalAlignment="Center"
-                                                         Margin="10"/>
+                                                         Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -141,7 +141,7 @@
                                         <DataTemplate>
                                             <p:TextParameter DataContext="{Binding A}"
                                                              DescriptionNotVisible="True" HorizontalAlignment="Center"
-                                                             Margin="10"
+                                                             Margin="5"
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempRecalculateSettingsCommand}"
                                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.ModNum}"/>
                                         </DataTemplate>
@@ -154,7 +154,7 @@
                                         <DataTemplate>
                                             <p:TextParameter DataContext="{Binding B}"
                                                              DescriptionNotVisible="True" HorizontalAlignment="Center"
-                                                             Margin="10"
+                                                             Margin="5"
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempRecalculateSettingsCommand}"
                                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.ModNum}"/>
                                         </DataTemplate>
