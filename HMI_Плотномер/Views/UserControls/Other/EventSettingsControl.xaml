@@ -11,7 +11,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-       
+        <Style TargetType="TextBox" BasedOn="{StaticResource ComboBoxEditableTextBox}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CaretBrush" Value="White"/>
+        </Style>
     </UserControl.Resources>
     <Border Margin="20" Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top">
         <DataGrid Background="Transparent"
@@ -36,7 +40,7 @@
                 <DataGridTemplateColumn Header="НОМЕР" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource Common}" Text="{Binding Num, StringFormat=d4}" Margin="10"/>
+                            <TextBox  Text="{Binding Num, StringFormat=d4, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -45,7 +49,7 @@
                 <DataGridTemplateColumn Header="ЗАГОЛОВОК" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource Common}" Text="{Binding Title}" Margin="10"/>
+                            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Margin="10" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -54,7 +58,7 @@
                 <DataGridTemplateColumn Header="ОПИСАНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource Common}" Text="{Binding Description}" Margin="10"/>
+                            <TextBox  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

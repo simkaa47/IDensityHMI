@@ -47,7 +47,9 @@ namespace IDensity.ViewModels
         public EventDevice EventAnalogModuleCommErr3 { get; } = new EventDevice("EventAnalogModuleCommErr3");
         #endregion
         #endregion
-
+        #region Событие высокой температуры
+        public EventDevice HighTempBoardErr { get; } = new EventDevice("HighTempBoardErr");
+        #endregion
 
         #endregion
 
@@ -143,12 +145,21 @@ namespace IDensity.ViewModels
                 }
             };
             #endregion
+            #region Событие высокой температуры
+            Model.TempTelemetry.PropertyChanged += (obj, args) =>
+             {
+                 if(args.PropertyName == nameof(Model.TempTelemetry.OverTemp))
+                 {                     
+                     HighTempBoardErr.IsActive = Model.TempTelemetry.OverTemp;
+                 }
+             };
+            #endregion
         }
 
-        #endregion
+    #endregion
 
-        #region Действие по наступлению события
-        void OnEventExecute(EventDevice device)
+    #region Действие по наступлению события
+    void OnEventExecute(EventDevice device)
         {
             EventExecute?.Invoke(device);
         } 

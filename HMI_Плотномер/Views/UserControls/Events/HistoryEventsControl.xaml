@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Border Background="Black">
+        <Border Background="Black" VerticalAlignment="Top" Margin="20">
             <DataGrid Background="Transparent"
                       Margin="10"
                       BorderThickness="0"
@@ -28,11 +28,66 @@
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}"/>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding EventTime, StringFormat=F,ConverterCulture=ru-RU}"/>
-                    <DataGridTextColumn Header="ПОЛЬЗОВАТЕЛЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding UserName}"/>
-                    <DataGridTextColumn Header="КОД СОБЫТИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding Event.Num, StringFormat=d4}"/>
-                    <DataGridTextColumn Header="СООБЩЕНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding Event.Title}"/>
-                    <DataGridTextColumn Header="АКТИВНОСТЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Binding="{Binding Activity, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource Activities}}"/>
+                    <!--#region Time-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" Style="{StaticResource Common}" Margin="20,10,20,10"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding EventTime, StringFormat=F,ConverterCulture=ru-RU}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region User-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="ПОЛЬЗОВАТЕЛЬ" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding UserName}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region Code-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="КОД СОБЫТИЯ" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Event.Num, StringFormat=d4}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region Message-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="СООБЩЕНИЕ" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Event.Title}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->
+                    <!--#region Activity-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="АКТИВНОСТЬ" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Activity, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource Activities}}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--#endregion-->                    
                 </DataGrid.Columns>
             </DataGrid>
         </Border>    

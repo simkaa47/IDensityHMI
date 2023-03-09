@@ -267,4 +267,8 @@
         <sys1:String>Вывод: иммитационная поверка не пройдена</sys1:String>
         <sys1:String>Вывод: иммитационная поверка пройдена успешно</sys1:String>
     </col1:ArrayList>
+    <x:Array Type="sys1:String"   x:Key="InternalTempColors">
+        <sys1:String>#FFFFFFFF</sys1:String>
+        <sys1:String>#FFFF0000</sys1:String>
+    </x:Array>
 </ResourceDictionary>

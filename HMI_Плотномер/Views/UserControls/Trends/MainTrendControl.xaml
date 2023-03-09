@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Trends"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+   
     <Grid>
         <oxy:Plot PlotMargins="80,0,0,30"                  
                       PlotType="XY"                   
@@ -27,6 +29,7 @@
                         MajorGridlineStyle="Dot"
                         Position ="Left" />
                 <oxy:DateTimeAxis FontWeight="Bold"
+                                  
                                   MaximumRange="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=MaximumRange}"
                                   MajorGridlineColor="WhiteSmoke"
                                   MajorGridlineStyle="Dot"                                  
