@@ -42,14 +42,13 @@
                     </TextBlock>
                     <!--#endregion-->
                     <!--#region Meas Unit-->
-                    <ComboBox DisplayMemberPath="Name" 
+                    <ComboBox  
                               Grid.Column="1"
                               Foreground="White"
                                   Name="MUnit"                             
                                   Margin="20,0,200,0"
                                   VerticalAlignment="Center"
-                              VerticalContentAlignment="Bottom"
-                                  FontSize="20"
+                              VerticalContentAlignment="Center"                                  
                                   Height="40">
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
@@ -66,6 +65,11 @@
                                 <Binding Path="MeasUnitMemoryId"/>
                             </MultiBinding>
                         </ComboBox.SelectedItem>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
                     <!--#endregion-->
                     <!--#region Counts-->

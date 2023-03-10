@@ -12,7 +12,8 @@ namespace IDensity.Core.Views.Converters
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is string notFormattedText)) return null;
-            TextBlock textBlock = new TextBlock();           
+            TextBlock textBlock = new TextBlock();
+            
 
             var list = notFormattedText.Split('^').ToList();
             int i = 0;
