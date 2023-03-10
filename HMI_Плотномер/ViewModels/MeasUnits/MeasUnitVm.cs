@@ -80,6 +80,7 @@ namespace IDensity.Core.ViewModels.MeasUnits
         public RelayCommand DelMeasNumCommand => _delMeasNumCommand ?? (_delMeasNumCommand = new RelayCommand(execPar => 
         {
             if (SelectedMeasUnit is null) return;
+            if (SelectedMeasUnit.UserCantDelete) return;
             SafetyAction(() =>
             {
                 _measUnitRepository.Delete(SelectedMeasUnit);
@@ -127,17 +128,20 @@ namespace IDensity.Core.ViewModels.MeasUnits
         {
             MeasUnits = _measUnitRepository.Init(new List<MeasUnit>
             {
-                new MeasUnit{Name="г/см^3",K=1, Offset = 0, Mode=0, DeviceType=0},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=1, DeviceType=0},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=2, DeviceType=0},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=3, DeviceType=0},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=4, DeviceType=0},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=5, DeviceType=0},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=6, DeviceType=0},
-                new MeasUnit{Name="мм",K=1, Offset=0, Mode=0, DeviceType=1},
-                new MeasUnit{Name="%",K=1, Offset=0, Mode=1, DeviceType=1},
-                new MeasUnit{Name="%",K=1, Offset=0, Mode=2, DeviceType=1},
-                new MeasUnit{Name="мм/c",K=1, Offset=0, Mode=3, DeviceType=1},
+                new MeasUnit{Name="г/см^3",K=1, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="кг/м^3",K=1000, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/л",K=0.001f, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/л",K=0.001f, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=2, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=3, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=4, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=5, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset = 0, Mode=6, DeviceType=0, UserCantDelete = true},
+                new MeasUnit{Name="мм",K=1, Offset=0, Mode=0, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="%",K=1, Offset=0, Mode=1, DeviceType=1, UserCantDelete = true},
+                new MeasUnit{Name="м^3",K=1, Offset=0, Mode=2, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="мм/c",K=1, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true}
             });
         }
 

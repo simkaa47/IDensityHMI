@@ -36,6 +36,9 @@ namespace IDensity.DataAccess.Migrations
                     b.Property<float>("Offset")
                         .HasColumnType("REAL");
 
+                    b.Property<bool>("UserCantDelete")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("MeasUnits");

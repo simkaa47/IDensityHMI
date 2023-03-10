@@ -77,6 +77,21 @@ namespace IDensity.DataAccess.Models
         }
         #endregion
 
+        #region User can't delete this meas unut
+        /// <summary>
+        /// User can't delete this meas unut
+        /// </summary>
+        private bool _userCantDelete;
+        /// <summary>
+        /// User can't delete this meas unut
+        /// </summary>
+        public bool UserCantDelete
+        {
+            get => _userCantDelete;
+            set => Set(ref _userCantDelete, value);
+        }
+        #endregion
+
         public static bool CompareMeasUnits(MeasUnit first, MeasUnit second)
         {
             if (first is null || second is null) return false;
