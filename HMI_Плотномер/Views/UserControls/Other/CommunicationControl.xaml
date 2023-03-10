@@ -23,7 +23,7 @@
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
         <!--#region Eth parameters -->
-        <GroupBox Header="Настройки Ethernet (TCP) соединения"
+        <GroupBox Header="Настройки соединения между АРМ и прибором"
                   FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
@@ -34,7 +34,7 @@
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region Ip -->
                 <DockPanel>
-                    <TextBlock Text="IP адрес устройства"/>
+                    <TextBlock Text="IP адрес прибора (фактический)"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -109,7 +109,7 @@
         </GroupBox>
         <!--#endregion-->
         <!--#region Eth parameters -->
-        <GroupBox Header="Настройки Ethernet (в плате)"
+        <GroupBox Header="Настройки TCP сервера прибора"
                   FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
@@ -120,7 +120,7 @@
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region ip -->
                 <DockPanel>
-                    <TextBlock Text="Ip адрес"/>
+                    <TextBlock Text="Ip адрес приб"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Width="165"
                                  Height="40"

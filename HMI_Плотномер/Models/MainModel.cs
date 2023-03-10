@@ -88,7 +88,7 @@ namespace IDensity.Models
         /// <summary>
         /// Флаг записи
         /// </summary>
-        private bool _tcpWriting;
+        private bool _tcpWriting = true;
         /// <summary>
         /// Флаг записи
         /// </summary>
@@ -245,7 +245,7 @@ namespace IDensity.Models
         /// <summary>
         /// Флаг записи Udp настроек
         /// </summary>
-        private bool _udpWriting;
+        private bool _udpWriting = true;
         /// <summary>
         /// Флаг записи Udp настроек
         /// </summary>

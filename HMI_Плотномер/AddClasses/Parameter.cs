@@ -162,7 +162,7 @@ namespace IDensity.AddClasses
         /// <summary>
         /// Writing Process Indicator
         /// </summary>
-        private bool _isWriting;
+        private bool _isWriting = true;
         /// <summary>
         /// Writing Process Indicator
         /// </summary>
