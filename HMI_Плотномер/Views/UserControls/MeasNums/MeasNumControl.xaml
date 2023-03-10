@@ -30,7 +30,9 @@
                         <DataGridTemplateColumn Header="ИМЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Margin="10" Style="{StaticResource Common}"/>
+                                    <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}" Margin="10"
+                                                 Foreground="White"
+                                                 FontSize="16"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
