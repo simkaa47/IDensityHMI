@@ -147,6 +147,11 @@
             <oth:MasterSettingsControl DataContext="{Binding MasterSettingsViewModel}"/>
         </TabItem>
         <!--#endregion-->
+        <!--#region Save-Load settings settings -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Save-Load" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" >
+            <oth:SaveLoadSettingsControl DataContext="{Binding CommonSettingsVm}"/>
+        </TabItem>
+        <!--#endregion-->
     </TabControl>
     
     

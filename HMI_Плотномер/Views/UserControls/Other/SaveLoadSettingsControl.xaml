@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="IDensity.Core.Views.UserControls.Other.SaveLoadSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Other"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:CommonSettingsVm}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+        <Style TargetType="DockPanel">
+            <Setter Property="MinHeight" Value="50"/>
+        </Style>
+    </UserControl.Resources>
+    <ListBox Background="Transparent"
+             BorderThickness="0"
+             Margin="20"
+             HorizontalContentAlignment="Stretch"
+             ItemContainerStyle="{StaticResource ParameterListBoxItem}"
+             >
+        <!--#region Path -->
+        <DockPanel>
+            <TextBlock Text="{Binding FileSettingsPath, TargetNullValue=Нажите на кнопку \'Browse\' чтобы указать файл}"
+                                       VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <!--#region Browse -->
+                <Button  Background="Transparent" Margin="5" BorderThickness="0" HorizontalAlignment="Right"
+                                 Style="{StaticResource ButtonWithBackground}" Command="{Binding BrowseFilePathCommand}">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="..\..\Resourses\Pictures\ReadAquaIcon.png"/>
+                        <Label FontSize="14" 
+                                   Content="Browse"/>
+                    </StackPanel>
+                </Button>
+                <!--#endregion-->
+                <Button  Content="СОХРАНИТЬ" Style="{StaticResource TypicalButton0}" Height="40" Margin="5"
+                        Command="{Binding WriteSettingsToFile}"/>
+                <Button  Content="ЗАГРУЗИТЬ" Grid.Column="1" Style="{StaticResource TypicalButton0}" Height="40"  Margin="5" 
+                        Command="{Binding ReadSettingsToMemoryCommand}"/>
+            </StackPanel>
+        </DockPanel>
+        <!--#endregion-->
+       
+    </ListBox>
+</UserControl>
