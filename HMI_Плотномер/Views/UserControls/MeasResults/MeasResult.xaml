@@ -45,7 +45,8 @@
                     <ComboBox  
                               Grid.Column="1"
                               Foreground="White"
-                                  Name="MUnit"                             
+                                  Name="MUnit"
+                        Background="Transparent"
                                   Margin="20,0,200,0"
                                   VerticalAlignment="Center"
                               VerticalContentAlignment="Center"                                  
