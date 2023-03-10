@@ -15,7 +15,7 @@
                          FontFamily="Roboto"
                          Margin="10,0,0,0"                         
                          VerticalAlignment="Center"
-                         Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text}"
+                         Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, UpdateSourceTrigger=PropertyChanged}"
                          FontSize="16"
                          
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"

@@ -127,7 +127,7 @@
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Text="{Binding VM.mainModel.IP}">
+                                 Text="{Binding VM.mainModel.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
                             </TextBox.InputBindings>
@@ -150,7 +150,7 @@
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Text="{Binding VM.mainModel.Mask}">
+                                 Text="{Binding VM.mainModel.Mask, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
                             </TextBox.InputBindings>
@@ -173,7 +173,7 @@
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Text="{Binding VM.mainModel.GateWay}">
+                                 Text="{Binding VM.mainModel.GateWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
                             </TextBox.InputBindings>
