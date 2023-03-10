@@ -24,5 +24,6 @@
     <conv:GetIfTrueConverter x:Key="GetIfTrue"/>
     <conv:GetByIndexFromParameterConverter x:Key="GetByIndexFromParameterConverter"/>
     <conv:NumericConverter x:Key="NumericConverter"/>
+    <conv:HighRegisterConverter x:Key="HighRegisterConverter"/>
     <conv:GetFromMeasTypeMultyConverter x:Key="GetFromMeasTypeMultyConverter"/>
 </ResourceDictionary>
