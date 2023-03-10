@@ -62,6 +62,18 @@ namespace IDensity.Core.Views.UserControls.DateTimes
 
 
 
+        public string DateTimeFormat
+        {
+            get { return (string)GetValue(DateTimeFormatProperty); }
+            set { SetValue(DateTimeFormatProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DateTimeFormat.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DateTimeFormatProperty =
+            DependencyProperty.Register("DateTimeFormat", typeof(string), typeof(DateTimeParameter), new PropertyMetadata(null));
+
+
+
 
         internal RelayCommand PopupOpenedCommand
         {

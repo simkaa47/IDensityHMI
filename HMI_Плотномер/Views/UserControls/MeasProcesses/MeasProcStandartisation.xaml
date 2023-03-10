@@ -80,6 +80,7 @@
                                 <DataTemplate>
                                     <p:DateTimeParameter DataContext="{Binding LastStandDate}" Margin="5"
                                                  DescriptionNotVisible="True"
+                                                         DataTimeFormat="d"
                                                          HorizontalAlignment="Center"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.LastStandDateWriteCommand}"/>
                                 </DataTemplate>

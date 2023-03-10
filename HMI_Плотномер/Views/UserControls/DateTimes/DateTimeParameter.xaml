@@ -31,7 +31,7 @@
             <wpftool:DateTimePicker Grid.Row="1"                                   
             HorizontalContentAlignment="Stretch"
             Format="Custom"             
-            FormatString="G"            
+            FormatString="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=DateTimeFormat, TargetNullValue=G}"            
             TimeFormat="Custom"
             TimeFormatString="HH:mm:ss"
             Value="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=DateTime}"            

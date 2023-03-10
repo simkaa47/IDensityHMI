@@ -104,6 +104,7 @@
                         <DataGrid CanUserAddRows="False" 
                              SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"                            
                              BorderThickness="0"
+                             FontWeight="Regular"
                              Background="Transparent"
                              CanUserDeleteRows="False" 
                              ItemsSource="{Binding SelectedProcess.SingleMeasResults}"
@@ -131,6 +132,7 @@
                                             <p:DateTimeParameter DataContext="{Binding Date}"
                                                              DescriptionNotVisible="True"
                                                              Margin="5"
+                                                                 DataTimeFormat="d"
                                                                  Height="40"
                                                              HorizontalAlignment="Center"
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.DateWriteCommand}"/>

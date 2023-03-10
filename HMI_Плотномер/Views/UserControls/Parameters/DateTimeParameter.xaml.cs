@@ -22,5 +22,19 @@ namespace IDensity.Core.Views.UserControls.Parameters
         {
             InitializeComponent();
         }
+
+
+
+        public string DataTimeFormat
+        {
+            get { return (string)GetValue(DataTimeFormatProperty); }
+            set { SetValue(DataTimeFormatProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DataTimeFormat.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DataTimeFormatProperty =
+            DependencyProperty.Register("DataTimeFormat", typeof(string), typeof(DateTimeParameter), new PropertyMetadata(null));
+
+
     }
 }
