@@ -23,7 +23,7 @@
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
         <!--#region Eth parameters -->
-        <GroupBox Header="Настройки соединения между АРМ и прибором"
+        <GroupBox Header="Настройки соединения с АРМ (Ethernet TCP)"
                   FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
@@ -53,63 +53,30 @@
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region Pause between requests -->
-                <DockPanel>
-                    <TextBlock Text="Пауза между запросами, мс."/>
-                    <TextBox Template="{StaticResource TextBoxTemplate}"
+                <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                    <DockPanel>
+                        <TextBlock Text="Частота опроса прибора, мс." />
+                        <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Width="165"
                              Height="40"/>
-                </DockPanel>
+                    </DockPanel>
+                </ListBoxItem>
                 <!--#endregion-->
                 <!--#region Cyclic requests -->
-                <DockPanel>
-                    <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
-                    <CheckBox IsChecked="{Binding VM.mainModel.TcpConnectData.CycicRequest}" Style="{StaticResource CheckBoxAqvaStyle}"/>
-                </DockPanel>
-                <!--#endregion-->
-                <!--#region Udp settings -->
-                <DockPanel>
-                    <TextBlock Text="Адрес приемника данных по UDP(IP, порт)"/>
-                    <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Right">
-                        <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
-                                 MinWidth="100"
-                                 Height="40"
-                                 Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter"  Command="{Binding SetUpsAddrCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
-                        <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 MinWidth="80"
-                                 Height="40"
-                                 Margin="5"
-                                Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding SetUpsAddrCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
-                        
-                        <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding VM.mainModel.UdpWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
-                        
-                    </StackPanel>
-                </DockPanel>
-                <!--#endregion-->
+                <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                    <DockPanel>
+                        <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
+                        <CheckBox IsChecked="{Binding VM.mainModel.TcpConnectData.CycicRequest}" Style="{StaticResource CheckBoxAqvaStyle}"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->                
             </ListBox>
         </GroupBox>
         <!--#endregion-->
         <!--#region Eth parameters -->
-        <GroupBox Header="Настройки TCP сервера прибора"
+        <GroupBox Header="Настройка сетевого подключения прибора (Ethernet TCP)"
                   FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
@@ -120,7 +87,7 @@
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region ip -->
                 <DockPanel>
-                    <TextBlock Text="Ip адрес приб"/>
+                    <TextBlock Text="IP адрес прибора"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Width="165"
                                  Height="40"
@@ -187,11 +154,48 @@
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
+                <!--#region Udp settings -->
+                <DockPanel>
+                    <TextBlock Text="Сетевой адрес получателя спектра (IP, порт)"/>
+                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+                        <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                 MinWidth="100"
+                                 Height="40"
+                                 Template="{StaticResource TextBoxTemplate}"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter"  Command="{Binding SetUpsAddrCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 MinWidth="80"
+                                 Height="40"
+                                 Margin="5"
+                                Template="{StaticResource TextBoxTemplate}"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding SetUpsAddrCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+                        <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
+                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
+                             Spin="{Binding VM.mainModel.UdpWriting}"
+                             Height="25"
+                             Margin="5"
+                             Foreground="Aqua"/>
+
+                    </StackPanel>
+                </DockPanel>
+                <!--#endregion-->
             </ListBox>
         </GroupBox>
         <!--#endregion-->
         <!--#region Serial port settings -->
-        <GroupBox Header="Настройки последовательного порта плотномера"
+        <GroupBox Header="Настройки последовательного порта прибора"
                   FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
@@ -220,7 +224,7 @@
         </GroupBox>
         <!--#endregion-->
         <Button Style="{StaticResource TypicalButton0}" Height="40" FontSize="16" Command="{Binding RstBoardCommand}">
-            ПЕРЕЗАГРУЗИТЬ ПЛАТУ
+            ПЕРЕЗАГРУЗИТЬ ПРИБОР
         </Button>
     </ListBox>
         
