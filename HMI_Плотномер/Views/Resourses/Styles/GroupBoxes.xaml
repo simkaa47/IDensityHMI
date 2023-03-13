@@ -4,11 +4,11 @@
     <Style TargetType="GroupBox" >
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="WhiteSmoke"/>
+        <Setter Property="Foreground" Value="White"/>
     </Style>
     <!--#endregion-->
     <Style TargetType="GroupBox" x:Key="GroupBoxTrendStyle">
         <Setter Property="BorderThickness" Value="0.1"/>
-
     </Style>
+   
 </ResourceDictionary>

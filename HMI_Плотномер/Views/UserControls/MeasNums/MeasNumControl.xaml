@@ -65,7 +65,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Margin="5" Style="{StaticResource Common}" 
-                                           Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource DeviceTypes}}">
+                                           Text="{Binding DeviceType, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource DeviceTypes}}">
 
                                     </TextBlock>
                                 </DataTemplate>

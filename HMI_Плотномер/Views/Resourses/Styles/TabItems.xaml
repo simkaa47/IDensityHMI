@@ -5,26 +5,24 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Viewbox MaxHeight="0.5 in">
-                        <Border Name="Border"  MinWidth="250" Margin="10,5,10,5" 
-                            BorderBrush="#28BCBA" Background="#1C1C1E" Height="60"  BorderThickness="1" CornerRadius="2">
-                            <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
-                                <Image Name="I2"
+                    <Border Name="Border"  MinWidth="250" Margin="10,5,10,5" 
+                            BorderBrush="#28BCBA" Background="#1C1C1E" Height="68" Width="319"  BorderThickness="1" CornerRadius="2">
+                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
+                            <Image Name="I2"
                                    Opacity="0.5"
                                    Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" 
                                    MaxHeight="32"
                                    MaxWidth="32"/>
-                                <Label Name="L2"   
+                            <Label Name="L2"   
                                    Opacity="0.5"
                                    FontWeight="Light"  FontSize="24" FontFamily="Roboto"
                                    ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                    Content="{TemplateBinding Header}"
                                    HorizontalAlignment="Left" 
                                    VerticalAlignment="Center"></Label>
-                            </DockPanel>
-                        </Border>
-                    </Viewbox>
-                   
+                        </DockPanel>
+                    </Border>
+
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">

@@ -9,7 +9,8 @@
                                TextWrapping="Wrap"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
-                               Style="{StaticResource Common}"/>
+                               Style="{StaticResource Common}"
+                               Foreground="White"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

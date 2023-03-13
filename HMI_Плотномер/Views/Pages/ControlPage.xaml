@@ -7,6 +7,7 @@
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:fa="http://schemas.fontawesome.io/icons/"  
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              Background="Transparent"
@@ -272,6 +273,56 @@
                                        Text="{Binding NextSpectrClearTime, StringFormat=HH:mm:ss}"/>
                             </DockPanel>
                         </ListBoxItem>
+                        <!--#endregion-->
+                        <!--#region IP -->
+                        <DockPanel>
+                            <TextBlock Text="IP-адрес получателя"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                 MinWidth="165"
+                                 Height="40"                             
+                                 Template="{StaticResource TextBoxTemplate}"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Key="Enter"  Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
+                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
+                             Spin="{Binding VM.mainModel.UdpWriting}"
+                             Height="25"
+                             Margin="5"
+                             Foreground="Aqua"/>
+                            </StackPanel>
+                        </DockPanel>
+                        <!--#endregion-->
+                        <!--#region Port num -->
+                        <DockPanel>
+                            <TextBlock Text="Номер порта получателя"/>
+                            <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+
+                                <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 MinWidth="165"
+                                 Height="40"                                 
+                                Template="{StaticResource TextBoxTemplate}"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Key="Enter" Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+
+                                <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
+                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
+                             Spin="{Binding VM.mainModel.UdpWriting}"
+                             Height="25"
+                             Margin="5"
+                             Foreground="Aqua"/>
+
+                            </StackPanel>
+                        </DockPanel>
                         <!--#endregion-->
                     </ListBox>
                 </GroupBox>

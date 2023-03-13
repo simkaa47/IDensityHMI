@@ -76,7 +76,7 @@
                 <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
                     <TextBlock  Style="{StaticResource TextBlockRoboto}"
                                 
-                                Text="СВЯЗЬ С ПЛАТОЙ"/>
+                                Text="СВЯЗЬ С ПРИБОРОМ"/>
                 </Viewbox>
             </Grid>
             <!--#endregion-->
