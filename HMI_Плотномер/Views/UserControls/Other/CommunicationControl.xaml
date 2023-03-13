@@ -34,7 +34,7 @@
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region Ip -->
                 <DockPanel>
-                    <TextBlock Text="IP адрес прибора (фактический)"/>
+                    <TextBlock Text="IP-адрес прибора (фактический)"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -55,7 +55,7 @@
                 <!--#region Pause between requests -->
                 <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                     <DockPanel>
-                        <TextBlock Text="Частота опроса прибора, мс." />
+                        <TextBlock Text="Частота опроса прибора, мс" />
                         <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -76,10 +76,17 @@
         </GroupBox>
         <!--#endregion-->
         <!--#region Eth parameters -->
-        <GroupBox Header="Настройка сетевого подключения прибора (Ethernet TCP)"
-                  FontSize="20"
-                  Margin="0,20,0,10"
+        <GroupBox Margin="0,20,0,10"
                   BorderThickness="0">
+            <GroupBox.Header>
+                <StackPanel>
+                    <TextBlock Text="Изменение параметров IP-адреса прибора" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="..\..\Resourses\Pictures\AlertReportProblemRed.png" Height="20"/>
+                        <TextBlock Text="Данные настройки вступят в силу только после перезагрузки прибора"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox.Header>
             <ListBox Background="Transparent"
                      BorderThickness="0"
                      HorizontalAlignment="Stretch"                     
@@ -87,7 +94,7 @@
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region ip -->
                 <DockPanel>
-                    <TextBlock Text="IP адрес прибора"/>
+                    <TextBlock Text="IP-адрес"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Width="165"
                                  Height="40"
@@ -154,14 +161,28 @@
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
+                
+            </ListBox>
+        </GroupBox>
+        <!--#endregion-->
+        <!--#region Получение спектра -->
+        <GroupBox Header="Получение данных спектра"
+                  FontSize="20"
+                  Margin="0,20,0,10"
+                  BorderThickness="0">
+            <ListBox Background="Transparent"
+                     BorderThickness="0"
+                     HorizontalAlignment="Stretch"                     
+                     HorizontalContentAlignment="Stretch"
+                     ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region Udp settings -->
+                <!--#region IP -->
                 <DockPanel>
-                    <TextBlock Text="Сетевой адрес получателя спектра (IP, порт)"/>
-                    <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Right">
+                    <TextBlock Text="IP-адрес"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
-                                 MinWidth="100"
-                                 Height="40"
+                                 MinWidth="165"
+                                 Height="40"                             
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center">
@@ -169,10 +190,24 @@
                                 <KeyBinding Key="Enter"  Command="{Binding SetUpsAddrCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
+                        <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
+                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
+                             Spin="{Binding VM.mainModel.UdpWriting}"
+                             Height="25"
+                             Margin="5"
+                             Foreground="Aqua"/>
+                    </StackPanel>
+                </DockPanel>
+                <!--#endregion-->
+                <!--#region Port num -->
+                <DockPanel>
+                    <TextBlock Text="Номер порта"/>
+                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+
                         <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 MinWidth="80"
-                                 Height="40"
-                                 Margin="5"
+                                 MinWidth="165"
+                                 Height="40"                                 
                                 Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center">
@@ -190,6 +225,7 @@
 
                     </StackPanel>
                 </DockPanel>
+                <!--#endregion-->
                 <!--#endregion-->
             </ListBox>
         </GroupBox>
