@@ -81,7 +81,7 @@
                 <Rectangle DockPanel.Dock="Bottom" Fill="#32d74b" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </DockPanel>
             <DockPanel DockPanel.Dock="Left"  MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="100,0,100,0" VerticalAlignment="Bottom" Foreground="#32d74b" FontWeight="Bold" FontSize="128">
+                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="100,0,100,0" VerticalAlignment="Bottom" Foreground="#32d74b" FontWeight="Bold" FontSize="115">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
@@ -91,7 +91,7 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>                
-                <Rectangle DockPanel.Dock="Bottom" Fill="#32d74b" Height="4" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                <Rectangle DockPanel.Dock="Bottom" Fill="#32d74b" Height="4"  Stretch="UniformToFill" VerticalAlignment="Bottom" />
             </DockPanel>
         </DockPanel>
         <!--#endregion-->
@@ -102,7 +102,7 @@
                 <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </DockPanel>
             <DockPanel DockPanel.Dock="Right"  MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="100,0,100,0" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="128">
+                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="100,0,100,0" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="115">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
