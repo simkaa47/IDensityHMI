@@ -20,6 +20,8 @@
     <None Remove="Views\Resourses\Pictures\Comm_Ok.png" />
     <None Remove="Views\Resourses\Pictures\ControlIcon.png" />
     <None Remove="Views\Resourses\Pictures\DeleteIcon.png" />
+    <None Remove="Views\Resourses\Pictures\DoneGrey.png" />
+    <None Remove="Views\Resourses\Pictures\DoneWhite.png" />
     <None Remove="Views\Resourses\Pictures\DriveFileMove.png" />
     <None Remove="Views\Resourses\Pictures\EditIcon.png" />
     <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
@@ -75,6 +77,8 @@
     <Resource Include="Views\Resourses\Pictures\Comm_Ok.png" />
     <Resource Include="Views\Resourses\Pictures\ControlIcon.png" />
     <Resource Include="Views\Resourses\Pictures\DeleteIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\DoneGrey.png" />
+    <Resource Include="Views\Resourses\Pictures\DoneWhite.png" />
     <Resource Include="Views\Resourses\Pictures\DriveFileMove.png" />
     <Resource Include="Views\Resourses\Pictures\EditIcon.png" />
     <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />

@@ -13,23 +13,27 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"   
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              d:DataContext="{d:DesignInstance Type=vm:VM}"
-             d:DesignHeight="450" d:DesignWidth="800">
-   
-    <Grid Background="Transparent">        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="0.4*"/>
-            </Grid.RowDefinitions>
-            <!--#region Trends-->
-            <TabControl TabStripPlacement="Bottom">
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <Canvas Background="Transparent">
+        <Canvas.Resources>
+            <Style TargetType="Border" x:Key="SelectedBoeder">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{DynamicResource AquaColor}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Canvas.Resources>
+        <!--#region Trends -->
+        <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="570" BorderThickness="0">
+            <!--#region Current Trend -->
+            <TabItem Header="Текущий тренд" MinHeight="64" MinWidth="253" >
+
                 <!--#region Current Trend-->
-                <TabItem Header="Текущий тренд">
-                    <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="10"                                                 
+                <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="24,24,0,0"  Width="924"                                              
                                                      LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle1="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
                                                      LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource VisibleConverter}}"
@@ -50,92 +54,90 @@
                                                      LineTitle9="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
                                                      LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle10="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"/>
-                </TabItem>
-                <!--#endregion-->                
-                <!--#region Archieve Trens-->
-                <TabItem Header="Архивный тренд">                    
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <!--#region Data Source Panel-->
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <!--#region Start Time Selection-->
-                            <dt:DateTimeParameter Description="Стартовая точка тренда"
-                                                  Margin="5,0,5,0"
+                <!--#endregion-->
+            </TabItem>
+            <!--#endregion-->
+            <!--#region Trend Settings -->
+            <TabItem Header="Настройки отображения" MinWidth="362" MinHeight="64" Style="{StaticResource TabItemStyleSecond}">
+                <trends:TrendSettingsControl Margin="24,24,0,0"/>
+            </TabItem>
+            <!--#endregion-->
+            <!--#region Archieve trends -->
+            <TabItem Header="Архивный тренд" MinHeight="64" MinWidth="270" Style="{StaticResource TabItemStyleSecond}">
+                <Canvas Background="Transparent">
+                    <!--#region Start Time Selection-->
+                    <dt:DateTimeParameter Description="Стартовая точка тренда"
+                                                  Height="56" Canvas.Bottom="0" Canvas.Left="24"
+                                                  Width="211"
                                                   PopupOpenedCommand="{Binding SelectDatesCommand}"                                                        
                                                   DateTime="{Binding DisplayDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                            <!--#endregion-->
-                            <!--#region Finish Time Selection-->
-                            <dt:DateTimeParameter   Grid.Column="1"
-                                                    Margin="5,0,5,0"
+                    <!--#endregion-->
+                    <!--#region Finish Time Selection-->
+                    <dt:DateTimeParameter   Height="56" Width="211"
+                                            Canvas.Bottom="0" Canvas.Left="251"
                                                     Description="Конечная точка тренда"
                                                     PopupOpenedCommand="{Binding SelectDatesCommand}"                                                      
                                                     DateTime="{Binding DisplayDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                            <!--#endregion-->
-                            <!--#region File Browse-->
-                            <Border Grid.Column="2" Margin="5,0,5,0" Background="#16FFFFFF" CornerRadius="4,4,0,0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="0.3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" 
+                    <!--#endregion-->
+                    <!--#region File Browse-->
+                    <Border Canvas.Bottom="0" Canvas.Left="478" Background="#16FFFFFF" CornerRadius="4,4,0,0" Width="141" Height="56" BorderThickness="0,0,0,2" Style="{StaticResource SelectedBoeder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.3*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" 
+                                       FontSize="16"
                                                TextWrapping="Wrap" Foreground="#B1FFFFFF" 
+                                       FontFamily="Roboto"
+                                       
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"/>
-                                    <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\DriveFileMove.png" Opacity="0.5"
+                            <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\DriveFileMove.png" Opacity="0.5"
                                            MouseLeftButtonDown="BrowseLogPath"/>
-                                </Grid>
-                            </Border>
-                            <!--#endregion-->
-                            <!--#region Write Button -->                            
-                            <Border Grid.Column="3" Margin="4,0,4,0" 
+                        </Grid>
+                    </Border>
+                    <!--#endregion-->
+                    <!--#region Write Button -->
+                    <Border Height="56" Width="121"  BorderThickness="0,0,0,2" Style="{StaticResource SelectedBoeder}"
+                            Canvas.Bottom="0" Canvas.Left="635"
                                     IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}"
                                     Opacity="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource Opacities}}"
                                     Background="#16FFFFFF" CornerRadius="4,4,0,0">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseLeftButtonDown">
-                                        <i:InvokeCommandAction Command="{Binding WriteLogCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="0.3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Запись" 
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding WriteLogCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.3*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Запись" 
                                                TextWrapping="Wrap" Foreground="#B1FFFFFF" 
                                                VerticalAlignment="Center"
+                                       FontSize="16"
                                                HorizontalAlignment="Center"/>
-                                    <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\SystemUpdateAlt.png" Opacity="0.5"
+                            <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\SystemUpdateAlt.png" 
                                            Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"/>
-                                    <fa:ImageAwesome Grid.Column="1"
+                            <fa:ImageAwesome Grid.Column="1"
                                                 Margin="2" 
                                                 Foreground="#16FFFFFF"
                                                 Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleConverter}}" 
                                                 Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
                                                 Spin="{Binding ArchivalTrendUploading}"/>
-                                </Grid>
-                            </Border>
-                            <!--#endregion-->
-                            <!--#region ShowTrendButton -->
-                            <Button Grid.Column="4" Margin="4,0,4,0"  Style="{StaticResource TypicalButton0}"
-                                    Content="Показать тренд"
-                                    Command="{Binding ShowArchivalTrendCommand}"/>
-                            <!--#endregion-->
                         </Grid>
-                        <!--#endregion-->
-                        <!--#region Trend -->
-                        <trends:MainTrendControl DataSource="{Binding ArchivalDataPotnts}" Margin="10"                                                 
+                    </Border>
+                    <!--#endregion-->
+                    <!--#region ShowTrendButton -->
+                    <Button   Style="{StaticResource TypicalButton0}" Height="56" Width="174" Canvas.Bottom="0" Canvas.Left="772"
+                                    Content="Показать тренд"
+                              FontSize="16" FontWeight="Medium"
+                                    Command="{Binding ShowArchivalTrendCommand}"/>
+                    <!--#endregion-->
+                    <!--#region Trend -->
+                    <trends:MainTrendControl DataSource="{Binding ArchivalDataPotnts}"  Height="360"   Width="924"  Margin="24,24,0,0"                                             
                                                      LineVisibility1="{Binding TrendsVisible.VisLine1, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle1="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
                                                      LineVisibility2="{Binding TrendsVisible.VisLine2, Converter={StaticResource VisibleConverter}}"
@@ -156,15 +158,105 @@
                                                      LineTitle9="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
                                                      LineVisibility10="{Binding TrendsVisible.VisLine10, Converter={StaticResource VisibleConverter}}"
                                                      LineTitle10="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"/>
-                        <!--#endregion-->
-                        <!--#region Load Indicator -->
-                        <fa:ImageAwesome Foreground="#16FFFFFF"  Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"  Height="30"   Icon="Refresh" />
-                        <!--#endregion-->
-                    </Grid>
-                </TabItem>
-                <!--#endregion-->
+                    <!--#endregion-->
+                    <!--#region Load Indicator -->
+                    <fa:ImageAwesome Foreground="{StaticResource AquaColor}" Canvas.Bottom="250" Canvas.Left="460"   Spin="{Binding ArchivalTrendDownloading}" Visibility="{Binding ArchivalTrendDownloading, Converter={StaticResource VisibleConverter}}"  Height="30"   Icon="Refresh" />
+                    <!--#endregion-->
+                </Canvas>
+            </TabItem>
+            <!--#endregion-->
+
+        </TabControl>
+        <!--#endregion-->
+        <!--#region Indication -->
+        <Border Canvas.Left="24" Canvas.Top="659" Height="185" Width="920" Background="{StaticResource PanelBorderColor}">
+           
+            
+        </Border>
+        <!--#region Temperature sensor indication -->
+        <TextBlock Text="ТЕМПЕРАТУРА ПРИБОРА, °С" Foreground="{StaticResource AquaColor}" FontSize="15" 
+                               HorizontalAlignment="Center"  
+                                Canvas.Left="80" FontWeight="Medium"
+                                Canvas.Top="699"
+                               VerticalAlignment="Bottom"/>
+        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
+                                Name="InternalTempIndicator"
+                                Foreground="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource InternalTempColors}}"  
+                               HorizontalAlignment="Center"
+                               FontSize="64"
+                                FontWeight="Medium"
+                                Canvas.Left="80"
+                                Canvas.Top="733"
+                                FontFamily="Roboto"
+                               VerticalAlignment="Center"/>
+        <Image Source="..\Resourses\Pictures\AlertReportProblemRed.png"  Height="40" Visibility="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource VisibleConverter}}"
+                               
+               Canvas.Top="750" Canvas.Left="35"/>        
+        <!--#endregion-->
+        <!--#region HV indication -->
+        <TextBlock Text="НАПРЯЖЕНИЕ HV, В" Foreground="{StaticResource AquaColor}" FontSize="15" 
+                               HorizontalAlignment="Center"
+                    FontWeight="Medium"
+                   Canvas.Top="699"
+                    Canvas.Left="359"
+                               VerticalAlignment="Bottom"/>
+        <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
+                               HorizontalAlignment="Center"
+                               FontSize="64"
+                    Canvas.Top="733"
+                    Canvas.Left="359"
+                     FontWeight="Medium"
+                    FontFamily="Roboto"
+                               VerticalAlignment="Center"/>
+        <!--#endregion-->
+        <!--#region Switch measuring button -->
+        <Button Canvas.Left="606" 
+                Canvas.Top="733"
+                Width="286"
+                Height="64"
+                        Style="{StaticResource ButtonWithBackground}" 
+                Background="#1c1c1e"
+                        FontSize="20"
+                FontWeight="Medium"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
+                        Command="{Binding SwitchMeasCommand}"/>
+        <!--#endregion-->
+        <!--#endregion-->
+        <!--#region MEas Indication -->
+        <ListBox Canvas.Left="948"
+                 ItemsSource="{Binding mainModel.MeasResults}"
+                 Background="Transparent"
+                 BorderBrush="Transparent"                     
+                 HorizontalContentAlignment="Stretch"
+                 VerticalContentAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Foreground" Value="Transparent"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <!--#endregion-->
+    </Canvas>
+    <!--
             </TabControl>
-            <!--#region Trend Settings-->
+            --><!--#region Trend Settings--><!--
             <ToggleButton Grid.Column="1"
                           Style="{StaticResource NoStyle}"
                           Margin="20"
@@ -185,55 +277,19 @@
                    Placement="MousePoint">
                 <trends:TrendSettingsControl/>
             </Popup>
+            --><!--#endregion-->
             <!--#endregion-->
-            <!--#endregion-->
-            <!--#region Bottom Indication -->
+            <!--#region Bottom Indication --><!--
             <Grid Grid.Column="0" Grid.Row="1" Background="{StaticResource PanelBorderColor}" Margin="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <!--#region Temperature sensor indication -->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="ТЕМПЕРАТУРА ПРИБОРА, °С" Foreground="Aqua" FontSize="14" 
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Bottom"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-                        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
-                                    Name="InternalTempIndicator"
-                                Foreground="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource InternalTempColors}}"  
-                               HorizontalAlignment="Center"
-                               FontSize="80"
-                               VerticalAlignment="Center"/>
-                        <Image Source="..\Resourses\Pictures\AlertReportProblemRed.png"  Height="{Binding ElementName=InternalTempIndicator, Path=ActualHeight}"
-                               Visibility="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource VisibleConverter}}"/>
-                    </StackPanel>
-                    
-
-                </Grid>
-                <!--#endregion-->
-                <!--#region HV indication -->
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="НАПРЯЖЕНИЕ HV, В" Foreground="Aqua" FontSize="14" 
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Bottom"/>
-                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
-                               HorizontalAlignment="Center"
-                               FontSize="80"
-                               VerticalAlignment="Center"/>
-
-                </Grid>
-                <!--#endregion-->
-                <!--#region Switch measuring button -->
+                
+                
+                --><!--#endregion-->
+                <!--#region Switch measuring button --><!--
                 <Button Grid.Column="2" 
                         Style="{StaticResource TypicalButton0}" 
                         Height="50"
@@ -242,12 +298,12 @@
                         VerticalContentAlignment="Center"
                         Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
                         Command="{Binding SwitchMeasCommand}"/>
-                <!--#endregion-->
+                --><!--#endregion--><!--
             </Grid>
-            <!--#endregion-->
+            --><!--#endregion--><!--
             
         </Grid>
-        <!--#region Meas Indication -->
+        --><!--#region Meas Indication --><!--
         <Viewbox Grid.Column="1" VerticalAlignment="Top">
             <ListBox ItemsSource="{Binding mainModel.MeasResults}"
                      Background="Transparent"
@@ -278,6 +334,6 @@
             </ListBox>
         </Viewbox>
         
-        <!--#endregion-->
-    </Grid>
+        --><!--#endregion--><!--
+    </Grid>-->
 </UserControl>

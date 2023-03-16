@@ -28,17 +28,18 @@
                                             Header="№">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Num.Value}" Margin="5" HorizontalAlignment="Center"
+                                    <TextBlock Text="{Binding Num.Value}" Margin="5" HorizontalAlignment="Center" Foreground="White"
                                            Style="{StaticResource Common}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Mode -->
-                        <DataGridTemplateColumn Header="РЕЖИМ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn  Header="РЕЖИМ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:CompoBoxParameter DescriptionNotVisible="True"
+                                                         Para
                                                      ItemsSource="{StaticResource CountModes}"
                                                      DataContext="{Binding CounterMode}"
                                                      Index="{Binding WriteValue}"

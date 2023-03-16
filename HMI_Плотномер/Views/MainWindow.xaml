@@ -7,9 +7,9 @@
         xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"     
         xmlns:sys1="clr-namespace:System;assembly=System.Runtime"       
         mc:Ignorable="d"  
-        
+        WindowStyle="None" ResizeMode="NoResize"
         Background="#000000"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">    
+        Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">    
     <Window.DataContext>
         <vm:VM/>
     </Window.DataContext>    
@@ -21,7 +21,7 @@
             <!--#region Вкладки -->
         <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
             <!--#region Вкладка Измерение -->
-            <TabItem Header="Измерение"
+            <TabItem Header="Измерение" MinHeight="68" MinWidth="319"
                              Tag="..\Pictures\MeasIcon.png"
                              Name="MainTab" 
                              IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
@@ -31,26 +31,26 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Вкладка Настройки -->
-            <TabItem Header="Настройки" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
+            <TabItem Header="Настройки" MinHeight="68" MinWidth="315"
                              Tag="..\Pictures\TuneIcon.png">
                 <pages:SettingsPage/>
             </TabItem>
             <!--#endregion-->            
             <!--#region Вкладка Управление -->
-            <TabItem Header="Управление" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
+            <TabItem Header="Управление" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}" MinHeight="68" MinWidth="328"
                              Tag="..\Pictures\ManageAccounts.png">
                 <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
             </TabItem>
             <!--#endregion--> 
             <!--#region Вкладка События -->
-            <TabItem Header="События" 
+            <TabItem Header="События" MinHeight="68" MinWidth="292"
                              Tag="..\Pictures\ListIcon.png">
                 <pages:EventPage/>
             </TabItem>
             <!--#endregion-->            
         </TabControl>
         <Grid.RowDefinitions>
-                <RowDefinition Height="0.08*" ></RowDefinition>
+                <RowDefinition Height="80" ></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <!--#endregion-->        

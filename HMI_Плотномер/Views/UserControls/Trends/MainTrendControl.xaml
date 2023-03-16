@@ -13,25 +13,25 @@
         <oxy:Plot PlotMargins="80,0,0,30"                  
                       PlotType="XY"                   
                       PlotAreaBorderThickness="1"
-                      TextColor="#FFFFFF" 
-                      Opacity="0.5"
+                      TextColor="#80FFFFFF" 
+                      
                       x:Name="plot" 
-                      PlotAreaBorderColor="WhiteSmoke"
+                      PlotAreaBorderColor="#80FFFFFF"
                       IsLegendVisible="True"
-                      Background="#2C2C2E"   
-                      PlotAreaBackground="#2C2C2E">
+                      Background="{DynamicResource PanelBorderColor}"   
+                      PlotAreaBackground="{DynamicResource PanelBorderColor}">
 
             <oxy:Plot.Axes>
                 <oxy:LinearAxis  
                         Font="Roboto"                        
                         FontSize="12"                      
-                        MajorGridlineColor="WhiteSmoke"
+                        MajorGridlineColor="#80FFFFFF"
                         MajorGridlineStyle="Dot"
                         Position ="Left" />
                 <oxy:DateTimeAxis FontWeight="Bold"
                                   
                                   MaximumRange="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=MaximumRange}"
-                                  MajorGridlineColor="WhiteSmoke"
+                                  MajorGridlineColor="#80FFFFFF"
                                   MajorGridlineStyle="Dot"                                  
                                   FontSize="12"/>
             </oxy:Plot.Axes>

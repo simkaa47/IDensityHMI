@@ -42,24 +42,22 @@
                  >
             <TabItem.Header>
                 <StackPanel HorizontalAlignment="Left">
-                    <Viewbox MaxHeight="0.5 in">
-                        <DockPanel>                            
-                            <Label Name="L2"
-                               VerticalContentAlignment="Center"
-                               Height="60"                                                              
-                               FontWeight="Light"  FontSize="24" FontFamily="Roboto"                                   
+                    <DockPanel Margin="27,5,0,5">
+                        <Label Name="L2"
+                               VerticalContentAlignment="Center"                                                                                             
+                               FontWeight="Normal"  FontSize="16" FontFamily="Roboto"                                   
                                Content="Измерительные процессы"
                                HorizontalAlignment="Left" 
                                HorizontalContentAlignment="Left"
                                VerticalAlignment="Center"></Label>
-                            <Image Source="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasProcTabIcons}}"
+                        <Image Source="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasProcTabIcons}}"
                                    HorizontalAlignment="Center"/>
-                        </DockPanel>
-                    </Viewbox>
+                    </DockPanel>
 
                     <ListBox x:Name="MeasSettSelector" SelectedIndex="0" HorizontalContentAlignment="Stretch"
-                             BorderThickness="0"                             
-                             Background="Transparent"
+                             BorderThickness="0" Width="286"  Margin="0"     
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             Background="#3F3F42"
                              Visibility="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Основное"/>
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Стандартизация"  />
@@ -70,9 +68,9 @@
                     </ListBox>                    
                 </StackPanel>
             </TabItem.Header>
-            <Grid>
+            <Grid Margin="55,32,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.1*"/>
+                    <RowDefinition Height="60"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <!--#region Meas Proc Selector -->

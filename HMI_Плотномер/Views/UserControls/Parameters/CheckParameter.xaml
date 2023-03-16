@@ -10,20 +10,15 @@
     <DockPanel MinHeight="50">
         <TextBlock Style="{StaticResource Common}"
                    Text="{Binding Description}"
+                    Margin="20,0,0,0"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CheckParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"
+            <CheckBox Style="{StaticResource CheckBoxAqvaStyle}" Margin="25,0,30,0"
                       Height="25"
                       Command="{Binding RelativeSource={RelativeSource AncestorType=local:CheckParameter}, Path=Command}"
                       IsChecked="{Binding WriteValue}"
                       VerticalAlignment="Center">
-            </CheckBox>
-            <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+            </CheckBox>            
         </StackPanel>
     </DockPanel>
 </local:CommandExtention>

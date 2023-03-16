@@ -16,6 +16,8 @@
                 <DockPanel HorizontalAlignment="Stretch">
                     <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=local:CurveVisibilityControl}, Path=Description}" 
                            Foreground="White"
+                               FontSize="16"
+                               FontFamily="Roboto"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"/>                    
                     <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"

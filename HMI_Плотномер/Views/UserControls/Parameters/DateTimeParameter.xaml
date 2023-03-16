@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:fa="http://schemas.fontawesome.io/icons/"  
              xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
+                         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DockPanel MinHeight="50">
+        <DockPanel >
             <TextBlock Style="{StaticResource Common}" 
                    Text="{Binding Description}"
                    HorizontalAlignment="Left"
@@ -18,15 +19,21 @@
                    TextWrapping="Wrap"/>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <dt:DateTimeParameter Margin="5,0,5,0"
+                                      VerticalAlignment="Center"
                                       DateTimeFormat="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=DataTimeFormat}"
                                                   PopupClosedCommand="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=Command}"                                                        
                                                   DateTime="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4" VerticalAlignment="Center"
+                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                    <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=CommanDParameter }"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
             </StackPanel>            
         </DockPanel>
     </Grid>

@@ -19,16 +19,18 @@
     </Style>
 
     <DataTemplate x:Key="DataGridHeaderTemplate">
-        <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
+        <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Center">
+            <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
                                Margin="10"
                                FontSize="14"
-                                MinHeight="30"
-                                 VerticalAlignment="Center"
-                               MaxWidth="160">
-            <TextBlock.Text>
-                <Binding/>
-            </TextBlock.Text>
-        </TextBlock>
+                   Foreground="White"
+                                HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                <TextBlock.Text>
+                    <Binding/>
+                </TextBlock.Text>
+            </TextBlock>
+        </Border>
     </DataTemplate>
 
     <Style TargetType="DataGridRow">
@@ -51,7 +53,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="MinHeight" Value="75"/>
     </Style>
 
     <Style TargetType="DataGridCell" >

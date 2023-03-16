@@ -13,6 +13,7 @@
         <TextBlock Style="{StaticResource Common}" 
                    Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                   Margin="20,0,0,0"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"/>
@@ -28,24 +29,24 @@
                   VerticalContentAlignment="Center"                  
                   FontSize="16"
                   Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
-                  Background="Transparent"
+                  Background="{StaticResource PanelBorderColor}"
                   FontFamily="Roboto"
                   FontWeight="Regular"
                   x:Name="Compo"
                   VerticalAlignment="Center">
+               
+            </ComboBox>
+            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="DropDownClosed">
-                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=Command}"
-                                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=CommanDParameter}"/>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=CommanDParameter }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </ComboBox>
-            <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+            </Border>
         </StackPanel>        
     </DockPanel>
 </local:CommandExtention>

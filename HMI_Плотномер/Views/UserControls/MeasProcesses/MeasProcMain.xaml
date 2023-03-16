@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              mc:Ignorable="d" 
@@ -106,7 +107,7 @@
             <!--#region Copy to other process -->
             <DockPanel>
                 <TextBlock Text="Скопировать на другой измерительный процесс"
-                           Style="{StaticResource Common}"/>
+                           Style="{StaticResource Common}" Margin="20,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <ComboBox Name="MeasNumSelector"  ItemsSource="{StaticResource  MeasProcNums}"
                               Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
@@ -114,17 +115,21 @@
                               Height="40"
                               VerticalContentAlignment="Center"
                               Background="Transparent"
-                              Width="75"
+                              Width="165"
                               SelectedIndex="0">                        
                     </ComboBox>
-                    <Button Width="80" 
-                            FontSize="16"
-                            Style="{StaticResource TypicalButton0}"
-                            Margin="5" 
-                            Height="40"
-                            Content="Copy" 
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.CopyMeasProcessCommand}"
-                            CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
+                   
+                    <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsCopying, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                        <Image Source="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsCopying, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDown">
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.CopyMeasProcessCommand}"
+                                    CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Border>
                 </StackPanel>
             </DockPanel>
             <!--#endregion-->

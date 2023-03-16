@@ -74,8 +74,8 @@
         <sys1:String>HV ВКЛЮЧЕНО</sys1:String>
     </col1:ArrayList>
     <x:Array Type="sys1:String" x:Key="measStatusBtn">
-        <sys1:String>ВКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
-        <sys1:String>ВЫКЛЮЧИТЬ ИЗМЕРЕНИЯ</sys1:String>
+        <sys1:String>Включить измерения</sys1:String>
+        <sys1:String>Выключить измерения</sys1:String>
     </x:Array>
     <col1:ArrayList x:Key="PortModes">
         <sys1:String>RS485</sys1:String>
@@ -271,4 +271,12 @@
         <sys1:String>#FFFFFFFF</sys1:String>
         <sys1:String>#FFFF0000</sys1:String>
     </x:Array>
+    <x:Array Type="sys1:String" x:Key="ButtonsParametersColors">
+        <sys1:String>#28BCBA</sys1:String>
+        <sys1:String>#606061</sys1:String>
+    </x:Array>
+    <x:Array Type="sys1:String" x:Key="ButtonsParametersImages">
+        <sys1:String>..\..\Resourses\Pictures\DoneWhite.png</sys1:String>
+        <sys1:String>..\..\Resourses\Pictures\DoneGrey.png</sys1:String>
+    </x:Array>    
 </ResourceDictionary>
