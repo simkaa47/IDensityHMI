@@ -13,7 +13,7 @@
         <conv:MeasUnitMultiplyConverter x:Key="GetMeasNumConverterResult"/>
         <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
         <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
-        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+        <!--<Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>-->
     </UserControl.Resources>
     <Canvas Width="972" Height="442" Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
         <!--#region Pulses -->
@@ -39,15 +39,14 @@
             </TextBlock>
             <!--#region Meas Unit-->            
                     <ComboBox  
-                              Grid.Column="1"
+                              HorizontalContentAlignment="Center"
                               Foreground="White"
                                   Name="MUnit"
                                     Background="{StaticResource PanelBorderColor}"
-                                  Margin="200,0,0,0"
-                                    FontSize="16"
+                                  Margin="100,0,0,0"                                    
                                   VerticalAlignment="Center"
                               VerticalContentAlignment="Center"                                  
-                                  Height="40"
+                                  Height="60"
                         Width="179">
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
@@ -66,7 +65,8 @@
                         </ComboBox.SelectedItem>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}"/>
+                        
+                        <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}" FontSize="24" Foreground="White" FontWeight="Medium"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>                    

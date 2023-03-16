@@ -503,7 +503,9 @@ namespace IDensity.ViewModels
         private RelayCommand _copyMeasProcessCommand;
         public RelayCommand CopyMeasProcessCommand => _copyMeasProcessCommand ?? (_copyMeasProcessCommand = new RelayCommand(exec =>
           {
-              int par = (int)exec;
+              ushort par = 0;
+              if (exec == null) return;
+              if (!ushort.TryParse(exec.ToString(), out par)) return;              
               CopyMeasProcess(SelectedProcess, (ushort)par);
           }, canExec => VM.mainModel.Connecting.Value));
         #endregion       

@@ -39,7 +39,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:CompoBoxParameter DescriptionNotVisible="True"
-                                                         Para
+                                                         
                                                      ItemsSource="{StaticResource CountModes}"
                                                      DataContext="{Binding CounterMode}"
                                                      Index="{Binding WriteValue}"
