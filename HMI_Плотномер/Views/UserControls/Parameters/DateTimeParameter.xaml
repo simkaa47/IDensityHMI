@@ -24,6 +24,7 @@
                                                   PopupClosedCommand="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=Command}"                                                        
                                                   DateTime="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4" VerticalAlignment="Center"
+                        Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=IsCommandButtonVisible, Converter={StaticResource VisibleConverter}}"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                     <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>

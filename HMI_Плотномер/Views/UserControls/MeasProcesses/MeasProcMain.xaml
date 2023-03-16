@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
@@ -18,7 +19,7 @@
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">            
-            <ListBox.Resources>
+            <ListBox.Resources>                
                 <conv:PipeDiameterConverter x:Key="PipeDiameterVisibilityConverter"/>
             </ListBox.Resources>            
 
@@ -109,19 +110,25 @@
                 <TextBlock Text="Скопировать на другой измерительный процесс"
                            Style="{StaticResource Common}" Margin="20,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <ComboBox Name="MeasNumSelector"  ItemsSource="{StaticResource  MeasProcNums}"
-                              Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
+                    <ComboBox Name="MeasNumSelector"  ItemsSource="{StaticResource  MeasProcNums}" Style="{StaticResource ComboboxParameterStyle}"                              
                               FontSize="16"
+                              BorderBrush="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxBorderBrushes}}"
                               Height="40"
                               VerticalContentAlignment="Center"
                               Background="Transparent"
                               Width="165"
-                              SelectedIndex="0">                        
+                              SelectedIndex="0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DropDownClosed">
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.CopyMeasProcessCommand}"
+                                    CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ComboBox>
                    
                     <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
-                    Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsCopying, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
-                        <Image Source="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsCopying, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                    Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                        <Image Source="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
@@ -133,10 +140,7 @@
                 </StackPanel>
             </DockPanel>
             <!--#endregion-->
-            <ComboBox Foreground="White" Height="40" Width="100"
-                      ItemsSource="{StaticResource AdcModes}"
-                      BorderBrush="Red"
-                      SelectedIndex="0"/>
+           
         </ListBox>    
     </Grid>
 </UserControl>

@@ -38,8 +38,7 @@
         <!--#region Измерительные процессы -->
         <TabItem Name="MeasProcTab"
                  DataContext="{Binding MeasProcessVm}"
-                 Style="{StaticResource MeasProcSettingsStyle}"
-                 >
+                 Style="{StaticResource MeasProcSettingsStyle}">
             <TabItem.Header>
                 <StackPanel HorizontalAlignment="Left">
                     <DockPanel Margin="27,5,0,5">

@@ -48,7 +48,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Флаг копирования изм процесса
         /// </summary>
-        public bool IsCopying
+        public bool IsWriting
         {
             get => _isCopying;
             set => Set(ref _isCopying, value);
@@ -513,7 +513,7 @@ namespace IDensity.ViewModels
         
         public void CopyMeasProcess(MeasProcSettings settings, ushort number)
         {
-            IsCopying = true;
+            IsWriting = true;
             VM.mainModel.MeasProcSettings[number].MeasDeep.PropertyChanged += ResetCipyFlag;            
             var header = $"*SETT,meas_proc={number}";
             var str = header + $",cntr={settings.MeasProcCounterNum.Value}";
@@ -539,7 +539,7 @@ namespace IDensity.ViewModels
         {
             if (e.PropertyName == "Value")
             {
-                IsCopying = false;               
+                IsWriting = false;               
             }
         }
 

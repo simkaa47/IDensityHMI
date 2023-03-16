@@ -41,6 +41,7 @@
                     <ComboBox  
                               HorizontalContentAlignment="Center"
                               Foreground="White"
+                        BorderBrush="{StaticResource BorderNonActiveColor}"
                                   Name="MUnit"
                                     Background="{StaticResource PanelBorderColor}"
                                   Margin="100,0,0,0"                                    

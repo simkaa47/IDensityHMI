@@ -278,5 +278,9 @@
     <x:Array Type="sys1:String" x:Key="ButtonsParametersImages">
         <sys1:String>..\..\Resourses\Pictures\DoneWhite.png</sys1:String>
         <sys1:String>..\..\Resourses\Pictures\DoneGrey.png</sys1:String>
-    </x:Array>    
+    </x:Array>
+    <x:Array Type="sys1:String" x:Key="CompoboxBorderBrushes">
+        <sys1:String>#28BCBA</sys1:String>
+        <sys1:String>#33FFFFFF</sys1:String>
+    </x:Array>
 </ResourceDictionary>

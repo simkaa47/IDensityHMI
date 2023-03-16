@@ -248,4 +248,17 @@
     <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle1}">
         
     </Style>
+
+
+    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle1}" x:Key="ComboboxParameterStyle">
+        <Setter Property="Foreground" Value="#33FFFFFF"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

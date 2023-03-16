@@ -83,7 +83,15 @@ namespace IDensity.Core.Views.UserControls.Parameters
             DependencyProperty.Register("ParameterWidth", typeof(object), typeof(CommandExtention), new PropertyMetadata(null));
 
 
+        public bool IsCommandButtonVisible
+        {
+            get { return (bool)GetValue(IsCommandButtonVisibleProperty); }
+            set { SetValue(IsCommandButtonVisibleProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for IsCommandButtonVisible.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsCommandButtonVisibleProperty =
+            DependencyProperty.Register("IsCommandButtonVisible", typeof(bool), typeof(CommandExtention), new PropertyMetadata(true));
 
     }
 }

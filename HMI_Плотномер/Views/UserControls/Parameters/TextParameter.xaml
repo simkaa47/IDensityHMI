@@ -27,7 +27,8 @@
                     </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderBrush" Value="#28BCBA"/>
-                    </Trigger>                   
+                    </Trigger>
+                   
                 </Style.Triggers>
             </Style>
             <Style TargetType="TextBox">

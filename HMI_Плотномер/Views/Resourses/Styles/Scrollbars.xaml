@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IDensity.Core.Views.Resourses.Styles">
+    <Style TargetType="ScrollBar" >
+        <Setter Property="Background" Value="#2C2C2E" />
+        <Setter Property="Foreground" Value="Yellow"/>            
+    </Style>
+
+    
+</ResourceDictionary>

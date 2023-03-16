@@ -60,11 +60,11 @@
                             </MultiBinding>
                         </TextBox.Text>
                     </TextBox>
-                    <ComboBox DisplayMemberPath="Name" 
-                              Name="MUnit" Width="80"
+                    <ComboBox Name="MUnit" Width="80"
                               Height="40"
                               Background="Transparent"
                               FontSize="16"
+                              BorderBrush="{StaticResource BorderNonActiveColor}"
                               Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                               Margin="5,0,0,0"
                               VerticalContentAlignment="Center">
@@ -84,6 +84,12 @@
                                 <Binding Path="CalibrationVm.MeasUnitMemoryId"/>
                             </MultiBinding>
                         </ComboBox.SelectedItem>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}"
+                                             FontSize="16" Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=Foreground}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                         <!--#endregion-->
                     </ComboBox>
                 </StackPanel>
@@ -111,8 +117,9 @@
                              CanUserDeleteRows="False" 
                              ItemsSource="{Binding SelectedProcess.SingleMeasResults}"
                              AutoGenerateColumns="False">
+                            
                             <DataGrid.Columns>
-                                <!--#region № -->
+                               <!--#region № -->
                                 <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                                                IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -141,7 +148,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <!--#endregion-->
+                               <!--#endregion-->
                                 <!--#region Weak -->
                                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                                     Header="ОСЛАБЛЕНИЕ">
@@ -154,7 +161,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <!--#endregion-->
+                               <!--#endregion-->
                                 <!--#region Физическая величина -->
                                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ФИЗИЧЕСКАЯ ВЕЛИЧИНА">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -170,7 +177,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <!--#endregion-->
+                               <!--#endregion-->
                                 <!--#region Activity -->
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
@@ -180,7 +187,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <!--#endregion-->
+                               <!--#endregion-->
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
@@ -190,7 +197,7 @@
                 <!--#region Coeffs -->
                 <GroupBox Header="Расчитанные к-ты полинома" FontSize="20" BorderThickness="0">
                     <StackPanel>
-                        <Border Background="Black" Margin="10">
+                        <Border Background="Black" Margin="10,20,0,0">
                             <DataGrid AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               BorderThickness="0"

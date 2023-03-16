@@ -15,7 +15,7 @@
         <!--#region Standartisations-->
         <StackPanel >
             <StackPanel.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>                
+                <!--<Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>-->                
             </StackPanel.Resources>
             <Border Background="Black" Margin="0,50,0,0" HorizontalAlignment="Left">
                 <DataGrid Background="Transparent"
@@ -25,7 +25,7 @@
                   ItemsSource="{Binding SelectedProcess.MeasStandSettings}"
                   AutoGenerateColumns="False"
                   BorderBrush="{StaticResource BorderNonActiveColor}"
-                  SelectedItem="{Binding SelectedStandartisation}"
+                  SelectedItem="{Binding SelectedStandartisation, UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
@@ -81,6 +81,7 @@
                                 <DataTemplate>
                                     <p:DateTimeParameter DataContext="{Binding LastStandDate}" 
                                                  DescriptionNotVisible="True"
+                                                         IsCommandButtonVisible="False"
                                                          Height="40"
                                                          VerticalAlignment="Center"
                                                          DataTimeFormat="d"

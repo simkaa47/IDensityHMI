@@ -22,7 +22,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--#region Left panel -->
-        <ListBox HorizontalContentAlignment="Stretch" Margin="0,0,20,0"                 
+        <ListBox HorizontalContentAlignment="Stretch" Margin="40,20,20,0"                 
                  HorizontalAlignment="Left" 
                  Background="Transparent"
                  BorderThickness="0"
