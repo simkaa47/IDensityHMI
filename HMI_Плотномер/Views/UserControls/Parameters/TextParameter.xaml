@@ -20,19 +20,18 @@
     <DockPanel MinHeight="56">
         <DockPanel.Resources>
             <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="#33FFFFFF"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsWriting}" Value="False">
                         <Setter Property="BorderBrush" Value="#28BCBA"/>
                     </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderBrush" Value="#28BCBA"/>
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="BorderBrush" Value="{StaticResource BorderNonActiveColor}"/>
-                    </Trigger>
+                    </Trigger>                   
                 </Style.Triggers>
             </Style>
             <Style TargetType="TextBox">
+                <Setter Property="Foreground" Value="#33FFFFFF"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsWriting}" Value="False">
                         <Setter Property="Foreground" Value="White"/>
@@ -40,9 +39,7 @@
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Foreground" Value="White"/>
                     </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource BorderNonActiveColor}"/>
-                    </Trigger>
+                    
                     
                 </Style.Triggers>
             </Style>
@@ -60,7 +57,7 @@
                     Width="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=ParameterWidth, TargetNullValue=165}"
                     BorderThickness="2"
                     Background="Transparent">
-                <TextBox Background="Transparent"
+                <TextBox Background="Transparent"                         
                          Name="Input"
                          IsReadOnly="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=IsOnlyRead}"
                          BorderThickness="0"                                                 
