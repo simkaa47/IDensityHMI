@@ -100,7 +100,7 @@
                     Grid.ColumnSpan="2"
                     CornerRadius="2"
                     BorderThickness="2"
-                    BorderBrush="{StaticResource BorderNonActiveColor}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
                     Background="Transparent"/>
                         <Border Grid.Column="0"
             CornerRadius="2,0,0,2"

@@ -105,7 +105,7 @@
                                  ItemsSource="{StaticResource CalcTypes}"/>
             <!--#endregion-->
             <!--#region Copy to other process -->
-            <DockPanel>
+            <DockPanel MinHeight="56">
                 <TextBlock Text="Скопировать на другой измерительный процесс"
                            Style="{StaticResource Common}" Margin="20,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -133,6 +133,10 @@
                 </StackPanel>
             </DockPanel>
             <!--#endregion-->
+            <ComboBox Foreground="White" Height="40" Width="100"
+                      ItemsSource="{StaticResource AdcModes}"
+                      BorderBrush="Red"
+                      SelectedIndex="0"/>
         </ListBox>    
     </Grid>
 </UserControl>
