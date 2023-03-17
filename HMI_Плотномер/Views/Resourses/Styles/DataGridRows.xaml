@@ -44,12 +44,14 @@
     <Style TargetType="DataGridRow">
         <Setter Property="Background" Value="{DynamicResource TabControlCommon}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Style.Triggers>           
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource BorderNonActiveColor}"/>
             </Trigger>
         </Style.Triggers>
+        
     </Style>
 
     <Style TargetType="DataGridRowHeader">
@@ -65,10 +67,29 @@
         <Setter Property="MinHeight" Value="75"/>
     </Style>
 
-    <Style TargetType="DataGridCell" >
-        <Setter Property="Background" Value="Transparent"/>
+    <Style TargetType="DataGridCell" >        
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#801c1c1e" Offset="0.0"/>
+                    <GradientStop Color="#801c1c1e" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource IfEvenConverter}}" Value="True">
+                <Setter Property="Background" Value="#902c2c2e"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="DataGrid">
+        <Setter Property="GridLinesVisibility" Value="Vertical"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>         
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
+        <Setter Property="AlternationCount" Value="100"/>        
+        <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource BorderNonActiveColor}"/>
     </Style>
 
     

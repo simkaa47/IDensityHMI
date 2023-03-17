@@ -50,6 +50,18 @@
             </TabItem>
             <!--#endregion-->            
         </TabControl>
+        <!--#region Vissma measure -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,160">
+            <Label Content="VISSMA" FontSize="60" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Regular"/>
+            <DockPanel HorizontalAlignment="Left">
+                <Rectangle Height="2" Width="100" HorizontalAlignment="Stretch" Fill="#4affffff"/>
+                <Label Content="VERSION 1.01" FontSize="15" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Normal"
+                       DockPanel.Dock="Right" HorizontalAlignment="Left"/>
+                
+            </DockPanel>
+            <Label Content="Measure" FontSize="57" Foreground="#4affffff" FontFamily="Roboto" FontWeight="UltraLight"/>
+        </StackPanel>
+        <!--#endregion-->
         <Grid.RowDefinitions>
                 <RowDefinition Height="80" ></RowDefinition>
                 <RowDefinition></RowDefinition>
