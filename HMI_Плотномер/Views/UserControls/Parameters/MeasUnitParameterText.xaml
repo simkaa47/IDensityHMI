@@ -122,6 +122,7 @@
             </Border>
 
             <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                 <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>

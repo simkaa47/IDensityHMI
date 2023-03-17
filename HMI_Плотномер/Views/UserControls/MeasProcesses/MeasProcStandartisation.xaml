@@ -67,7 +67,7 @@
                         <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ, x 0.1 C." MaxWidth="223">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True" Margin="5"
+                                    <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True" Margin="20,5,0,5"
                                               HorizontalAlignment="Center"
                                                       ParameterWidth="109"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
@@ -81,7 +81,7 @@
                                 <DataTemplate>
                                     <p:DateTimeParameter DataContext="{Binding LastStandDate}" 
                                                  DescriptionNotVisible="True"
-                                                         IsCommandButtonVisible="False"
+                                                         CommandButtonVisibility="Collapsed"
                                                          Height="40"
                                                          VerticalAlignment="Center"
                                                          DataTimeFormat="d"
@@ -97,7 +97,7 @@
                                 <DataTemplate>
                                     <p:TextParameter DataContext="{Binding StandResult}"
                                              DescriptionNotVisible="True"
-                                                     Margin="20,10,0,10"
+                                                     Margin="20,5,0,5"
                                                      ParameterWidth="104"
                                              HorizontalAlignment="Center"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.ResultWriteCommand}"/>
@@ -112,7 +112,7 @@
                                     <p:TextParameter DataContext="{Binding HalfLifeCorr}"
                                              DescriptionNotVisible="True"
                                              HorizontalAlignment="Center"
-                                                     Margin="20,10,0,10"
+                                                    Margin="20,5,0,5"
                                                      ParameterWidth="104"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.HalfLifeCorrWriteCommand}"/>
                                 </DataTemplate>
@@ -126,7 +126,7 @@
                                     <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"
                                              DescriptionNotVisible="True"
                                              HorizontalAlignment="Center"
-                                                             Margin="20,0,0,0"
+                                             Margin="20,5,0,5"
                                              MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
                                              MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
@@ -140,20 +140,19 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid MaxHeight="40">
-                                        <fa:ImageAwesome Icon="CheckCircle"  
-                                                 Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
+                                        <Image Source="..\..\Resourses\Pictures\Comm_Ok.png"                                                   
                                                  Visibility="{Binding IsStandartisation, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="MouseLeftButtonUp">
                                                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.MakeStandCommand}"/>
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                        </fa:ImageAwesome>
-                                        <fa:ImageAwesome Icon="StopCircle"  
-                                                 Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxBorderColors}}"
+                                        </Image>
+                                        <Image Source="..\..\Resourses\Pictures\FailGray.png"   
+                                                 
                                                  Visibility="{Binding IsStandartisation, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
 
-                                        </fa:ImageAwesome>
+                                        </Image>
                                     </Grid>
 
                                 </DataTemplate>

@@ -10,13 +10,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="Border" >
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="BorderBrush" Value="{DynamicResource AquaColor}"/>
                 </Trigger>
-                <Trigger Property="IsMouseOver" Value="False">
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
-                </Trigger>
+                <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                    <Setter Property="BorderBrush" Value="{DynamicResource AquaColor}"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>

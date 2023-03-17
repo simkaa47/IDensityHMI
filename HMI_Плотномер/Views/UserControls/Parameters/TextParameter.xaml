@@ -88,7 +88,8 @@
                 </TextBox>
             </Border>
             <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
-                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}">
                 <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
                 <i:Interaction.Triggers>

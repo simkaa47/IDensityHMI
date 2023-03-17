@@ -124,7 +124,7 @@
                                                                IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Id}" Margin="10" 
+                                            <TextBlock Text="{Binding Id}" Margin="20" 
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver,
@@ -156,7 +156,7 @@
                                         <DataTemplate>
                                             <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Weak}"  HorizontalAlignment="Center"
                                                              ParameterWidth="104"
-                                                             Margin="20,0,0,0"
+                                                             Margin="20,5,0,5"
                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.WeakWriteCommand}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -170,7 +170,7 @@
                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.ValueWriteCommand}"
                                                                  DataContext="{Binding CounterValue}"
                                                                  HorizontalAlignment="Center"
-                                                                  Margin="20,0,0,0"
+                                                                  Margin="20,5,0,5"
                                                                  MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
                                                                  MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"/>
 
@@ -208,7 +208,7 @@
                                     <DataGridTemplateColumn Header="СТЕПЕНЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Deg}" Margin="10"
+                                                <TextBlock Text="{Binding Deg}" Margin="20"
                                                            Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver,
                                                 Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"/>
                                             </DataTemplate>
@@ -217,7 +217,7 @@
                                     <DataGridTemplateColumn Header="ВЕЛИЧИНА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Coeff}" Margin="10"
+                                                <TextBlock Text="{Binding Coeff}" Margin="20"
                                                            Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver,
                                                 Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"/>
                                             </DataTemplate>

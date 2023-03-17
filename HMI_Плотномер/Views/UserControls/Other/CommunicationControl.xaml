@@ -19,36 +19,42 @@
     </UserControl.Resources>
     <ListBox Width="750" Background="Transparent"
              BorderThickness="0"
+             Margin="40,20"
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
              >
         <!--#region Eth parameters -->
-        <GroupBox Header="Настройки соединения с прибором"
-                  FontSize="20"
+        <GroupBox FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
+            <GroupBox.Header>
+                <TextBlock Text="Настройки соединения с прибором" Foreground="White" FontSize="20" Margin="20" FontWeight="Medium"/>
+            </GroupBox.Header>
             <ListBox Background="Transparent"
-                     BorderThickness="0"
-                     HorizontalAlignment="Stretch"                     
+                     BorderThickness="0,1,0,0"
+                     HorizontalAlignment="Stretch"
+                     BorderBrush="{StaticResource BorderNonActiveColor}"
                      HorizontalContentAlignment="Stretch"
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region Ip -->
                 <DockPanel>
-                    <TextBlock Text="IP-адрес прибора (фактический)"/>
+                    <TextBlock Text="IP-адрес прибора (фактический)" Margin="20,0,0,0"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Width="165"
+                             Width="140"
+                             Margin="0,0,85,0"
                              Height="40"/>
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region Port number -->
                 <DockPanel>
-                    <TextBlock Text="Номер порта"/>
+                    <TextBlock Text="Номер порта"   Margin="20,0,0,0"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Width="165"
+                             Width="140"
+                             Margin="0,0,85,0"
                              Height="40"/>
                 </DockPanel>
                 <!--#endregion-->
@@ -77,18 +83,22 @@
         <!--#endregion-->        
         
         <!--#region Serial port settings -->
-        <GroupBox Header="Настройки последовательного порта прибора"
-                  FontSize="20"
+        <GroupBox FontSize="20"
                   Margin="0,20,0,10"
                   BorderThickness="0">
+            <GroupBox.Header>
+                <TextBlock Text="Настройки последовательного порта прибора" Foreground="White" FontSize="20" Margin="20" FontWeight="Medium"/>
+            </GroupBox.Header>
             <ListBox Background="Transparent"
-                     BorderThickness="0"
+                     BorderThickness="0,1,0,0"
+                     BorderBrush="{StaticResource BorderNonActiveColor}"
                      HorizontalAlignment="Stretch"                     
                      HorizontalContentAlignment="Stretch"
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region baudrate -->
                 <p:CompoBoxParameter DataContext="{Binding VM.mainModel.PortBaudrate}"
                                      ItemsSource="{StaticResource PortSpeeds}"
+                                     ParameterWidth="140"
                                      Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                                      SelectedItem="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ConnectSettingsVm.ChangeBaudrateCommand}"
@@ -98,6 +108,7 @@
                 <!--#region serial mode -->
                 <p:CompoBoxParameter DataContext="{Binding VM.mainModel.PortSelectMode}"
                                      ItemsSource="{StaticResource PortModes}"
+                                     ParameterWidth="140"
                                      Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ConnectSettingsVm.ChangeSerialSelectCommand}"
                                      CommanDParameter="{Binding RelativeSource={RelativeSource Self}, Path=Index}"/>
@@ -110,24 +121,25 @@
                   BorderThickness="0">
             <GroupBox.Header>
                 <StackPanel>
-                    <TextBlock Text="Изменение параметров IP-адреса прибора" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                    <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Настройки последовательного порта прибора" Foreground="White" FontSize="20" Margin="20,20,20,0" FontWeight="Medium"/>
+                    <StackPanel Orientation="Horizontal" Margin="20,0,0,10">
                         <Image Source="..\..\Resourses\Pictures\AlertReportProblemRed.png" Height="20"/>
                         <TextBlock Text="Данные настройки вступят в силу только после перезагрузки прибора"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox.Header>
-            <ListBox Background="Transparent"
-                     BorderThickness="0"
+            <ListBox Background="Transparent"                     
+                     BorderThickness="0,1,0,0"
+                     BorderBrush="{StaticResource BorderNonActiveColor}"
                      HorizontalAlignment="Stretch"                     
                      HorizontalContentAlignment="Stretch"
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region ip -->
                 <DockPanel>
-                    <TextBlock Text="IP-адрес"/>
+                    <TextBlock Text="IP-адрес" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Width="165"
-                                 Height="40"
+                        <TextBox Height="40"
+                                 Width="140"
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
@@ -136,12 +148,16 @@
                                 <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
-                        <fa:ImageAwesome Visibility="{Binding VM.mainModel.TcpWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding VM.mainModel.TcpWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                            <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding WriteEthParamsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -149,7 +165,7 @@
                 <DockPanel>
                     <TextBlock Text="Маска подсети"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Width="165"
+                        <TextBox Width="140"
                                  Height="40"
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
@@ -159,12 +175,16 @@
                                 <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
-                        <fa:ImageAwesome Visibility="{Binding VM.mainModel.TcpWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding VM.mainModel.TcpWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                            <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding WriteEthParamsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -172,7 +192,7 @@
                 <DockPanel>
                     <TextBlock Text="Сетевой шлюз"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Width="165"
+                        <TextBox Width="140"
                                  Height="40"
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
@@ -182,12 +202,16 @@
                                 <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
-                        <fa:ImageAwesome Visibility="{Binding VM.mainModel.TcpWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding VM.mainModel.TcpWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                            <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding WriteEthParamsCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->

@@ -16,43 +16,50 @@
             <sys:String>..\..\Resourses\Pictures\Comm_Ok.png</sys:String>
         </x:Array>
     </UserControl.Resources>
-    <ListBox Width="600" Background="Transparent"
+    <ListBox Width="475" Background="Transparent"
              BorderThickness="0"
+             Margin="40,20"
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
         <!--#region HV SV -->
         <p:TextParameter DataContext="{Binding mainModel.TelemetryHV.VoltageSV}"
+                         ParameterWidth="87"
                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.AdcViewModel.SetHvCommand}"/>
         <!--#endregion-->
         <!--#region Input voltage -->
         <p:TextParameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}"
+                         ParameterWidth="87" CommandButtonVisibility="Hidden"
                          IsOnlyRead="True"/>
         <!--#endregion-->
         <!--#region Output voltage -->
         <p:TextParameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurOut}"
-                         IsOnlyRead="True"/>
+                         ParameterWidth="87"
+                         IsOnlyRead="True" CommandButtonVisibility="Hidden"/>
         <!--#endregion-->
         <!--#region Comm Indicator-->
         <DockPanel MinHeight="50" DataContext="{Binding mainModel.TelemetryHV.HvCommState}">
-            <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
+            <TextBlock Text="{Binding Description}" Style="{StaticResource Common}" Margin="20,0,0,0"/>
             <Image Source="{Binding Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
                    HorizontalAlignment="Right" 
                    VerticalAlignment="Center"
+                   Margin="0,0,25,0"
                    MaxHeight="30"
                    MaxWidth="34"/>
         </DockPanel>
         <!--#endregion-->
         <!--#region Switch HV -->
         <DockPanel MinHeight="50" >
-            <TextBlock Text="Управление высоким напряжением" Style="{StaticResource Common}"/>
+            <TextBlock Text="Управление высоким напряжением" Style="{StaticResource Common}"  Margin="20,0,0,0"/>
             <Button Style="{StaticResource TypicalButton0}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Margin="5"
+                    Margin="5,5,20,5"
+                    Width="146"
+                    
                      Command="{Binding AdcViewModel.switchHvCommandCommand}"
                     Height="40"
-                    Width="160"
+                   
                     Content="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvButn}}"
                     FontSize="16"/>
         </DockPanel>

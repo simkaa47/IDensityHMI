@@ -14,17 +14,19 @@
             <TextBlock Style="{StaticResource Common}" 
                    Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                       Margin="20,0,0,0"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"/>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <dt:DateTimeParameter Margin="5,0,5,0"
+                <dt:DateTimeParameter Margin="5,0,5,0"                                      
+                                      Width="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=ParameterWidth}"
                                       VerticalAlignment="Center"
                                       DateTimeFormat="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=DataTimeFormat}"
                                                   PopupClosedCommand="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=Command}"                                                        
                                                   DateTime="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4" VerticalAlignment="Center"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:DateTimeParameter}, Path=IsCommandButtonVisible, Converter={StaticResource VisibleConverter}}"
+                        Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                     <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>

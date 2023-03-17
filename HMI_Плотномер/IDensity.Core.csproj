@@ -25,6 +25,7 @@
     <None Remove="Views\Resourses\Pictures\DriveFileMove.png" />
     <None Remove="Views\Resourses\Pictures\EditIcon.png" />
     <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
+    <None Remove="Views\Resourses\Pictures\FailGray.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
     <None Remove="Views\Resourses\Pictures\ListIcon.png" />
     <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
@@ -82,6 +83,7 @@
     <Resource Include="Views\Resourses\Pictures\DriveFileMove.png" />
     <Resource Include="Views\Resourses\Pictures\EditIcon.png" />
     <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\FailGray.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />
     <Resource Include="Views\Resourses\Pictures\ListIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />

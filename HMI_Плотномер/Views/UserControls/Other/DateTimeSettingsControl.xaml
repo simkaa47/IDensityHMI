@@ -12,27 +12,23 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <ListBox Width="600" Background="Transparent"
              BorderThickness="0"
+             Margin="40,20"
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
         <!--#region rtc set command -->
         <p:DateTimeParameter DataContext="{Binding mainModel.Rtc}"
+                             CommandButtonVisibility="Collapsed"
                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SetRtcCommand}"/>
         <!--#endregion-->
         <!--#region Synchronize with PC time -->
         <DockPanel MinHeight="50">
-            <TextBlock Text="Синхронизировать с временем ПК" Style="{StaticResource Common}"/>
+            <TextBlock Text="Синхронизировать с временем ПК" Style="{StaticResource Common}" Margin="20,0,0,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock Style="{StaticResource Common}"
+                <TextBlock Style="{StaticResource Common}" 
                            Text="{Binding CurPcDateTime, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}">
                     
-                </TextBlock>
-                <fa:ImageAwesome Visibility="{Binding mainModel.Rtc.IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding mainModel.Rtc.IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                </TextBlock>                
                 <Button Style="{StaticResource TypicalButton0}" Height="40" Width="40" Content="-->" FontSize="16"
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                         Command="{Binding SyncRtcCommand}"
