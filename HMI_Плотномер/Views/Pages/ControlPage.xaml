@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -20,6 +21,10 @@
         <x:Array Type="sys:String"   x:Key="ButtonColorsSdCard">
             <sys:String>#FFFFFFFF</sys:String>
             <sys:String>#FFFF0000</sys:String>
+        </x:Array>
+        <x:Array Type="sys:String" x:Key="ButtonsParametersImages1">
+            <sys:String>..\Resourses\Pictures\DoneWhite.png</sys:String>
+            <sys:String>..\Resourses\Pictures\DoneGrey.png</sys:String>
         </x:Array>
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
     </UserControl.Resources>
@@ -124,25 +129,28 @@
                      BorderThickness="0"
                      VerticalAlignment="Top"
                      HorizontalContentAlignment="Stretch"
-                     Margin="10"
+                     Margin="20"
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region Synch level -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.AdcBoardSettings.AdcSyncLevel}" 
+                                 ParameterWidth="104"
                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.SetAdcSyncLevelChangeCommand}"/>
                 <!--#endregion-->
                 <!--#region Gain -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.AdcBoardSettings.PreampGain}" 
+                                 ParameterWidth="104"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetPreampGainChangeCommand}"/>
                 <!--#endregion-->
                 <!--#region Timer -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.AdcBoardSettings.TimerMax}" 
+                                 ParameterWidth="104"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetTimerMaxChangeCommand}"/>
                 <!--#endregion-->
                 <!--#region Avg deep -->
                 <DockPanel>
-                    <TextBlock Text="Глубина усреднения спектра"  TextWrapping="Wrap"/>
+                    <TextBlock Text="Глубина усреднения спектра"  TextWrapping="Wrap" Margin="20,0,0,0"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}" 
-                             Width="165" 
+                             Width="104" Margin="0,0,85,0"
                              Height="40"
                              HorizontalAlignment="Right"
                              Text="{Binding AdcAvgSettings.SpectrFilterDeep, UpdateSourceTrigger=PropertyChanged}"/>
@@ -150,25 +158,28 @@
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region HV SV -->
-                <p:TextParameter DataContext="{Binding VM.mainModel.TelemetryHV.VoltageSV}"  Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetHvCommand}" />
+                <p:TextParameter DataContext="{Binding VM.mainModel.TelemetryHV.VoltageSV}"  
+                                 ParameterWidth="104"
+                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetHvCommand}" />
                 <!--#endregion-->
                 <!--#region Output voltage -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.TelemetryHV.VoltageCurOut}"
+                                 ParameterWidth="104" CommandButtonVisibility="Hidden"
                                  IsOnlyRead="True"/>
                 <!--#endregion-->
                 <!--#region Limits to find Spectr -->
                 <DockPanel>
-                    <TextBlock Text="Диапазон поика максимума спектра, мин|макс" />
+                    <TextBlock Text="Диапазон поика максимума спектра, мин|макс" Margin="20,0,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Text="{Binding AdcAvgSettings.SpectrMinLimit, UpdateSourceTrigger=LostFocus}" 
                                  Width="80" Height="40" 
-                                 Margin="0,5,5,0"
+                                 Margin="0,0,5,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalAlignment="Right"
                                   VerticalContentAlignment="Center"/>
                         <TextBox Text="{Binding AdcAvgSettings.SpectrMaxLimit, UpdateSourceTrigger=LostFocus}" 
                                  Width="80" Height="40" 
-                                 Margin="0,5,0,0"
+                                 Margin="0,0,85,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                   HorizontalAlignment="Right"
                                   VerticalContentAlignment="Center"/>
@@ -177,32 +188,38 @@
                 <!--#endregion-->
                 <!--#region Find spectr limits -->
                 <DockPanel>
-                    <TextBlock Text="Расчет пределов с заданными отклонениями" TextWrapping="Wrap"/>
+                    <TextBlock Text="Расчет пределов с заданными отклонениями" TextWrapping="Wrap" Margin="20,0,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Text="{Binding AdcAvgSettings.LeftCounterCoeff, StringFormat=f2,ConverterCulture=RU-ru, UpdateSourceTrigger=LostFocus}" 
-                                         Width="50" Height="40" 
+                                        Width="80" Height="40" 
                                  Margin="0,5,5,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                          HorizontalAlignment="Right"
                                          VerticalContentAlignment="Center"/>
                         <TextBox Text="{Binding AdcAvgSettings.RightCounterCoeff, StringFormat=f2, ConverterCulture=RU-ru, UpdateSourceTrigger=LostFocus}" 
-                                         Width="55" Height="40" 
+                                         Width="80" Height="40" 
                                  Margin="0,5,5,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                          HorizontalAlignment="Right"
                                          VerticalContentAlignment="Center"/>
-                        <Button Style="{StaticResource TypicalButton0}" 
-                                Command="{Binding TuneCounterDiapasoneCommand}" 
-                                Content="-->" 
-                                VerticalAlignment="Center"
-                                Height="40"
-                                Width="50"
-                                Margin="0,5,0,5"/>
+                        <Border Height="24" Width="40" Margin="20,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                            <Image Source="..\Resourses\Pictures\DoneGrey.png"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding TuneCounterDiapasoneCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region Spectr log -->
-                <GroupBox Header="Запись спектра" BorderThickness="0" FontSize="20">
+                <GroupBox  BorderThickness="0" FontSize="20">
+                    <GroupBox.Header>
+                        <TextBlock Text="Запись спектра" Foreground="White" FontSize="20" Margin="20" FontWeight="Medium"/>
+                    </GroupBox.Header>
                     <ListBox Background="{StaticResource TabControlCommon}"
                      BorderThickness="0"
                      VerticalAlignment="Top"
@@ -248,7 +265,7 @@
                         <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                             <DockPanel>
                                 <TextBlock Text="Частота циклического логирования спектра, сек" Style="{StaticResource Common}"/>
-                                <TextBox Width="150"  Template="{StaticResource TextBoxTemplate}"
+                                <TextBox Width="104" Margin="0,0,85,0"  Template="{StaticResource TextBoxTemplate}"
                                      Height="40"
                                              HorizontalAlignment="Right" 
                                              Text="{Binding SpectrLogSettings.LogFreq}"/>
@@ -259,8 +276,9 @@
                         <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                             <DockPanel >
                                 <TextBlock Text="Частота очистки спектра, сек" Style="{StaticResource Common}"/>
-                                <TextBox Width="150"  Height="40" Template="{StaticResource TextBoxTemplate}"
+                                <TextBox Width="104"  Height="40" Template="{StaticResource TextBoxTemplate}"
                                              HorizontalAlignment="Right" 
+                                         Margin="0,0,85,0"
                                              Text="{Binding SpectrLogSettings.FreqClearSpectr}"/>
                             </DockPanel>
                         </ListBoxItem>
@@ -269,7 +287,7 @@
                         <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                             <DockPanel >
                                 <TextBlock Text="Время следующей очистки спектра" />
-                                <TextBlock HorizontalAlignment="Right" 
+                                <TextBlock HorizontalAlignment="Right" Margin="0,0,85,0"
                                        Text="{Binding NextSpectrClearTime, StringFormat=HH:mm:ss}"/>
                             </DockPanel>
                         </ListBoxItem>
@@ -279,7 +297,7 @@
                             <TextBlock Text="IP-адрес получателя"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
-                                 MinWidth="165"
+                                 MinWidth="140"
                                  Height="40"                             
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
@@ -288,12 +306,16 @@
                                         <KeyBinding Key="Enter"  Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
                                     </TextBox.InputBindings>
                                 </TextBox>
-                                <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding VM.mainModel.UdpWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                                <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                                    <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Border>
                             </StackPanel>
                         </DockPanel>
                         <!--#endregion-->
@@ -304,7 +326,7 @@
                                                 HorizontalAlignment="Right">
 
                                 <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 MinWidth="165"
+                                 MinWidth="140"
                                  Height="40"                                 
                                 Template="{StaticResource TextBoxTemplate}"
                                  HorizontalContentAlignment="Center"
@@ -314,12 +336,16 @@
                                     </TextBox.InputBindings>
                                 </TextBox>
 
-                                <fa:ImageAwesome Visibility="{Binding VM.mainModel.UdpWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding VM.mainModel.UdpWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+                                <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                                    <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Border>
 
                             </StackPanel>
                         </DockPanel>

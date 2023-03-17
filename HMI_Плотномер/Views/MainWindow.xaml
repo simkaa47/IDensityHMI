@@ -32,6 +32,7 @@
             <!--#endregion-->
             <!--#region Вкладка Настройки -->
             <TabItem Header="Настройки" MinHeight="68" MinWidth="315"
+                     Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
                              Tag="..\Pictures\TuneIcon.png">
                 <pages:SettingsPage/>
             </TabItem>
