@@ -28,7 +28,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <!--#region EventSelector -->
-            <ListBox    Name="EventsSelector"
+            <ListBox    Name="EventsSelector"                       
                         HorizontalAlignment="Left"
                         BorderThickness="0"
                         Background="Transparent"
@@ -57,7 +57,7 @@
                                    Style="{StaticResource Common}"  Margin="20,0,20,0"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
-                                              Height="40"
+                                              Height="42"
                                               DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </Grid>
                     <!--#endregion-->
@@ -71,7 +71,7 @@
                                    Style="{StaticResource Common}" Margin="20,0,20,0"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
-                                              Height="40"
+                                              Height="42"
                                               DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </Grid>
                     <!--#endregion-->
@@ -82,16 +82,17 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="150"
-                            Height="40"/>
+                            Height="42"/>
                     <!--#endregion-->
                     <!--#region Filter -->
                     <Border HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
                             Margin="50,0,50,0"
+                            Height="42"
                             Background="#20FFFFFF"
                             Grid.Column="3">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <Image Source="..\Resourses\Styles\Search.png" Height="25" Margin="5,0,5,0"/>
+                            <Image Source="..\Resourses\Styles\Search.png" Height="25" Margin="10,0,10,0"/>
                             <TextBox BorderThickness="0" Background="Transparent"
                                      Text="{Binding EventFilterText, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Поиск}"
                                      VerticalAlignment="Center"

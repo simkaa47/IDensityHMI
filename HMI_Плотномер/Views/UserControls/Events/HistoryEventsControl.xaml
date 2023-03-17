@@ -7,13 +7,15 @@
              d:DataContext="{d:DesignInstance vm:VM}"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Events"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800">    
     <Grid>
         <Border Background="Black" VerticalAlignment="Top" Margin="20">
             <DataGrid Background="Transparent"
                       Margin="10"
                       BorderThickness="0"
                       IsReadOnly="True" 
+                      GridLinesVisibility="None"
+                      
                      AutoGenerateColumns="False" 
                      ItemsSource="{Binding SelectedEventItems}" 
                      VirtualizingPanel.VirtualizationMode="Recycling"
@@ -27,11 +29,24 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}"/>
                 </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                
                 <DataGrid.Columns>
                     <!--#region Time-->
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="450">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" Style="{StaticResource Common}" Margin="20,10,20,10"/>
+                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" Foreground="White" Style="{StaticResource Common}" Margin="40,10,20,10"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

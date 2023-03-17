@@ -1,21 +1,29 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="DataGridRow" x:Key="EventRowStyle">
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="16"/>        
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="Margin" Value="0,1,0,1"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="ToolTip">
             <Setter.Value>
-                <TextBlock Text="{Binding Event.Description}"/>
+                <TextBlock Text="{Binding Event.Description}" />
             </Setter.Value>            
         </Setter>
         <Setter Property="ToolTip.Placement" Value="Mouse"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Activity}" Value="True">
-                <Setter Property="Background" Value="{Binding Event.ActiveBrush}"/>
+                <Setter Property="Background" Value="{Binding Event.ActiveBrush, Converter={StaticResource AddOpacityToColorConverter}}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Activity}" Value="False">
-                <Setter Property="Background" Value="{Binding Event.NonActiveBrush}"/>                
+                <Setter Property="Background" Value="{Binding Event.NonActiveBrush, Converter={StaticResource AddOpacityToColorConverter}}"/>                
             </DataTrigger>
         </Style.Triggers>        
+    </Style>
+
+    <Style TargetType="DataGridColumnHeader" x:Key="EventColumnStyle">
+        <Setter Property="BorderThickness" Value="0"/>
+        
     </Style>
 
     <DataTemplate x:Key="DataGridHeaderTemplate">
