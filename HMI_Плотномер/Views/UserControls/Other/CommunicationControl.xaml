@@ -64,8 +64,9 @@
                         <TextBlock Text="Частота опроса прибора, мс" />
                         <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
+                                 Margin="0,0,85,0"
                              Text="{Binding VM.mainModel.TcpConnectData.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Width="165"
+                             Width="145"
                              Height="40"/>
                     </DockPanel>
                 </ListBoxItem>
@@ -74,7 +75,7 @@
                 <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                     <DockPanel>
                         <TextBlock Text="Циклический опрос" Style="{StaticResource Common}"/>
-                        <CheckBox IsChecked="{Binding VM.mainModel.TcpConnectData.CycicRequest}" Style="{StaticResource CheckBoxAqvaStyle}"/>
+                        <CheckBox IsChecked="{Binding VM.mainModel.TcpConnectData.CycicRequest}" Style="{StaticResource CheckBoxAqvaStyle}" Margin="0,0,30,0"/>
                     </DockPanel>
                 </ListBoxItem>
                 <!--#endregion-->                
@@ -128,6 +129,33 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox.Header>
+            <GroupBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="#33FFFFFF"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding VM.mainModel.TcpWriting}" Value="False">
+                            <Setter Property="BorderBrush" Value="#28BCBA"/>
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="#28BCBA"/>
+                        </Trigger>
+
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Foreground" Value="#33FFFFFF"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding VM.mainModel.TcpWriting}" Value="False">
+                            <Setter Property="Foreground" Value="White"/>
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+
+
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Resources>
             <ListBox Background="Transparent"                     
                      BorderThickness="0,1,0,0"
                      BorderBrush="{StaticResource BorderNonActiveColor}"
@@ -138,16 +166,26 @@
                 <DockPanel>
                     <TextBlock Text="IP-адрес" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Height="40"
-                                 Width="140"
-                                 Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Text="{Binding VM.mainModel.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
+                        <Border CornerRadius="4"
+                            Height="40"                                       
+                            Width="140"
+                            BorderThickness="2"
+                            Background="Transparent">
+                            <TextBox Background="Transparent"
+                                     BorderThickness="0"                                                 
+                                     FontFamily="Roboto"
+                                     Margin="10,0,0,0"  
+                                     Text="{Binding VM.mainModel.IP, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalAlignment="Center"
+                                     FontSize="16"
+                                     CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
+                                     FontWeight="Regular">
+                                <TextBox.InputBindings>
+                                    <KeyBinding  Key="Enter"   Command="{Binding WriteEthParamsCommand}"/>
+                                </TextBox.InputBindings>
+                                
+                            </TextBox>
+                        </Border>
                         <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
@@ -165,16 +203,26 @@
                 <DockPanel>
                     <TextBlock Text="Маска подсети"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Width="140"
-                                 Height="40"
-                                 Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Text="{Binding VM.mainModel.Mask, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
+                        <Border CornerRadius="4"
+                            Height="40"                                       
+                            Width="140"
+                            BorderThickness="2"
+                            Background="Transparent">
+                            <TextBox Background="Transparent"
+                                     BorderThickness="0"                                                 
+                                     FontFamily="Roboto"
+                                     Margin="10,0,0,0"  
+                                     Text="{Binding VM.mainModel.Mask, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalAlignment="Center"
+                                     FontSize="16"
+                                     CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
+                                     FontWeight="Regular">
+                                <TextBox.InputBindings>
+                                    <KeyBinding  Key="Enter"   Command="{Binding WriteEthParamsCommand}"/>
+                                </TextBox.InputBindings>
+
+                            </TextBox>
+                        </Border>
                         <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
@@ -192,16 +240,26 @@
                 <DockPanel>
                     <TextBlock Text="Сетевой шлюз"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox Width="140"
-                                 Height="40"
-                                 Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Text="{Binding VM.mainModel.GateWay, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding WriteEthParamsCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
+                        <Border CornerRadius="4"
+                            Height="40"                                       
+                            Width="140"
+                            BorderThickness="2"
+                            Background="Transparent">
+                            <TextBox Background="Transparent"
+                                     BorderThickness="0"                                                 
+                                     FontFamily="Roboto"
+                                     Margin="10,0,0,0"  
+                                     Text="{Binding VM.mainModel.GateWay, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalAlignment="Center"
+                                     FontSize="16"
+                                     CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
+                                     FontWeight="Regular">
+                                <TextBox.InputBindings>
+                                    <KeyBinding  Key="Enter"   Command="{Binding WriteEthParamsCommand}"/>
+                                </TextBox.InputBindings>
+
+                            </TextBox>
+                        </Border>
                         <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
