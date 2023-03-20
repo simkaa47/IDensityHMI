@@ -22,5 +22,11 @@ namespace IDensity.Core.Views.Pages
             AuthorizationWindow password = new AuthorizationWindow(vm);            
             password.ShowDialog();
         }
+
+        private void ImageAwesome_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (Application.Current.MainWindow.WindowState == WindowState.Maximized) Application.Current.MainWindow.WindowState = WindowState.Normal;
+            else Application.Current.MainWindow.WindowState = WindowState.Maximized;
+        }
     }
 }

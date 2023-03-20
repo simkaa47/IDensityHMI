@@ -7,66 +7,69 @@
         xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"     
         xmlns:sys1="clr-namespace:System;assembly=System.Runtime"       
         mc:Ignorable="d"  
-        WindowStyle="None" ResizeMode="NoResize"
-        Background="#000000"
-        Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">    
+         WindowStyle="None"
+        Background="Transparent"        
+        Title="MainWindow"  WindowState="Maximized">    
     <Window.DataContext>
         <vm:VM/>
     </Window.DataContext>    
         <!--#region Страницы -->
-        <Grid>
+    <Viewbox>
+        <Grid Background="Black" SnapsToDevicePixels="True">
             <!--#region High Bar -->
             <pages:HighBar/>
             <!--#endregion-->
+            <!--#region Vissma measure -->
+            <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,160">
+                <Label Content="VISSMA" FontSize="60" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Regular"/>
+                <DockPanel HorizontalAlignment="Left">
+                    <Rectangle Height="2" Width="100" HorizontalAlignment="Stretch" Fill="#4affffff"/>
+                    <Label Content="VERSION 1.01" FontSize="15" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Normal"
+                       DockPanel.Dock="Right" HorizontalAlignment="Left"/>
+
+                </DockPanel>
+                <Label Content="Measure" FontSize="57" Foreground="#4affffff" FontFamily="Roboto" FontWeight="UltraLight"/>
+            </StackPanel>
+            <!--#endregion-->
             <!--#region Вкладки -->
-        <TabControl  Grid.Row="1" TabStripPlacement="Bottom" >
-            <!--#region Вкладка Измерение -->
-            <TabItem Header="Измерение" MinHeight="68" MinWidth="319"
+            <TabControl  Grid.Row="1" TabStripPlacement="Bottom" Height="1000" Width="1920">
+                <!--#region Вкладка Измерение -->
+                <TabItem Header="Измерение" MinHeight="68" MinWidth="319"
                              Tag="..\Pictures\MeasIcon.png"
                              Name="MainTab" 
                              IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
-                <Grid>
-                    <pages:MainPage/>
-                </Grid>
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Вкладка Настройки -->
-            <TabItem Header="Настройки" MinHeight="68" MinWidth="315"
+                    <Grid>
+                        <pages:MainPage/>
+                    </Grid>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region Вкладка Настройки -->
+                <TabItem Header="Настройки" MinHeight="68" MinWidth="315"
                      Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
                              Tag="..\Pictures\TuneIcon.png">
-                <pages:SettingsPage/>
-            </TabItem>
-            <!--#endregion-->            
-            <!--#region Вкладка Управление -->
-            <TabItem Header="Управление" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}" MinHeight="68" MinWidth="328"
+                    <pages:SettingsPage/>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region Вкладка Управление -->
+                <TabItem Header="Управление" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}" MinHeight="68" MinWidth="328"
                              Tag="..\Pictures\ManageAccounts.png">
-                <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
-            </TabItem>
-            <!--#endregion--> 
-            <!--#region Вкладка События -->
-            <TabItem Header="События" MinHeight="68" MinWidth="292"
+                    <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region Вкладка События -->
+                <TabItem Header="События" MinHeight="68" MinWidth="292"
                              Tag="..\Pictures\ListIcon.png">
-                <pages:EventPage/>
-            </TabItem>
-            <!--#endregion-->            
-        </TabControl>
-        <!--#region Vissma measure -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,160">
-            <Label Content="VISSMA" FontSize="60" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Regular"/>
-            <DockPanel HorizontalAlignment="Left">
-                <Rectangle Height="2" Width="100" HorizontalAlignment="Stretch" Fill="#4affffff"/>
-                <Label Content="VERSION 1.01" FontSize="15" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Normal"
-                       DockPanel.Dock="Right" HorizontalAlignment="Left"/>
-                
-            </DockPanel>
-            <Label Content="Measure" FontSize="57" Foreground="#4affffff" FontFamily="Roboto" FontWeight="UltraLight"/>
-        </StackPanel>
-        <!--#endregion-->
-        <Grid.RowDefinitions>
+                    <pages:EventPage/>
+                </TabItem>
+                <!--#endregion-->
+            </TabControl>
+
+            <Grid.RowDefinitions>
                 <RowDefinition Height="80" ></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <!--#endregion-->        
-    </Grid>
-        <!--#endregion-->   
+            <!--#endregion-->
+        </Grid>
+    </Viewbox>
+    <!--#endregion-->   
 </Window>
