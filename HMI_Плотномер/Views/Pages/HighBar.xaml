@@ -123,12 +123,12 @@
                     Height="38"
                     Width="208"
                     Canvas.Top="21"
-                    Canvas.Left="1274"
+                    Canvas.Left="1224"
                     >                
             </Border>
             <TextBlock Style="{StaticResource TextBlockRoboto}"
                        Canvas.Top="30"
-                       Canvas.Left="1293"
+                       Canvas.Left="1243"
                        Foreground="#A2FFFFFF"
                        Text="{Binding mainModel.Rtc.Value, StringFormat=HH:mm:ss   dd.MM.yyyy}">
                 
@@ -139,16 +139,16 @@
             <Image     Height="32" Width="32"
                        MouseLeftButtonDown="Logout_click"
                        Source="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserIcons }}" 
-                       Canvas.Left="1522" Canvas.Top="23">
+                       Canvas.Left="1472" Canvas.Top="23">
             </Image>
             <TextBlock    Canvas.Top="30"
-                          Canvas.Left="1567"
+                          Canvas.Left="1527"
                           FontSize="16"
                           FontWeight="Regular"
                                 Style="{StaticResource TextBlockRoboto}" 
                                 Text="{Binding CurUser, Converter={StaticResource UserToName}}"
                                 Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
-            <Image Canvas.Left="1781" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
+            <Image Canvas.Left="1751" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>

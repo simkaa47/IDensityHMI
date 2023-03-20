@@ -27,16 +27,20 @@
         <!--#endregion-->       
         <!--#region Meas Type and meas unit-->
         <StackPanel Orientation="Horizontal" Canvas.Left="56" Canvas.Top="24">
-            <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" Canvas.Top="24" Canvas.Left="56">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource GetMeasProcType}">
-                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
-                        <Binding Path="Settings.MeasType.Value"/>
-                        <Binding Source="{StaticResource DensityCalculation}"/>
-                        <Binding Source="{StaticResource LevelCalculation}"/>
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+            
+            <StackPanel>
+                <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" Canvas.Top="24" Canvas.Left="56">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource GetMeasProcType}">
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
+                            <Binding Path="Settings.MeasType.Value"/>
+                            <Binding Source="{StaticResource DensityCalculation}"/>
+                            <Binding Source="{StaticResource LevelCalculation}"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Text="{Binding MeasProcessNum.Value}"/>
+            </StackPanel>
             <!--#region Meas Unit-->            
                     <ComboBox  
                               HorizontalContentAlignment="Center"
