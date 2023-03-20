@@ -34,7 +34,7 @@
                                         Header="№">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding GroupNum}" Margin="10" Style="{StaticResource Common}"/>
+                            <TextBlock Text="{Binding GroupNum}" Margin="20" Style="{StaticResource Common}" Foreground="White"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -45,7 +45,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding CommState.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons}}"
-                                   Margin="5">
+                                   Margin="20" Height="24" Width="24">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
                                         <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SwithPowerCommand}"
@@ -63,7 +63,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource Common}" Text="{Binding AdcValue.Value}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Left" Margin="20" Foreground="White"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -76,6 +76,7 @@
                         <DataTemplate>
                             <p:CompoBoxParameter ItemsSource="{StaticResource On/Off}" 
                                                 HorizontalAlignment="Center"
+                                                 CommandButtonVisibility="Collapsed"
                                                  ParameterWidth="80"
                                                  DataContext="{Binding Activity}"
                                                  DescriptionNotVisible="True"

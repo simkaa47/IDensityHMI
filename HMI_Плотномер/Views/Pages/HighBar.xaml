@@ -4,182 +4,175 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:col="clr-namespace:System.Collections;assembly=System.Runtime.Extensions"
-             d:DesignHeight="100" d:DesignWidth="800" 
+             d:DesignHeight="80" d:DesignWidth="1080" 
              d:DataContext="{d:DesignInstance Type=vm:VM}">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="TextBlockRoboto">
+            <Setter Property="FontFamily" Value="Roboto"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <x:Array x:Key="CommBackground" Type="{x:Type sys:String}">
+            <sys:String>#FF3B30</sys:String>
+            <sys:String>#00FFFFFF</sys:String>
+        </x:Array>
+        <x:Array x:Key="UserBackground" Type="{x:Type sys:String}">
+            <sys:String>#FF3B30</sys:String>
+            <sys:String>#FFFFFF</sys:String>
+        </x:Array>
+        <x:Array x:Key="StatusIcons" Type="{x:Type sys:String}">
+            <sys:String>..\Resourses\Pictures\Comm_Fail.png</sys:String>
+            <sys:String>..\Resourses\Pictures\Comm_Ok.png</sys:String>
+        </x:Array>
+        <x:Array x:Key="MeasStatuses" Type="{x:Type sys:String}">
+            <sys:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys:String>
+            <sys:String>ИЗМЕРЕНИЯ ВКЛЮЧЕНЫ</sys:String>
+        </x:Array>
+        <x:Array x:Key="HvStatuses" Type="{x:Type sys:String}">
+            <sys:String>HV ВЫКЛЮЧЕНО</sys:String>
+            <sys:String>HV ВКЛЮЧЕНО</sys:String>
+        </x:Array>
+        <x:Array x:Key="UserIcons" Type="{x:Type sys:String}">
+            <sys:String>..\Resourses\Pictures\AccountCircleNonAuthorized.png</sys:String>
+            <sys:String>..\Resourses\Pictures\AccountCircleAuthorized.png</sys:String>
+        </x:Array>
+    </UserControl.Resources>
     <Border BorderThickness="0,0,0,1" BorderBrush="#5B5B5B">
-        <Grid Background="#1C1C1E">
-            <Grid.Resources>
-                <Style TargetType="TextBlock" x:Key="TextBlockRoboto">
-                    <Setter Property="FontFamily" Value="Roboto"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="FontSize" Value="15"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-                <x:Array x:Key="CommBackground" Type="{x:Type sys:String}">
-                    <sys:String>#FF3B30</sys:String>
-                    <sys:String>#00FFFFFF</sys:String>
-                </x:Array>
-                <x:Array x:Key="UserBackground" Type="{x:Type sys:String}">
-                    <sys:String>#FF3B30</sys:String>
-                    <sys:String>#FFFFFF</sys:String>
-                </x:Array>
-                <x:Array x:Key="StatusIcons" Type="{x:Type sys:String}">
-                    <sys:String>..\Resourses\Pictures\Comm_Fail.png</sys:String>
-                    <sys:String>..\Resourses\Pictures\Comm_Ok.png</sys:String>
-                </x:Array>
-                <x:Array x:Key="MeasStatuses" Type="{x:Type sys:String}">
-                    <sys:String>ИЗМЕРЕНИЯ ВЫКЛЮЧЕНЫ</sys:String>
-                    <sys:String>ИЗМЕРЕНИЯ ВКЛЮЧЕНЫ</sys:String>
-                </x:Array>
-                <x:Array x:Key="HvStatuses" Type="{x:Type sys:String}">
-                    <sys:String>HV ВЫКЛЮЧЕНО</sys:String>
-                    <sys:String>HV ВКЛЮЧЕНО</sys:String>
-                </x:Array>
-                <x:Array x:Key="UserIcons" Type="{x:Type sys:String}">
-                    <sys:String>..\Resourses\Pictures\AccountCircleNonAuthorized.png</sys:String>
-                    <sys:String>..\Resourses\Pictures\AccountCircleAuthorized.png</sys:String>
-                </x:Array>
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="1.2*"/>
-                <ColumnDefinition Width="0.25*"/>
-            </Grid.ColumnDefinitions>
+        <Canvas Background="#1C1C1E">
             <!--#region Konvels logo -->
-            <Image Grid.Column="0" Source="..\Resourses\Pictures\Logo_Konvels_blue.png"
+            <Image Source="..\Resourses\Pictures\Logo_Konvels_blue.png"
+                   Canvas.Left="30.912" Canvas.Top="24"
                    MaxHeight="32" MaxWidth="125"/>
             <!--#endregion-->
             <!--#region Board Connect State -->
-            <Grid Margin="1,0,1,0"  Grid.Column="1" Background="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" 
+            <Border Background="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}"
+                    Height="80" Width="227"
+                    Canvas.Left="193">
+                
+            </Border>
+            <Image  Canvas.Left="217" Canvas.Top="24"
                        Source="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"
-                       MaxHeight="30"
-                       MaxWidth="34"/>
-                <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
-                    <TextBlock  Style="{StaticResource TextBlockRoboto}"
-                                
-                                Text="СВЯЗЬ С ПРИБОРОМ"/>
-                </Viewbox>
-            </Grid>
+                       MaxHeight="32"
+                       MaxWidth="32"/>
+            <TextBlock  Style="{StaticResource TextBlockRoboto}" 
+                        Text="СВЯЗЬ С ПРИБОРОМ"
+                        Canvas.Top="30" 
+                        Canvas.Left="265"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
             <!--#endregion-->
             <!--#region Meas Indication -->
-            <Grid Margin="1,0,1,0" Grid.Column="2" Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" 
-                       Source="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"
-                       MaxHeight="30"
-                       MaxWidth="34"/>
-                <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
-                    <TextBlock  Style="{StaticResource TextBlockRoboto}" 
-                                Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasStatuses }}"/>
-                </Viewbox>
-            </Grid>
-            <!--#endregion-->
-            <!--#region HV Indication -->
-            <Grid Margin="1,0,1,0"  Grid.Column="3" Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" 
-                       Source="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"
-                       MaxHeight="30"
-                       MaxWidth="34"/>
-                <Viewbox Grid.Column="1" Margin="5" MaxHeight="16" HorizontalAlignment="Left">
-                    <TextBlock  Style="{StaticResource TextBlockRoboto}" 
-                                Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvStatuses }}"/>
-                </Viewbox>
-            </Grid>
-            <!--#endregion-->
-            <!--#region Serial Number -->
-            <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Серийный номер" Style="{StaticResource TextBlockRoboto}" Foreground="#6CFFFFFF"/>
-                <TextBlock Text="{Binding mainModel.SerialNumber.Value}" Style="{StaticResource TextBlockRoboto}" Foreground="#6CFFFFFF"/>
-            </StackPanel>
-            <!--#endregion-->
-            <!--#region DateTime -->
-           
-            <TextBox Grid.Column="5"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                     BorderThickness="0"
-                     IsEnabled="False"
-                     VerticalContentAlignment="Center"
-                     HorizontalContentAlignment="Center"
-                     Background="#2C2C2E"
-                     Foreground="#A2FFFFFF"
-                     Padding="10"
-                     Text="{Binding mainModel.Rtc.Value, StringFormat=HH:mm:ss   dd.MM.yyyy}"/>
-            <!--#endregion-->
-            <!--#region Authorization -->
-            <Grid Grid.Column="6">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.15*"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="0.15*"/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"
-                       MouseLeftButtonDown="Logout_click"
-                       Source="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserIcons }}" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center">                    
-                </Image>
-                <Viewbox Grid.Column="1" Margin="5">
-                    <TextBlock  Height="Auto"                                    
-                                Width="Auto"  
-                                Style="{StaticResource TextBlockRoboto}" 
-                                Text="{Binding CurUser, Converter={StaticResource UserToName}}"
-                                Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>                    
-                </Viewbox>
-                <Image Grid.Column="2" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Image>
-            </Grid>
-            <!--#endregion-->
-            <!--#region Buttom Exit -->
-            <Border Grid.Column="7" BorderBrush="#5B5B5B" BorderThickness="1,0,0,0">
-                <Grid Background="#000000">
-                    <Image Source="..\Resourses\Pictures\Clear.png" MaxHeight="32" MaxWidth="32">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding CloseAppCommand}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Image>
-                </Grid>
+            <Border Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}"
+                    Canvas.Left="421"
+                    Width="301"
+                    Height="80"> 
             </Border>
+            <Image Source="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
+                   HorizontalAlignment="Center" 
+                   Canvas.Left="445"
+                   Canvas.Top="24"
+                   VerticalAlignment="Center"
+                   Height="30"
+                   Width="34"/>
+            <TextBlock  Style="{StaticResource TextBlockRoboto}" 
+                        Canvas.Top="30"
+                        Canvas.Left="493"
+                        Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasStatuses }}"/>
             
             <!--#endregion-->
-        </Grid>
+            <!--#region HV Indication -->
+            <Border Background="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CommBackground }}"
+                    Canvas.Left="723"
+                    Width="222"
+                    
+                    Height="80">
+                
+            </Border>
+            <Image Source="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       Height="30"
+                   Canvas.Left="747"
+                   Canvas.Top="24"
+                       Width="34"/>
+            <TextBlock  Style="{StaticResource TextBlockRoboto}" 
+                                Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvStatuses }}"
+                        Canvas.Top="30"
+                        Canvas.Left="795"/>            
+            <!--#endregion-->
+            <!--#region Serial Number -->
+            <TextBlock Text="Серийный номер" Style="{StaticResource TextBlockRoboto}" FontSize="14" Foreground="#6CFFFFFF"
+                       Canvas.Top="21" Canvas.Left="1004" FontWeight="Regular"/>
+            <TextBlock Text="{Binding mainModel.SerialNumber.Value}" Style="{StaticResource TextBlockRoboto}" Foreground="#6CFFFFFF"
+                       Canvas.Left="1004" Canvas.Top="38"/>
+            
+            <!--#endregion-->
+            <!--#region DateTime -->
+            <Border Background="#2c2c2E"
+                    Height="38"
+                    Width="208"
+                    Canvas.Top="21"
+                    Canvas.Left="1224"
+                    >                
+            </Border>
+            <TextBlock Style="{StaticResource TextBlockRoboto}"
+                       Canvas.Top="30"
+                       Canvas.Left="1243"
+                       Foreground="#A2FFFFFF"
+                       Text="{Binding mainModel.Rtc.Value, StringFormat=HH:mm:ss   dd.MM.yyyy}">
+                
+            </TextBlock>
+                      
+            <!--#endregion-->
+            <!--#region Authorization -->
+            <Image     Height="32" Width="32"
+                       MouseLeftButtonDown="Logout_click"
+                       Source="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserIcons }}" 
+                       Canvas.Left="1472" Canvas.Top="23">
+            </Image>
+            <TextBlock    Canvas.Top="30"
+                          Canvas.Left="1527"
+                          FontSize="16"
+                          FontWeight="Regular"
+                                Style="{StaticResource TextBlockRoboto}" 
+                                Text="{Binding CurUser, Converter={StaticResource UserToName}}"
+                                Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
+            <Image Canvas.Left="1751" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Image>            
+            <!--#endregion-->
+            <!--#region REsize -->
+            <fa:ImageAwesome Icon="WindowRestore" Canvas.Left="1800" Canvas.Top="27" Foreground="White" Height="30"
+                             MouseDown="ImageAwesome_MouseDown"/>
+            <!--#endregion-->
+            <!--#region Buttom Exit -->
+            <Border  BorderBrush="#5B5B5B" BorderThickness="1,0,0,1" Background="Black" Canvas.Left="1840" Width="80" Height="80">
+                
+            </Border>
+            <Image Source="..\Resourses\Pictures\Clear.png" MaxHeight="32" MaxWidth="32" Canvas.Left="1864" Canvas.Top="23">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding CloseAppCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Image>
+            <!--#endregion-->            
+        </Canvas>        
     </Border>
    
 </UserControl>

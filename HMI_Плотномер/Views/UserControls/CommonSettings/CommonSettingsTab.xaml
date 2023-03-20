@@ -22,60 +22,67 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--#region Left panel -->
-        <ListBox HorizontalContentAlignment="Stretch" Margin="0,0,20,0"                 
+        <ListBox HorizontalContentAlignment="Stretch" Margin="40,20,20,0"                 
                  HorizontalAlignment="Left" 
                  Background="Transparent"
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
             <!--#region Calman settings -->
-            <GroupBox Header="Настройки фильтра Калмана"
-                      BorderThickness="0"
+            <GroupBox BorderThickness="0"
                       Margin="0,20,0,20"
                       FontSize="20">
-                <Border Background="Black">
+                <GroupBox.Header>
+                    <TextBlock Text="Настройки фильтра Калмана" Foreground="White" FontSize="20" FontWeight="Bold" FontFamily="Roboto" Margin="20,0,0,20"/>
+                </GroupBox.Header>
+                <Border Background="Black" HorizontalAlignment="Left">
                     <DataGrid CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               Background="Transparent"
                               AutoGenerateColumns="False"
+                              HorizontalAlignment="Left"
                               ItemsSource="{Binding VM.mainModel.KalmanSettings}"
                               BorderBrush="{StaticResource BorderNonActiveColor}"
                               BorderThickness="0,0,1,1">
                         <DataGrid.Columns>
                             <!--#region Id -->
-                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
+                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="110"
                                                     Header="№">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Index}" Style="{StaticResource Common}" Margin="5"/>
+                                        <TextBlock Text="{Binding Index}" Style="{StaticResource Common}" Margin="20" HorizontalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <!--#endregion-->
                             <!--#region Speed coeff -->
-                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЭФФИЦИЕНТ СКОРОСТИ">
+                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЭФФИЦИЕНТ СКОРОСТИ" MaxWidth="220">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <p:TextParameter DescriptionNotVisible="True"
+                                                         ParameterWidth="104"
                                                          DataContext="{Binding Speed}"
+                                                         Margin="20,5,0,5"
                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSpeedCommand}"
                                                          CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"
                                                          HorizontalAlignment="Center"
-                                                         Margin="5"/>
+                                                        />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <!--#endregion-->
                             <!--#region Smooth coeff -->
-                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЭФФИЦИЕНТ СГЛАЖИВАНИЯ">
+                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЭФФИЦИЕНТ СГЛАЖИВАНИЯ" MaxWidth="220">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <p:TextParameter DescriptionNotVisible="True"
                                                          DataContext="{Binding Smooth}"
+                                                         ParameterWidth="104"
+                                                         Margin="20,0,0,0"
                                                          CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Index}"
                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteKalmanSmoothCommand}"
                                                          HorizontalAlignment="Center"
-                                                         Margin="5"/>
+                                                         />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -86,11 +93,13 @@
             </GroupBox>
             <!--#endregion-->
             <!--#region Get temperature settings -->
-            <GroupBox Header="Настройки получения температуры"
-                      BorderThickness="0"
+            <GroupBox BorderThickness="0"
                       DataContext="{Binding VM.mainModel.GetTemperature}"
                       Margin="0,20,0,20"
                       FontSize="20">
+                <GroupBox.Header>
+                    <TextBlock Text="Настройки получения температуры" Foreground="White" FontSize="20" FontWeight="Bold" FontFamily="Roboto" Margin="20,0,0,20"/>
+                </GroupBox.Header>
                 <ListBox HorizontalContentAlignment="Stretch" Margin="0,0,20,0"                 
                  HorizontalAlignment="Stretch" 
                  Background="Transparent"
@@ -99,9 +108,10 @@
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
                     <!--#region Source -->
                     <DockPanel>
-                        <TextBlock Text="Источник температуры"/>
+                        <TextBlock Text="Источник температуры" Margin="20"/>
                         <ComboBox Height="40" Width="165" HorizontalAlignment="Right"
                                   SelectedIndex="{Binding Source}"
+                                  BorderBrush="{StaticResource BorderNonActiveColor}"
                                   ItemsSource="{StaticResource TempSrc}"
                                   Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
                                   FontSize="16"
@@ -136,12 +146,14 @@
                                 </DataGridTemplateColumn>
                                 <!--#endregion-->
                                 <!--#region Coeff A -->
-                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ A" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ A" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:TextParameter DataContext="{Binding A}"
                                                              DescriptionNotVisible="True" HorizontalAlignment="Center"
-                                                             Margin="5"
+                                                             ParameterWidth="104"
+                                                         Margin="20,5,0,5"
+                                                            
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempRecalculateSettingsCommand}"
                                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.ModNum}"/>
                                         </DataTemplate>
@@ -149,12 +161,13 @@
                                 </DataGridTemplateColumn>
                                 <!--#endregion-->
                                 <!--#region Coeff B -->
-                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ A" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ A" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:TextParameter DataContext="{Binding B}"
                                                              DescriptionNotVisible="True" HorizontalAlignment="Center"
-                                                             Margin="5"
+                                                              ParameterWidth="104"
+                                                         Margin="20,0,0,0"
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CommonSettingsVm.WriteTempRecalculateSettingsCommand}"
                                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.ModNum}"/>
                                         </DataTemplate>
@@ -173,9 +186,11 @@
         <!--#region Right panel -->
         <ListBox Grid.Column="1" HorizontalContentAlignment="Stretch"                  
                  HorizontalAlignment="Stretch" 
-                 
+                 Width="680"
+                 Margin="0,80,0,0"
                  Background="Transparent"
-                 BorderThickness="0"
+                 BorderThickness="0,1,0,0"
+                 BorderBrush="{StaticResource BorderNonActiveColor}"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
             <!--#region Device type -->
@@ -205,24 +220,24 @@
                              Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteIsotopNameCommand}"/>
             <!--#endregion-->
             <!--#region Source installation date -->
-            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceInstallDate}"
+            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceInstallDate}" CommandButtonVisibility="Hidden" DataTimeFormat="d" ParameterWidth="165"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceInstallDateCommand}"/>
             <!--#endregion-->
             <!--#region Source expiration date date -->
-            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceExpirationDate}"
+            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceExpirationDate}" CommandButtonVisibility="Hidden" DataTimeFormat="d" ParameterWidth="165"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceExpirationDateCommand}"/>
             <!--#endregion-->
             <!--#region Serial number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}" IsOnlyRead="True"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.SerialNumber}" IsOnlyRead="True" CommandButtonVisibility="Hidden"/>
             <!--#endregion-->
             <!--#region Order number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}" IsOnlyRead="True"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.OrderNumber}" IsOnlyRead="True" CommandButtonVisibility="Hidden"/>
             <!--#endregion-->
             <!--#region FW version -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}" IsOnlyRead="True"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.FwVersion}" IsOnlyRead="True" CommandButtonVisibility="Hidden"/>
             <!--#endregion-->
             <!--#region Customer number -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}" IsOnlyRead="True"/>
+            <p:TextParameter DataContext="{Binding VM.mainModel.CustNumber}" IsOnlyRead="True" CommandButtonVisibility="Hidden"/>
             <!--#endregion-->
             <!--#region Software shecksum SV -->
             <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">

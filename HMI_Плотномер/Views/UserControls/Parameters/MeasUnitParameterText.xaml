@@ -12,34 +12,38 @@
     <local:CommandExtention.Resources>
         <conv:GetMeasNumConverter x:Key="GetMeasNum"/>
         <conv:ToStringFormatConverter x:Key="StringFormatConverter"/>
-        <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
-        <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
+        <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>        
     </local:CommandExtention.Resources>
     <DockPanel MaxHeight="50">
         <DockPanel.Resources>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource ComboboxParameterStyle}"/>
             <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="#33FFFFFF"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="Aqua"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource AquaColor}"/>
                     </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="BorderBrush" Value="{StaticResource BorderNonActiveColor}"/>
-                    </Trigger>
+                    <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                        <Setter Property="BorderBrush"  Value="{StaticResource AquaColor}"/>
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
             <Style TargetType="TextBox">
+                <Setter Property="Foreground" Value="{StaticResource BorderNonActiveColor}"/>
                 <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                        <Setter Property="Foreground" Value="White"/>
+                    </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Foreground" Value="White"/>
                     </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource BorderNonActiveColor}"/>
-                    </Trigger>
+                    
                 </Style.Triggers>
             </Style>
         </DockPanel.Resources>
         <TextBlock Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                   Style="{StaticResource Common}"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"/>
         <StackPanel HorizontalAlignment="Right"
@@ -62,10 +66,9 @@
                          MaxWidth="65"
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                          FontWeight="Regular">
-
                         <TextBox.InputBindings>
-                            <KeyBinding  Key="Enter" Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=Command}" 
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=CommanDParameter }">
+                            <KeyBinding  Key="Enter"   Command="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommanDParameter }">
 
                             </KeyBinding>
                         </TextBox.InputBindings>
@@ -84,12 +87,13 @@
                         </TextBox.Text>
                     </TextBox>
                     <ComboBox Width="100" Name="MeasUnitSelector" 
-                              Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
+                             
                               VerticalContentAlignment="Center"
-                              FontSize="16"
+                              VerticalAlignment="Center"
+                              BorderBrush="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxBorderBrushes}}"
                               Height="{Binding ElementName=Border, Path=Height}"
                               HorizontalContentAlignment="Center"
-                              Background="Transparent"
+                              Background="{StaticResource PanelBorderColor}"
                               HorizontalAlignment="Right">
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay" >
@@ -108,20 +112,27 @@
                         </ComboBox.SelectedItem>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}" Foreground="Red"/>
+                                <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}"
+                                             FontSize="16" Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=Foreground}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </DockPanel>
                 
             </Border>
-           
-            <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+
+            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
+                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseUp">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=Command, Delay=200}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=CommanDParameter, Delay=200 }"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Border>
         </StackPanel>
         <DockPanel.ToolTip>
             <ToolTip Placement="MousePoint" BorderThickness="0">

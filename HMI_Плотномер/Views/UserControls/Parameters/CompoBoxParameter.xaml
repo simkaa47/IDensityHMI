@@ -9,10 +9,16 @@
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel MinHeight="50">        
+    <DockPanel MinHeight="50">
+        <DockPanel.Resources>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource ComboboxParameterStyle}">
+                
+            </Style>
+        </DockPanel.Resources>
         <TextBlock Style="{StaticResource Common}" 
                    Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                   Margin="20,0,0,0"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"/>
@@ -27,25 +33,31 @@
                   HorizontalContentAlignment="Left"
                   VerticalContentAlignment="Center"                  
                   FontSize="16"
-                  Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
-                  Background="Transparent"
+                  Background="{StaticResource PanelBorderColor}"
+                  BorderBrush="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxBorderBrushes}}"
                   FontFamily="Roboto"
                   FontWeight="Regular"
                   x:Name="Compo"
                   VerticalAlignment="Center">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="DropDownClosed">
-                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=Command}"
-                                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=CommanDParameter}"/>
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=CommanDParameter }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
-            <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
+                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=CommanDParameter }"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Border>
         </StackPanel>        
     </DockPanel>
 </local:CommandExtention>

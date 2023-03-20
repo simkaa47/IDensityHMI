@@ -10,14 +10,14 @@
              d:DataContext="{d:DesignInstance Type=vm:VM}"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
-    <Border Background="#1C1C1E" BorderThickness="1" BorderBrush="Aqua">
+    <Border Background="{StaticResource PanelBorderColor}" >
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <!--#region Trends Visibility-->
-            <ListBox  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0">
+            <ListBox  HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Margin="58,0,58,0">
                 <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}" 
                                        Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
                                        Check="{Binding TrendsVisible.VisLine1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -53,8 +53,13 @@
             <!--#region Other trend settings-->
             <ListBox Grid.Column="1" 
                      HorizontalContentAlignment="Stretch"
-                     VerticalAlignment="Center"
+                     VerticalAlignment="Top"
+                     Margin="0,58,0,0"
                      BorderThickness="0"
+                     FontSize="16"
+                               FontFamily="Roboto"
+                     Height="132"
+                     Width="280"
                      Background="Transparent">
                <!--#region Write Data if no measuring mode-->               
                 <DockPanel>
@@ -74,7 +79,9 @@
                 <DockPanel>
                     <TextBlock Foreground="White"
                            TextWrapping="Wrap"
-                           MaxWidth="200"
+                           MaxWidth="250"
+                               FontSize="16"
+                               FontFamily="Roboto"
                            VerticalAlignment="Center"
                            Text="Максимальное время отображения, мин"/>
                     <GroupBox Style="{StaticResource GroupBoxTrendStyle}" 

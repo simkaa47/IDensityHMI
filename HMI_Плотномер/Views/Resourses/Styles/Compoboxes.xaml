@@ -100,7 +100,7 @@
                     Grid.ColumnSpan="2"
                     CornerRadius="2"
                     BorderThickness="2"
-                    BorderBrush="{StaticResource BorderNonActiveColor}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
                     Background="Transparent"/>
                         <Border Grid.Column="0"
             CornerRadius="2,0,0,2"
@@ -121,7 +121,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Aqua"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#28BCBA"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -247,5 +247,18 @@
     </Style>
     <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle1}">
         
+    </Style>
+
+
+    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle1}" x:Key="ComboboxParameterStyle">
+        <Setter Property="Foreground" Value="#33FFFFFF"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

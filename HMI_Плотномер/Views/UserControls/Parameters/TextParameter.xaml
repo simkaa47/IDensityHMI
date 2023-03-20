@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:add="clr-namespace:IDensity.AddClasses"
              xmlns:fa="http://schemas.fontawesome.io/icons/"             
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
@@ -11,35 +12,42 @@
              mc:Ignorable="d"              
              d:DesignHeight="450" d:DesignWidth="800">
     <local:CommandExtention.Resources>
+        
         <conv:ToStringFormatConverter x:Key="StringFormatConverter"/>
         
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
     </local:CommandExtention.Resources>
-    <DockPanel MinHeight="50">
+    <DockPanel MinHeight="56">
         <DockPanel.Resources>
             <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="#33FFFFFF"/>
                 <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                        <Setter Property="BorderBrush" Value="#28BCBA"/>
+                    </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="Aqua"/>
+                        <Setter Property="BorderBrush" Value="#28BCBA"/>
                     </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="BorderBrush" Value="{StaticResource BorderNonActiveColor}"/>
-                    </Trigger>
+                   
                 </Style.Triggers>
             </Style>
             <Style TargetType="TextBox">
+                <Setter Property="Foreground" Value="#33FFFFFF"/>
                 <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsWriting}" Value="False">
+                        <Setter Property="Foreground" Value="White"/>
+                    </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Foreground" Value="White"/>
                     </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource BorderNonActiveColor}"/>
-                    </Trigger>
+                    
+                    
                 </Style.Triggers>
             </Style>
         </DockPanel.Resources>
         <TextBlock Text="{Binding Description}"
                    HorizontalAlignment="Left"
+                   Margin="20,0,0,0"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"/>
         <StackPanel HorizontalAlignment="Right"
@@ -50,7 +58,7 @@
                     Width="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=ParameterWidth, TargetNullValue=165}"
                     BorderThickness="2"
                     Background="Transparent">
-                <TextBox Background="Transparent"
+                <TextBox Background="Transparent"                         
                          Name="Input"
                          IsReadOnly="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=IsOnlyRead}"
                          BorderThickness="0"                                                 
@@ -79,12 +87,18 @@
                     </MultiBinding>
                 </TextBox>
             </Border>
-            <fa:ImageAwesome Visibility="{Binding IsWriting, Converter={StaticResource VisibleConverter}}" 
-                             Icon="Refresh" HorizontalAlignment="Center" MaxHeight="25"                                             
-                             Spin="{Binding IsWriting}"
-                             Height="25"
-                             Margin="5"
-                             Foreground="Aqua"/>
+            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}">
+                <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=Command}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=CommanDParameter }"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Border>            
         </StackPanel>
         <DockPanel.ToolTip>
             <ToolTip Placement="MousePoint" BorderThickness="0">

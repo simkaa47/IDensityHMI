@@ -8,13 +8,17 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:AnalogVm}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <GroupBox Header="Аналоговые входы" Margin="20"
-                  BorderThickness="0" FontSize="20">
+    <StackPanel Margin="40,0,0,0">
+        <GroupBox  BorderThickness="0" FontSize="20">
+            <GroupBox.Header>
+                <TextBlock Text="Аналоговые входы" FontSize="20" Foreground="White" FontFamily="Roboto" Margin="20,40,0,20"/>
+            </GroupBox.Header>
             <local:AnalogInputs/>
         </GroupBox>
-        <GroupBox Header="Аналоговые выходы" Margin="20"
-                  BorderThickness="0" FontSize="20">
+        <GroupBox BorderThickness="0" FontSize="20">
+            <GroupBox.Header>
+                <TextBlock Text="Аналоговые выходы" FontSize="20" Foreground="White" FontFamily="Roboto" Margin="20,40,0,20"/>
+            </GroupBox.Header>
             <local:AnalogOutput/>
         </GroupBox>
     </StackPanel>

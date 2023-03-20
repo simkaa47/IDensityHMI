@@ -4,6 +4,7 @@ using IDensity.ViewModels.Commands;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
@@ -38,6 +39,22 @@ namespace IDensity.ViewModels
             set => Set(ref _selectedStandartisation, value);
         }
         #endregion
+
+        #region Флаг копирования изм процесса
+        /// <summary>
+        /// Флаг копирования изм процесса
+        /// </summary>
+        private bool _isCopying;
+        /// <summary>
+        /// Флаг копирования изм процесса
+        /// </summary>
+        public bool IsWriting
+        {
+            get => _isCopying;
+            set => Set(ref _isCopying, value);
+        }
+        #endregion
+
 
 
         #region Selected Temp Compensation index
@@ -238,6 +255,8 @@ namespace IDensity.ViewModels
             if (par.ValidationOk) WriteTempCompensation(i.ToString(), par);
         }, canExecPar => true));
         #endregion
+
+
 
 
 
@@ -484,7 +503,9 @@ namespace IDensity.ViewModels
         private RelayCommand _copyMeasProcessCommand;
         public RelayCommand CopyMeasProcessCommand => _copyMeasProcessCommand ?? (_copyMeasProcessCommand = new RelayCommand(exec =>
           {
-              int par = (int)exec;
+              ushort par = 0;
+              if (exec == null) return;
+              if (!ushort.TryParse(exec.ToString(), out par)) return;              
               CopyMeasProcess(SelectedProcess, (ushort)par);
           }, canExec => VM.mainModel.Connecting.Value));
         #endregion       
@@ -492,6 +513,8 @@ namespace IDensity.ViewModels
         
         public void CopyMeasProcess(MeasProcSettings settings, ushort number)
         {
+            IsWriting = true;
+            VM.mainModel.MeasProcSettings[number].MeasDeep.PropertyChanged += ResetCipyFlag;            
             var header = $"*SETT,meas_proc={number}";
             var str = header + $",cntr={settings.MeasProcCounterNum.Value}";
             str += $",{CopyStandartisation(settings)}";
@@ -510,6 +533,14 @@ namespace IDensity.ViewModels
             str += $",calc_type={settings.CalculationType.Value}";
             str += $",{CopyVolumeCoeffs(settings)}";
             VM.CommService.Tcp.WriteMeasProcSettings(str + "#", number);
+        }
+
+        private void ResetCipyFlag(object o, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Value")
+            {
+                IsWriting = false;               
+            }
         }
 
         private string CopyStandartisation(MeasProcSettings settings)

@@ -5,21 +5,21 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Border Name="Border"  MinWidth="250" Margin="10,5,10,5" 
-                            BorderBrush="#28BCBA" Background="#1C1C1E" Height="68" Width="319"  BorderThickness="1" CornerRadius="2">
+                    <Border Name="Border"  Width="{TemplateBinding MinWidth}" Height="{TemplateBinding MinHeight}"  Margin="24,24,0,24" 
+                            BorderBrush="#8028BCBA" Background="#1C1C1E"  BorderThickness="1" CornerRadius="4">
                         <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
-                            <Image Name="I2"
-                                   Opacity="0.5"
+                            <Image Name="I2" 
+                                   Margin="10,0,10,0"
                                    Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" 
                                    MaxHeight="32"
                                    MaxWidth="32"/>
-                            <Label Name="L2"   
-                                   Opacity="0.5"
-                                   FontWeight="Light"  FontSize="24" FontFamily="Roboto"
-                                   ContentStringFormat="{TemplateBinding HeaderStringFormat}"
-                                   Content="{TemplateBinding Header}"
+                            <TextBlock Name="L2"  
+                                   
+                                     FontSize="20" FontFamily="Roboto" FontWeight="Medium"
+                                   Foreground="#FFFFFF"
+                                   Text="{TemplateBinding Header}"
                                    HorizontalAlignment="Left" 
-                                   VerticalAlignment="Center"></Label>
+                                   VerticalAlignment="Center"></TextBlock>
                         </DockPanel>
                     </Border>
 
@@ -41,35 +41,117 @@
         </Setter>
         
     </Style>
+
+    <Style TargetType="TabItem" x:Key="TabItemStyleFirst">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Border Name="Border"  Width="{TemplateBinding MinWidth}" Height="{TemplateBinding MinHeight}"  Margin="24,24,0,24" 
+                            BorderBrush="#8028BCBA" Background="#1C1C1E"  BorderThickness="1" CornerRadius="4">
+                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
+                            <Image Name="I2"
+                                   Opacity="0.5"
+                                   Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" 
+                                   MaxHeight="32"
+                                   MaxWidth="32"/>
+                            <TextBlock Name="L2"  
+                                   
+                                     FontSize="20" FontFamily="Roboto" FontWeight="Medium"
+                                   Foreground="#FFFFFF"
+                                   Text="{TemplateBinding Header}"
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Center"></TextBlock>
+                        </DockPanel>
+                    </Border>
+
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                            <Setter TargetName="L2" Property="Opacity" Value="1"/>
+                            <Setter TargetName="I2" Property="Opacity" Value="1"/>
+                            <Setter TargetName="Border" Property="Background" Value="#28BCBA"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style TargetType="TabItem" x:Key="TabItemStyleSecond">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Border Name="Border"  Width="{TemplateBinding MinWidth}" Height="{TemplateBinding MinHeight}"  Margin="17,24,0,24" 
+                            BorderBrush="#8028BCBA" Background="#1C1C1E"  BorderThickness="1" CornerRadius="4">
+                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="10,0,0,0">
+                            <Image Name="I2"
+                                   Opacity="0.5"
+                                   Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" 
+                                   MaxHeight="32"
+                                   MaxWidth="32"/>
+                            <TextBlock Name="L2"  
+                                   
+                                     FontSize="20" FontFamily="Roboto" FontWeight="SemiBold"
+                                   Foreground="#FFFFFF"
+                                   Text="{TemplateBinding Header}"
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Center"></TextBlock>
+                        </DockPanel>
+                    </Border>
+
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                            <Setter TargetName="L2" Property="Opacity" Value="1"/>
+                            <Setter TargetName="I2" Property="Opacity" Value="1"/>
+                            <Setter TargetName="Border" Property="Background" Value="#28BCBA"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+
     <Style TargetType="TabItem" BasedOn="{StaticResource TabItemStyleCommon}"/>
 
     <Style TargetType="TabItem" x:Key="TabItemSettingsStyle">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Viewbox MaxHeight="0.5 in">
-                        <StackPanel>
-                            <Border Name="Border"  Width="350"  
-                            BorderBrush="#28BCBA" Background="#2C2C2E" Height="60" BorderThickness="1" CornerRadius="2">
-                                <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="10,5,0,5">
-                                    <Image Name="I2"
+                    <StackPanel>
+                        <Border Name="Border"  Width="285"  
+                            BorderBrush="#33ffffff" Background="#2C2C2E" Height="48" BorderThickness="1" CornerRadius="0">
+                            <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="27,5,0,5">
+                                <Image Name="I2"
                                    Opacity="0.5"
                                    Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" 
                                    MaxHeight="32"
                                    MaxWidth="32"/>
-                                    <Label Name="L2"   
+                                <Label Name="L2"   
                                    Opacity="0.5"
-                                   FontWeight="Light"  FontSize="24" FontFamily="Roboto"
+                                   FontWeight="Normal"  FontSize="16" FontFamily="Roboto" 
                                    ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                    Content="{TemplateBinding Header}"
                                    HorizontalAlignment="Left" 
                                    VerticalAlignment="Center"></Label>
-                                </DockPanel>
-                            </Border>
+                            </DockPanel>
+                        </Border>
 
 
-                        </StackPanel>
-                    </Viewbox>
+                    </StackPanel>
 
 
                     <ControlTemplate.Triggers>
@@ -95,11 +177,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <Border Name="Border"   
-                            BorderBrush="#28BCBA" Background="#2C2C2E"  BorderThickness="1" CornerRadius="2">
-                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="5,0,0,0">
+                            BorderBrush="#33ffffff" Background="#2C2C2E"  BorderThickness="1" CornerRadius="0">
+                        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="-6,0,-8,-8">
                             <Label Name="L2"   
                                    Opacity="0.5"
-                                   FontWeight="Light"  FontSize="24" FontFamily="Roboto"
+                                   FontWeight="Normal"  FontSize="16" FontFamily="Roboto" 
                                    ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                    Content="{TemplateBinding Header}"
                                    HorizontalAlignment="Left"

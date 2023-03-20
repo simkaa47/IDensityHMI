@@ -16,22 +16,25 @@
             <sys:String>..\..\Resourses\Pictures\Comm_Ok.png</sys:String>
         </x:Array>
     </UserControl.Resources>
-    <ListBox Width="600" Background="Transparent"
+    <ListBox Width="439" Background="Transparent"
              BorderThickness="0"
+             Margin="40,20"
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
         <!--#region External temp -->
         <p:TextParameter DataContext="{Binding mainModel.TempTelemetry.TempExternal}"
-                         IsOnlyRead="True"/>
+                         IsOnlyRead="True" CommandButtonVisibility="Collapsed"
+                         ParameterWidth="87"/>
         <!--#endregion-->
         <!--#region Comm Indicator-->
         <DockPanel MinHeight="50" DataContext="{Binding mainModel.TempTelemetry.TempBoardCommState}">
-            <TextBlock Text="{Binding Description}" Style="{StaticResource Common}"/>
+            <TextBlock Text="{Binding Description}" Style="{StaticResource Common}" Margin="20,0,0,0"/>
             <Image Source="{Binding Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
                    HorizontalAlignment="Right" 
                    VerticalAlignment="Center"
                    MaxHeight="30"
+                   Margin="0,0,5,0"
                    MaxWidth="34"/>
         </DockPanel>
         <!--#endregion-->

@@ -9,51 +9,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}">
-    <Viewbox>        
-        <DockPanel>
-            <Border Background="{StaticResource BorderNonActiveColor}" Margin="2,2,1,2">
-                <TextBlock Text="ПРОЦЕССЫ:" FontSize="12" Foreground="White" VerticalAlignment="Center" Margin="7,0,7,0" />
-            </Border>
-            <ListBox ItemsSource="{Binding VM.mainModel.MeasProcSettings}"
-                     Name="ddd"
+    <DockPanel >
+        <Border Background="{StaticResource BorderNonActiveColor}" Margin="0,0,0,1" Width="136" Height="58">
+            <TextBlock Text="ПРОЦЕССЫ:" FontSize="15" FontFamily="Roboto" FontWeight="Medium" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
+        <ListBox ItemsSource="{Binding VM.mainModel.MeasProcSettings}"                     
                      HorizontalContentAlignment="Stretch"
                      SelectedItem="{Binding SelectedProcess, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                      SelectedIndex="0"
                      Focusable="False"
+                 ItemContainerStyle="{StaticResource MeasProcSelectorItemStyle}"
                      Background="Transparent"
                      BorderThickness="0"
-                     >
-                <ListBox.Resources>
-                    <x:Array Type="sys:String" x:Key="CheckBoxItems">
-                        <sys:String>..\..\Resourses\Pictures\RadioButtonUnChecked.png</sys:String>
-                        <sys:String>..\..\Resourses\Pictures\RadioButtonChecked.png</sys:String>
-                    </x:Array>
-                </ListBox.Resources>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Background" Value="{DynamicResource BorderNonActiveColor}"/>                        
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel Margin="10,0,10,0">
-                            <Image Height="12" Margin="5" Source="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CheckBoxItems}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="№ " VerticalAlignment="Center" Foreground="Gray" FontSize="8"/>
-                                <TextBlock Text="{Binding Num, StringFormat=0{0}}" FontWeight="Normal"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Foreground="White"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel>
-    </Viewbox>
+                     >            
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            
+            
+        </ListBox>
+    </DockPanel>
 </UserControl>

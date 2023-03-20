@@ -5,12 +5,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                    <TextBlock Text="{TemplateBinding Content}"
+                    <Border BorderThickness="1" BorderBrush="red">
+                        <TextBlock Text="{TemplateBinding Content}"
                                TextWrapping="Wrap"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Style="{StaticResource Common}"
                                Foreground="White"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

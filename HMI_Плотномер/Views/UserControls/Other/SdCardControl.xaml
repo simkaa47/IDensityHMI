@@ -25,7 +25,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--#region Table -->
-        <Border Background="Black" Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Border Background="Black" Margin="40,20" HorizontalAlignment="Left" VerticalAlignment="Top">
             <StackPanel>
                 <!--#region Table -->
                 <DataGrid CanUserAddRows="False"

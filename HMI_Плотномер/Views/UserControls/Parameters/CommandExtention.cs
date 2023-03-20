@@ -85,5 +85,17 @@ namespace IDensity.Core.Views.UserControls.Parameters
 
 
 
+        public Visibility CommandButtonVisibility
+        {
+            get { return (Visibility)GetValue(CommandButtonVisibilityProperty); }
+            set { SetValue(CommandButtonVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CommandButtonVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CommandButtonVisibilityProperty =
+            DependencyProperty.Register("CommandButtonVisibility", typeof(Visibility), typeof(CommandExtention), new PropertyMetadata(Visibility.Visible));
+
+
+
     }
 }
