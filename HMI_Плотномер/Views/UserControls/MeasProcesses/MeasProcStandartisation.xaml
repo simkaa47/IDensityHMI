@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:fa="http://schemas.fontawesome.io/icons/"    
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
@@ -15,7 +16,7 @@
         <!--#region Standartisations-->
         <StackPanel >
             <StackPanel.Resources>
-                <!--<Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>-->                
+                <conv:MultiplyOnNumberConverter x:Key="MultiplyOnNumberConverter"   Offset="0"/>
             </StackPanel.Resources>
             <Border Background="Black" Margin="0,50,0,0" HorizontalAlignment="Left">
                 <DataGrid Background="Transparent"
@@ -64,12 +65,12 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Stand duartion -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ, x 0.1 C." MaxWidth="223">                            
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ,  C." MaxWidth="223">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True" Margin="20,5,0,5"
                                               HorizontalAlignment="Center"
-                                                      ParameterWidth="109"
+                                              ParameterWidth="109"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

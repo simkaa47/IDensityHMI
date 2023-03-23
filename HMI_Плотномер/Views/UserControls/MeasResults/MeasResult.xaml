@@ -29,7 +29,7 @@
         <StackPanel Orientation="Horizontal" Canvas.Left="56" Canvas.Top="24">
             
             <StackPanel>
-                <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" Canvas.Top="24" Canvas.Left="56">
+                <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" Canvas.Top="24" Canvas.Left="56" MaxWidth="300" TextWrapping="Wrap">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource GetMeasProcType}">
                             <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
