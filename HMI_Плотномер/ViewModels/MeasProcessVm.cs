@@ -548,7 +548,7 @@ namespace IDensity.ViewModels
             string arg = string.Empty;
             foreach (var std in settings.MeasStandSettings)
             {
-                arg+= $"std={std.Id},0,{std.StandDuration.Value}," +
+                arg+= $"std={std.Id},0,{std.StandDuration.Value*10}," +
                     $"{std.LastStandDate.Value:dd:MM:yy}," +
                     $"{std.StandResult.Value.ToStringPoint()}," +
                     $"{std.StandPhysValue.Value.ToStringPoint()}," +

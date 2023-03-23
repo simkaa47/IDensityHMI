@@ -165,8 +165,9 @@
             </fa:ImageAwesome>
             <!--#endregion-->
             <!--#region Normal-Maximaze -->
-            <fa:ImageAwesome Icon="WindowRestore" Canvas.Left="1765" Canvas.Top="27" Foreground="White"  Width="30"
-                             MouseDown="Normal_Click" 
+            <fa:ImageAwesome Icon="WindowRestore" Canvas.Left="1765" Canvas.Top="27"   Width="30"
+                             MouseDown="Normal_Click"
+                             Foreground="White"
                              Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=WindowState, Converter={StaticResource VisibleIfEqual}, ConverterParameter=Maximized}">
                 <fa:ImageAwesome.ToolTip>
                     <TextBlock Text="Свернуть в окно"/>

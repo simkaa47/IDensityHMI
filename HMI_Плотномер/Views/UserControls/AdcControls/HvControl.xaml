@@ -16,7 +16,7 @@
             <sys:String>..\..\Resourses\Pictures\Comm_Ok.png</sys:String>
         </x:Array>
     </UserControl.Resources>
-    <ListBox Width="475" Background="Transparent"
+    <ListBox Width="550" Background="Transparent"
              BorderThickness="0"
              Margin="40,20"
              HorizontalAlignment="Left"
@@ -62,6 +62,23 @@
                    
                     Content="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvButn}}"
                     FontSize="16"/>
+        </DockPanel>
+        <!--#endregion-->
+        <!--#region External temp -->
+        <p:TextParameter DataContext="{Binding mainModel.TempTelemetry.TempInternal}"
+                         StringFormat="f1"
+                         IsOnlyRead="True" CommandButtonVisibility="Hidden"
+                         ParameterWidth="87"/>
+        <!--#endregion-->
+        <!--#region Comm Indicator-->
+        <DockPanel MinHeight="50" DataContext="{Binding mainModel.TempTelemetry.TempBoardCommState}">
+            <TextBlock Text="{Binding Description}" Style="{StaticResource Common}" Margin="20,0,0,0"/>
+            <Image Source="{Binding Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Center"
+                   MaxHeight="30"
+                   Margin="0,0,25,0"
+                   MaxWidth="34"/>
         </DockPanel>
         <!--#endregion-->
     </ListBox>

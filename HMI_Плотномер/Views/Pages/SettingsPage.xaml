@@ -99,21 +99,11 @@
             <mu:MeasNumControl DataContext="{Binding MeasUnitSettingsVm}"/>
         </TabItem>
         <!--#endregion-->
-        <!--#region Hv -->
-        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Плата HV"  >
+        <!--#region Boards -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Платы HV и питания"  >
             <adc:HvControl/>
         </TabItem>
-        <!--#endregion-->
-        <!--#region Supply board settings -->
-        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Плата питания"  >
-            <oth:SupplyBoardControl/>
-        </TabItem>
-        <!--#endregion-->
-        <!--#region Date and time settings -->
-        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Дата и время"  >
-            <oth:DateTimeSettingsControl/>
-        </TabItem>
-        <!--#endregion-->
+        <!--#endregion--> 
         <!--#region Communication -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Коммуникация"  >
             <oth:CommunicationControl DataContext="{Binding ConnectSettingsVm}"/>

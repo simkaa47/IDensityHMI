@@ -154,7 +154,7 @@ namespace IDensity.ViewModels
                     _vM.CommService.Tcp.GetMeasSettingsExternal(proc.Num);
                     standTimer.Stop();
                 };
-                standTimer.Interval = stand.StandDuration.Value * 100 + 4000;
+                standTimer.Interval = stand.StandDuration.Value * 1000 + 4000;
                 standTimer.Start();
                 IsStandartisation = true;
                 stand.IsStandartisation = true;
@@ -168,7 +168,7 @@ namespace IDensity.ViewModels
         {
            var str = $"*SETT,meas_proc={proc.Num}," +
            $"std={stand.Id},0," +
-           $"{(id=="duration" ? stand.StandDuration.WriteValue : stand.StandDuration.Value)}," +
+           $"{(id=="duration" ? stand.StandDuration.WriteValue*10 : stand.StandDuration.Value*10)}," +
            $"{(id == "date" ? stand.LastStandDate.WriteValue : stand.LastStandDate.Value).ToString("dd:MM:yy")}," +
            $"{(id == "result" ? stand.StandResult.WriteValue : stand.StandResult.Value).ToStringPoint()}," +
            $"{(id == "value" ? stand.StandPhysValue.WriteValue : stand.StandPhysValue.Value).ToStringPoint()}," +

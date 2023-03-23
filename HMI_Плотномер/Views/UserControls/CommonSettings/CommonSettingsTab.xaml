@@ -242,7 +242,7 @@
             <!--#region Software shecksum SV -->
             <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                 <DockPanel>
-                    <TextBlock Text="Задание контрольной суммы ПО прибора"/>
+                    <TextBlock Text="Задание контрольной суммы ПО прибора"  Margin="20,0,0,0"/>
                     <TextBox Width="165" Height="40" Template="{StaticResource TextBoxTemplate}" HorizontalAlignment="Right" Text="{Binding VM.mainModel.CheckSum.Value}"/>
                 </DockPanel>
             </ListBoxItem>
@@ -250,13 +250,33 @@
             <!--#region GetCheckSum -->
             <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
                 <DockPanel>
-                    <TextBlock Text="Запрос контрольной суммы ПО плотномера"/>
+                    <TextBlock Text="Запрос контрольной суммы ПО плотномера" Margin="20,0,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Text="{Binding VM.mainModel.CurCheckSum}" Width="125" Height="40" Template="{StaticResource TextBoxTemplate}"/>
                         <Button Content="-->" Command="{Binding GetCheckSumCommand}" Margin="5,5,0,5" Style="{StaticResource TypicalButton0}"/>
                     </StackPanel>
                 </DockPanel>
             </ListBoxItem>
+            <!--#endregion-->
+            <!--#region rtc set command -->
+            <p:DateTimeParameter DataContext="{Binding VM.mainModel.Rtc}"
+                             CommandButtonVisibility="Collapsed"
+                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.VM.SetRtcCommand}"/>
+            <!--#endregion-->
+            <!--#region Synchronize with PC time -->
+            <DockPanel MinHeight="50">
+                <TextBlock Text="Синхронизировать с временем ПК" Style="{StaticResource Common}" Margin="20,0,0,0"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource Common}" 
+                           Text="{Binding VM.CurPcDateTime, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}">
+
+                    </TextBlock>
+                    <Button Style="{StaticResource TypicalButton0}" Height="40" Width="40" Content="-->" FontSize="16"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Command="{Binding VM.SyncRtcCommand}"
+                        Margin="5,0,0,0"/>
+                </StackPanel>
+            </DockPanel>
             <!--#endregion-->
         </ListBox>
         <!--#endregion-->

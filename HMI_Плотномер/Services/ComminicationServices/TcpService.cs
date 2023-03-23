@@ -366,7 +366,7 @@ namespace IDensity.Services.ComminicationServices
             for (int i = 0; i < MeasProcSettings.StandCount; i++)
             {
                 _model.MeasProcSettings[num].MeasStandSettings[i].Id = i;
-                _model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)arr[2 + i * 8];
+                _model.MeasProcSettings[num].MeasStandSettings[i].StandDuration.Value = (ushort)(arr[2 + i * 8]/10);
                 int day = (ushort)arr[3 + i * 8];
                 day = day > 0 && day <= 31 ? day : 1;
                 int month = (ushort)arr[4 + i * 8];
