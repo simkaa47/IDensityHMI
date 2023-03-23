@@ -35,13 +35,14 @@ namespace IDensity
 
             InitializeComponent();
                                    
-        }       
+        }
 
-        
-        
-
-        
-
-       
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if(this.WindowState ==WindowState.Maximized)
+            {
+                this.WindowStyle = WindowStyle.None;
+            }
+        }
     }
 }

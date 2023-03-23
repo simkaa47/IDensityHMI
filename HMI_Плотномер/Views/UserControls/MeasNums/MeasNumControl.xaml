@@ -24,9 +24,9 @@
                       CanUserDeleteRows="False"
                       Background="Transparent"
                       BorderThickness="0"
+                          EnableRowVirtualization="False"
                       IsReadOnly="True"
-                      Margin="10"
-                      AlternationCount="{Binding MeasUnits.Count}"
+                      Margin="10"                      
                       ItemsSource="{Binding MeasUnits}"
                       SelectedItem="{Binding SelectedMeasUnit}">
                     <DataGrid.Columns>
@@ -34,7 +34,7 @@
                         <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Style="{StaticResource Common}" Margin="20" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex}" Foreground="White" HorizontalAlignment="Left"/>
+                                    <TextBlock Style="{StaticResource Common}" Margin="20" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, UpdateSourceTrigger=PropertyChanged}" Foreground="White" HorizontalAlignment="Left"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
