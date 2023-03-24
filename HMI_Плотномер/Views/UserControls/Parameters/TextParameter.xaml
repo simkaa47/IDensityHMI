@@ -85,6 +85,7 @@
                         </Binding>
                         <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="StringFormat"/>
                         <Binding RelativeSource="{RelativeSource AncestorType=local:CommandExtention}" Path="Coeff"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:CommandExtention}" Path="Offset"/>
                     </MultiBinding>
                 </TextBox>
             </Border>

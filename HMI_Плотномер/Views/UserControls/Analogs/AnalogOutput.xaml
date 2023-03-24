@@ -226,6 +226,8 @@
                             <p:TextParameter DescriptionNotVisible="True"
                                              ParameterWidth="80"
                                              Margin="20,5,0,5"
+                                             Coeff="0.001"
+                                             Offset="0"
                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.LowLimitMaWriteCommand}"
                                              DataContext="{Binding DacLowLimitMa}"
