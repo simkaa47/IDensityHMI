@@ -130,18 +130,31 @@ namespace IDensity.Core.ViewModels.MeasUnits
             {
                 new MeasUnit{Name="г/см^3",K=1, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
                 new MeasUnit{Name="кг/м^3",K=1000, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
-                new MeasUnit{Name="г/л",K=0.001f, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
-                new MeasUnit{Name="г/л",K=0.001f, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
-                new MeasUnit{Name="%",K=1, Offset = 0, Mode=2, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/л",K=1000, Offset = 0, Mode=0, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/см^3",K=1, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="кг/м^3",K=1000, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/л",K=1000, Offset = 0, Mode=1, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/см^3",K=1, Offset = 0, Mode=2, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="кг/м^3",K=1000, Offset = 0, Mode=2, DeviceType=0, UserCantDelete=true},
+                new MeasUnit{Name="г/л",K=1000, Offset = 0, Mode=2, DeviceType=0, UserCantDelete=true},
                 new MeasUnit{Name="%",K=1, Offset = 0, Mode=3, DeviceType=0, UserCantDelete=true},
                 new MeasUnit{Name="%",K=1, Offset = 0, Mode=4, DeviceType=0, UserCantDelete=true},
                 new MeasUnit{Name="%",K=1, Offset = 0, Mode=5, DeviceType=0, UserCantDelete=true},
                 new MeasUnit{Name="%",K=1, Offset = 0, Mode=6, DeviceType=0, UserCantDelete = true},
                 new MeasUnit{Name="мм",K=1, Offset=0, Mode=0, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="cм",K=0.1f, Offset=0, Mode=0, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="мм",K=0.1f, Offset=0, Mode=0, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="м",K=0.001f, Offset=0, Mode=0, DeviceType=1, UserCantDelete=true},
                 new MeasUnit{Name="%",K=1, Offset=0, Mode=1, DeviceType=1, UserCantDelete = true},
                 new MeasUnit{Name="м^3",K=1, Offset=0, Mode=2, DeviceType=1, UserCantDelete=true},
-                new MeasUnit{Name="мм/c",K=1, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true}
+                new MeasUnit{Name="см^3",K=1000000, Offset=0, Mode=2, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="мм/c",K=1, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="мм/мин",K=0.06f, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="см/с",K=0.1f, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="см/ч",K=360, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true},
+                new MeasUnit{Name="м/ч",K=3.6f, Offset=0, Mode=3, DeviceType=1, UserCantDelete=true},
+
+
             });
         }
 

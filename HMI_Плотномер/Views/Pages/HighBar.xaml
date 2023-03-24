@@ -157,22 +157,28 @@
             </Image>            
             <!--#endregion-->
             <!--#region Collapse -->
-            <fa:ImageAwesome Icon="WindowMinimize" Canvas.Left="1800" Canvas.Top="27" Foreground="White"  Width="30"
+            <Button Background="Transparent" BorderThickness="0" Canvas.Left="1765" Canvas.Top="27" Width="30" Height="30">
+                <fa:ImageAwesome Icon="WindowMinimize"  Foreground="White"  VerticalAlignment="Bottom"
                              MouseDown="Minimaze_Click">
-                <fa:ImageAwesome.ToolTip>
-                    <TextBlock Text="Свернуть полностью"/>
-                </fa:ImageAwesome.ToolTip>
-            </fa:ImageAwesome>
+                    <fa:ImageAwesome.ToolTip>
+                        <TextBlock Text="Свернуть полностью"/>
+                    </fa:ImageAwesome.ToolTip>
+                </fa:ImageAwesome>
+            </Button>
+            
             <!--#endregion-->
             <!--#region Normal-Maximaze -->
-            <fa:ImageAwesome Icon="WindowRestore" Canvas.Left="1765" Canvas.Top="27"   Width="30"
+            <Button Background="Transparent" BorderThickness="0" Canvas.Left="1800" Canvas.Top="27"   Width="30" Height="30">
+                <fa:ImageAwesome Icon="WindowRestore" 
                              MouseDown="Normal_Click"
                              Foreground="White"
                              Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=WindowState, Converter={StaticResource VisibleIfEqual}, ConverterParameter=Maximized}">
-                <fa:ImageAwesome.ToolTip>
-                    <TextBlock Text="Свернуть в окно"/>
-                </fa:ImageAwesome.ToolTip>
-            </fa:ImageAwesome>
+                    <fa:ImageAwesome.ToolTip>
+                        <TextBlock Text="Свернуть в окно"/>
+                    </fa:ImageAwesome.ToolTip>
+                </fa:ImageAwesome>
+            </Button>
+            
             
             <!--#endregion-->
             

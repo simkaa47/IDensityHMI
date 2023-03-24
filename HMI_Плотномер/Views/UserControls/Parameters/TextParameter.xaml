@@ -84,6 +84,7 @@
                             </Binding.ValidationRules>
                         </Binding>
                         <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="StringFormat"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:CommandExtention}" Path="Coeff"/>
                     </MultiBinding>
                 </TextBox>
             </Border>
