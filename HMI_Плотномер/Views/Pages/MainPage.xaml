@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:mr="clr-namespace:IDensity.Core.Views.UserControls.MeasResults"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
              xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
@@ -214,8 +215,10 @@
                 Canvas.Top="733"
                 Width="286"
                 Height="64"
-                        Style="{StaticResource ButtonWithBackground}" 
-                Background="#1c1c1e"
+                BorderBrush="{StaticResource AquaColor}"
+                BorderThickness="1"
+                Style="{StaticResource CommonButton}" 
+                Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsMeasSwitchColors}}"
                         FontSize="20"
                 FontWeight="Medium"
                         HorizontalContentAlignment="Center"
@@ -225,115 +228,11 @@
         <!--#endregion-->
         <!--#endregion-->
         <!--#region MEas Indication -->
-        <ListBox Canvas.Left="948"
-                 ItemsSource="{Binding mainModel.MeasResults}"
-                 Background="Transparent"
-                 BorderBrush="Transparent"                     
-                 HorizontalContentAlignment="Stretch"
-                 VerticalContentAlignment="Stretch">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Margin" Value="0"/>
-                    <Setter Property="Foreground" Value="Transparent"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Focusable" Value="False"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="False">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
-        <!--#endregion-->
-    </Canvas>
-    <!--
-            </TabControl>
-            --><!--#region Trend Settings--><!--
-            <ToggleButton Grid.Column="1"
-                          Style="{StaticResource NoStyle}"
-                          Margin="20"
-                          MaxHeight="30"
-                          MaxWidth="30"
-                          Background="Transparent"
-                          HorizontalAlignment="Right" 
-                          VerticalAlignment="Top"
-                          x:Name="ShowTrendSettinsButton">
-                <ToggleButton.ToolTip>
-                    <TextBlock Text="Настройки трендов"/>
-                </ToggleButton.ToolTip>
-                <Image Source="..\Resourses\Pictures\TuneIcon.png"/>                
-            </ToggleButton>
-            <Popup Height="Auto" Width="600"                   
-                   IsOpen="{Binding ElementName=ShowTrendSettinsButton, Path=IsChecked}"                   
-                   StaysOpen="False"                   
-                   Placement="MousePoint">
-                <trends:TrendSettingsControl/>
-            </Popup>
-            --><!--#endregion-->
-            <!--#endregion-->
-            <!--#region Bottom Indication --><!--
-            <Grid Grid.Column="0" Grid.Row="1" Background="{StaticResource PanelBorderColor}" Margin="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                
-                
-                --><!--#endregion-->
-                <!--#region Switch measuring button --><!--
-                <Button Grid.Column="2" 
-                        Style="{StaticResource TypicalButton0}" 
-                        Height="50"
-                        Width="200"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
-                        Command="{Binding SwitchMeasCommand}"/>
-                --><!--#endregion--><!--
-            </Grid>
-            --><!--#endregion--><!--
-            
-        </Grid>
-        --><!--#region Meas Indication --><!--
-        <Viewbox Grid.Column="1" VerticalAlignment="Top">
-            <ListBox ItemsSource="{Binding mainModel.MeasResults}"
-                     Background="Transparent"
-                     BorderBrush="Transparent"                     
-                     HorizontalContentAlignment="Stretch"
-                     VerticalContentAlignment="Stretch"
-                     Grid.RowSpan="2">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Foreground" Value="Transparent"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Focusable" Value="False"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsFocused" Value="False">
-                                <Setter Property="Background" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="Transparent"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
-        </Viewbox>
+        <StackPanel Canvas.Left="948">
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" IndicatorColor="#32d74b"/>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff"/>
+        </StackPanel>
         
-        --><!--#endregion--><!--
-    </Grid>-->
+        <!--#endregion-->
+    </Canvas>    
 </UserControl>

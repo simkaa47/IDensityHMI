@@ -63,4 +63,27 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="Button" x:Key="CommonButton">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="4" Name="Border"                            
+                             Background="{TemplateBinding Background}"
+                             Height="{TemplateBinding Height}"                            
+                             Width="{TemplateBinding Width}"
+                             BorderThickness="{TemplateBinding BorderThickness}"                            
+                             BorderBrush="{TemplateBinding BorderBrush}">
+                        <Grid>
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                          VerticalAlignment="Center"  
+                                          Margin="5"     
+                                          HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

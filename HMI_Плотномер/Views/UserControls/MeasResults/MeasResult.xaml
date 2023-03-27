@@ -82,11 +82,22 @@
         <!--#region Awg value -->
         <DockPanel Width="860" Height="156" Canvas.Left="56" Canvas.Top="100">
             <DockPanel DockPanel.Dock="Right" MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="#32d74b" FontWeight="Bold" FontSize="36"/>
-                <Rectangle DockPanel.Dock="Bottom" Fill="#32d74b" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,15" 
+                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
+                           FontWeight="Bold" 
+                           FontSize="36"/>
+                <Rectangle DockPanel.Dock="Bottom" 
+                           Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
+                           Height="12" 
+                           Stretch="UniformToFill" 
+                           VerticalAlignment="Bottom"/>
             </DockPanel>
             <DockPanel DockPanel.Dock="Left"  MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="100,0,100,0" VerticalAlignment="Bottom" Foreground="#32d74b" FontWeight="Bold" FontSize="115">
+                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,0" 
+                           VerticalAlignment="Bottom" 
+                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
+                           FontWeight="Bold" 
+                           FontSize="115">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
@@ -96,18 +107,22 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>                
-                <Rectangle DockPanel.Dock="Bottom" Fill="#32d74b" Height="4"  Stretch="UniformToFill" VerticalAlignment="Bottom" />
+                <Rectangle DockPanel.Dock="Bottom" 
+                           Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
+                           Height="4" 
+                           Stretch="UniformToFill" 
+                           VerticalAlignment="Bottom" />
             </DockPanel>
         </DockPanel>
         <!--#endregion-->
         <!--#region cur value -->
         <DockPanel Width="860" Height="156" Canvas.Left="56" Canvas.Top="275">
             <DockPanel DockPanel.Dock="Left" MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock Text="Мгновенное" DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
+                <TextBlock Text="Мгновенное" Margin="0,0,0,15"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
                 <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </DockPanel>
             <DockPanel DockPanel.Dock="Right"  MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="100,0,100,0" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="115">
+                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="25,0,25,0" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="115">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">

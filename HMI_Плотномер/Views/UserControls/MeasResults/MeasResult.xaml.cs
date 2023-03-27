@@ -22,5 +22,23 @@ namespace IDensity.Core.Views.UserControls.MeasResults
         {
             InitializeComponent();
         }
+
+
+
+        public Brush IndicatorColor
+        {
+            get { return (Brush)GetValue(IndicatorColorProperty); }
+            set { SetValue(IndicatorColorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IndicatorColor.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IndicatorColorProperty =
+            DependencyProperty.Register("IndicatorColor", typeof(Brush), typeof(MeasResult), new PropertyMetadata(Brushes.WhiteSmoke));
+
+
+
+
+
+
     }
 }
