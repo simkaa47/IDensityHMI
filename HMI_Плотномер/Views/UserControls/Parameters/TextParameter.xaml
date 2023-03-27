@@ -84,8 +84,8 @@
                             </Binding.ValidationRules>
                         </Binding>
                         <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="StringFormat"/>
-                        <Binding RelativeSource="{RelativeSource AncestorType=local:CommandExtention}" Path="Coeff"/>
-                        <Binding RelativeSource="{RelativeSource AncestorType=local:CommandExtention}" Path="Offset"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:TextParameter}" Path="Coeff" UpdateSourceTrigger="PropertyChanged" Mode="OneWay"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:TextParameter}" Path="Offset"/>
                     </MultiBinding>
                 </TextBox>
             </Border>

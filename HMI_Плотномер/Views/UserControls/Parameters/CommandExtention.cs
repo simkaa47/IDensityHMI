@@ -98,27 +98,27 @@ namespace IDensity.Core.Views.UserControls.Parameters
 
 
 
-        public float Coeff
+        public object Coeff
         {
-            get { return (float)GetValue(CoeffProperty); }
+            get { return (object)GetValue(CoeffProperty); }
             set { SetValue(CoeffProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Coeff.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CoeffProperty =
-            DependencyProperty.Register("Coeff", typeof(float), typeof(CommandExtention), new PropertyMetadata(0f));
+            DependencyProperty.Register("Coeff", typeof(object), typeof(CommandExtention), new PropertyMetadata(null));
 
 
 
-        public float Offset
+        public object Offset
         {
-            get { return (float)GetValue(OffsetProperty); }
+            get { return (object)GetValue(OffsetProperty); }
             set { SetValue(OffsetProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Offset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OffsetProperty =
-            DependencyProperty.Register("Offset", typeof(float), typeof(CommandExtention), new PropertyMetadata(0f));
+            DependencyProperty.Register("Offset", typeof(object), typeof(CommandExtention), new PropertyMetadata(null));
 
 
     }

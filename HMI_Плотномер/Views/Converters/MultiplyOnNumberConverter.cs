@@ -14,10 +14,10 @@ namespace IDensity.Core.Views.Converters
         {
             float temp = 0;
             if (value is null) return 0;
-            if(float.TryParse(value.ToString(), out temp)) return 0;
+            if(!float.TryParse(value.ToString(), out temp)) return 0;
             float x = temp;
             if (parameter is null) return 0;
-            if (float.TryParse(parameter.ToString(), out temp)) return 0;
+            if (!float.TryParse(parameter.ToString(), out temp)) return 0;
             float k = temp;
             return k * x + Offset;
         }

@@ -30,6 +30,7 @@
         <!--#region Input voltage -->
         <p:TextParameter DataContext="{Binding mainModel.TelemetryHV.VoltageCurIn}"
                          ParameterWidth="87" CommandButtonVisibility="Hidden"
+                         StringFormat="f1" 
                          IsOnlyRead="True"/>
         <!--#endregion-->
         <!--#region Output voltage -->
@@ -66,7 +67,7 @@
         <!--#endregion-->
         <!--#region External temp -->
         <p:TextParameter DataContext="{Binding mainModel.TempTelemetry.TempInternal}"
-                         StringFormat="f1"
+                         StringFormat="f1"                         
                          IsOnlyRead="True" CommandButtonVisibility="Hidden"
                          ParameterWidth="87"/>
         <!--#endregion-->

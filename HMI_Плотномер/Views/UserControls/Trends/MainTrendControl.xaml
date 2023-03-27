@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
    
     <Grid>
-        <oxy:Plot PlotMargins="80,0,0,30"                  
+        <oxy:Plot PlotMargins="50,0,0,30"                  
                       PlotType="XY"                   
                       PlotAreaBorderThickness="1"
                       TextColor="#80FFFFFF" 
