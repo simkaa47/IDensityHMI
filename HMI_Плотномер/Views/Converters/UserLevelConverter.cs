@@ -14,7 +14,7 @@ namespace IDensity.Core.Views.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
 
-            var user = value as User;
+           var user = value as User;
             string param = parameter as string;
             if (user == null || param == null) return Visibility.Collapsed;
             int GetIndexOfName(string name)

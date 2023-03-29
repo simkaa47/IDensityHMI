@@ -7,6 +7,7 @@
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:fa="http://schemas.fontawesome.io/icons/"    
+             xmlns:bp="clr-namespace:IDensity.Core.Views"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasProcesses"
              mc:Ignorable="d" 
@@ -47,9 +48,12 @@
                             </Style.Triggers>
                         </Style>
                     </DataGrid.RowStyle>
+                    <DataGrid.Resources>
+                        <bp:BindingProxy  x:Key="AdminVisibility" Data="{Binding VM.CurUser}"/>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <!--#region Type-->
-                        <DataGridTemplateColumn  Header="ТИП" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">                            
+                        <DataGridTemplateColumn  Header="ТИП" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="160">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock TextWrapping="Wrap" Style="{StaticResource Common}" Margin="20">
@@ -63,7 +67,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--#endregion-->
+                        <!--#endregion-->                        
                         <!--#region Stand duartion -->
                         <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ,  C." MaxWidth="223">                            
                             <DataGridTemplateColumn.CellTemplate>
@@ -72,6 +76,22 @@
                                               HorizontalAlignment="Center"
                                               ParameterWidth="109"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Phys value -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ФИЗИЧЕСКАЯ ВЕЛИЧИНА">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"
+                                             DescriptionNotVisible="True"
+                                             HorizontalAlignment="Center"
+                                             Margin="20,5,0,5"
+                                             MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
+                                             MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
+                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
+
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -107,7 +127,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Half life value -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА" MaxWidth="225">                            
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" 
+                                                
+                                                Visibility="{Binding Source={StaticResource AdminVisibility}, Path=Data, Mode=TwoWay, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор, UpdateSourceTrigger=PropertyChanged}"
+                                                Header="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА" MaxWidth="225">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DataContext="{Binding HalfLifeCorr}"
@@ -119,25 +142,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--#endregion-->
-                        <!--#region Phys value -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ФИЗИЧЕСКАЯ ВЕЛИЧИНА">                            
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"
-                                             DescriptionNotVisible="True"
-                                             HorizontalAlignment="Center"
-                                             Margin="20,5,0,5"
-                                             MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
-                                             MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
-                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
-
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <!--#endregion-->
+                        <!--#endregion-->                        
                         <!--#region Make standartisation Command-->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="УПРАВЛЕНИЕ">                            
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ПРОВЕСТИ СТАНДАРТИЗАЦИЮ" Width="160">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid MaxHeight="40">

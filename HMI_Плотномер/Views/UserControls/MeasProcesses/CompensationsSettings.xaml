@@ -16,126 +16,134 @@
         <ListBox HorizontalContentAlignment="Stretch"                   
                  HorizontalAlignment="Left" 
                  Background="Transparent"
+                 Width="750"
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
             <!--#region Temp cpmpensation -->
-            <GroupBox Header="Температурная компенсация"
-                      FontSize="20"
+            <ListBoxItem Visibility="{Binding VM.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}">
+                <GroupBox Header="Температурная компенсация"
+                      FontSize="20" HorizontalAlignment="Left"
                       Margin="0,40,0,00"
                       BorderThickness="0">
-                <Border Background="Black" Margin="-5,10,0,0">
-                    <DataGrid Background="Transparent"
+                    <Border Background="Black" Margin="-5,10,0,0">
+                        <DataGrid Background="Transparent"
                           CanUserAddRows="False"
+                                  HorizontalAlignment="Left"
                           CanUserDeleteRows="False"                          
                           AutoGenerateColumns="False"
                           SelectedIndex="{Binding TempCompensationIndex}"
                           BorderThickness="0"
                           ItemsSource="{Binding SelectedProcess.TempCompensations}">
-                        <DataGrid.Columns>
-                            <!--#region Index -->
-                            <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
+                            <DataGrid.Columns>
+                                <!--#region Index -->
+                                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                                 Header="ТИП" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock TextWrapping="Wrap" Style="{StaticResource Common}" Margin="20">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource StringByIndex}">
-                                                    <Binding Path="Index"/>
-                                                    <Binding Source="{StaticResource TempCompensDestinations}"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <!--#endregion-->
-                            <!--#region Activity -->
-                            <DataGridTemplateColumn Header="АКТИВНОСТЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <p:CheckParameter DescriptionNotVisible="True" DataContext="{Binding Activity}"
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Style="{StaticResource Common}" Margin="20">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource StringByIndex}">
+                                                        <Binding Path="Index"/>
+                                                        <Binding Source="{StaticResource TempCompensDestinations}"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region Activity -->
+                                <DataGridTemplateColumn Header="АКТИВНОСТЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <p:CheckParameter DescriptionNotVisible="True" DataContext="{Binding Activity}"
                                                       HorizontalAlignment="Center"
                                                           Margin="5"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationActivityWriteCommand}"
                                                       VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <!--#endregion-->
-                            <!--#region Coeff 0 -->
-                            <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ 0" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[0]}"
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region Coeff 0 -->
+                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ 0" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[0]}"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationCoeffCommand}"
                                                       CommanDParameter="0"
                                                          ParameterWidth="104"
                                                          Margin="20,0,0,0"
                                                       HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <!--#endregion-->
-                            <!--#region Coeff 1 -->
-                            <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ 1"  HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[1]}"
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                                <!--#region Coeff 1 -->
+                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ 1"  HeaderTemplate="{StaticResource DataGridHeaderTemplate}" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[1]}"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationCoeffCommand}"
                                                       CommanDParameter="1"
                                                          Margin="20,0,0,0"
                                                          ParameterWidth="104"
                                                       HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
 
-                            </DataGridTemplateColumn>
-                            <!--#endregion-->
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>
-                
-            </GroupBox>
+                                </DataGridTemplateColumn>
+                                <!--#endregion-->
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+
+                </GroupBox>
+            </ListBoxItem>
+            
             <!--#endregion-->
             <!--#region Steam compensation -->
-            <GroupBox Header="Компенсация паровой фазы"
+            <ListBoxItem Visibility="{Binding VM.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
+                <GroupBox Header="Компенсация паровой фазы"
                       Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}"
                       FontSize="20"
                       Margin="0,20,0,0"
                       HorizontalContentAlignment="Stretch"
                       BorderThickness="0">
-                <ListBox  HorizontalContentAlignment="Stretch"                   
+                    <ListBox  HorizontalContentAlignment="Stretch"                   
                  HorizontalAlignment="Stretch" 
                           Margin="0,20,0,0"
                  Background="Transparent"
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
-                    <!--#region Activity -->
-                    <p:CheckParameter DataContext="{Binding SelectedProcess.SteamCompensation.Activity}" HorizontalAlignment="Stretch"
+                        <!--#region Activity -->
+                        <p:CheckParameter DataContext="{Binding SelectedProcess.SteamCompensation.Activity}" HorizontalAlignment="Stretch"
                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompActivityWriteCommand}"/>
-                    <!--#endregion-->
-                    <!--#region Source -->
-                    <p:CompoBoxParameter DataContext="{Binding SelectedProcess.SteamCompensation.Sourse}"
+                        <!--#endregion-->
+                        <!--#region Source -->
+                        <p:CompoBoxParameter DataContext="{Binding SelectedProcess.SteamCompensation.Sourse}"
                                          Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                          Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompSourceWriteCommand}"
                                          ItemsSource="{StaticResource TempSrc}"/>
-                    <!--#endregion-->
-                    <!--#region A -->
-                    <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.A}"
+                        <!--#endregion-->
+                        <!--#region A -->
+                        <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.A}"
                                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompensationWriteACommand}"/>
-                    <!--#endregion-->
-                    <!--#region B -->
-                    <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.B}"
+                        <!--#endregion-->
+                        <!--#region B -->
+                        <p:TextParameter DataContext="{Binding SelectedProcess.SteamCompensation.B}"
                                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SteamCompensationWriteBCommand}"/>
-                    <!--#endregion-->
-                </ListBox>
-            </GroupBox>
+                        <!--#endregion-->
+                    </ListBox>
+                </GroupBox>
+            </ListBoxItem>
+            
             <!--#endregion-->
         </ListBox>
     </Grid>

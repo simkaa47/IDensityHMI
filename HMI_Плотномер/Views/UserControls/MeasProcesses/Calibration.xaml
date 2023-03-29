@@ -62,7 +62,7 @@
                     </TextBox>
                     <ComboBox Name="MUnit" Width="80"
                               Height="40"
-                              Background="Transparent"
+                              Background="Transparent"                              
                               FontSize="16"
                               BorderBrush="{StaticResource BorderNonActiveColor}"
                               Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"
@@ -71,16 +71,16 @@
                         <!--#region ЕИ -->
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource SingleMeasPhysValueNum}" Mode="OneWay" >
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                                <Binding  Path="VM.MeasUnitSettingsVm.MeasUnits"/>
                                 <Binding Path="SelectedProcess.MeasType.Value"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                                <Binding Path="VM.mainModel.DeviceType.Value"/>
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedItem>
                             <MultiBinding Converter="{StaticResource SingleMeasPhysValueNum}" Mode="OneWay">
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                                <Binding  Path="VM.MeasUnitSettingsVm.MeasUnits"/>
                                 <Binding Path="SelectedProcess.MeasType.Value"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                                <Binding Path="VM.mainModel.DeviceType.Value"/>
                                 <Binding Path="CalibrationVm.MeasUnitMemoryId"/>
                             </MultiBinding>
                         </ComboBox.SelectedItem>
@@ -90,7 +90,7 @@
                                              FontSize="16" Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=Foreground}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
-                        <!--#endregion-->
+                        <!--#endregion -->
                     </ComboBox>
                 </StackPanel>
             </DockPanel>
@@ -111,9 +111,10 @@
                     <Border Background="Black" Margin="0,20,0,0">
                         <DataGrid CanUserAddRows="False" 
                              SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"                            
-                             BorderThickness="0"
+                             BorderThickness="1,0,1,0"
                              FontWeight="Regular"
                              Background="Transparent"
+                                  BorderBrush="{StaticResource BorderNonActiveColor}"
                              CanUserDeleteRows="False" 
                              ItemsSource="{Binding SelectedProcess.SingleMeasResults}"
                              AutoGenerateColumns="False">

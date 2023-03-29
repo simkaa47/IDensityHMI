@@ -19,7 +19,21 @@
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">            
-            <ListBox.Resources>                
+            <ListBox.Resources>
+                <Style TargetType="ListBoxItem" x:Key="AttenuationVisibleParameters" BasedOn="{StaticResource ParameterListBoxItem}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value}" Value="0"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.SelectedProcess.CalculationType.Value}" Value="1"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
                 <conv:PipeDiameterConverter x:Key="PipeDiameterVisibilityConverter"/>
             </ListBox.Resources>            
 
@@ -54,6 +68,7 @@
             <!--#endregion-->
             <!--#region Fast Change Threshold -->
             <p:TextParameter DataContext="{Binding SelectedProcess.FastChange.Threshold}"
+                             Coeff="0,1"
                              Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteFastChangeThresholdCommand}"/>
             <!--#endregion-->
             <!--#region Pipe diameter -->
@@ -76,12 +91,15 @@
                               Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteActivityCommand}"/>
             <!--#endregion-->
             <!--#region Attenuatuin coeefs -->
-            <p:TextParameter DataContext="{Binding SelectedProcess.AttCoeffs[0]}"
-                             Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
-           
-            
-            <p:TextParameter DataContext="{Binding SelectedProcess.AttCoeffs[1]}"
-                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+            <ListBoxItem DataContext="{Binding SelectedProcess.AttCoeffs[0]}" Style="{StaticResource AttenuationVisibleParameters}">
+                <p:TextParameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+            </ListBoxItem>
+            <ListBoxItem DataContext="{Binding SelectedProcess.AttCoeffs[1]}" Style="{StaticResource AttenuationVisibleParameters}">
+                <p:TextParameter Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteAttenuationCommand}"/>
+            </ListBoxItem>
+
+
+
             <!--#endregion-->
             <!--#region Volume Coeefs -->
             <ListBoxItem Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=1}">
