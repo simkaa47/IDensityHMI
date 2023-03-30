@@ -142,7 +142,7 @@
 
                     </Style.Triggers>
                 </Style>
-                <Style TargetType="TextBox">
+                <Style TargetType="TextBox" x:Key="ConnectStyle">
                     <Setter Property="Foreground" Value="#33FFFFFF"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding VM.mainModel.TcpWriting}" Value="False">
@@ -151,10 +151,9 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>
-
-
                     </Style.Triggers>
                 </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource ConnectStyle}"/>
             </GroupBox.Resources>
             <ListBox Background="Transparent"                     
                      BorderThickness="0,1,0,0"
@@ -272,6 +271,92 @@
                         </Border>
                     </StackPanel>
                 </DockPanel>
+                <!--#endregion-->
+                <!--Mac-->
+                <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                    <DockPanel>
+                        <TextBlock Text="MAC-адрес"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Border CornerRadius="4"
+                            Height="40"                                       
+                            Width="240"
+                            BorderThickness="2"
+                            Background="Transparent">
+                                <Border.Resources>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource ConnectStyle}">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="FontFamily" Value="Roboto"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="CaretBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"/>
+                                        <Setter Property="FontWeight" Value="Regular"/>                                        
+                                    </Style>
+                                </Border.Resources>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <!--Mac0-->
+                                    <TextBox Text="{Binding VM.mainModel.Mac[0], UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding  Key="Enter"   Command="{Binding MacAddrWriteCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBlock Text=":"/>
+                                    <!--#endregion-->
+                                    <!--Mac1-->
+                                    <TextBox Text="{Binding VM.mainModel.Mac[1], UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding  Key="Enter"   Command="{Binding MacAddrWriteCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBlock Text=":"/>
+                                    <!--#endregion-->
+                                    <!--Mac2-->
+                                    <TextBox Text="{Binding VM.mainModel.Mac[2], UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding  Key="Enter"   Command="{Binding MacAddrWriteCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBlock Text=":"/>
+                                    <!--#endregion-->
+                                    <!--Mac3-->
+                                    <TextBox Text="{Binding VM.mainModel.Mac[3], UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding  Key="Enter"   Command="{Binding MacAddrWriteCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBlock Text=":"/>
+                                    <!--#endregion-->
+                                    <!--Mac4-->
+                                    <TextBox Text="{Binding VM.mainModel.Mac[4], UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding  Key="Enter"   Command="{Binding MacAddrWriteCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBlock Text=":"/>
+                                    <!--#endregion-->
+                                    <!--Mac5-->
+                                    <TextBox Text="{Binding VM.mainModel.Mac[5], UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding  Key="Enter"   Command="{Binding MacAddrWriteCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>                                    
+                                    <!--#endregion-->
+                                </StackPanel>
+                               
+                            </Border>
+                            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  VM.mainModel.MacWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                                <Image Source="{Binding  VM.mainModel.MacWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDown">
+                                        <i:InvokeCommandAction Command="{Binding MacAddrWriteCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Border>
+                        </StackPanel>
+                    </DockPanel>
+                </ListBoxItem>
                 <!--#endregion-->
 
             </ListBox>

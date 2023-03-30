@@ -53,21 +53,7 @@ namespace IDensity.ViewModels
         }
         #endregion
 
-        #region Команды
-
-        #region Записать имя прибора
-        /// <summary>
-        /// Записать имя прибора
-        /// </summary>
-        RelayCommand _writeDeviceNameCommand;
-        /// <summary>
-        /// Записать имя прибора
-        /// </summary>
-        public RelayCommand WriteDeviceNameCommand => _writeDeviceNameCommand ?? (_writeDeviceNameCommand = new RelayCommand(execPar =>
-        {
-            WriteDeviceName(VM.mainModel);
-        }, canExecPar => true));
-        #endregion
+        #region Команды        
 
         #region Записать имя изотопа
         /// <summary>
@@ -109,21 +95,7 @@ namespace IDensity.ViewModels
         {
             WriteSourceExpirationDate(VM.mainModel);
         }, canExecPar => true));
-        #endregion
-
-        #region Записать настройки периода полураспада
-        /// <summary>
-        /// Записать настройки периода полураспада
-        /// </summary>
-        RelayCommand _writeHalfLifeCommand;
-        /// <summary>
-        /// Записать настройки периода полураспада
-        /// </summary>
-        public RelayCommand WriteHalfLifeCommand => _writeHalfLifeCommand ?? (_writeHalfLifeCommand = new RelayCommand(execPar =>
-        {            
-            WriteHalfLife(VM.mainModel);
-        }, canExecPar => true));
-        #endregion
+        #endregion        
 
         #region Browse для пути файла импорта-экспорта
         /// <summary>
@@ -257,9 +229,7 @@ namespace IDensity.ViewModels
             {
                 VM.CommService.WriteCounterSettings(diap);
             }
-            // Запись общих настроек
-            WriteHalfLife(fromFile);
-            WriteDeviceName(fromFile);
+            // Запись общих настроек            
             WriteIsotope(fromFile);
             WriteSourceInstallDate(fromFile);
             WriteSourceExpirationDate(fromFile);
@@ -285,26 +255,7 @@ namespace IDensity.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        void WriteHalfLife(MainModel model)
-        {
-            VM.mainModel.HalfLife.IsWriting = true;
-            VM.CommService.WriteCommonSettings($"half_life={model.HalfLife.WriteValue.ToStringPoint()}");
-        }
-
-        void WriteDeviceName(MainModel model)
-        {
-            model.DeviceName.IsWriting = true;
-            VM.CommService.WriteCommonSettings($"name={model.DeviceName.WriteValue.Substring(0, Math.Min(model.DeviceName.WriteValue.Length, 10))}");
-        }
-
-        void WriteIsotope(MainModel model)
-        {
-            model.IsotopName.IsWriting = true;
-            var len = Math.Min(model.IsotopName.WriteValue.Length, 10);
-            VM.CommService.WriteCommonSettings($"isotope={model.IsotopName.WriteValue.Substring(0, len)}");
-        }
+        }        
 
         void WriteSourceInstallDate(MainModel model)
         {
@@ -359,6 +310,12 @@ namespace IDensity.ViewModels
         {
             string arg = $"*SETT,levelmeter_ln={value.ToStringPoint()}#";
             VM.CommService.Tcp.SetFsrd8(arg);
+        }
+
+        void WriteIsotope(MainModel model)
+        {
+            model.IsotopeIndex.IsWriting = true;            
+            VM.CommService.WriteCommonSettings($"isotope={model.IsotopeIndex.WriteValue}");
         }
     }
 

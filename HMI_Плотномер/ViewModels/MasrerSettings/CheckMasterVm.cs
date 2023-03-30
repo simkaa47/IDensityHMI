@@ -271,8 +271,7 @@ namespace IDensity.ViewModels.MasrerSettings
         }
 
         void GetDeviceInformation()
-        {
-            DeviceInfo.DeviceName = VM.mainModel.DeviceName.Value;
+        {            
             DeviceInfo.HmiSoftwareNumber = App.VersionNumber;
             DeviceInfo.SerialNumber = VM.mainModel.SerialNumber.Value;
         }

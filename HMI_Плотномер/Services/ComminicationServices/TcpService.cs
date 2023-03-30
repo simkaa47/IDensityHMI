@@ -607,11 +607,11 @@ namespace IDensity.Services.ComminicationServices
             list = GetNumber("preamp_gain", 1, 1, str);
             if (list == null) return;
             _model.AdcBoardSettings.PreampGain.Value = (ushort)list[0][0];
-            list = GetNumber("half_life", 1, 1, str);
-            if (list == null) return;
-            _model.HalfLife.Value = list[0][0];
-            _model.DeviceName.Value = GetStringById("name", str);
-            _model.IsotopName.Value = GetStringById("isotope", str);
+
+            _model.IsotopeNames = GetStringById("isotope", str, 4);
+            _model.IsotopeIndex.Value = (byte)GetNumber("isotope_index", 1, 1, str)[0][0];
+           
+            
             float.TryParse(GetStringById("pipe_diameter", str), out float temp);
             _model.SourceInstallDate.Value = GetDate(GetStringById("src_inst_date", str));
             _model.SourceExpirationDate.Value = GetDate(GetStringById("src_exp_date", str));
@@ -627,11 +627,17 @@ namespace IDensity.Services.ComminicationServices
 
         string GetStringById(string id, string source)
         {
+            var strings = GetStringById(id, source, 1);
+            if (strings.Length > 0) return strings[0];
+            return string.Empty;
+        }
+        string[] GetStringById(string id, string source, int cnt)
+        {
             var indexfirst = source.IndexOf(id);
             if (indexfirst != -1) return source.Substring(indexfirst + id.Length + 1).
                     Split(new char[] { ',', '#' }).
-                    FirstOrDefault();
-            return string.Empty;
+                    Take(cnt).ToArray();
+            return new string[0];
         }
 
         DateTime GetDate(string strDate)
@@ -697,6 +703,13 @@ namespace IDensity.Services.ComminicationServices
             if (list == null) return;
             _model.LevelLength.Value = list[0][0];
             _model.SettingsReaded = true;
+
+            // Mac address
+            list = GetNumber("mac", 6, 1, str);
+            if (list != null)
+            {
+                _model.Mac = list[0].Select(num => (byte)num).ToArray();
+            }
         }
         #endregion
 

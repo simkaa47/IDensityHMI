@@ -113,7 +113,9 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <!--#region Edit -->
-                                        <Button BorderThickness="0" Background="Transparent" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditMeasNumCommand}">
+                                        <Button BorderThickness="0" Background="Transparent"
+                                                Visibility="{Binding UserCantDelete, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditMeasNumCommand}">
                                             <Image Source="..\..\Resourses\Pictures\EditIcon.png" Margin="10" />
                                             <Button.ToolTip>
                                                 <TextBlock Text="Редактировать"/>

@@ -65,6 +65,31 @@ namespace IDensity.ViewModels
             o => VM.mainModel.Connecting.Value));
         #endregion
 
+
+        #region Записать mac
+        /// <summary>
+        /// Записать mac
+        /// </summary>
+        RelayCommand _macAddrWriteCommand;
+        /// <summary>
+        /// Записать mac
+        /// </summary>
+        public RelayCommand MacAddrWriteCommand => _macAddrWriteCommand ?? (_macAddrWriteCommand = new RelayCommand(execPar => 
+        {
+            var mac = VM.mainModel.Mac;
+            if (mac is null) return;
+            var arg = $"*SETT,mac=";
+            foreach(var b in mac)
+            {
+                arg += $"{b},";
+            }
+            arg += "#";
+            VM.mainModel.MacWriting = true;
+            VM.CommService.Tcp.SetFsrd8(arg);
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
+
         #region Перезагрузить плату
         RelayCommand _rstBoardCommand;
         public RelayCommand RstBoardCommand => _rstBoardCommand ?? (_rstBoardCommand = new RelayCommand(par => VM.CommService.RstBoard(), o => VM.mainModel.Connecting.Value));

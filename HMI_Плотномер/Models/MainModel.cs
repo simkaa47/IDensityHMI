@@ -101,6 +101,46 @@ namespace IDensity.Models
 
         #endregion
 
+        #region MAC адрес
+
+        #region MAC
+        /// <summary>
+        /// MAC
+        /// </summary>
+        private byte[] _mac;
+        /// <summary>
+        /// MAC
+        /// </summary>
+        public byte[] Mac
+        {
+            get => _mac;
+            set
+            {
+                if(Set(ref _mac, value))
+                {
+                    MacWriting = false;
+                }
+            }
+        }
+        #endregion
+
+        #region Флаг записи MAc адреса
+        /// <summary>
+        /// Флаг записи MAc адреса
+        /// </summary>
+        private bool _macWriting;
+        /// <summary>
+        /// Флаг записи MAc адреса
+        /// </summary>
+        public bool MacWriting
+        {
+            get => _macWriting;
+            set => Set(ref _macWriting, value);
+        }
+        #endregion
+
+        #endregion
+
         public MainModel()
         {
             Init();// Инициализация параметров  
@@ -311,22 +351,26 @@ namespace IDensity.Models
         public AdcBoardSettings AdcBoardSettings { get; set; } = new AdcBoardSettings();
         #endregion
 
+        #endregion  
+
+        #region Имена изотопов
+        /// <summary>
+        /// Имена изотопов
+        /// </summary>
+        private string[] _isotopeNames;
+        /// <summary>
+        /// Имена изотопов
+        /// </summary>
+        public string[] IsotopeNames
+        {
+            get => _isotopeNames;
+            set => Set(ref _isotopeNames, value);
+        }
         #endregion
 
-        #region Значение полураспада
-        [DataMember]
-        public Parameter<float> HalfLife { get; set; } = new Parameter<float>("HalfLife", "Значение полураспада", float.MinValue, float.MaxValue, 0, "");
+        #region Текущий изотоп
+        public Parameter<byte> IsotopeIndex { get; } = new Parameter<byte>("IsotopeIndex", "Тип изотопа", 0, 10, 0, "");
         #endregion
-
-        #region Название прибора
-        [DataMember]
-        public Parameter<string> DeviceName { get; set; } = new Parameter<string>("DeviceName", "Название прибора", string.Empty, "zzzzzzzzzzz", 0, "");
-        #endregion
-
-        #region Имя изотопа
-        [DataMember]
-        public Parameter<string> IsotopName { get; set; } = new Parameter<string>("IsotopName", "Название изотопа", string.Empty, "zzzzzzzzzzz", 0, "");
-        #endregion        
 
         #region Время установки источника
         [DataMember]

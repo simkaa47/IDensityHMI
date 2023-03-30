@@ -161,7 +161,7 @@
                                 </DataGridTemplateColumn>
                                 <!--#endregion-->
                                 <!--#region Coeff B -->
-                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ A" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
+                                <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ B" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:TextParameter DataContext="{Binding B}"
@@ -206,17 +206,10 @@
                 
             </ListBoxItem>
             <!--#endregion-->
-            <!--#region Hilf life -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.HalfLife}" 
-                             HorizontalAlignment="Stretch"
-                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteHalfLifeCommand}"/>
-            <!--#endregion-->
-            <!--#region Device Name -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.DeviceName}" 
-                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteDeviceNameCommand}"/>
-            <!--#endregion-->
             <!--#region Имя изотопа -->
-            <p:TextParameter DataContext="{Binding VM.mainModel.IsotopName}" 
+            <p:CompoBoxParameter DataContext="{Binding VM.mainModel.IsotopeIndex}" 
+                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.mainModel.IsotopeNames}"
                              Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteIsotopNameCommand}"/>
             <!--#endregion-->
             <!--#region Source installation date -->
