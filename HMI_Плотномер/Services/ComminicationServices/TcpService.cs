@@ -713,7 +713,7 @@ namespace IDensity.Services.ComminicationServices
         }
         #endregion
 
-        #region Настройки №8
+        #region Настройки №9
         void GetSettings9()
         {
             _model.SettingsReaded = false;

@@ -15,9 +15,9 @@
         <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
         <!--<Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>-->
     </UserControl.Resources>
-    <Canvas Width="972" Height="442" Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
+    <Canvas Width="860" Height="400" Margin="56,24,40,10" Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
         <!--#region Pulses -->
-        <Border Width="183" Height="60" Canvas.Top="24" Canvas.Left="709" Background="{StaticResource PanelBorderColor}">
+        <Border Width="183" Height="60" Canvas.Top="0" Canvas.Left="653" Background="{StaticResource PanelBorderColor}">
             <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Run Text="{Binding CounterValue.Value, StringFormat={}{0:f1}, ConverterCulture=RU-ru}" FontSize="24" FontFamily="Roboto" FontWeight="Medium"/>
                  <Run Text="импульсов/c" FontSize="16"/>
@@ -26,7 +26,7 @@
        
         <!--#endregion-->       
         <!--#region Meas Type and meas unit-->
-        <StackPanel Orientation="Horizontal" Canvas.Left="56" Canvas.Top="24">
+        <StackPanel Orientation="Horizontal"  Canvas.Top="0">
             
             <StackPanel>
                 <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" Canvas.Top="24" Canvas.Left="56" MaxWidth="300" TextWrapping="Wrap">
@@ -38,8 +38,7 @@
                             <Binding Source="{StaticResource LevelCalculation}"/>
                         </MultiBinding>
                     </TextBlock.Text>
-                </TextBlock>
-                <TextBlock Text="{Binding MeasProcessNum.Value}"/>
+                </TextBlock>                
             </StackPanel>
             <!--#region Meas Unit-->            
                     <ComboBox  
@@ -80,9 +79,9 @@
                     
         <!--#endregion-->
         <!--#region Awg value -->
-        <DockPanel Width="860" Height="156" Canvas.Left="56" Canvas.Top="100">
-            <DockPanel DockPanel.Dock="Right" MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,15" 
+        <DockPanel Width="860" Height="162"  Canvas.Top="69">
+            <DockPanel DockPanel.Dock="Right" MaxWidth="420" VerticalAlignment="Bottom">
+                <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,20" 
                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            FontWeight="Bold" 
                            FontSize="36"/>
@@ -92,12 +91,12 @@
                            Stretch="UniformToFill" 
                            VerticalAlignment="Bottom"/>
             </DockPanel>
-            <DockPanel DockPanel.Dock="Left"  MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,0" 
+            <DockPanel DockPanel.Dock="Left"  MaxWidth="440" VerticalAlignment="Bottom">
+                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,5" 
                            VerticalAlignment="Bottom" 
                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            FontWeight="Bold" 
-                           FontSize="115">
+                           FontSize="128">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
@@ -106,8 +105,8 @@
                             <Binding Path="MeasUnitMemoryId"/>
                         </MultiBinding>
                     </TextBlock.Text>
-                </TextBlock>                
-                <Rectangle DockPanel.Dock="Bottom" 
+                </TextBlock>
+                <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0"
                            Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            Height="4" 
                            Stretch="UniformToFill" 
@@ -116,13 +115,13 @@
         </DockPanel>
         <!--#endregion-->
         <!--#region cur value -->
-        <DockPanel Width="860" Height="156" Canvas.Left="56" Canvas.Top="275">
-            <DockPanel DockPanel.Dock="Left" MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock Text="Мгновенное" Margin="0,0,0,15"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
+        <DockPanel Width="860" Height="164"  Canvas.Top="236">
+            <DockPanel DockPanel.Dock="Left" MaxWidth="420" VerticalAlignment="Bottom">
+                <TextBlock Text="Мгновенное" Margin="0,0,0,20"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
                 <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </DockPanel>
-            <DockPanel DockPanel.Dock="Right"  MaxWidth="430" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="25,0,25,0" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="115">
+            <DockPanel DockPanel.Dock="Right"  MaxWidth="440" VerticalAlignment="Bottom">
+                <TextBlock DockPanel.Dock="Top"  HorizontalAlignment="Left" Margin="25,0,25,5" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="128">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
@@ -132,7 +131,7 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-                <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="4" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0" Fill="#ff9f0a" Height="4" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </DockPanel>
         </DockPanel>
         <!--#endregion-->

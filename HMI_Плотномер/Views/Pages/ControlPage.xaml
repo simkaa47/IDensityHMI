@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             FontSize="16"
               xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:c="clr-namespace:IDensity.Core.Views.UserControls.Counters"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"

@@ -46,7 +46,7 @@
             <sys:String>..\Resourses\Pictures\AccountCircleAuthorized.png</sys:String>
         </x:Array>
     </UserControl.Resources>
-    <Border BorderThickness="0,0,0,1" BorderBrush="#5B5B5B">
+    <Border >
         <Canvas Background="#1C1C1E">
             <!--#region Konvels logo -->
             <Image Source="..\Resourses\Pictures\Logo_Konvels_blue.png"
@@ -59,7 +59,7 @@
                     Canvas.Left="193">
                 
             </Border>
-            <Image  Canvas.Left="217" Canvas.Top="24"
+            <Image  Canvas.Left="208" Canvas.Top="24"
                        Source="{Binding mainModel.Connecting.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons }}" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"
@@ -68,7 +68,7 @@
             <TextBlock  Style="{StaticResource TextBlockRoboto}" 
                         Text="СВЯЗЬ С ПРИБОРОМ"
                         Canvas.Top="30" 
-                        Canvas.Left="265"
+                        Canvas.Left="256"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"/>
             <!--#endregion-->

@@ -29,9 +29,9 @@
             </Style>
         </Canvas.Resources>
         <!--#region Trends -->
-        <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="570" BorderThickness="0">
+        <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="565" BorderThickness="0">
             <!--#region Current Trend -->
-            <TabItem Header="Текущий тренд" MinHeight="64" MinWidth="253" >
+            <TabItem Header="Текущий тренд" MinHeight="64" MinWidth="253" FontSize="20">
 
                 <!--#region Current Trend-->
                 <trends:MainTrendControl DataSource="{Binding PlotCollection}" Margin="24,24,0,0"  Width="924"                                              
@@ -59,12 +59,12 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Trend Settings -->
-            <TabItem Header="Настройки отображения" MinWidth="362" MinHeight="64" Style="{StaticResource TabItemStyleSecond}">
+            <TabItem Header="Настройки отображения" MinWidth="362" MinHeight="64" FontSize="20" Style="{StaticResource TabItemStyleSecond}">
                 <trends:TrendSettingsControl Margin="24,24,0,0"/>
             </TabItem>
             <!--#endregion-->
             <!--#region Archieve trends -->
-            <TabItem Header="Архивный тренд" MinHeight="64" MinWidth="270" Style="{StaticResource TabItemStyleSecond}">
+            <TabItem Header="Архивный тренд" MinHeight="64" FontSize="20" MinWidth="270" Style="{StaticResource TabItemStyleSecond}">
                 <Canvas Background="Transparent">
                     <!--#region Start Time Selection-->
                     <dt:DateTimeParameter Description="Стартовая точка тренда"
