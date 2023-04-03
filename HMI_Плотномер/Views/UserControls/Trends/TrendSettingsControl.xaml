@@ -17,7 +17,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <!--#region Trends Visibility-->
-            <ListBox  HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Margin="58,0,58,0">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top"   Background="Transparent"  Margin="52,55,0,0" Width="374">
                 <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=0}" 
                                        Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=0}"
                                        Check="{Binding TrendsVisible.VisLine1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -48,7 +48,7 @@
                 <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}" 
                                        Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"
                                        Check="{Binding TrendsVisible.VisLine10, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            </ListBox>
+            </StackPanel>
             <!--#endregion-->
             <!--#region Other trend settings-->
             <ListBox Grid.Column="1" 
@@ -58,11 +58,11 @@
                      BorderThickness="0"
                      FontSize="16"
                                FontFamily="Roboto"
-                     Height="132"
+                     Height="142"
                      Width="280"
                      Background="Transparent">
                <!--#region Write Data if no measuring mode-->               
-                <DockPanel>
+                <DockPanel Margin="0,0,0,20">
                     <TextBlock Foreground="White"
                            TextWrapping="Wrap"
                            MaxWidth="200"
@@ -76,7 +76,7 @@
                 <Border BorderThickness="0,1,0,0" BorderBrush="#33FFFFFF">
                     
                 </Border>
-                <DockPanel>
+                <DockPanel Margin="0,20,0,0">
                     <TextBlock Foreground="White"
                            TextWrapping="Wrap"
                            MaxWidth="250"

@@ -32,11 +32,14 @@
     <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
     <None Remove="Views\Resourses\Pictures\ManageAccounts.png" />
     <None Remove="Views\Resourses\Pictures\MeasIcon.png" />
+    <None Remove="Views\Resourses\Pictures\MeasProc_main.png" />
+    <None Remove="Views\Resourses\Pictures\MeaxProc_Standartisation.png" />
     <None Remove="Views\Resourses\Pictures\RadioButtonChecked.png" />
     <None Remove="Views\Resourses\Pictures\RadioButtonUnchecked.png" />
     <None Remove="Views\Resourses\Pictures\ReadAquaIcon.png" />
     <None Remove="Views\Resourses\Pictures\ResetTv.png" />
     <None Remove="Views\Resourses\Pictures\SystemUpdateAlt.png" />
+    <None Remove="Views\Resourses\Pictures\TrendSettings.png" />
     <None Remove="Views\Resourses\Pictures\TuneIcon.png" />
     <None Remove="Views\Resourses\Styles\Search.png" />
   </ItemGroup>
@@ -91,11 +94,14 @@
     <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
     <Resource Include="Views\Resourses\Pictures\ManageAccounts.png" />
     <Resource Include="Views\Resourses\Pictures\MeasIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\MeasProc_main.png" />
+    <Resource Include="Views\Resourses\Pictures\MeaxProc_Standartisation.png" />
     <Resource Include="Views\Resourses\Pictures\RadioButtonChecked.png" />
     <Resource Include="Views\Resourses\Pictures\RadioButtonUnchecked.png" />
     <Resource Include="Views\Resourses\Pictures\ReadAquaIcon.png" />
     <Resource Include="Views\Resourses\Pictures\ResetTv.png" />
     <Resource Include="Views\Resourses\Pictures\SystemUpdateAlt.png" />
+    <Resource Include="Views\Resourses\Pictures\TrendSettings.png" />
     <Resource Include="Views\Resourses\Pictures\TuneIcon.png" />
     <Resource Include="Views\Resourses\Styles\Search.png" />
   </ItemGroup>

@@ -34,7 +34,7 @@
             <Setter Property="Background" Value="#33FFFFFF"/>
         </Style>        
     </UserControl.Resources>
-    <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}">
+    <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}" BorderThickness="0">
         <!--#region Измерительные процессы -->
         <TabItem Name="MeasProcTab"
                  DataContext="{Binding MeasProcessVm}"
@@ -67,7 +67,7 @@
                     </ListBox>                    
                 </StackPanel>
             </TabItem.Header>
-            <Grid Margin="55,32,0,0">
+            <Grid Margin="55,30,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition/>

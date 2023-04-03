@@ -132,8 +132,15 @@ namespace IDensity.ViewModels
         RelayCommand _closeAppCommand;
         public RelayCommand CloseAppCommand => _closeAppCommand ?? (_closeAppCommand = new RelayCommand(o =>
         {
-            AdcViewModel.UdpService?.Stop();
-            Application.Current.Shutdown();
+            const string message = "Закрыть приложение?";
+            const string caption = "Закрытие приложения";
+
+            var result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if(result == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }                                
+            
         }, o => true));
         #endregion        
 

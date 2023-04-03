@@ -2,39 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mr="clr-namespace:IDensity.Core.Views.UserControls.MeasResults"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox>
         <!--#region MEas Indication -->
-        <ListBox Canvas.Left="948"
-                 ItemsSource="{Binding mainModel.MeasResults}"
-                 Background="Transparent"
-                 BorderBrush="Transparent"                     
-                 HorizontalContentAlignment="Stretch"
-                 VerticalContentAlignment="Stretch">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Margin" Value="0"/>
-                    <Setter Property="Foreground" Value="Transparent"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Focusable" Value="False"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="False">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
+        <StackPanel>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" IndicatorColor="#32d74b"/>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff"/>
+        </StackPanel>
         <!--#endregion-->
     </Viewbox>
 </UserControl>

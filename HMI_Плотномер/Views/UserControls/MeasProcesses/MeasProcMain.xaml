@@ -13,7 +13,7 @@
              d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid> 
-        <ListBox HorizontalContentAlignment="Stretch"  Width="687" 
+        <ListBox HorizontalContentAlignment="Stretch"  Width="687" Margin="0,20,0,0" 
                  HorizontalAlignment="Left" 
                  Background="Transparent"
                  BorderThickness="0"
