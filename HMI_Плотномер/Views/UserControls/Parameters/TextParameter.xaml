@@ -17,7 +17,7 @@
         
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"></Style>
     </local:CommandExtention.Resources>
-    <DockPanel MinHeight="56">
+    <DockPanel MinHeight="54">
         <DockPanel.Resources>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="#33FFFFFF"/>

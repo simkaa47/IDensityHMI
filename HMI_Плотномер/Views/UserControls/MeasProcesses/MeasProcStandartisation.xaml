@@ -19,7 +19,7 @@
             <StackPanel.Resources>
                 <conv:MultiplyOnNumberConverter x:Key="MultiplyOnNumberConverter"   Offset="0"/>
             </StackPanel.Resources>
-            <Border Background="Black" Margin="0,50,0,0" HorizontalAlignment="Left">
+            <Border Background="Black" Margin="-10,20,0,0" HorizontalAlignment="Left">
                 <DataGrid Background="Transparent"
                   Margin="10"
                   HorizontalAlignment="Left"

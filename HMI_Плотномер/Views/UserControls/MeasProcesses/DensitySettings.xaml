@@ -10,24 +10,29 @@
              d:DataContext="{d:DesignInstance Type=vm:MeasProcessVm}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox HorizontalContentAlignment="Stretch"  Width="500"                 
+        <ListBox HorizontalContentAlignment="Stretch"  Width="430"                
                  HorizontalAlignment="Left" 
+                 Margin="-8,0,0,0"
                  Background="Transparent"
                  BorderThickness="0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
-            <GroupBox Header="Плотность жидкого"
-                      FontSize="20"
-                      
+            <GroupBox FontSize="20"
+                      Margin="0,52,0,0"                      
                       BorderThickness="0">
+                <GroupBox.Header>
+                    <TextBlock Text="Плотность жидкого" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="14,0,0,4"/>
+                </GroupBox.Header>
                 <p:TextParameter DataContext="{Binding SelectedProcess.DensityLiqD1.PhysValue}" ParameterWidth="104"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DensityLiqSettingsCommand}"/>
             </GroupBox>
-            <GroupBox Header="Плотность твердого"
-                      FontSize="20"
-                      Margin="0,20,0,20"
+            <GroupBox FontSize="20"
+                      Margin="0,52,0,0"
                       
                       BorderThickness="0">
+                <GroupBox.Header>
+                    <TextBlock Text="Плотность твердого" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="14,0,0,4"/>
+                </GroupBox.Header>
                 <p:TextParameter DataContext="{Binding SelectedProcess.DensitySolD2.PhysValue}"  ParameterWidth="104" Margin="0,0,0,0"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DensitySolidSettingsCommand}"/>
             </GroupBox>

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
-             xmlns:add="clr-namespace:IDensity.AddClasses"
+             xmlns:add="clr-namespace:IDensity.AddClasses"             
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasResults"
              mc:Ignorable="d" 
@@ -15,7 +15,8 @@
         <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
         <!--<Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>-->
     </UserControl.Resources>
-    <Canvas Width="860" Height="400" Margin="56,24,40,10" Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
+    <Canvas Width="860" Height="400" Margin="56,24,40,10" Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
+            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
         <!--#region Pulses -->
         <Border Width="183" Height="60" Canvas.Top="0" Canvas.Left="653" Background="{StaticResource PanelBorderColor}">
             <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">

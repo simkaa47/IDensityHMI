@@ -30,7 +30,7 @@
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Center">
             <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
                                Margin="10"
-                               FontSize="14"
+                               FontSize="13"
                    Foreground="White"
                                 HorizontalAlignment="Center"
                                  VerticalAlignment="Center">
@@ -55,7 +55,7 @@
     </Style>
 
     <Style TargetType="DataGridRowHeader">
-        <Setter Property="Width" Value="0"/>
+        <Setter Property="Width" Value="0"/>        
     </Style>
 
     <Style TargetType="DataGridColumnHeader" >
@@ -64,7 +64,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="MinHeight" Value="75"/>
+        <Setter Property="MinHeight" Value="60"/>
     </Style>
 
     <Style TargetType="DataGridCell" >        

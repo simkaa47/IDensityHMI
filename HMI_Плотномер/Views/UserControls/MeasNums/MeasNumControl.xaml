@@ -30,8 +30,8 @@
                       ItemsSource="{Binding MeasUnits}"
                       SelectedItem="{Binding SelectedMeasUnit}">
                     <DataGrid.Columns>
-                        <!--#region Name -->
-                        <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <!--#region Name -->                       
+                        <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="75">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Style="{StaticResource Common}" Margin="20" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, UpdateSourceTrigger=PropertyChanged}" Foreground="White" HorizontalAlignment="Left"/>
@@ -69,7 +69,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!--#endregion-->
-                        <!--#region Device type -->
+                        <!--#region Device type -->                        
                         <DataGridTemplateColumn Header="ТИП УСТРОЙСТВА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

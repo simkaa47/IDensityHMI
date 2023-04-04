@@ -8,18 +8,24 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:AnalogVm}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Margin="40,0,0,0">
+    <StackPanel Margin="20,30,0,0">
         <GroupBox  BorderThickness="0" FontSize="20">
             <GroupBox.Header>
-                <TextBlock Text="Аналоговые входы" FontSize="20" Foreground="White" FontFamily="Roboto" Margin="20,40,0,20"/>
+                <TextBlock Text="Аналоговые входы" FontSize="20" Foreground="White" FontWeight="SemiBold" FontFamily="Roboto" Margin="30,0,0,20"/>
             </GroupBox.Header>
             <local:AnalogInputs/>
         </GroupBox>
-        <GroupBox BorderThickness="0" FontSize="20">
+        <GroupBox BorderThickness="0" FontSize="20" Margin="0,20,0,0">
             <GroupBox.Header>
-                <TextBlock Text="Аналоговые выходы" FontSize="20" Foreground="White" FontFamily="Roboto" Margin="20,40,0,20"/>
+                <TextBlock Text="Аналоговые выходы (Мониторинг)" FontSize="20" Foreground="White" FontWeight="SemiBold" FontFamily="Roboto" Margin="30,0,0,20"/>
             </GroupBox.Header>
             <local:AnalogOutput/>
+        </GroupBox>
+        <GroupBox BorderThickness="0" FontSize="20" Margin="0,20,0,0">
+            <GroupBox.Header>
+                <TextBlock Text="Аналоговые выходы (Настройки)" FontSize="20" Foreground="White" FontWeight="SemiBold" FontFamily="Roboto" Margin="30,0,0,20"/>
+            </GroupBox.Header>
+            <local:AnalogTabSettings/>
         </GroupBox>
     </StackPanel>
 </UserControl>

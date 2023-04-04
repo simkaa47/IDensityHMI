@@ -7,6 +7,7 @@
         xmlns:pages="clr-namespace:IDensity.Core.Views.Pages"     
         xmlns:sys1="clr-namespace:System;assembly=System.Runtime"       
         mc:Ignorable="d"  
+        xmlns:oth="clr-namespace:IDensity.Core.Views.UserControls.Other"
         Background="Transparent"
         StateChanged="Window_StateChanged"
          WindowStyle="None"                
@@ -22,67 +23,79 @@
                 <!--#region High Bar -->
                 <pages:HighBar/>
                 <!--#endregion-->
-                <!--#region Vissma measure -->
-                <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,160">
-                    <Label Content="VISSMA" FontSize="60" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Regular"/>
-                    <DockPanel HorizontalAlignment="Left">
-                        <Rectangle Height="2" Width="100" HorizontalAlignment="Stretch" Fill="#4affffff"/>
-                        <Label Content="VERSION 1.01" FontSize="15" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Normal"
-                       DockPanel.Dock="Right" HorizontalAlignment="Left"/>
+                
+                
+                <Grid Grid.Row="1">
+                    <!--#region Вкладки -->
+                    <TabControl  Grid.Row="1" TabStripPlacement="Bottom" Height="1000" Width="1920" BorderThickness="0,1,0,1" BorderBrush="#5b5b5b">
 
-                    </DockPanel>
-                    <Label Content="Measure" FontSize="57" Foreground="#4affffff" FontFamily="Roboto" FontWeight="UltraLight"/>
-                </StackPanel>
-                <!--#endregion-->
-                <!--#region Вкладки -->
-                <TabControl  Grid.Row="1" TabStripPlacement="Bottom" Height="1000" Width="1920" BorderThickness="0,1,0,1" BorderBrush="#5b5b5b">
-                    <!--#region Вкладка Измерение -->
-                    <TabItem Header="Измерение" MinHeight="68" MinWidth="319"
+                        <!--#region Вкладка Измерение -->
+                        <TabItem Header="Измерение" MinHeight="68" MinWidth="319"
                              Tag="..\Pictures\MeasIcon.png" FontSize="24"
                              Name="MainTab" 
                              IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
-                        <Grid>
-                            <pages:MainPage/>
-                        </Grid>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region Вкладка Настройки -->
-                    <TabItem Header="Настройки" Style="{StaticResource TabItemStyleSecond}" MinHeight="68" MinWidth="315"  FontSize="24"
+                            <Grid>
+                                <!--#region Vissma measure -->
+                                <oth:VissmaMeasure/>
+                                <!--#endregion-->
+                                <pages:MainPage/>
+                            </Grid>
+                        </TabItem>
+                        <!--#endregion-->
+                        <!--#region Вкладка Настройки -->
+                        <TabItem Header="Настройки" Style="{StaticResource TabItemStyleSecond}" MinHeight="68" MinWidth="315"  FontSize="24"
                      Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}"
                              Tag="..\Pictures\TuneIcon.png">
-                        <pages:SettingsPage/>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region Вкладка Управление -->
-                    <TabItem Header="Управление" Style="{StaticResource TabItemStyleSecond}" FontSize="24"  Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}" MinHeight="68" MinWidth="328"
+                            <Grid>
+                                <!--#region Vissma measure -->
+                                <oth:VissmaMeasure/>
+                                <!--#endregion-->
+                                <pages:SettingsPage/>
+                            </Grid>
+                        </TabItem>
+                        <!--#endregion-->
+                        <!--#region Вкладка Управление -->
+                        <TabItem Header="Управление" Style="{StaticResource TabItemStyleSecond}" FontSize="24"  Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Сервис}" MinHeight="68" MinWidth="328"
                              Tag="..\Pictures\ManageAccounts.png">
-                        <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
-                    </TabItem>
-                    <!--#endregion-->
-                    <!--#region Вкладка События -->
-                    <TabItem Header="События" MinHeight="68" FontSize="24" Style="{StaticResource TabItemStyleSecond}" MinWidth="292"
+                            <pages:ControlPage DataContext="{Binding AdcViewModel}"/>
+                        </TabItem>
+                        <!--#endregion-->
+                        <!--#region Вкладка События -->
+                        <TabItem Header="События" MinHeight="68" FontSize="24" Style="{StaticResource TabItemStyleSecond}" MinWidth="292"
                              Tag="..\Pictures\ListIcon.png">
-                        <pages:EventPage/>
-                    </TabItem>
+                            <pages:EventPage/>
+                        </TabItem>
+                        <!--#endregion-->
+                    </TabControl>
                     <!--#endregion-->
-                </TabControl>
+                    
+                </Grid>
+                
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="80" ></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <!--#endregion-->
+               
             </Grid>
         </Viewbox>
         <Grid>
             <pages:IndicationWindow Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=WindowState, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=Maximized}"/>
         </Grid>
 
-        
+       
         <!--<Image Source="..\Views\Resourses\Pictures\Frame 56.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\TrendSettings.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeasProc_main.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeaxProc_Standartisation.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\Meas_proc_Calibration_Settings.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\Meas_Proc_Calibration.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\DensitySettings.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\Compensation_Settings.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\Counters.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\CommonSettinhs.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\Analogs.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\MeasUnits.png" Opacity="0.4"/>-->
     </Grid>
     <!--#endregion-->   
 </Window>

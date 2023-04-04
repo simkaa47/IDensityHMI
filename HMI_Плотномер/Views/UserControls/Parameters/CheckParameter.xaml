@@ -7,12 +7,12 @@
              mc:Ignorable="d" 
              xmlns:fa="http://schemas.fontawesome.io/icons/"                         
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel MinHeight="50">
+    <DockPanel MinHeight="54" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource Common}"
                    Text="{Binding Description}"
                     Margin="20,0,0,0"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CheckParameter}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
             <CheckBox Style="{StaticResource CheckBoxAqvaStyle}" Margin="25,0,30,0"
                       Height="25"
                       Command="{Binding RelativeSource={RelativeSource AncestorType=local:CheckParameter}, Path=Command}"

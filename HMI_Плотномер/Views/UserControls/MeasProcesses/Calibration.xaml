@@ -17,7 +17,7 @@
                 
             </Style>
             <Style TargetType="DockPanel">
-                <Setter Property="MinHeight" Value="56"/>
+                <Setter Property="MinHeight" Value="54"/>
             </Style>
             <conv:MeasUnitMultiplyConverter x:Key="SingleMultiply"/>
             <conv:GetMeasNumConverter x:Key="SingleMeasPhysValueNum"/>
@@ -26,9 +26,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListBox HorizontalContentAlignment="Stretch"  Width="599"                 
+        <ListBox HorizontalContentAlignment="Stretch"  Width="601"                 
                  HorizontalAlignment="Left" 
-                 Margin="0,25,0,0"
+                 Margin="0,20,0,0"
                  Background="Transparent"
                  BorderThickness="0"
                  VerticalAlignment="Top"
@@ -51,7 +51,7 @@
             <DockPanel>
                 <TextBlock Text="Физическая величина" Margin="20,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBox Width="80" Template="{StaticResource TextBoxTemplate}" Height="40">
+                    <TextBox Width="60" Template="{StaticResource TextBoxTemplate}" Height="40">
                         <TextBox.Text>
                             <MultiBinding Converter="{StaticResource SingleMultiply}">
                                 <Binding Path="CalibrationVm.SingleMeasPhysValue"/>
@@ -60,7 +60,7 @@
                             </MultiBinding>
                         </TextBox.Text>
                     </TextBox>
-                    <ComboBox Name="MUnit" Width="80"
+                    <ComboBox Name="MUnit" Width="100"
                               Height="40"
                               Background="Transparent"                              
                               FontSize="16"
@@ -104,15 +104,18 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <WrapPanel Orientation="Horizontal">                
-                <GroupBox Header="Единичные измерения"
+                <GroupBox Margin="0,30,0,0"
                           FontSize="20"
                           BorderThickness="0">
+                    <GroupBox.Header>
+                        <TextBlock Text="Единичные измерения" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="12,0,0,0"/>
+                    </GroupBox.Header>
                     <!--#region Данные ед.измерений -->
-                    <Border Background="Black" Margin="0,20,0,0">
+                    <Border Background="Black" Margin="-6,28,0,0">
                         <DataGrid CanUserAddRows="False" 
                              SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"                            
                              BorderThickness="1,0,1,0"
-                             FontWeight="Regular"
+                             FontWeight="Normal"
                              Background="Transparent"
                                   BorderBrush="{StaticResource BorderNonActiveColor}"
                              CanUserDeleteRows="False" 
@@ -122,7 +125,7 @@
                             <DataGrid.Columns>
                                <!--#region № -->
                                 <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                                               IsReadOnly="True">
+                                                               IsReadOnly="True" Width="60">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Id}" Margin="20" 
@@ -136,14 +139,16 @@
 
                                 <!--#endregion-->
                                 <!--#region Дата измерения-->
-                                <DataGridTemplateColumn Header="ДАТА ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                <DataGridTemplateColumn Header="ДАТА ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="220">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:DateTimeParameter DataContext="{Binding Date}"
-                                                             DescriptionNotVisible="True"                                                             
+                                                             DescriptionNotVisible="True"   
+                                                                 CommandButtonVisibility="Collapsed"
                                                                  VerticalAlignment="Center"
                                                                  DataTimeFormat="d"
                                                                  Height="50"
+                                                                 ParameterWidth="154"
                                                              HorizontalAlignment="Center"
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.DateWriteCommand}"/>
                                         </DataTemplate>
@@ -196,9 +201,12 @@
                     <!--#endregion-->
                 </GroupBox>
                 <!--#region Coeffs -->
-                <GroupBox Header="Расчитанные к-ты полинома" FontSize="20" BorderThickness="0">
+                <GroupBox  FontSize="20" BorderThickness="0" Margin="0,30,0,0">
+                    <GroupBox.Header>
+                        <TextBlock Text="Расчитанные к-ты полинома" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="12,0,0,0"/>
+                    </GroupBox.Header>
                     <StackPanel>
-                        <Border Background="Black" Margin="10,20,0,0">
+                        <Border Background="Black" Margin="-6,28,0,0">
                             <DataGrid AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               BorderThickness="0"
@@ -245,7 +253,7 @@
                         Style="{StaticResource ButtonWithBackground}"
                         Background="{StaticResource AquaColor}"
                         VerticalContentAlignment="Center"
-                        Margin="1"
+                        Margin="0,1,0,1"
                         Width="220"
                         CommandParameter="{Binding SelectedProcess.IsActive.Value}">
                     <Button.Content>
@@ -266,12 +274,12 @@
                 <!--#endregion-->
                 <!--#region Расчитать к-ты -->
                 <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}" Style="{StaticResource ButtonWithBackground}"
-                        Background="{StaticResource AquaColor}" Margin="1" Width="200"
+                        Background="{StaticResource AquaColor}" Margin="0,1,0,1" Width="200"
                         Content="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ" FontSize="13"/>
                 <!--#endregion-->
                 <!--#region Показать зависимость -->
                 <ToggleButton  Width="220"
-                               Margin="1"
+                               Margin="0,1,0,1"
                                FontSize="13"
                                Style="{StaticResource ToggleButtonLikeButtonWithBackround}"  
                                Background="{StaticResource AquaColor}"
@@ -284,7 +292,7 @@
                 <!--#region Записать коэффиценты -->
                 <Button Command="{Binding CalibrationVm.WriteCalibrCoeefsCommand}" Style="{StaticResource ButtonWithBackground}"
                         Background="{StaticResource AquaColor}" Width="200"
-                        Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ" Margin="1" FontSize="13"/>
+                        Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ" Margin="0,1,0,1" FontSize="13"/>
                 <!--#endregion-->
             </WrapPanel>
             <!--#endregion-->

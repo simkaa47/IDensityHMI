@@ -9,7 +9,7 @@
              xmlns:trends="clr-namespace:IDensity.Core.Views.UserControls.Trends"
              xmlns:dt="clr-namespace:IDensity.Core.Views.UserControls.DateTimes"
              xmlns:wpftool="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
+             xmlns:local="clr-namespace:IDensity.Core.Views.Pages"             
              mc:Ignorable="d" 
              xmlns:fa="http://schemas.fontawesome.io/icons/"   
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"

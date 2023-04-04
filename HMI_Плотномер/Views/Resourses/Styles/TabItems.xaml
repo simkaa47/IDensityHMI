@@ -140,7 +140,7 @@
                     <StackPanel>
                         <Border Name="Border"  Width="285"  
                             BorderBrush="#33ffffff" Background="#2C2C2E" Height="48" BorderThickness="1" CornerRadius="0">
-                            <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="27,5,0,5">
+                            <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="24,5,0,5">
                                 <Image Name="I2"
                                    Opacity="0.5"
                                    Source = "{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" 

@@ -34,7 +34,7 @@
             <Setter Property="Background" Value="#33FFFFFF"/>
         </Style>        
     </UserControl.Resources>
-    <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}" BorderThickness="0">
+    <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}" BorderThickness="0" Background="Transparent">
         <!--#region Измерительные процессы -->
         <TabItem Name="MeasProcTab"
                  DataContext="{Binding MeasProcessVm}"
@@ -81,7 +81,7 @@
         <!--#endregion-->
         <!--#region Счетчики -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Счетчики"  >
-            <c:CounterTab DataContext="{Binding AdcViewModel}"/>
+            <c:CounterTab DataContext="{Binding AdcViewModel}" Margin="20,40"/>
         </TabItem>
         <!--#endregion-->
         <!--#region Общие настройки -->

@@ -22,18 +22,20 @@
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
             <!--#region Temp cpmpensation -->
             <ListBoxItem Visibility="{Binding VM.mainModel.DeviceType.Value, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}">
-                <GroupBox Header="Температурная компенсация"
-                      FontSize="20" HorizontalAlignment="Left"
-                      Margin="0,40,0,00"
-                      BorderThickness="0">
-                    <Border Background="Black" Margin="-5,10,0,0">
+                <GroupBox FontSize="20" HorizontalAlignment="Left"
+                          Margin="0,52,0,00"
+                          BorderThickness="0">
+                    <GroupBox.Header>
+                        <TextBlock Text="Температурная компенсация" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="6,0,0,0"/>
+                    </GroupBox.Header>
+                    <Border Background="Black" Margin="-11,30,0,0">
                         <DataGrid Background="Transparent"
                           CanUserAddRows="False"
                                   HorizontalAlignment="Left"
                           CanUserDeleteRows="False"                          
                           AutoGenerateColumns="False"
                           SelectedIndex="{Binding TempCompensationIndex}"
-                          BorderThickness="0"
+                          BorderThickness="1"
                           ItemsSource="{Binding SelectedProcess.TempCompensations}">
                             <DataGrid.Columns>
                                 <!--#region Index -->
