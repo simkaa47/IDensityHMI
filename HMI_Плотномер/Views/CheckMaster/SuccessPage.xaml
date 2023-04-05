@@ -88,7 +88,7 @@
                             <!--#endregion-->
                             <!--#region Версия ПО HMI -->
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Версия ПО HMI"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DeviceInfo.HmiSoftwareNumber}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding VM.SoftVersion}"/>
                             <!--#endregion-->
                             <!--#region Версия ПО PLC -->
                             <TextBlock Grid.Row="3" Grid.Column="0" Text="Версия ПО прибора"/>
