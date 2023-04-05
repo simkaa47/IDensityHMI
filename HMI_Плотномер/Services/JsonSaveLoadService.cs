@@ -9,8 +9,9 @@ namespace IDensity.Core.Services
         public static void Save(object writeObject, Type type, string path)
         {
             var jsonFormatter = new DataContractJsonSerializer(type);
-            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            using (var file = new FileStream(path, FileMode.Truncate))
             {
+                
                 jsonFormatter.WriteObject(file, writeObject);
             }
         }

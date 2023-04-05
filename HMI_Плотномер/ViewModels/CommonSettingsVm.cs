@@ -6,6 +6,7 @@ using IDensity.ViewModels.Commands;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 
@@ -22,6 +23,40 @@ namespace IDensity.ViewModels
         /// Главная VM
         /// </summary>
         public VM VM { get; }
+
+
+        #region Флаг загрузки
+        /// <summary>
+        /// Флаг загрузки
+        /// </summary>
+        private bool _loadFlag;
+        /// <summary>
+        /// Флаг загрузки
+        /// </summary>
+        public bool LoadFlag
+        {
+            get => _loadFlag;
+            set => Set(ref _loadFlag, value);
+        }
+        #endregion
+
+        #region Индикатр загрузки
+        /// <summary>
+        /// Индикатр загрузки
+        /// </summary>
+        private int _loadProgress;
+        /// <summary>
+        /// Индикатр загрузки
+        /// </summary>
+        public int LoadProgress
+        {
+            get => _loadProgress;
+            set => Set(ref _loadProgress, value);
+        }
+        #endregion
+
+
+
 
         #region Запрос контрольной суммы ПО основного микроконтроллера
         /// <summary>
@@ -241,8 +276,31 @@ namespace IDensity.ViewModels
             WriteDeviceType(fromFile.DeviceType.WriteValue);
             WiteLevelLength(fromFile.LevelLength.WriteValue);
             // Запись настроек аналогов
+            foreach (var group in fromFile.AnalogGroups)
+            {
+                VM.CommService.Tcp.SendAnalogInSwttings(group.AI.GroupNum, group.AI.ModulNum, group.AI);
+                VM.CommService.Tcp.SendAnalogOutSwttings(group.AI.GroupNum, group.AI.ModulNum, group.AO);
+            }
+            //Настроки связи            
+            VM.CommService.ChangeSerialSelect(fromFile.PortSelectMode.WriteValue);//; Режим порта
+            VM.CommService.ChangeBaudrate(fromFile.PortBaudrate.WriteValue);// байдрейт
+            byte num = 0;// udp
+            var nums = (fromFile.UdpAddrString.Split(".", StringSplitOptions.RemoveEmptyEntries)).Where(s => byte.TryParse(s, out num)).Select(s => num).ToArray();
+            if (nums.Length == 4)
+            {
+                fromFile.UdpWriting = true;
+                VM.CommService.SetUdpAddr(nums, fromFile.PortUdp);
+            }
+            VM.CommService.SetTcpSettings(fromFile.IP, fromFile.Mask, fromFile.GateWay);// tcp
 
-
+            // настройки АЦП
+            VM.CommService.SetAdcMode(fromFile.AdcBoardSettings.AdcMode.WriteValue);
+            VM.CommService.SetAdcSyncMode(fromFile.AdcBoardSettings.AdcSyncMode.WriteValue);
+            VM.CommService.SetAdcSyncLevel(fromFile.AdcBoardSettings.AdcSyncLevel.WriteValue);
+            VM.CommService.SetAdcProcMode(fromFile.AdcBoardSettings.AdcProcMode.WriteValue);
+            VM.CommService.SetAdcTimerMax(fromFile.AdcBoardSettings.TimerMax.WriteValue);
+            VM.CommService.SetPreampGain(fromFile.AdcBoardSettings.PreampGain.WriteValue);
+            VM.CommService.SetHv(fromFile.TelemetryHV.VoltageSV.WriteValue);
         }
 
         void SafetyAction(Action action)

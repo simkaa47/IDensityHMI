@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IDensity.AddClasses
 {
+    [DataContract]
     public class HvTelemetry
     {
         #region Входное напряжение, вольт
         #region Уставка напряжения
-        public Parameter<ushort> VoltageSV { get; } = new Parameter<ushort>("VoltageSvHv", "Уставка напряжения, вольт", 400, 2000, 67, "hold");        
+        [DataMember]
+        public Parameter<ushort> VoltageSV { get; set; } = new Parameter<ushort>("VoltageSvHv", "Уставка напряжения, вольт", 400, 2000, 67, "hold");        
         #endregion 
         #endregion
         #region Входное напряжение, вольт

@@ -105,27 +105,27 @@ namespace IDensity.AddClasses
             {
                 if (value!=null)
                 {
-                    if (errorsDict != null)
+                    if (value.CompareTo(this.Value) != 0)
                     {
-                        if (value.CompareTo(this.Value) != 0)
-                        {
-                            
-                            RestartTimer();
-                        }
-                        if (value.CompareTo(MinValue) < 0 || value.CompareTo(MaxValue) > 0)
-                        {
+
+                        RestartTimer();
+                    }
+                    if (errorsDict!=null)
+                    {
+                        if ((value.CompareTo(MinValue) < 0 || value.CompareTo(MaxValue) > 0))
+                                   {
                             errorsDict["WriteValue"] = $"Значение параметра записи \"{Description}\" больше максимального или меньше минимального предела!";
                             ValidationOk = false;
                         }
                         else
                         {
                             errorsDict["WriteValue"] = null;
-                            
+
                             ValidationOk = true;
-                        }
-                        Set(ref _writeValue, value);
+                        } 
                     }
-                    
+                    Set(ref _writeValue, value);
+
                 }
             }
         }
