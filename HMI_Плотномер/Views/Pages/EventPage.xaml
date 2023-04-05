@@ -34,8 +34,8 @@
                         BorderThickness="0"
                         Background="Transparent"
                         SelectedIndex="0">
-                <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="История событий"/>
-                <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Текущие ошибки"/>
+                <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource EventSelectorItemStyle}" Content="История событий"/>
+                <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource EventSelectorItemStyle}" Content="Текущие ошибки"/>
             </ListBox>
             <!--#endregion-->
             <!--#region Dates Panel -->
@@ -43,57 +43,65 @@
                     Visibility="{Binding ElementName=EventsSelector, Path=SelectedIndex, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.75*"/>
-                        <ColumnDefinition Width="0.75*"/>
-                        <ColumnDefinition Width="0.5*"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition Width="0.4*"/>
+                        <ColumnDefinition Width="1.2*"/>
                     </Grid.ColumnDefinitions>
                     <!--#region Start point -->
                     <Grid Grid.Column="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.75*"/>
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Начальная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
-                                   Style="{StaticResource Common}"  Margin="20,0,20,0"/>
+                                   Style="{StaticResource Common}"  Margin="60,0,0,0"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"
                                               Height="42"
+                                              Width="220"
                                               DateTime="{Binding StartPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </Grid>
                     <!--#endregion-->
                     <!--#region Finish point -->
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.57*"/>
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Конечная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
-                                   Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                        <TextBlock Text="Начальная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
+                                   Style="{StaticResource Common}"  Margin="30,0,0,0"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"
                                               Height="42"
+                                              Width="220"
                                               DateTime="{Binding EndPointHistoryEvent, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </Grid>
                     <!--#endregion-->
                     <!--#region Button Show -->
-                    <Button Grid.Column="2" Style="{StaticResource TypicalButton0}"
+                    <Button Grid.Column="2" Style="{StaticResource CommonButton}"
                             Content="ПОКАЗАТЬ"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource AquaColor}"
+                            BorderThickness="1"
+                            Margin="5,0,0,0"
                             Command="{Binding ShowEventsCommand}"
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Width="150"
+                            Width="138"
                             Height="42"/>
                     <!--#endregion-->
                     <!--#region Filter -->
                     <Border HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
-                            Margin="50,0,50,0"
-                            Height="42"
+                            Margin="50,0,150,2"
+                            Height="40"
                             Background="#20FFFFFF"
                             Grid.Column="3">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <Image Source="..\Resourses\Styles\Search.png" Height="25" Margin="10,0,10,0"/>
+                            <Image Source="..\Resourses\Styles\Search.png" Height="25" Margin="14,0,8,0"/>
                             <TextBox BorderThickness="0" Background="Transparent"
                                      Text="{Binding EventFilterText, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Поиск}"
                                      VerticalAlignment="Center"

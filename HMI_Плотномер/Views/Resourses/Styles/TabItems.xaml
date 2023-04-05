@@ -213,6 +213,8 @@
 
     </Style>
 
+    
+
     <Style TargetType="TabItem" x:Key="TabItemNoStyle">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="BorderThickness" Value="0"/>

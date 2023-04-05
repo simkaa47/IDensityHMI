@@ -94,6 +94,43 @@
         </Setter>
     </Style>
 
-    
+    <Style TargetType="ListBoxItem" x:Key="EventSelectorItemStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Grid>
+
+                        <Border Name="Border"  Width="180" Height="40"  Margin="0"
+                            BorderBrush="#33ffffff" Background="#3F3F42"  BorderThickness="0,0,0,1" CornerRadius="0">
+                            <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="25,0,0,0">
+                                <Label Name="L2"   
+                                   Opacity="0.5"
+                                   FontWeight="Normal"  FontSize="16" FontFamily="Roboto"                                   
+                                   Content="{TemplateBinding Content}"
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Center"></Label>
+                            </DockPanel>
+                        </Border>
+                        <Border Height="40" HorizontalAlignment="Left" BorderBrush="#28BCBA" Width="50"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                            <Setter TargetName="L2" Property="Opacity" Value="1"/>
+
+
+                            <Setter TargetName="Border" Property="Background" Value="#FF808080"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
 
 </ResourceDictionary>
