@@ -40,6 +40,7 @@ namespace IDensity.Models
         /// <summary>
         /// IP адрес платы
         /// </summary>
+        [DataMember]
         public string IP
         {
             get => _ip;
@@ -56,6 +57,7 @@ namespace IDensity.Models
         /// <summary>
         /// IP адрес платы
         /// </summary>
+        [DataMember]
         public string Mask
         {
             get => _mask;
@@ -72,6 +74,7 @@ namespace IDensity.Models
         /// <summary>
         /// IP адрес платы
         /// </summary>
+        [DataMember]
         public string GateWay
         {
             get => _gateway;
@@ -111,6 +114,7 @@ namespace IDensity.Models
         /// <summary>
         /// MAC
         /// </summary>
+        [DataMember]
         public byte[] Mac
         {
             get => _mac;
@@ -169,7 +173,8 @@ namespace IDensity.Models
         #endregion
 
         #region Данные тлеметрии HV
-        public HvTelemetry TelemetryHV { get; } = new HvTelemetry();
+        [DataMember]
+        public HvTelemetry TelemetryHV { get; set; } = new HvTelemetry();
         #endregion        
 
         #region Данные телеметрии платы питания(темпратуры)
@@ -318,6 +323,7 @@ namespace IDensity.Models
         /// <summary>
         /// Номер порта Udp источника
         /// </summary>
+        [DataMember]
         public int PortUdp
         {
             get { return _portUdp; }
@@ -369,7 +375,8 @@ namespace IDensity.Models
         #endregion
 
         #region Текущий изотоп
-        public Parameter<byte> IsotopeIndex { get; } = new Parameter<byte>("IsotopeIndex", "Тип изотопа", 0, 10, 0, "");
+        [DataMember]
+        public Parameter<byte> IsotopeIndex { get; set; } = new Parameter<byte>("IsotopeIndex", "Тип изотопа", 0, 10, 0, "");
         #endregion
 
         #region Время установки источника

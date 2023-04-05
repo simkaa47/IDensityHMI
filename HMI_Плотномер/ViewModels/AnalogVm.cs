@@ -117,6 +117,23 @@ namespace IDensity.ViewModels
         }, canExecPar => VM.mainModel.Connecting.Value));
         #endregion
 
+        #region Write type of meas result
+        /// <summary>
+        /// Write meas num
+        /// </summary>
+        RelayCommand _measResultTypeWriteCommand;
+        /// <summary>
+        /// Write meas num
+        /// </summary>
+        public RelayCommand MeasResultTypeWriteCommand => _measResultTypeWriteCommand ?? (_measResultTypeWriteCommand = new RelayCommand(execPar =>
+        {
+            if (!(execPar is AnalogOutput output)) return;
+            if (!output.VarNdx.ValidationOk) return;
+            VM.CommService.Tcp.SendAnalogOutSwttings(output.GroupNum, output.ModulNum, output);
+            output.VarNdx.IsWriting = true;
+        }, canExecPar => VM.mainModel.Connecting.Value));
+        #endregion
+
 
         #region Write low limit value
         /// <summary>
