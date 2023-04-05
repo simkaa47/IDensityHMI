@@ -40,6 +40,7 @@ namespace IDensity.Models
         /// <summary>
         /// IP адрес платы
         /// </summary>
+        [DataMember]
         public string IP
         {
             get => _ip;
@@ -56,6 +57,7 @@ namespace IDensity.Models
         /// <summary>
         /// IP адрес платы
         /// </summary>
+        [DataMember]
         public string Mask
         {
             get => _mask;
@@ -72,6 +74,7 @@ namespace IDensity.Models
         /// <summary>
         /// IP адрес платы
         /// </summary>
+        [DataMember]
         public string GateWay
         {
             get => _gateway;
@@ -111,6 +114,7 @@ namespace IDensity.Models
         /// <summary>
         /// MAC
         /// </summary>
+        [DataMember]
         public byte[] Mac
         {
             get => _mac;

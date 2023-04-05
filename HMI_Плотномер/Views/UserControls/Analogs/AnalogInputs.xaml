@@ -59,11 +59,19 @@
                 <!--#endregion-->
                 <!--#region Current -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ТОК AI, MKA">
+                                        Header="ТОК AI, MA">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource Common}" Text="{Binding AdcValue.Value}"
-                                       HorizontalAlignment="Left" Margin="20" Foreground="White"/>
+                            <TextBlock Style="{StaticResource Common}"
+                                       HorizontalAlignment="Left" Margin="20" Foreground="White">
+                                <TextBlock.Text>
+                                    <Binding Path="AdcValue.Value" StringFormat="f3"  Converter="{StaticResource MultiplyOnNumberConverter}">
+                                        <Binding.ConverterParameter>
+                                            <sys:Single>0.001</sys:Single>
+                                        </Binding.ConverterParameter>
+                                    </Binding>
+                                </TextBlock.Text>
+                            </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

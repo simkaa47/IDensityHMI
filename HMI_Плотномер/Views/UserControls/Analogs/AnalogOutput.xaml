@@ -66,7 +66,7 @@
                             <TextBlock Style="{StaticResource Common}"
                                        HorizontalAlignment="Left" Margin="20" Foreground="White">
                                 <TextBlock.Text>
-                                    <Binding Path="VoltageDac.Value"  Converter="{StaticResource MultiplyOnNumberConverter}">
+                                    <Binding Path="VoltageDac.Value" StringFormat="f3"  Converter="{StaticResource MultiplyOnNumberConverter}">
                                         <Binding.ConverterParameter>
                                             <sys:Single>0.00735</sys:Single>
                                         </Binding.ConverterParameter>

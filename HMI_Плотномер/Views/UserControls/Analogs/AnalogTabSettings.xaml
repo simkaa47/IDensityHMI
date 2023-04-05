@@ -37,7 +37,7 @@
                 <!--#endregion--> 
                 <!--#region Set test value -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ТЕСТОВОЕ ЗНАЧЕНИЕ, МА"
+                                        Header="ТЕСТОВОЕ ЗНАЧЕНИЕ, МА" Width="180"
                                         >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -94,17 +94,36 @@
                 <!--#region Meas proc num -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                         Header="№ ИЗМ. ПРОЦЕССА"
-                                        MaxWidth="120">
+                                        MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:CompoBoxParameter DescriptionNotVisible="True"
                                              DataContext="{Binding AnalogMeasProcNdx}"
                                                  CommandButtonVisibility="Collapsed"
-                                                 ParameterWidth="80"
+                                                 ParameterWidth="60"
                                              ItemsSource="{StaticResource MeasProcNums}"
                                              Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                              HorizontalAlignment="Center"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasNumWriteCommand}"
+                                             CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--#endregion-->
+                <!--#region Meas result type -->
+                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
+                                        Header="ТИП ИЗМЕРЕНИЯ"
+                                        MaxWidth="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <p:CompoBoxParameter DescriptionNotVisible="True"
+                                             DataContext="{Binding VarNdx}"
+                                                 CommandButtonVisibility="Collapsed"
+                                                 ParameterWidth="80"
+                                             ItemsSource="{StaticResource VarTypes}"
+                                             Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                             HorizontalAlignment="Center"
+                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultTypeWriteCommand}"
                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -119,7 +138,7 @@
                             <p:MeasUnitParameterText DataContext="{Binding DacLowLimit}"
                                              DescriptionNotVisible="True"
                                               ParameterWidth="160"
-                                                     Margin="20,5,0,5"
+                                              Margin="20,5,0,5"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.LowLimitValueWriteCommand}"
                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"
                                              HorizontalAlignment="Center"                                             
@@ -163,11 +182,11 @@
                 <!--#region Low limit (current) -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                         Header="НИЖНИЙ ПРЕДЕЛ ТОКА(MA)"
-                                        Width="200">
+                                        Width="180">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:TextParameter DescriptionNotVisible="True"
-                                             ParameterWidth="80"
+                                             ParameterWidth="70"
                                              Margin="20,5,0,5"
                                              Coeff="0,001"                                             
                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"
@@ -181,11 +200,11 @@
                 <!--#region High limit (current) -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                         Header="ВЕРХНИЙ ПРЕДЕЛ ТОКА(MA)"
-                                        Width="200">
+                                        Width="180">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:TextParameter DescriptionNotVisible="True"
-                                             ParameterWidth="80"
+                                             ParameterWidth="70"
                                              Coeff="0,001" 
                                               Margin="20,5,0,5"
                                              CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"
