@@ -12,7 +12,14 @@ namespace IDensity.Core.Services.CheckServices
             set => Set(ref _serialNumber, value);
         }
         #endregion
-       
+        #region Версия ПО Hmi
+        private string _hmiSoftwareNumber;
+        public string HmiSoftwareNumber
+        {
+            get => _hmiSoftwareNumber;
+            set => Set(ref _hmiSoftwareNumber, value);
+        }
+        #endregion
         #region DeviceName
         private string _deviceName;
         public string DeviceName
