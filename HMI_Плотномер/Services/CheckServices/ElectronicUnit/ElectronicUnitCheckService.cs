@@ -1,15 +1,13 @@
-﻿using IDensity.AddClasses;
+﻿using IDensity.DataAccess;
 using IDensity.Services.CheckServices;
 using IDensity.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace IDensity.Core.Services.CheckServices.ElectronicUnit
 {
-    public class ElectronicUnitCheckService:PropertyChangedBase
+    public class ElectronicUnitCheckService : PropertyChangedBase
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly VM _vM;
@@ -35,19 +33,19 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit
             _vM = vM;
         }
 
-       
+
 
         public async Task<ElectronicUnitCheck> Check()
         {
             var result = new ElectronicUnitCheck();
             ProcessPercent = 0;
             var analogService = new AnalogCheckService(_cancellationTokenSource, _vM);
-            analogService.PropertyChanged += (o, e) => 
-            { 
+            analogService.PropertyChanged += (o, e) =>
+            {
 
-                if(e.PropertyName==nameof(analogService.ProcessPercent))
+                if (e.PropertyName == nameof(analogService.ProcessPercent))
                 {
-                    ProcessPercent =  80.0 / 100.0 * analogService.ProcessPercent;
+                    ProcessPercent = 80.0 / 100.0 * analogService.ProcessPercent;
                 }
             };
             var analogs = await analogService.Check();
@@ -56,14 +54,14 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit
             result.AnalogCheck1 = analogs[1];
             result.HvSourceCheck = CheckHv();
 
-            var soft= await new CheckCheckSumService(_cancellationTokenSource, _vM).Check();
+            var soft = await new CheckCheckSumService(_cancellationTokenSource, _vM).Check();
             ProcessPercent = 90;
             result.SoftwareCheck = soft[0];
             var rtc = await new RtcCheckService(_cancellationTokenSource, _vM).Check();
             ProcessPercent = 100;
             result.RtcCheck = rtc[0];
             result.CheckResult = !(result.AnalogCheck0.IsError
-                || result.AnalogCheck1.IsError 
+                || result.AnalogCheck1.IsError
                 || result.HvSourceCheck.IsError
                 || result.RtcCheck.IsError
                 || result.SoftwareCheck.IsError);
@@ -85,8 +83,8 @@ namespace IDensity.Core.Services.CheckServices.ElectronicUnit
             return result;
         }
 
-        
 
-        
+
+
     }
 }

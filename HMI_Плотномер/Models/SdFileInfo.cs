@@ -1,7 +1,4 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity.Models
 {
@@ -67,14 +64,14 @@ namespace IDensity.Models
         public int Start
         {
             get => _start;
-            set 
+            set
             {
                 if (value >= 0 && value <= WriteNumber)
                 {
                     if (value > Finish) Finish = value;
                     Set(ref _start, value);
-                } 
-            } 
+                }
+            }
         }
         #endregion
 
@@ -90,18 +87,18 @@ namespace IDensity.Models
         public int Finish
         {
             get => _finish;
-            set 
+            set
             {
                 if (value >= 0 && value <= WriteNumber)
                 {
                     if (value < Start) Start = value;
                     Set(ref _finish, value);
                 }
-            } 
+            }
         }
         #endregion
 
 
     }
-        
+
 }

@@ -1,4 +1,4 @@
-﻿using IDensity.AddClasses;
+﻿using IDensity.Core.Models.Trends;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;

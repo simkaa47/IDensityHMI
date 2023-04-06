@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:IDensity.ViewModels"
+             xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:a="clr-namespace:IDensity.Core.Views.UserControls.Analogs"
              xmlns:adc ="clr-namespace:IDensity.Core.Views.UserControls.AdcControls"
              xmlns:mu="clr-namespace:IDensity.Core.Views.UserControls.MeasNums"
@@ -81,7 +82,13 @@
         <!--#endregion-->
         <!--#region Счетчики -->
         <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Счетчики"  >
-            <c:CounterTab DataContext="{Binding AdcViewModel}" Margin="20,40"/>
+            <StackPanel>
+                <p:TextParameter DataContext="{Binding mainModel.CounterNum}"
+                                     Margin="20,40,40,0"   
+                                 ParameterWidth="104"
+                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.AdcViewModel.WriteCounterNumberCommand}"/>
+                <c:CounterTab DataContext="{Binding AdcViewModel}" Margin="20,0"/>
+            </StackPanel>
         </TabItem>
         <!--#endregion-->
         <!--#region Общие настройки -->

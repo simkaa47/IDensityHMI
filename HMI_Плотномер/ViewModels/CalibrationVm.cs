@@ -1,6 +1,8 @@
 ﻿using IDensity.AddClasses;
-using IDensity.AddClasses.Settings;
-using IDensity.Models;
+using IDensity.Core.Extentions;
+using IDensity.Core.Models.MeasProcess;
+using IDensity.Core.Models.Parameters;
+using IDensity.DataAccess;
 using IDensity.Services.Calibration;
 using IDensity.ViewModels;
 using IDensity.ViewModels.Commands;

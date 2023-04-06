@@ -118,7 +118,7 @@
             </Grid>
             <!--#region Counters -->
             <Viewbox Grid.Row="2">
-                <c:CounterTab Grid.Row="2"/>
+                <c:CounterTab Grid.Row="2" Margin="0,0,1,0"/>
             </Viewbox>
             
             <!--#endregion-->

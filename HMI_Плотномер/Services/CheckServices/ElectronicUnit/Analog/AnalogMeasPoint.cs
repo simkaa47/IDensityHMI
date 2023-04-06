@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.DataAccess;
 
 namespace IDensity.Core.Services.CheckServices.ElectronicUnit.Analog
 {

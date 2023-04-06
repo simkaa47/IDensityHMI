@@ -1,12 +1,10 @@
-﻿using IDensity.AddClasses;
+﻿using IDensity.DataAccess;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace IDensity.Models
 {
-    public class SdCardMeasData:PropertyChangedBase
+    public class SdCardMeasData : PropertyChangedBase
     {
 
 
@@ -30,7 +28,7 @@ namespace IDensity.Models
         /// <summary>
         /// Данные измерений
         /// </summary>
-        public SdMeasResult[] MeasResults { get; } = Enumerable.Range(0,2).Select(i=>new SdMeasResult()).ToArray();
+        public SdMeasResult[] MeasResults { get; } = Enumerable.Range(0, 2).Select(i => new SdMeasResult()).ToArray();
         #endregion
 
         #region Температура внутреннего датчика
@@ -208,7 +206,7 @@ namespace IDensity.Models
             set => Set(ref _isActive, value);
         }
         #endregion
-        
+
     }
 
     public class SdAnalogData : PropertyChangedBase

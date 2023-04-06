@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using static IDensity.AddClasses.EventHistory.EventDevice;
+using static IDensity.Core.Models.Events.EventDevice;
 
 namespace IDensity.Core.Services.CheckServices.PrepareChecking
 {

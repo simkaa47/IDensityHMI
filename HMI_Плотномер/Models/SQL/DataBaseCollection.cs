@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IDensity.DataAccess;
+using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
-using IDensity.AddClasses;
-using Microsoft.Data.Sqlite;
 
 namespace IDensity.Models.SQL
 {
     /// <summary>
     /// Коллекция, синхронизирующаяся с базой данных
     /// </summary>
-    public class DataBaseCollection<T> where T: PropertyChangedBase, IDataBased
+    public class DataBaseCollection<T> where T : PropertyChangedBase, IDataBased
     {
         #region Событие изменения коллекции
         public event Action CollectionChangedEvent;
@@ -25,7 +23,7 @@ namespace IDensity.Models.SQL
         public event Action<string> SqlErrorEvent;
         #endregion
         #region Имя ДБ
-        private string DBName { get; } = "application"; 
+        private string DBName { get; } = "application";
         #endregion
         #region Имя таблицы
         /// <summary>
@@ -40,7 +38,7 @@ namespace IDensity.Models.SQL
         public ObservableCollection<T> Data { get; }
         #endregion
         #region Строка подлючения
-        string ConnectionString { get => $"Data Source={DBName}.db;Mode=ReadWriteCreate";}
+        string ConnectionString { get => $"Data Source={DBName}.db;Mode=ReadWriteCreate"; }
 
         #endregion
         #region Конструктор
@@ -59,11 +57,11 @@ namespace IDensity.Models.SQL
                 Data.Add(defaultCell);
 
             // Подписка на изменение свойтсва каждого элемента коллекции
-            foreach (var item in Data) 
+            foreach (var item in Data)
             {
                 item.PropertyChanged += EditCellSql;
                 item.PropertyChanged += (o, e) => CollectionChangedEvent?.Invoke();
-            } 
+            }
         }
         #endregion
         #region Методы работы с ДБ
@@ -71,7 +69,7 @@ namespace IDensity.Models.SQL
         /// <summary>
         /// Взять данные из базы данных
         /// </summary>
-        void  ReadFromSql()
+        void ReadFromSql()
         {
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -94,7 +92,7 @@ namespace IDensity.Models.SQL
             }
         }
         #endregion
-        
+
         #region Создание таблицы в базе данных
         /// <summary>
         /// Создание таблицы в базе данных
@@ -143,17 +141,17 @@ namespace IDensity.Models.SQL
         /// </summary>
         /// <param name="command"></param>
         void SqlExecuteCmd(SqliteCommand command)
-        {                         
-                using (SqliteConnection connection = new SqliteConnection(ConnectionString))
-                {
+        {
+            using (SqliteConnection connection = new SqliteConnection(ConnectionString))
+            {
                 DoSqlCommand(() =>
                 {
                     connection.Open();
                     command.Connection = connection;
                     command.ExecuteNonQuery();
                 }
-                );                    
-                }            
+                );
+            }
         }
         #endregion
         #region Проверка наличия свойства в классе
@@ -206,7 +204,7 @@ namespace IDensity.Models.SQL
                 if (collection != null && collection.Count >= 1 && ContainStringArr(props, "Id"))
                 {
                     long index = 0;
-                    if(collection.Count>1)index = (long)type.GetProperty("Id").GetValue(collection[collection.Count - 2]) + 1;
+                    if (collection.Count > 1) index = (long)type.GetProperty("Id").GetValue(collection[collection.Count - 2]) + 1;
                     type.GetProperty("Id").SetValue((T)e.NewItems[0], index);
                     InsertToTable((T)e.NewItems[0]);
                     (e.NewItems[0] as T).PropertyChanged += EditCellSql;

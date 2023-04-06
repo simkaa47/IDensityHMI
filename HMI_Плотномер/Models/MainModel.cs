@@ -1,7 +1,14 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.AdcBoardSettings;
-using IDensity.AddClasses.Settings;
-using IDensity.Core.AddClasses.Settings;
+using IDensity.Core.Models.Analogs;
+using IDensity.Core.Models.CheckMaster;
+using IDensity.Core.Models.Counters;
+using IDensity.Core.Models.MeasProcess;
+using IDensity.Core.Models.MeasResults;
+using IDensity.Core.Models.Parameters;
+using IDensity.Core.Models.Tcp;
+using IDensity.Core.Models.Telemetry;
+using IDensity.DataAccess;
 using IDensity.Services.InitServices;
 using System;
 using System.Collections.Generic;
@@ -120,7 +127,7 @@ namespace IDensity.Models
             get => _mac;
             set
             {
-                if(Set(ref _mac, value))
+                if (Set(ref _mac, value))
                 {
                     MacWriting = false;
                 }
@@ -240,11 +247,7 @@ namespace IDensity.Models
                     .ToArray();
             }
         }
-        #endregion        
-
-        #region Настройки платы АЦП        
-        public AdcParameters AdcBoard { get; } = new AdcParameters();
-        #endregion
+        #endregion                
 
         #region Настройки аналоговых модулей
         AnalogGroup[] _analogGroups;
@@ -268,7 +271,12 @@ namespace IDensity.Models
         #region Данные счетчиков 
         [DataMember]
         public CountDiapasone[] CountDiapasones { get; set; } = Enumerable.Range(0, CountCounters).Select(i => new CountDiapasone()).ToArray();
-        #endregion        
+        #endregion
+
+        #region Текущий номер счетчика
+        [DataMember]
+        public Parameter<byte> CounterNum { get; set; } = new Parameter<byte>("CounterNum", "Текущий тип счетчика", 0, (byte)(CountCounters - 1), 0, "");
+        #endregion
 
         #region Параметры полседовательного порта платы
         #region Баудрейт
@@ -480,7 +488,7 @@ namespace IDensity.Models
         #region Парсинг битовых значений устройств
         public void GetDeviceData()
         {
-            AdcBoard.CommState.Value = (CommStates.Value & 1) == 0;
+            AdcBoardSettings.CommState.Value = (CommStates.Value & 1) == 0;
             TempTelemetry.TempBoardCommState.Value = (CommStates.Value & 2) == 0;
             TelemetryHV.HvCommState.Value = (CommStates.Value & 4) == 0;
             for (int i = 0; i < 2; i++)

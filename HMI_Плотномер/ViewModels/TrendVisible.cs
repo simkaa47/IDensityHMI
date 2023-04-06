@@ -1,11 +1,8 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity.ViewModels
 {
-    public class TrendVisible: PropertyChangedBase
+    public class TrendVisible : PropertyChangedBase
     {
         #region Видимость тренда 1
         private bool _visLine1;

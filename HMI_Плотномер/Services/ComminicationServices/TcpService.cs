@@ -1,6 +1,10 @@
 ﻿using IDensity.AddClasses;
-using IDensity.AddClasses.Settings;
-using IDensity.Core.AddClasses.Settings;
+using IDensity.Core.Extentions;
+using IDensity.Core.Models.Analogs;
+using IDensity.Core.Models.Counters;
+using IDensity.Core.Models.MeasProcess;
+using IDensity.Core.Models.Tcp;
+using IDensity.DataAccess;
 using IDensity.Models;
 using System;
 using System.Collections.Generic;
@@ -333,8 +337,7 @@ namespace IDensity.Services.ComminicationServices
             var str = AskResponse(Encoding.ASCII.GetBytes($"*CMND,MPR,{index}#"));
             var arr = GetNumericsFromString(str, new char[] { ',', '=', '#', ':' });
             if (arr == null || arr.Length != 120) throw new Exception($"Сигнатура ответа на запрос настроек измерительных процессов №{index} не соответсвует заданной. Получена строка {str}, которая была разбита на {arr.Length} чисел");
-            _model.MeasProcSettings[index].Num = (ushort)arr[0];
-            _model.MeasProcSettings[index].MeasProcCounterNum.Value = (ushort)arr[1];
+            _model.MeasProcSettings[index].Num = (ushort)arr[0];            
             RecognizeStandDataFromArr(arr, index);
             RecognizeSingleMeasData(arr, index);
             RecognizeCalibrCurveFromArr(arr, index);
@@ -565,6 +568,7 @@ namespace IDensity.Services.ComminicationServices
                 _model.CountDiapasones[i].CountBotPerc.Value = (ushort)list[i][7];
             }
             list = GetNumber("adc_proc_mode", 1, 1, str);
+            _model.CounterNum.Value = (byte)GetNumber("adc_proc_calc_cnt", 1, 1, str)[0][0];  
             if (list == null) return;
             _model.AdcBoardSettings.AdcProcMode.Value = (ushort)list[0][0];
             list = GetNumber("adc_single_meas_time", 1, 1, str);
@@ -1044,6 +1048,13 @@ namespace IDensity.Services.ComminicationServices
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(arg)));
         }
 
+        #endregion
+
+        #region Записать настройки FSRD2
+        public void SetFsrd2(string arg)
+        {
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings2(); }, Encoding.ASCII.GetBytes(arg)));
+        }
         #endregion
 
 

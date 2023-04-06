@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDensity.Models.SQL
+﻿namespace IDensity.Models.SQL
 {
     public interface IDataBased
     {

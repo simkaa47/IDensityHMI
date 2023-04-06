@@ -35,12 +35,8 @@
                     </Style.Triggers>
                 </Style>
                 <conv:PipeDiameterConverter x:Key="PipeDiameterVisibilityConverter"/>
-            </ListBox.Resources>            
-
-            <!--#region Counter Number -->
-            <p:TextParameter DataContext="{Binding SelectedProcess.MeasProcCounterNum}"
-                             Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteCounterNumCommand}"/>
-            <!--#endregion-->
+            </ListBox.Resources>
+            
             <!--#region Measuring Duration -->
             <p:TextParameter DataContext="{Binding SelectedProcess.MeasDuration}"
                              Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteMeasDurationCommand}"/>

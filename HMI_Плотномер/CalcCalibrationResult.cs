@@ -1,11 +1,8 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity
 {
-    class CalcCalibrationResult :PropertyChangedBase
+    class CalcCalibrationResult : PropertyChangedBase
     {
         #region Степень полинома
         private int _deegry;
@@ -31,7 +28,7 @@ namespace IDensity
         public CalcCalibrationResult(int deg, double coeff)
         {
             this.Deegry = deg;
-            this.Coeff = coeff; 
+            this.Coeff = coeff;
         }
 
     }

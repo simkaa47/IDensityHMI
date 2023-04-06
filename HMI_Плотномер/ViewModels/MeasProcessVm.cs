@@ -1,21 +1,18 @@
-﻿using IDensity.AddClasses;
-using IDensity.AddClasses.Settings;
+﻿using IDensity.Core.Extentions;
+using IDensity.Core.Models.MeasProcess;
+using IDensity.Core.Models.Parameters;
+using IDensity.DataAccess;
 using IDensity.ViewModels.Commands;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace IDensity.ViewModels
 {
-    public class MeasProcessVm:PropertyChangedBase
+    public class MeasProcessVm : PropertyChangedBase
     {
         public MeasProcessVm(VM vM)
         {
-            VM = vM;            
+            VM = vM;
             StandVm = new StandarisationViewModel(VM);
             CalibrationVm = new CalibrationVm(VM);
         }
@@ -84,28 +81,12 @@ namespace IDensity.ViewModels
         public MeasProcSettings SelectedProcess
         {
             get => _selectedProcess;
-            set 
-            { 
-                if(value!=null) Set(ref _selectedProcess, value);
-            } 
+            set
+            {
+                if (value != null) Set(ref _selectedProcess, value);
+            }
         }
-        #endregion
-
-        #region Write counter number
-        /// <summary>
-        /// Write counter number
-        /// </summary>
-        RelayCommand _writeCounterNumCommand;
-        /// <summary>
-        /// Write counter number
-        /// </summary>
-        public RelayCommand WriteCounterNumCommand => _writeCounterNumCommand ?? (_writeCounterNumCommand = new RelayCommand(execPar => 
-        { 
-            var str = $"*SETT,meas_proc={SelectedProcess.Num},cntr={SelectedProcess.MeasProcCounterNum.WriteValue}#";
-            SelectedProcess.MeasProcCounterNum.IsWriting= true;
-            VM.CommService.Tcp.WriteMeasProcSettings(str , SelectedProcess.Num);
-        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasProcCounterNum)));
-        #endregion
+        #endregion        
 
         #region WriteMeasDuration
         /// <summary>
@@ -115,9 +96,9 @@ namespace IDensity.ViewModels
         /// <summary>
         /// WriteMeasDuration
         /// </summary>
-        public RelayCommand WriteMeasDurationCommand => _writeMeasDurationCommand ?? (_writeMeasDurationCommand = new RelayCommand(execPar => 
+        public RelayCommand WriteMeasDurationCommand => _writeMeasDurationCommand ?? (_writeMeasDurationCommand = new RelayCommand(execPar =>
         {
-            var str = $"*SETT,meas_proc={SelectedProcess.Num},duration={SelectedProcess.MeasDuration.WriteValue*10}#";
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},duration={SelectedProcess.MeasDuration.WriteValue * 10}#";
             SelectedProcess.MeasDuration.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasDuration)));
@@ -131,7 +112,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write Meas Deep
         /// </summary>
-        public RelayCommand WriteMeasDeepCommand => _writeMeasDeepCommand ?? (_writeMeasDeepCommand = new RelayCommand(execPar => 
+        public RelayCommand WriteMeasDeepCommand => _writeMeasDeepCommand ?? (_writeMeasDeepCommand = new RelayCommand(execPar =>
         {
             var str = $"*SETT,meas_proc={SelectedProcess.Num},aver_depth={SelectedProcess.MeasDeep.WriteValue}#";
             SelectedProcess.MeasDeep.IsWriting = true;
@@ -163,7 +144,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write Activity Command
         /// </summary>
-        public RelayCommand WriteActivityCommand => _writeActivityCommand ?? (_writeActivityCommand = new RelayCommand(execPar => 
+        public RelayCommand WriteActivityCommand => _writeActivityCommand ?? (_writeActivityCommand = new RelayCommand(execPar =>
         {
             VM.CommService.SetMeasProcActivity();
         }, canExecPar => SelectedProcess != null && VM.mainModel.Connecting.Value));
@@ -177,13 +158,13 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write Fast Change Settings Command
         /// </summary>
-        public RelayCommand WriteFastChangeActivityCommand => _writeFastChangeActivityCommand ?? (_writeFastChangeActivityCommand = new RelayCommand(execPar => 
+        public RelayCommand WriteFastChangeActivityCommand => _writeFastChangeActivityCommand ?? (_writeFastChangeActivityCommand = new RelayCommand(execPar =>
         {
             var fast = SelectedProcess.FastChange;
             var str = $"*SETT,meas_proc={SelectedProcess.Num},fast_chg={(fast.Activity.WriteValue ? 1 : 0)},{fast.Threshold.Value}#";
             fast.Activity.IsWriting = true;
-            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);            
-        }, canExecPar => SelectedProcess!= null && GetCommandCondition(SelectedProcess.FastChange.Activity)));
+            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+        }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.FastChange.Activity)));
         #endregion
 
         #region Write Fast Change Settings Command
@@ -211,8 +192,8 @@ namespace IDensity.ViewModels
         /// <summary>
         /// WritePipeDiameter
         /// </summary>
-        public RelayCommand WritePipeDiameterCommand => _writePipeDiameterCommand ?? (_writePipeDiameterCommand = new RelayCommand(execPar => 
-        {            
+        public RelayCommand WritePipeDiameterCommand => _writePipeDiameterCommand ?? (_writePipeDiameterCommand = new RelayCommand(execPar =>
+        {
             var str = $"*SETT,meas_proc={SelectedProcess.Num},pipe_diam={(ushort)(SelectedProcess.PipeDiameter.WriteValue * 10)}#";
             SelectedProcess.PipeDiameter.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
@@ -228,7 +209,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write temperature compensation
         /// </summary>
-        public RelayCommand TempCompensationActivityWriteCommand => _tempCompensationActivityWriteCommand ?? (_tempCompensationActivityWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand TempCompensationActivityWriteCommand => _tempCompensationActivityWriteCommand ?? (_tempCompensationActivityWriteCommand = new RelayCommand(execPar =>
         {
             if (SelectedProcess is null || TempCompensationIndex < 0) return;
             var par = SelectedProcess.TempCompensations[TempCompensationIndex].Activity;
@@ -245,7 +226,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write temp comp coeff
         /// </summary>
-        public RelayCommand TempCompensationCoeffCommand => _tempCompensationCoeffCommand ?? (_tempCompensationCoeffCommand = new RelayCommand(execPar => 
+        public RelayCommand TempCompensationCoeffCommand => _tempCompensationCoeffCommand ?? (_tempCompensationCoeffCommand = new RelayCommand(execPar =>
         {
             if (SelectedProcess is null || TempCompensationIndex < 0) return;
             if (execPar is null) return;
@@ -266,7 +247,7 @@ namespace IDensity.ViewModels
             var proc = SelectedProcess;
             string cmd = ($"*SETT,meas_proc={proc.Num}," +
                 $"comp_temp={TempCompensationIndex}," +
-                $"{((id=="activity" ? proc.TempCompensations[TempCompensationIndex].Activity.WriteValue : proc.TempCompensations[TempCompensationIndex].Activity.Value) ? 1 : 0)},0");
+                $"{((id == "activity" ? proc.TempCompensations[TempCompensationIndex].Activity.WriteValue : proc.TempCompensations[TempCompensationIndex].Activity.Value) ? 1 : 0)},0");
             var coeffs = SelectedProcess.TempCompensations[TempCompensationIndex].Coeffs;
             for (int i = 0; i < coeffs.Count; i++)
             {
@@ -275,18 +256,18 @@ namespace IDensity.ViewModels
             par.IsWriting = true;
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
-        }        
+        }
 
         #region Записать-кты ослабления
         RelayCommand _writeAttenuationCommand;
         public RelayCommand WriteAttenuationCommand => _writeAttenuationCommand ?? (_writeAttenuationCommand = new RelayCommand(exec =>
-        {            
+        {
             if (SelectedProcess is null) return;
             foreach (var att in SelectedProcess.AttCoeffs)
             {
                 att.IsWriting = true;
             }
-            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},att_coeffs={(SelectedProcess.AttCoeffs[0].WriteValue.ToStringPoint())},{(SelectedProcess.AttCoeffs[1].WriteValue.ToStringPoint())}");           
+            string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},att_coeffs={(SelectedProcess.AttCoeffs[0].WriteValue.ToStringPoint())},{(SelectedProcess.AttCoeffs[1].WriteValue.ToStringPoint())}");
             cmd += "#";
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
 
@@ -298,7 +279,7 @@ namespace IDensity.ViewModels
         RelayCommand _writeCalcTypeCommand;
         public RelayCommand WriteCalcTypeCommand => _writeCalcTypeCommand ?? (_writeCalcTypeCommand = new RelayCommand(exec =>
         {
-            
+
             if (SelectedProcess is null) return;
             string cmd = ($"*SETT,meas_proc={SelectedProcess.Num},calc_type={SelectedProcess.CalculationType.WriteValue}");
             cmd += "#";
@@ -336,7 +317,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write calibration result
         /// </summary>
-        public RelayCommand CalibrResultWriteCommand => _calibrResultWriteCommand ?? (_calibrResultWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand CalibrResultWriteCommand => _calibrResultWriteCommand ?? (_calibrResultWriteCommand = new RelayCommand(execPar =>
         {
             WriteCalibrCurveData("result", SelectedProcess.CalibrCurve.Result);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.CalibrCurve.Result)));
@@ -350,7 +331,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write calibration type
         /// </summary>
-        public RelayCommand CalibrTypeWriteCommand => _calibrTypeWriteCommand ?? (_calibrTypeWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand CalibrTypeWriteCommand => _calibrTypeWriteCommand ?? (_calibrTypeWriteCommand = new RelayCommand(execPar =>
         {
             WriteCalibrCurveData("type", SelectedProcess.CalibrCurve.Type);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.CalibrCurve.Type)));
@@ -364,7 +345,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write calibration coeff
         /// </summary>
-        public RelayCommand CalibrCoeffWriteCommand => _calibrCoeffWriteCommand ?? (_calibrCoeffWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand CalibrCoeffWriteCommand => _calibrCoeffWriteCommand ?? (_calibrCoeffWriteCommand = new RelayCommand(execPar =>
         {
             int i = 0;
             if (!int.TryParse(execPar.ToString(), out i)) return;
@@ -380,7 +361,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write density liq settings
         /// </summary>
-        public RelayCommand DensityLiqSettingsCommand => _densityLiqSettingsCommand ?? (_densityLiqSettingsCommand = new RelayCommand(execPar => 
+        public RelayCommand DensityLiqSettingsCommand => _densityLiqSettingsCommand ?? (_densityLiqSettingsCommand = new RelayCommand(execPar =>
         {
             var proc = SelectedProcess;
             var str = $"*SETT,meas_proc={proc.Num},dens_liq=0,{proc.DensityLiqD1.PhysValue.WriteValue}#";
@@ -397,7 +378,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write density solid settings
         /// </summary>
-        public RelayCommand DensitySolidSettingsCommand => _densitySolidSettingsCommand ?? (_densitySolidSettingsCommand = new RelayCommand(execPar => 
+        public RelayCommand DensitySolidSettingsCommand => _densitySolidSettingsCommand ?? (_densitySolidSettingsCommand = new RelayCommand(execPar =>
         {
             var proc = SelectedProcess;
             var str = $"*SETT,meas_proc={proc.Num},dens_solid=0,{proc.DensitySolD2.PhysValue.WriteValue}#";
@@ -414,7 +395,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write steam compensation activity
         /// </summary>
-        public RelayCommand SteamCompActivityWriteCommand => _steamCompActivityWriteCommand ?? (_steamCompActivityWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand SteamCompActivityWriteCommand => _steamCompActivityWriteCommand ?? (_steamCompActivityWriteCommand = new RelayCommand(execPar =>
         {
             WriteSteamCompensation("activity", SelectedProcess.SteamCompensation.Activity);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.Activity)));
@@ -428,7 +409,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write steam compensation source
         /// </summary>
-        public RelayCommand SteamCompSourceWriteCommand => _steamCompSourceWriteCommand ?? (_steamCompSourceWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand SteamCompSourceWriteCommand => _steamCompSourceWriteCommand ?? (_steamCompSourceWriteCommand = new RelayCommand(execPar =>
         {
             WriteSteamCompensation("source", SelectedProcess.SteamCompensation.Sourse);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.Sourse)));
@@ -442,7 +423,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write steam compensation A
         /// </summary>
-        public RelayCommand SteamCompensationWriteACommand => _steamCompensationWriteACommand ?? (_steamCompensationWriteACommand = new RelayCommand(execPar => 
+        public RelayCommand SteamCompensationWriteACommand => _steamCompensationWriteACommand ?? (_steamCompensationWriteACommand = new RelayCommand(execPar =>
         {
             WriteSteamCompensation("A", SelectedProcess.SteamCompensation.A);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.SteamCompensation.A)));
@@ -477,13 +458,13 @@ namespace IDensity.ViewModels
             par.IsWriting = true;
             VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
         }
-       
+
 
         private void WriteCalibrCurveData<T>(string key, Parameter<T> par) where T : IComparable
         {
             var curve = SelectedProcess.CalibrCurve;
-            var str = $"*SETT,meas_proc={SelectedProcess.Num},calib_curve={(key=="type" ? curve.Type.WriteValue : curve.Type.Value)},0,";
-            for(int i = 0;i<SelectedProcess.CalibrCurve.Coeffs.Count;i++)
+            var str = $"*SETT,meas_proc={SelectedProcess.Num},calib_curve={(key == "type" ? curve.Type.WriteValue : curve.Type.Value)},0,";
+            for (int i = 0; i < SelectedProcess.CalibrCurve.Coeffs.Count; i++)
             {
                 str += (key == i.ToString() ? curve.Coeffs[i].WriteValue : curve.Coeffs[i].Value).ToStringPoint();
                 str += ",";
@@ -494,7 +475,7 @@ namespace IDensity.ViewModels
 
         }
 
-        private bool GetCommandCondition<T>(Parameter<T> par) where T:IComparable
+        private bool GetCommandCondition<T>(Parameter<T> par) where T : IComparable
         {
             return VM.mainModel.Connecting.Value && SelectedProcess != null && par.ValidationOk;
         }
@@ -505,19 +486,18 @@ namespace IDensity.ViewModels
           {
               ushort par = 0;
               if (exec == null) return;
-              if (!ushort.TryParse(exec.ToString(), out par)) return;              
+              if (!ushort.TryParse(exec.ToString(), out par)) return;
               CopyMeasProcess(SelectedProcess, (ushort)par);
           }, canExec => VM.mainModel.Connecting.Value));
-        #endregion       
+        #endregion
 
-        
+
         public void CopyMeasProcess(MeasProcSettings settings, ushort number)
         {
             IsWriting = true;
-            VM.mainModel.MeasProcSettings[number].MeasDeep.PropertyChanged += ResetCipyFlag;            
-            var header = $"*SETT,meas_proc={number}";
-            var str = header + $",cntr={settings.MeasProcCounterNum.Value}";
-            str += $",{CopyStandartisation(settings)}";
+            VM.mainModel.MeasProcSettings[number].MeasDeep.PropertyChanged += ResetCipyFlag;
+            var header = $"*SETT,meas_proc={number}";            
+            var str = header + $",{CopyStandartisation(settings)}";
             str += $",{CopyCalibrCurve(settings)}";
             str += $",{CopySingleMeasResults(settings)}";
             VM.CommService.Tcp.WriteMeasProcSettings(str + "#", number);
@@ -525,7 +505,7 @@ namespace IDensity.ViewModels
             str += $",{CopyTempCompensation(settings)}";
             str += $",{CopySteamCompensation(settings)}";
             str += $",aver_depth={settings.MeasDeep.Value}";
-            str += $",duration={settings.MeasDuration.Value*10}";
+            str += $",duration={settings.MeasDuration.Value * 10}";
             str += $",type={settings.MeasType.Value}";
             str += $",{CopyFastChanges(settings)}";
             str += $",pipe_diam={(ushort)(settings.PipeDiameter.Value * 10)}";
@@ -539,7 +519,7 @@ namespace IDensity.ViewModels
         {
             if (e.PropertyName == "Value")
             {
-                IsWriting = false;               
+                IsWriting = false;
             }
         }
 
@@ -548,7 +528,7 @@ namespace IDensity.ViewModels
             string arg = string.Empty;
             foreach (var std in settings.MeasStandSettings)
             {
-                arg+= $"std={std.Id},0,{std.StandDuration.Value*10}," +
+                arg += $"std={std.Id},0,{std.StandDuration.Value * 10}," +
                     $"{std.LastStandDate.Value:dd:MM:yy}," +
                     $"{std.StandResult.Value.ToStringPoint()}," +
                     $"{std.StandPhysValue.Value.ToStringPoint()}," +
@@ -573,7 +553,7 @@ namespace IDensity.ViewModels
         private string CopySingleMeasResults(MeasProcSettings settings)
         {
             var arg = "calib_src=";
-            for(int j = 0; j < MeasProcSettings.SingleMeasResCount; j++)
+            for (int j = 0; j < MeasProcSettings.SingleMeasResCount; j++)
             {
                 arg += $"{settings.SingleMeasResults[j].Date.Value.ToString("dd:MM:yy")},{settings.SingleMeasResults[j].Weak.Value.ToStringPoint()},{settings.SingleMeasResults[j].CounterValue.Value.ToStringPoint()},";
             }
@@ -591,7 +571,7 @@ namespace IDensity.ViewModels
             var arg = string.Empty;
             foreach (var comp in settings.TempCompensations)
             {
-                arg += $"comp_temp={comp.Index},{(comp.Activity.Value ? 1:0)},0";
+                arg += $"comp_temp={comp.Index},{(comp.Activity.Value ? 1 : 0)},0";
                 foreach (var coeff in comp.Coeffs)
                 {
                     arg += "," + coeff.Value.ToStringPoint();
@@ -608,7 +588,7 @@ namespace IDensity.ViewModels
             arg += $"comp_temp={(comp.Activity.Value ? 1 : 0)}," +
                 $"{comp.MeasUnitNum.Value},{comp.Sourse.Value}," +
                 $"{comp.A.Value.ToStringPoint()}," +
-                $"{comp.B.Value.ToStringPoint()}";            
+                $"{comp.B.Value.ToStringPoint()}";
             return arg;
         }
 

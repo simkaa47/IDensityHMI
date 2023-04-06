@@ -1,4 +1,6 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Models.Trends;
+using IDensity.DataAccess;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
