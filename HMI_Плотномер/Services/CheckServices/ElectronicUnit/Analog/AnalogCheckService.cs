@@ -1,5 +1,7 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Models.Analogs;
 using IDensity.Core.Services.CheckServices.ElectronicUnit.Analog;
+using IDensity.DataAccess;
 using IDensity.Models;
 using IDensity.Services.ComminicationServices;
 using IDensity.ViewModels;

@@ -1,6 +1,10 @@
 ﻿using IDensity.AddClasses;
 using IDensity.AddClasses.EventHistory;
+using IDensity.Core.Models.Events;
+using IDensity.Core.Models.Trends;
+using IDensity.Core.Models.Users;
 using IDensity.Core.ViewModels.MeasUnits;
+using IDensity.DataAccess;
 using IDensity.DataAccess.Models;
 using IDensity.DataAccess.Repositories;
 using IDensity.Models;
@@ -330,21 +334,6 @@ namespace IDensity.ViewModels
         public bool ArchivalTrendUploading { get => _archivalTrendUploading; private set { Set(ref _archivalTrendUploading, value); } }
         #endregion
 
-        #endregion
-
-        #region Данные перечислений 
-
-        #region Названия источников компенсаций
-        public DataBaseCollection<EnumCustom> CompensationSrcNames { get; } = new DataBaseCollection<EnumCustom>("CompensationSrcNames", new EnumCustom());
-        #endregion        
-
-        #region Названия измерительных процессов
-        public DataBaseCollection<EnumCustom> MeasProcNames { get; } = new DataBaseCollection<EnumCustom>("MeasProcNames", new EnumCustom());
-        #endregion
-
-        #region Названия стандартизаций
-        public DataBaseCollection<EnumCustom> StandNames { get; } = new DataBaseCollection<EnumCustom>("StandNames", new EnumCustom());
-        #endregion
         #endregion        
 
         #region Вывести данные из БД

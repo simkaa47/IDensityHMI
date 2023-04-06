@@ -1,4 +1,5 @@
 ﻿using IDensity.AddClasses;
+using IDensity.DataAccess;
 using IDensity.ViewModels.Commands;
 using IDensity.Views.CheckMaster;
 using IDensity.Views.SettingsMaster.ConnectionMaster;

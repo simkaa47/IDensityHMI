@@ -1,5 +1,5 @@
-﻿using IDensity.AddClasses;
-using IDensity.AddClasses.EventHistory;
+﻿using IDensity.Core.Models.Events;
+using IDensity.Core.Models.Parameters;
 using IDensity.Models;
 using System;
 using System.Collections.Generic;

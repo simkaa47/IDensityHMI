@@ -1,4 +1,4 @@
-﻿using IDensity.AddClasses;
+﻿using IDensity.Core.Models.Users;
 using System;
 using System.Globalization;
 using System.Linq;

@@ -1,24 +1,22 @@
-﻿using IDensity.AddClasses;
+﻿using IDensity.DataAccess;
 using IDensity.Models;
 using IDensity.Services.MasterSettings;
 using IDensity.ViewModels.Commands;
 using IDensity.Views.SettingsMaster.ConnectionMaster;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace IDensity.ViewModels.MasrerSettings
 {
-    public  class MasterConnectViewModel:PropertyChangedBase
+    public class MasterConnectViewModel : PropertyChangedBase
     {
         public MasterConnectViewModel(VM vM)
         {
             VM = vM;
-            
+
         }
         public VM VM { get; }
 
@@ -138,7 +136,7 @@ namespace IDensity.ViewModels.MasrerSettings
             FailureSearchEvent?.Invoke();
             CancelMasterEvent?.Invoke();
             CancelScan();
-            CancelWaiting();            
+            CancelWaiting();
         }
 
         /// <summary>
@@ -147,7 +145,7 @@ namespace IDensity.ViewModels.MasrerSettings
         public void GetAdapters()
         {
             Adapters = _connectService.GetAdapterData();
-            
+
         }
 
 
@@ -159,10 +157,10 @@ namespace IDensity.ViewModels.MasrerSettings
         /// <summary>
         /// Выполнение команды Next
         /// </summary>
-        public RelayCommand NextCommand => _nextCommand ?? (_nextCommand = new RelayCommand(execPar => 
+        public RelayCommand NextCommand => _nextCommand ?? (_nextCommand = new RelayCommand(execPar =>
         {
             OnNextCommand();
-        
+
         }, canExecPar => true));
         #endregion
 
@@ -177,13 +175,13 @@ namespace IDensity.ViewModels.MasrerSettings
                 State = StateConnectionMaster.ConnectionReady;
                 IsProcessing = false;
                 return;
-            } 
+            }
             switch (State)
             {
-               case StateConnectionMaster.ConnectionReady:
+                case StateConnectionMaster.ConnectionReady:
                     State = StateConnectionMaster.Exit;
                     break;
-               case StateConnectionMaster.Start:
+                case StateConnectionMaster.Start:
                     GetAdapters();
                     if (Adapters.Count() > 0)
                     {
@@ -226,7 +224,7 @@ namespace IDensity.ViewModels.MasrerSettings
         public event Action CancelMasterEvent = delegate { };
         #endregion
 
-        
+
 
         async void Scan()
         {
@@ -244,14 +242,14 @@ namespace IDensity.ViewModels.MasrerSettings
                     IsProcessing = string.IsNullOrEmpty(SelectedIP) ? true : false;
                 }
             };
-            _connectService.FoundDeviceEvent += (s) => FoundedDevicesIp = _connectService.FoundedDevicesIP;            
-            await _connectService.Scan(Adapters.Where(a=>a.Selected), CancleScanTokenSource.Token);
+            _connectService.FoundDeviceEvent += (s) => FoundedDevicesIp = _connectService.FoundedDevicesIP;
+            await _connectService.Scan(Adapters.Where(a => a.Selected), CancleScanTokenSource.Token);
             ScanCompleted = 100;
-            if (!(FoundedDevicesIp!=null && FoundedDevicesIp.Count > 0))
+            if (!(FoundedDevicesIp != null && FoundedDevicesIp.Count > 0))
             {
                 State = StateConnectionMaster.NoInterfaces;
                 IsProcessing = false;
-            }           
+            }
         }
 
         async void WaitConnectingAsync()
@@ -260,7 +258,7 @@ namespace IDensity.ViewModels.MasrerSettings
             VM.mainModel.TcpConnectData.IP = SelectedIP;
             CancelScan();
             CancelWaitConnectTokenSource = new CancellationTokenSource();
-            await Task.Run(()=>
+            await Task.Run(() =>
             {
                 if (WaitingConnectAsync().Wait(30000, CancelWaitConnectTokenSource.Token))
                 {
@@ -269,13 +267,13 @@ namespace IDensity.ViewModels.MasrerSettings
                 else
                     State = StateConnectionMaster.FailureSearch;
                 IsProcessing = false;
-                    
+
             });
         }
 
         async Task WaitingConnectAsync()
         {
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 while (!VM.mainModel.Connecting.Value)
                 {

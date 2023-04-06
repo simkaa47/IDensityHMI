@@ -1,4 +1,6 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Models.Analogs;
+using IDensity.DataAccess;
 using IDensity.Models;
 using IDensity.ViewModels.Commands;
 using System.Collections.Generic;

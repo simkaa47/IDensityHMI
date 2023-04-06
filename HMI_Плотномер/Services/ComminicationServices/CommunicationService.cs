@@ -1,4 +1,5 @@
-﻿using IDensity.AddClasses;
+﻿using IDensity.Core.Models.Analogs;
+using IDensity.Core.Models.Counters;
 using IDensity.Models;
 using System;
 using System.Diagnostics;

@@ -14,8 +14,7 @@
     <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
     <conv:EqualityToVisibilityConverter x:Key="VisibleIfEqual"/>
     <conv:NotEqualityToVisibilityConverter x:Key="VisibleIfNotEqual"/>
-    <conv:StringByIndexConverter x:Key="StringByIndex"/>
-    <conv:GetNameFromEnumCustom x:Key="EnumCustomConverter"/>
+    <conv:StringByIndexConverter x:Key="StringByIndex"/>   
     <conv:GetBitFromNum x:Key="GetBitConverter"/>
     <conv:MultiValueSelector x:Key="Multiselector"/>
     <conv:AddConverter x:Key="AddConverter"/>

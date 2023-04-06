@@ -1,4 +1,4 @@
-﻿using IDensity.AddClasses.Settings;
+﻿using IDensity.Core.Models.MeasProcess;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

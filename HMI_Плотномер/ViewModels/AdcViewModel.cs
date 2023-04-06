@@ -1,4 +1,7 @@
 ﻿using IDensity.AddClasses;
+using IDensity.Core.Models.Adc;
+using IDensity.Core.Models.Counters;
+using IDensity.DataAccess;
 using IDensity.Models;
 using IDensity.Services.AdcServices;
 using IDensity.Services.ComminicationServices;
@@ -374,6 +377,23 @@ namespace IDensity.ViewModels
             }
         }
         #endregion
+
+
+        #region Изменить номер  счетчика
+        /// <summary>
+        /// Изменить номер  счетчика
+        /// </summary>
+        RelayCommand _writeCounterNumberCommand;
+        /// <summary>
+        /// Изменить номер  счетчика
+        /// </summary>
+        public RelayCommand WriteCounterNumberCommand => _writeCounterNumberCommand ?? (_writeCounterNumberCommand = new RelayCommand(execPar => 
+        {
+            VM.CommService.Tcp.SetFsrd2($"*SETT,adc_proc_calc_cntr={VM.mainModel.CounterNum.WriteValue}#");
+            VM.mainModel.CounterNum.IsWriting = true;
+        }, canExecPar => VM.mainModel.Connecting.Value && VM.mainModel.CounterNum.ValidationOk));
+        #endregion
+
 
         #region Очистить статистику импульсов в режиме осцилографа
         /// <summary>

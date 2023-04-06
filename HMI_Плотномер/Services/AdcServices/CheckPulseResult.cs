@@ -1,7 +1,4 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity.Services.AdcServices
 {

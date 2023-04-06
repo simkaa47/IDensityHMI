@@ -1,11 +1,8 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity.Services.CheckServices
 {
-    public class DeviceCheckResult:PropertyChangedBase
+    public class DeviceCheckResult : PropertyChangedBase
     {
         #region Название блока проверки прибора
         /// <summary>
@@ -52,7 +49,7 @@ namespace IDensity.Services.CheckServices
         }
         #endregion
 
-        
+
 
     }
 }

@@ -1,11 +1,8 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity.Models
 {
-    public class SpectrLogSettings:PropertyChangedBase
+    public class SpectrLogSettings : PropertyChangedBase
     {
 
         #region Частота логирования спектра, раз/мин
@@ -19,11 +16,11 @@ namespace IDensity.Models
         public int LogFreq
         {
             get => _logFreq;
-            set 
+            set
             {
-                if(value>=10)
-                Set(ref _logFreq, value);
-            } 
+                if (value >= 10)
+                    Set(ref _logFreq, value);
+            }
         }
         #endregion
 
@@ -53,11 +50,11 @@ namespace IDensity.Models
         public int FreqClearSpectr
         {
             get => _freqClearSpectr;
-            set 
-            { 
-                if(value>60)
-                Set(ref _freqClearSpectr, value); 
-            } 
+            set
+            {
+                if (value > 60)
+                    Set(ref _freqClearSpectr, value);
+            }
         }
         #endregion
 

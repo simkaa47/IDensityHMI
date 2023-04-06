@@ -1,18 +1,16 @@
-﻿using IDensity.AddClasses;
-using IDensity.Core.Services.CheckServices;
+﻿using IDensity.Core.Services.CheckServices;
 using IDensity.Core.Services.CheckServices.ElectronicUnit;
 using IDensity.Core.Services.CheckServices.PrepareChecking;
 using IDensity.Core.Services.CheckServices.Process;
 using IDensity.Core.Services.CheckServices.Sensor;
+using IDensity.DataAccess;
 using IDensity.Models;
-using IDensity.Services.CheckServices;
 using IDensity.Services.ComminicationServices;
 using IDensity.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace IDensity.ViewModels.MasrerSettings
 {
@@ -98,7 +96,7 @@ namespace IDensity.ViewModels.MasrerSettings
 
         private SensorCheck _sensorCheck;
         public SensorCheck SensorCheck
-        { 
+        {
             get => _sensorCheck;
             set => Set(ref _sensorCheck, value);
         }
@@ -206,7 +204,7 @@ namespace IDensity.ViewModels.MasrerSettings
             {
                 ProcessPercent = 0;
                 MainStatus = "Предварительное условие проверки...";
-                GetDeviceInformation();                
+                GetDeviceInformation();
                 new PrepareCheckService(PrepareCheckInformation, VM).Check();
                 ProcessPercent = 10;
                 MainStatus = "Проверка основного блока электроники...";
@@ -215,7 +213,7 @@ namespace IDensity.ViewModels.MasrerSettings
                 {
                     if (e.PropertyName == nameof(electronicCheckService.ProcessPercent))
                     {
-                        ProcessPercent  = 10 + 80.0 / 100.0 * electronicCheckService.ProcessPercent;
+                        ProcessPercent = 10 + 80.0 / 100.0 * electronicCheckService.ProcessPercent;
                     }
                 };
                 ElectronicUnitCheck = await electronicCheckService.Check();
@@ -246,7 +244,7 @@ namespace IDensity.ViewModels.MasrerSettings
             }
         }
 
-        
+
         void Describe()
         {
             _model.Connecting.PropertyChanged += (o, e) =>
@@ -271,8 +269,8 @@ namespace IDensity.ViewModels.MasrerSettings
         }
 
         void GetDeviceInformation()
-        {            
-            DeviceInfo.HmiSoftwareNumber = App.VersionNumber;
+        {
+            
             DeviceInfo.SerialNumber = VM.mainModel.SerialNumber.Value;
         }
 

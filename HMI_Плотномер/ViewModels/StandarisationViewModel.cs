@@ -1,11 +1,12 @@
-﻿using IDensity.AddClasses;
-using IDensity.AddClasses.Settings;
+﻿using IDensity.Core.Extentions;
+using IDensity.Core.Models.MeasProcess;
+using IDensity.DataAccess;
 using IDensity.ViewModels.Commands;
 using System.Timers;
 
 namespace IDensity.ViewModels
 {
-    public class StandarisationViewModel:PropertyChangedBase
+    public class StandarisationViewModel : PropertyChangedBase
     {
         private readonly VM _vM;
 
@@ -61,7 +62,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write StandLastDateCommand
         /// </summary>
-        public RelayCommand LastStandDateWriteCommand => _lastStandDateWriteCommand ?? (_lastStandDateWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand LastStandDateWriteCommand => _lastStandDateWriteCommand ?? (_lastStandDateWriteCommand = new RelayCommand(execPar =>
         {
             var proc = _vM.MeasProcessVm.SelectedProcess;
             var stand = _vM.MeasProcessVm.SelectedStandartisation;
@@ -80,7 +81,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write Standartisation result
         /// </summary>
-        public RelayCommand ResultWriteCommand => _resultWriteCommand ?? (_resultWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand ResultWriteCommand => _resultWriteCommand ?? (_resultWriteCommand = new RelayCommand(execPar =>
         {
             var proc = _vM.MeasProcessVm.SelectedProcess;
             var stand = _vM.MeasProcessVm.SelectedStandartisation;
@@ -100,7 +101,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write standartisation phys value
         /// </summary>
-        public RelayCommand PhysValueWriteCommand => _physValueWriteCommand ?? (_physValueWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand PhysValueWriteCommand => _physValueWriteCommand ?? (_physValueWriteCommand = new RelayCommand(execPar =>
         {
             var proc = _vM.MeasProcessVm.SelectedProcess;
             var stand = _vM.MeasProcessVm.SelectedStandartisation;
@@ -119,7 +120,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Write half life corrected value
         /// </summary>
-        public RelayCommand HalfLifeCorrWriteCommand => _halfLifeCorrWriteCommand ?? (_halfLifeCorrWriteCommand = new RelayCommand(execPar => 
+        public RelayCommand HalfLifeCorrWriteCommand => _halfLifeCorrWriteCommand ?? (_halfLifeCorrWriteCommand = new RelayCommand(execPar =>
         {
             var proc = _vM.MeasProcessVm.SelectedProcess;
             var stand = _vM.MeasProcessVm.SelectedStandartisation;
@@ -139,7 +140,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Make standartisation
         /// </summary>
-        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(execPar => 
+        public RelayCommand MakeStandCommand => _makeStandCommand ?? (_makeStandCommand = new RelayCommand(execPar =>
         {
             if (!IsStandartisation)
             {
@@ -166,14 +167,14 @@ namespace IDensity.ViewModels
 
         private string GetWriteCommand(string id, MeasProcSettings proc, StandSettings stand)
         {
-           var str = $"*SETT,meas_proc={proc.Num}," +
-           $"std={stand.Id},0," +
-           $"{(id=="duration" ? stand.StandDuration.WriteValue*10 : stand.StandDuration.Value*10)}," +
-           $"{(id == "date" ? stand.LastStandDate.WriteValue : stand.LastStandDate.Value).ToString("dd:MM:yy")}," +
-           $"{(id == "result" ? stand.StandResult.WriteValue : stand.StandResult.Value).ToStringPoint()}," +
-           $"{(id == "value" ? stand.StandPhysValue.WriteValue : stand.StandPhysValue.Value).ToStringPoint()}," +
-           $"{(id == "half_life" ? stand.HalfLifeCorr.WriteValue : stand.HalfLifeCorr.Value).ToStringPoint()}#";
-           return str;
+            var str = $"*SETT,meas_proc={proc.Num}," +
+            $"std={stand.Id},0," +
+            $"{(id == "duration" ? stand.StandDuration.WriteValue * 10 : stand.StandDuration.Value * 10)}," +
+            $"{(id == "date" ? stand.LastStandDate.WriteValue : stand.LastStandDate.Value).ToString("dd:MM:yy")}," +
+            $"{(id == "result" ? stand.StandResult.WriteValue : stand.StandResult.Value).ToStringPoint()}," +
+            $"{(id == "value" ? stand.StandPhysValue.WriteValue : stand.StandPhysValue.Value).ToStringPoint()}," +
+            $"{(id == "half_life" ? stand.HalfLifeCorr.WriteValue : stand.HalfLifeCorr.Value).ToStringPoint()}#";
+            return str;
         }
 
         #endregion

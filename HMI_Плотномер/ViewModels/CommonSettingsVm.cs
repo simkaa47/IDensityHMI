@@ -1,6 +1,9 @@
 ﻿using IDensity.AddClasses;
-using IDensity.Core.AddClasses.Settings;
+using IDensity.Core.Extentions;
+using IDensity.Core.Models.MeasProcess;
+using IDensity.Core.Models.Parameters;
 using IDensity.Core.Services;
+using IDensity.DataAccess;
 using IDensity.Models;
 using IDensity.ViewModels.Commands;
 using Microsoft.Win32;
@@ -301,6 +304,7 @@ namespace IDensity.ViewModels
             VM.CommService.SetAdcTimerMax(fromFile.AdcBoardSettings.TimerMax.WriteValue);
             VM.CommService.SetPreampGain(fromFile.AdcBoardSettings.PreampGain.WriteValue);
             VM.CommService.SetHv(fromFile.TelemetryHV.VoltageSV.WriteValue);
+            VM.CommService.Tcp.SetFsrd2($"*SETT,adc_proc_calc_cntr={fromFile.CounterNum.WriteValue}#");
         }
 
         void SafetyAction(Action action)

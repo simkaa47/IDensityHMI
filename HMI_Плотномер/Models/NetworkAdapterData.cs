@@ -1,11 +1,8 @@
-﻿using IDensity.AddClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess;
 
 namespace IDensity.Models
 {
-    public  class NetworkAdapterData:PropertyChangedBase
+    public class NetworkAdapterData : PropertyChangedBase
     {
         #region Имя
         /// <summary>
@@ -56,11 +53,11 @@ namespace IDensity.Models
         /// <summary>
         /// IP
         /// </summary>
-        private string  _ip;
+        private string _ip;
         /// <summary>
         /// IP
         /// </summary>
-        public string  Ip
+        public string Ip
         {
             get => _ip;
             set => Set(ref _ip, value);

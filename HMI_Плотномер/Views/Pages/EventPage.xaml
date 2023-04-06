@@ -70,7 +70,7 @@
                             <ColumnDefinition Width="0.57*"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Начальная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
+                        <TextBlock Text="Конечная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
                                    Style="{StaticResource Common}"  Margin="30,0,0,0"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
