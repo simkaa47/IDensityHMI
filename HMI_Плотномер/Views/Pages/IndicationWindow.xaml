@@ -10,8 +10,8 @@
     <Viewbox>
         <!--#region MEas Indication -->
         <StackPanel>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" IndicatorColor="#32d74b"/>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff"/>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" IndicatorColor="#32d74b" CounterValueVisibility="Visible"/>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff" CounterValueVisibility="Collapsed"/>
         </StackPanel>
         <!--#endregion-->
     </Viewbox>
