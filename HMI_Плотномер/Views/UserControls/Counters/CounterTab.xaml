@@ -41,7 +41,7 @@
                                 <DataTemplate>
                                     <p:CompoBoxParameter DescriptionNotVisible="True"
                                                      CommandButtonVisibility="Collapsed" 
-                                                      
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource NotEqual}, ConverterParameter=2}" 
                                                      ItemsSource="{StaticResource CountModes}"
                                                      DataContext="{Binding CounterMode}"
                                                      Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -57,9 +57,11 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
-                                                        ParameterWidth="104"
-                                                 DataContext="{Binding Start}"
-                                                 HorizontalAlignment="Center" Margin="20,5,0,5"
+                                                     ParameterWidth="104"
+                                                     CommandButtonVisibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource NotEqual}, ConverterParameter=2}"
+                                                    DataContext="{Binding Start}"
+                                                    HorizontalAlignment="Center" Margin="20,5,0,5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterStartCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -71,6 +73,8 @@
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
                                                      ParameterWidth="104"
+                                                     CommandButtonVisibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource NotEqual}, ConverterParameter=2}"
                                                  DataContext="{Binding Width}" Margin="20,5,0,5"
                                                  HorizontalAlignment="Center"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterWidthCommand}"/>
@@ -85,6 +89,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountPeakFind}"
                                                      ParameterWidth="104"
+                                                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
                                                  HorizontalAlignment="Center" Margin="20,5,0,5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterPeakFindCommand}"/>
                                 </DataTemplate>
@@ -98,6 +103,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountPeakSmooth}"
                                                      ParameterWidth="104"
+                                                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
                                                  HorizontalAlignment="Center" Margin="20,5,0,5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterSmoothCommand}"/>
                                 </DataTemplate>
@@ -111,6 +117,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountBotPerc}"
                                                      ParameterWidth="104"
+                                                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
                                                  HorizontalAlignment="Center" Margin="20,5,0,5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterDevDownCommand}"/>
                                 </DataTemplate>
@@ -124,6 +131,7 @@
                                     <p:TextParameter DescriptionNotVisible="True"
                                                  DataContext="{Binding CountTopPerc}"
                                                      ParameterWidth="104"
+                                                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
                                                  HorizontalAlignment="Center" Margin="20,5,0,5"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterDevUpCommand}"/>
                                 </DataTemplate>
