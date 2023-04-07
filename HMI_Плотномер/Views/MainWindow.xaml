@@ -97,6 +97,7 @@
         <!--<Image Source="..\Views\Resourses\Pictures\Analogs.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeasUnits.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\Events.png" Opacity="0.4"/>-->
+        
     </Grid>
     <!--#endregion-->   
 </Window>

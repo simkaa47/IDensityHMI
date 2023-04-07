@@ -13,10 +13,9 @@
              d:DesignHeight="80" d:DesignWidth="1080" 
              d:DataContext="{d:DesignInstance Type=vm:VM}">
     <UserControl.Resources>
-        <Style TargetType="TextBlock" x:Key="TextBlockRoboto">
-            <Setter Property="FontFamily" Value="Roboto"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style TargetType="TextBlock" x:Key="TextBlockRoboto" BasedOn="{StaticResource Common}">            
             <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="..\Resourses\Fonts\#Roboto Medium"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>

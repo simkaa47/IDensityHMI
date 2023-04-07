@@ -13,14 +13,14 @@
         <conv:MeasUnitMultiplyConverter x:Key="GetMeasNumConverterResult"/>
         <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
         <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
-        <!--<Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>-->
+        
     </UserControl.Resources>
     <Canvas Width="860" Height="400" Margin="56,24,40,10" Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
-            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
+            >
         <!--#region Pulses -->
         <Border Width="183" Height="60" Canvas.Top="0" Canvas.Left="653" Background="{StaticResource PanelBorderColor}"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=CounterValueVisibility}">
-            <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="..\..\Resourses\Fonts\#Roboto Medium">
                 <Run Text="{Binding CounterValue.Value, StringFormat={}{0:f1}, ConverterCulture=RU-ru}" FontSize="24" FontFamily="Roboto" FontWeight="Medium"/>
                  <Run Text="импульсов/c" FontSize="16"/>
             </TextBlock>
@@ -84,7 +84,7 @@
         <DockPanel Width="860" Height="162"  Canvas.Top="69">
             <DockPanel DockPanel.Dock="Right" MaxWidth="414" VerticalAlignment="Bottom">
                 <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,20" 
-                           
+                           FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            FontWeight="Bold"                           
                            FontSize="36"/>
@@ -120,7 +120,7 @@
         <!--#region cur value -->
         <DockPanel Width="860" Height="164"  Canvas.Top="236">
             <DockPanel DockPanel.Dock="Left" MaxWidth="414" VerticalAlignment="Bottom">
-                <TextBlock Text="Мгновенное" Margin="0,0,0,20"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
+                <TextBlock Text="Мгновенное" FontFamily="..\..\Resourses\Fonts\#Roboto Medium" Margin="0,0,0,20"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
                 <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </DockPanel>
             <DockPanel DockPanel.Dock="Right"  MinWidth="420" VerticalAlignment="Bottom">

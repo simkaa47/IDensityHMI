@@ -34,7 +34,14 @@ namespace IDensity
             CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator = ",";
 
             InitializeComponent();
-                                   
+            List<string> families = new List<string>();
+
+            foreach (FontFamily fontFamily in Fonts.SystemFontFamilies)
+            {
+                families.Add(fontFamily.Source);
+            }
+            families.Sort();
+
         }
 
         private void Window_StateChanged(object sender, EventArgs e)

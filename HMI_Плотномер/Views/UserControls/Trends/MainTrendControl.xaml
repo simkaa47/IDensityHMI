@@ -10,11 +10,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
    
     <Grid>
-        <oxy:Plot PlotMargins="50,0,0,30"                  
+        <oxy:Plot PlotMargins="40,0,0,30"                  
                       PlotType="XY"                   
                       PlotAreaBorderThickness="1"
                       TextColor="#80FFFFFF" 
-                      
+                      FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
                       x:Name="plot" 
                       PlotAreaBorderColor="#80FFFFFF"
                       IsLegendVisible="True"
@@ -23,7 +23,7 @@
 
             <oxy:Plot.Axes>
                 <oxy:LinearAxis  
-                        Font="Roboto"                        
+                        Font="..\..\Resourses\Fonts\#Roboto Medium"                       
                         FontSize="12"                      
                         MajorGridlineColor="#80FFFFFF"
                         MajorGridlineStyle="Dot"
@@ -32,6 +32,7 @@
                                   
                                   MaximumRange="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=MaximumRange}"
                                   MajorGridlineColor="#80FFFFFF"
+                                  Font="..\..\Resourses\Fonts\#Roboto Black"
                                   MajorGridlineStyle="Dot"                                  
                                   FontSize="12"/>
             </oxy:Plot.Axes>

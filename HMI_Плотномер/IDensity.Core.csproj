@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Resourses\Fonts\Roboto-Black.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-BlackItalic.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-Bold.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-BoldItalic.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-Italic.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-Light.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-LightItalic.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-Medium.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-MediumItalic.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-Regular.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-Thin.ttf" />
+    <None Remove="Views\Resourses\Fonts\Roboto-ThinItalic.ttf" />
     <None Remove="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <None Remove="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
     <None Remove="Views\Resourses\Pictures\AddCircleOutline.png" />
@@ -80,6 +92,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Resourses\Fonts\Roboto-Black.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-BlackItalic.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-Bold.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-BoldItalic.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-Italic.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-Light.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-LightItalic.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-Medium.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-MediumItalic.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-Regular.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-Thin.ttf" />
+    <Resource Include="Views\Resourses\Fonts\Roboto-ThinItalic.ttf" />
     <Resource Include="Views\Resourses\Pictures\AccountCircleAuthorized.png" />
     <Resource Include="Views\Resourses\Pictures\AccountCircleNonAuthorized.png" />
     <Resource Include="Views\Resourses\Pictures\AddCircleOutline.png" />
