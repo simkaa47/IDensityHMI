@@ -44,7 +44,7 @@
                                                       
                                                      ItemsSource="{StaticResource CountModes}"
                                                      DataContext="{Binding CounterMode}"
-                                                     Index="{Binding WriteValue}"
+                                                     Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                      Margin="20,5,20,5"
                                                      HorizontalAlignment="Center"
                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterModeCommand}"/>

@@ -24,7 +24,7 @@ namespace IDensity.Core.Models.Counters
 
         #region Режим раоты счетчиков
         [DataMember]
-        public Parameter<ushort> CounterMode { get; set; } = new Parameter<ushort>("CounterMode", "Режим работы счетчиков", 0, 1, 0, "");
+        public Parameter<ushort> CounterMode { get; set; } = new Parameter<ushort>("CounterMode", "Режим работы счетчиков", 0, 2, 0, "");
         #endregion
 
         #region Начальный номер счетчика
