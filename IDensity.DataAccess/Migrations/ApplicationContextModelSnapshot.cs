@@ -57,6 +57,26 @@ namespace IDensity.DataAccess.Migrations
                     b.ToTable("MeasResultLogs");
                 });
 
+            modelBuilder.Entity("IDensity.DataAccess.Models.MeasResultViewSett", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AvgVisibility")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("CurVisibility")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TimeUnit")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeasResultViewSetts");
+                });
+
             modelBuilder.Entity("IDensity.DataAccess.Models.MeasUnit", b =>
                 {
                     b.Property<long>("Id")

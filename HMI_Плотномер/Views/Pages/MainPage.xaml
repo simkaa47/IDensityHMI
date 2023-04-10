@@ -170,49 +170,68 @@
         </TabControl>
         <!--#endregion-->
         <!--#region Indication -->
-        <Border Canvas.Left="24" Canvas.Top="659" Height="185" Width="920" Background="{StaticResource PanelBorderColor}">
-           
-            
-        </Border>
-        <!--#region Temperature sensor indication -->
-        <TextBlock Text="ТЕМПЕРАТУРА ПРИБОРА, °С" Foreground="{StaticResource AquaColor}" FontSize="15" 
-                               HorizontalAlignment="Center"  
-                                Canvas.Left="80" FontWeight="Medium"
-                                Canvas.Top="699"
+        <Border Canvas.Left="24" Canvas.Top="560" Height="300" Width="920" Background="{StaticResource PanelBorderColor}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--#region Temperature sensor indication -->
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="ТЕМПЕРАТУРА ПРИБОРА, °С" Foreground="{StaticResource AquaColor}" FontSize="15" 
+                               HorizontalAlignment="Center"                              
+                                FontWeight="Medium"                                
                                VerticalAlignment="Bottom"/>
-        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
                                 Name="InternalTempIndicator"
                                 Foreground="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource InternalTempColors}}"  
                                HorizontalAlignment="Center"
                                FontSize="64"
-                                FontWeight="Medium"
-                                Canvas.Left="80"
-                                Canvas.Top="733"
+                                FontWeight="Medium"                                
                                 FontFamily="Roboto"
                                VerticalAlignment="Center"/>
-        <Image Source="..\Resourses\Pictures\AlertReportProblemRed.png"  Height="40" Visibility="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource VisibleConverter}}"
-                               
-               Canvas.Top="750" Canvas.Left="35"/>        
-        <!--#endregion-->
-        <!--#region HV indication -->
-        <TextBlock Text="НАПРЯЖЕНИЕ HV, В" Foreground="{StaticResource AquaColor}" FontSize="15" 
+                        <Image Source="..\Resourses\Pictures\AlertReportProblemRed.png"  Height="40" Visibility="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource VisibleConverter}}"/>
+                    </StackPanel>
+                </StackPanel>
+                <!--#endregion-->
+                <!--#region HV indication -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="НАПРЯЖЕНИЕ HV, В"
+                               Foreground="{StaticResource AquaColor}" 
+                               FontSize="15" 
                                HorizontalAlignment="Center"
-                    FontWeight="Medium"
-                   Canvas.Top="699"
-                    Canvas.Left="359"
-                               VerticalAlignment="Bottom"/>
-        <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
+                                FontWeight="Medium"/>
+                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
                                HorizontalAlignment="Center"
-                               FontSize="64"
-                    Canvas.Top="733"
-                    Canvas.Left="359"
-                     FontWeight="Medium"
-                    FontFamily="Roboto"
+                               FontSize="64"                   
+                                FontWeight="Medium"
+                                FontFamily="Roboto"
                                VerticalAlignment="Center"/>
-        <!--#endregion-->
-        <!--#region Switch measuring button -->
-        <Button Canvas.Left="606" 
-                Canvas.Top="733"
+                </StackPanel>
+                <!--#endregion-->
+                <!--#region Count Pulse indication -->
+                <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                    <TextBlock Text="КОЛИЧЕСТВО ИМПУЛЬСОВ В СЕКУНДУ"
+                               Foreground="{StaticResource AquaColor}" 
+                               FontSize="15" 
+                               HorizontalAlignment="Center"
+                                FontWeight="Medium"/>
+                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.MeasResults[0].CounterValue.Value, StringFormat=f1, ConverterCulture=RU-ru}" Foreground="White"  
+                               HorizontalAlignment="Center"
+                               FontSize="64"                   
+                                FontWeight="Medium"
+                                FontFamily="Roboto"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <!--#endregion-->
+                <!--#region Switch measuring button -->
+                <Button Grid.Column="1" Grid.Row="1"
+               
                 Width="286"
                 Height="64"
                 BorderBrush="{StaticResource AquaColor}"
@@ -224,9 +243,17 @@
                 FontFamily="..\Resourses\Fonts\#Roboto Medium"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
                         Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
                         Command="{Binding SwitchMeasCommand}"/>
-        <!--#endregion-->
+                <!--#endregion-->
+            </Grid>
+            
+        </Border>
+       
+       
+        
         <!--#endregion-->
         <!--#region MEas Indication -->
         <StackPanel Canvas.Left="948">

@@ -16,17 +16,7 @@
         
     </UserControl.Resources>
     <Canvas Width="860" Height="400" Margin="56,24,40,10" Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
-            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
-        <!--#region Pulses -->
-        <Border Width="183" Height="60" Canvas.Top="0" Canvas.Left="653" Background="{StaticResource PanelBorderColor}"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=CounterValueVisibility}">
-            <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="..\..\Resourses\Fonts\#Roboto Medium">
-                <Run Text="{Binding CounterValue.Value, StringFormat={}{0:f1}, ConverterCulture=RU-ru}" FontSize="24" FontFamily="Roboto" FontWeight="Medium"/>
-                 <Run Text="импульсов/c" FontSize="16"/>
-            </TextBlock>
-        </Border>
-       
-        <!--#endregion-->       
+            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">         
         <!--#region Meas Type and meas unit-->
         <StackPanel Orientation="Horizontal"  Canvas.Top="0">
             
