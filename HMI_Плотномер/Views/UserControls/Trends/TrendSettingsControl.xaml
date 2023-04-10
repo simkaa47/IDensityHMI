@@ -45,9 +45,7 @@
                 <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=8}" 
                                        Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=8}"
                                        Check="{Binding TrendsVisible.VisLine9, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <uc:CurveVisibilityControl Description="{Binding Source={StaticResource CurveNames}, Converter={StaticResource GetByIndex}, ConverterParameter=9}" 
-                                       Color="{Binding Source={StaticResource CurveColors}, Converter={StaticResource GetByIndex}, ConverterParameter=9}"
-                                       Check="{Binding TrendsVisible.VisLine10, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                
             </StackPanel>
             <!--#endregion-->
             <!--#region Other trend settings-->

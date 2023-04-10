@@ -1,9 +1,13 @@
-﻿namespace IDensity.DataAccess.Models
+﻿using IDensity.DataAccess.Repositories;
+using System;
+
+namespace IDensity.DataAccess.Models
 {
-    public class MeasResult
+    public class MeasResultLog:IDataBased
     {
         public long Id { get; set; }
 
+        public DateTime Time { get; set;  }
         public float Pulses { get; set; }
         public float CurValue1 { get; set; }
         public float AvgValue1 { get; set; }
