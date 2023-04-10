@@ -15,6 +15,44 @@ namespace IDensity.DataAccess.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.29");
 
+            modelBuilder.Entity("IDensity.DataAccess.Models.MeasResult", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("AvgValue1")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("AvgValue2")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("CurValue1")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("CurValue2")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Current1")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Current2")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("HvValue1")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Pulses")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Temperature")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeasResults");
+                });
+
             modelBuilder.Entity("IDensity.DataAccess.Models.MeasUnit", b =>
                 {
                     b.Property<long>("Id")
