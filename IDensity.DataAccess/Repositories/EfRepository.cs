@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace IDensity.DataAccess.Repositories
 {
@@ -45,6 +46,13 @@ namespace IDensity.DataAccess.Repositories
                  .Where(e => e.Id == id)
                  .FirstOrDefault();
 
+        }
+
+        public List<T> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            return _dbContext.Set<T>()
+                .Where(predicate)
+                .ToList();
         }
 
         public IEnumerable<T> Init(IEnumerable<T> collection)

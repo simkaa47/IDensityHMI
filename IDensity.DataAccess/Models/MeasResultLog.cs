@@ -1,8 +1,9 @@
-﻿using System;
+﻿using IDensity.DataAccess.Repositories;
+using System;
 
 namespace IDensity.DataAccess.Models
 {
-    public class MeasResultLog
+    public class MeasResultLog:IDataBased
     {
         public long Id { get; set; }
 

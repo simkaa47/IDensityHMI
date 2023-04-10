@@ -149,10 +149,9 @@
         <sys1:String>Для плотности</sys1:String>
     </x:Array>
     <x:Array Type="sys1:String"   x:Key="CurveNames">
-        <sys1:String>Процесс 1:значение счетчика</sys1:String>
+        <sys1:String>Значение счетчика</sys1:String>
         <sys1:String>Процесс 1:мгновенное значение</sys1:String>
-        <sys1:String>Процесс 1:усредненное значение</sys1:String>
-        <sys1:String>Процесс 2:значение счетчика</sys1:String>
+        <sys1:String>Процесс 1:усредненное значение</sys1:String>        
         <sys1:String>Процесс 2:мгновенное значение</sys1:String>
         <sys1:String>Процесс 2:усредненное значение</sys1:String>
         <sys1:String>Значение тока на AI0, мкА</sys1:String>

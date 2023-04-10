@@ -1,4 +1,5 @@
 ﻿using IDensity.Core.Models.Trends;
+using IDensity.DataAccess.Models;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,15 +28,15 @@ namespace IDensity.Core.Views.UserControls.Trends
 
 
         #region Источник для трендов
-        public IEnumerable<TimePoint> DataSource
+        public IEnumerable<MeasResultLog> DataSource
         {
-            get { return (IEnumerable<TimePoint>)GetValue(DataSourceProperty); }
+            get { return (IEnumerable<MeasResultLog>)GetValue(DataSourceProperty); }
             set { SetValue(DataSourceProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for DataSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DataSourceProperty =
-            DependencyProperty.Register("DataSource", typeof(IEnumerable<TimePoint>), typeof(MainTrendControl), new PropertyMetadata(null));
+            DependencyProperty.Register("DataSource", typeof(IEnumerable<MeasResultLog>), typeof(MainTrendControl), new PropertyMetadata(null));
         #endregion
 
         #region Видимость тренда 1

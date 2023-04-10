@@ -36,6 +36,10 @@ namespace IDensity.ViewModels
     /// </summary>
     public class VM : PropertyChangedBase
     {
+        #region Репозитории
+        private  EfRepository<MeasResultLog> _measResultRepository;
+        #endregion
+
         #region Дочерние VM
         public CommonSettingsVm CommonSettingsVm { get; private set; }
         public MasterSettingsViewModel MasterSettingsViewModel { get; private set; }
@@ -66,7 +70,9 @@ namespace IDensity.ViewModels
             AnalogVm = new AnalogVm(this);
             MeasUnitSettingsVm = new MeasUnitVm(this);
             CommService.Tcp.TcpEvent += WriteTcpLog;
-           
+            _measResultRepository = new EfRepository<MeasResultLog>();
+
+
         }
 
         #region Инициализация сервисов
@@ -264,10 +270,10 @@ namespace IDensity.ViewModels
         public GraphSettings TrendSettings => _trendSettings;
         #endregion
 
-        ObservableCollection<TimePoint> _plotCollection;
-        public ObservableCollection<TimePoint> PlotCollection
+        ObservableCollection<MeasResultLog> _plotCollection;
+        public ObservableCollection<MeasResultLog> PlotCollection
         {
-            get => _plotCollection ?? (_plotCollection = new ObservableCollection<TimePoint>());
+            get => _plotCollection ?? (_plotCollection = new ObservableCollection<MeasResultLog>());
         }
         #endregion
 
@@ -278,8 +284,8 @@ namespace IDensity.ViewModels
 
         #region Данные для архивного тренда
         #region Коллекция
-        IEnumerable<TimePoint> _archivalDataPotnts = new List<TimePoint> { new TimePoint { time=new DateTime(2020,1,1) }, new TimePoint { time = DateTime.Now } };
-        public IEnumerable<TimePoint> ArchivalDataPotnts { get => _archivalDataPotnts; private set { Set(ref _archivalDataPotnts, value); } }
+        IEnumerable<MeasResultLog> _archivalDataPotnts = new List<MeasResultLog> { new MeasResultLog { Time =new DateTime(2020,1,1) }, new MeasResultLog { Time = DateTime.Now } };
+        public IEnumerable<MeasResultLog> ArchivalDataPotnts { get => _archivalDataPotnts; private set { Set(ref _archivalDataPotnts, value); } }
         #endregion
 
         #region Настройки
@@ -343,8 +349,8 @@ namespace IDensity.ViewModels
             {
                 ArchivalTrendDownloading = true;
                 await Task.Run(() =>
-                {
-                    var list = SqlMethods.ReadFromSql<TimePoint>($"SELECT * FROM TimePoints WHERE time >= datetime('{DisplayDateStart.ToString("u")}') AND time <= datetime('{DisplayDateEnd.ToString("u")}');");
+                {                    
+                    var list = _measResultRepository.GetWhere(m => m.Time >= DisplayDateStart && m.Time <= DisplayDateEnd);
                     for (int j = 0; j < 2; j++)
                     {
                         var unit = GetCoeff(mainModel.MeasResults[j].MeasUnitMemoryId);
@@ -352,13 +358,13 @@ namespace IDensity.ViewModels
                         {
                             if (j == 0)
                             {
-                                point.y2 = point.y2 * unit.K + unit.Offset;
-                                point.y3 = point.y3 * unit.K + unit.Offset;
+                                point.CurValue1 = point.CurValue1 * unit.K + unit.Offset;
+                                point.AvgValue1 = point.AvgValue1 * unit.K + unit.Offset;
                             }
                             else
                             {
-                                point.y5 = point.y5 * unit.K + unit.Offset;
-                                point.y6 = point.y6 * unit.K + unit.Offset;
+                                point.CurValue2 = point.CurValue2 * unit.K + unit.Offset;
+                                point.AvgValue2 = point.AvgValue2 * unit.K + unit.Offset;
                             }
                         }
                         MeasResultMeasUnits[j] = unit;
@@ -381,28 +387,27 @@ namespace IDensity.ViewModels
             if (!(mainModel.CycleMeasStatus.Value || TrendSettings.WriteIfNoMeasState)) return;
             App.Current?.Dispatcher?.Invoke(() =>
                 {
-                    var tp = new TimePoint
+                    var tp = new MeasResultLog
                     {
-                        time = DateTime.Now,
-                        y1 = mainModel.MeasResults[0].CounterValue.Value,
-                        y2 = mainModel.MeasResults[0].PhysValueCur.Value,
-                        y3 = mainModel.MeasResults[0].PhysValueAvg.Value,
-                        y4 = mainModel.MeasResults[1].CounterValue.Value,
-                        y5 = mainModel.MeasResults[1].PhysValueCur.Value,
-                        y6 = mainModel.MeasResults[1].PhysValueAvg.Value,
-                        y7 = mainModel.AnalogGroups[0].AI.AdcValue.Value,
-                        y8 = mainModel.AnalogGroups[1].AI.AdcValue.Value,
-                        y9 = mainModel.TelemetryHV.VoltageCurOut.Value,
-                        y10 = mainModel.TempTelemetry.TempInternal.Value
+                        Time = DateTime.Now,
+                        Pulses = mainModel.MeasResults[0].CounterValue.Value,
+                        CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value,
+                        AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value,
+                        CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value,
+                        AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value,
+                        Current1 = mainModel.AnalogGroups[0].AI.AdcValue.Value,
+                        Current2 = mainModel.AnalogGroups[1].AI.AdcValue.Value,
+                        HvValue1 = mainModel.TelemetryHV.VoltageCurOut.Value,
+                        Temperature = mainModel.TempTelemetry.TempInternal.Value
                     };
-                    SqlMethods.WritetoDb<TimePoint>(tp);                    
-                    tp.y2 = mainModel.MeasResults[0].PhysValueCur.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
-                    tp.y3 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
-                    tp.y5 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
-                    tp.y6 = mainModel.MeasResults[1].PhysValueAvg.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
+                    _measResultRepository.Add(tp);             
+                    tp.CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                    tp.CurValue2 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                    tp.AvgValue1 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
+                    tp.AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
                     PlotCollection.Add(tp);
                     int i = 0;
-                    while (PlotCollection.Count > 0 && PlotCollection[0].time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 10)
+                    while (PlotCollection.Count > 0 && PlotCollection[0].Time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 10)
                     {
                         PlotCollection.RemoveAt(0);
                         i++;
@@ -416,13 +421,13 @@ namespace IDensity.ViewModels
                             {
                                 if (j == 0)
                                 {
-                                    point.y2 = ((point.y2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
-                                    point.y3 = ((point.y3 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.CurValue1 = ((point.CurValue1 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.AvgValue1 = ((point.AvgValue1 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
                                 }
                                 else
                                 {
-                                    point.y5 = ((point.y5 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
-                                    point.y6 = ((point.y6 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.CurValue2 = ((point.CurValue2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.AvgValue2 = ((point.AvgValue2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
                                 }
                             }
                             MeasResultMeasUnits[j] = unit;
@@ -457,16 +462,16 @@ namespace IDensity.ViewModels
                 await Task.Run(() =>
                 {
                     StringBuilder builder = new StringBuilder();
-                    builder.Append("Дата Время" + "\t" + "Процесс 0: счетчик" + "\t" + "Процесс 0: мгновенная ФВ" + "\t"
-                             + "Процесс 0: усредненная ФВ" + "\t" + "Процесс 1: счетчик" + "\t"
+                    builder.Append("Дата Время" + "\t" + "Счетчик" + "\t" + "Процесс 0: мгновенная ФВ" + "\t"
+                             + "Процесс 0: усредненная ФВ" + "\t"
                              + "Процесс 1: мгновенная ФВ" + "\t" + "Процесс 1: усредненная ФВ" + "\t"
                              + "Ток AI0, мкA" + "\t" + "Ток AI1, мкA" + "\t" + "Значение HV out, V" + "\t" + "Температура" + "\n");
                     foreach (var item in ArchivalDataPotnts)
                     {
-                        builder.Append(item.time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.y1.ToString("0.000") + "\t" + item.y2.ToString("0.000") + "\t"
-                             + item.y3.ToString("0.000") + "\t" + item.y4.ToString("0.000") + "\t"
-                             + item.y5.ToString("0.000") + "\t" + item.y6.ToString("0.000") + "\t"
-                             + item.y7.ToString("0.000") + "\t" + item.y8.ToString("0.000") + "\t" + item.y9.ToString("0.000") + "\t" + item.y10.ToString("0.000") + "\n");
+                        builder.Append(item.Time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.Pulses.ToString("0.000") + "\t" + item.CurValue1.ToString("0.000") + "\t"
+                             + item.AvgValue1.ToString("0.000") + "\t" 
+                             + item.CurValue2.ToString("0.000") + "\t" + item.AvgValue2.ToString("0.000") + "\t"
+                             + item.Current1.ToString("0.000") + "\t" + item.Current2.ToString("0.000") + "\t" + item.HvValue1.ToString("0.000") + "\t" + item.Temperature.ToString("0.000") + "\n");
                     }
                     using (StreamWriter sw = new StreamWriter(LogPath, false, System.Text.Encoding.Default))
                     {
