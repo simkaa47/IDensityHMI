@@ -29,7 +29,7 @@
             </Style>
         </Canvas.Resources>
         <!--#region Trends -->
-        <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="565" BorderThickness="0">
+        <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="565" BorderThickness="0" DataContext="{Binding MeasResultsVM}">
             <!--#region Current Trend -->
             <TabItem Header="Текущий тренд" MinHeight="64" MinWidth="253" FontSize="20">
 
