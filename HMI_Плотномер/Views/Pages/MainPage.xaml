@@ -256,15 +256,17 @@
         
         <!--#endregion-->
         <!--#region MEas Indication -->
-        <StackPanel Canvas.Left="948">
-            <mr:MeasResult 
+        <Viewbox Canvas.Left="948">
+            <StackPanel>
+                <mr:MeasResult 
                 DataContext="{Binding mainModel.MeasResults[0]}" 
                 IndicatorColor="#32d74b" 
                 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
                 CounterValueVisibility="Visible"/>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff" CounterValueVisibility="Collapsed"/>
-        </StackPanel>
-        
+                <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff" CounterValueVisibility="Collapsed"/>
+            </StackPanel>
+        </Viewbox>
+
         <!--#endregion-->
     </Canvas>    
 </UserControl>

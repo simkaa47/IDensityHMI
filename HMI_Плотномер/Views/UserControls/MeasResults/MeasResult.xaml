@@ -16,31 +16,63 @@
         <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
         
     </UserControl.Resources>
-    <Canvas Width="860" Height="400" Margin="56,24,40,10" Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
-            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">
+    <Grid  Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
+            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">        
         <!--#region Visible settings -->
-        <ToggleButton Background="Transparent" x:Name="OpenVisibleSettingsButton" Height="20" Width="20"
+        <ToggleButton Background="Transparent" x:Name="OpenVisibleSettingsButton" Height="30" Width="30"
                       HorizontalAlignment="Right" VerticalAlignment="Top">
             <Image Source="..\..\Resourses\Pictures\TuneIcon.png"/>
         </ToggleButton>
+        <Popup IsOpen="{Binding ElementName=OpenVisibleSettingsButton, Path=IsChecked}"
+               StaysOpen="False"
+               Placement="MousePoint">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+                </Grid.Resources>
+                <Border Style="{StaticResource BorderLight}"
+                        Height="Auto"
+                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=ViewSettings}"
+                        Width="300">
+                    <ListBox Background="Transparent" HorizontalContentAlignment="Stretch">
+                        <!--#region Cur visibility -->
+                        <DockPanel>
+                            <TextBlock Text="Показать мгновенное значение"/>
+                            <CheckBox IsChecked="{Binding CurVisibility}"
+                                      HorizontalAlignment="Right"
+                                      Style="{StaticResource CheckBoxAqvaStyle}"/>
+                        </DockPanel>
+                        <!--#endregion-->
+                        <!--#region Avg visibility -->
+                        <DockPanel>
+                            <TextBlock Text="Показать усредненное значение"/>
+                            <CheckBox IsChecked="{Binding AvgVisibility}"
+                                      HorizontalAlignment="Right"
+                                      Style="{StaticResource CheckBoxAqvaStyle}"/>
+                        </DockPanel>
+                        <!--#endregion-->
+                    </ListBox>
+                </Border>
+            </Grid>
+        </Popup>
         <!--#endregion-->
-        <!--#region Meas Type and meas unit-->
-        <StackPanel Orientation="Horizontal"  Canvas.Top="0">
-            
-            <StackPanel>
-                <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" Canvas.Top="24" Canvas.Left="56" MaxWidth="300" TextWrapping="Wrap">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource GetMeasProcType}">
-                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
-                            <Binding Path="Settings.MeasType.Value"/>
-                            <Binding Source="{StaticResource DensityCalculation}"/>
-                            <Binding Source="{StaticResource LevelCalculation}"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>                
-            </StackPanel>
-            <!--#region Meas Unit-->            
-                    <ComboBox  
+        <StackPanel>
+            <!--#region Meas Type and meas unit-->
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36"  MaxWidth="300" TextWrapping="Wrap">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource GetMeasProcType}">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
+                                <Binding Path="Settings.MeasType.Value"/>
+                                <Binding Source="{StaticResource DensityCalculation}"/>
+                                <Binding Source="{StaticResource LevelCalculation}"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+                <!--#region Meas Unit-->
+                <ComboBox  
                               HorizontalContentAlignment="Center"
                               Foreground="White"
                         BorderBrush="{StaticResource BorderNonActiveColor}"
@@ -51,89 +83,90 @@
                               VerticalContentAlignment="Center"                                  
                                   Height="60"
                         Width="179">
-                        <ComboBox.ItemsSource>
-                            <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
-                                <Binding Path="Settings.MeasType.Value"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
-                            </MultiBinding>
-                        </ComboBox.ItemsSource>
-                        <ComboBox.SelectedItem>
-                            <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
-                                <Binding Path="Settings.MeasType.Value"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
-                                <Binding Path="MeasUnitMemoryId"/>
-                            </MultiBinding>
-                        </ComboBox.SelectedItem>
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                        
-                        <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}" FontSize="24" Foreground="White" FontWeight="Medium"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>                    
+                    <ComboBox.ItemsSource>
+                        <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                            <Binding Path="Settings.MeasType.Value"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                        </MultiBinding>
+                    </ComboBox.ItemsSource>
+                    <ComboBox.SelectedItem>
+                        <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                            <Binding Path="Settings.MeasType.Value"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                            <Binding Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </ComboBox.SelectedItem>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+
+                            <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}" FontSize="24" Foreground="White" FontWeight="Medium"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <!--#endregion-->
+            </StackPanel>
+
             <!--#endregion-->
-        </StackPanel>
-                    
-        <!--#endregion-->
-        <!--#region Awg value -->
-        <DockPanel Width="860" Height="162"  Canvas.Top="69">
-            <DockPanel DockPanel.Dock="Right" MaxWidth="414" VerticalAlignment="Bottom">
-                <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,20" 
+            <!--#region Awg value --><!--
+            <DockPanel   Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=ViewSettings.AvgVisibility}">
+                <DockPanel DockPanel.Dock="Right"  VerticalAlignment="Bottom">
+                    <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
                            FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            FontWeight="Bold"                           
                            FontSize="36"/>
-                <Rectangle DockPanel.Dock="Bottom" 
+                    <Rectangle DockPanel.Dock="Bottom" 
                            Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            Height="12" 
                            Stretch="UniformToFill" 
                            VerticalAlignment="Bottom"/>
-            </DockPanel>
-            <DockPanel DockPanel.Dock="Left"  MinWidth="440" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,5" 
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Left"  MinWidth="440" VerticalAlignment="Bottom">
+                    <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,5" 
                            VerticalAlignment="Bottom" 
                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            FontWeight="Bold" 
                            FontSize="128">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource Multyply}" 
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                            <Binding Path="PhysValueAvg.Value" />
-                            <Binding ElementName="MUnit" Path="SelectedItem"/>
-                            <Binding Path="MeasUnitMemoryId"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0"
+                                <Binding Path="PhysValueAvg.Value" />
+                                <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                <Binding Path="MeasUnitMemoryId"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0"
                            Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            Height="4" 
                            Stretch="UniformToFill" 
                            VerticalAlignment="Bottom" />
+                </DockPanel>
             </DockPanel>
-        </DockPanel>
-        <!--#endregion-->
-        <!--#region cur value -->
-        <DockPanel Width="860" Height="164"  Canvas.Top="236">
-            <DockPanel DockPanel.Dock="Left" MaxWidth="414" VerticalAlignment="Bottom">
-                <TextBlock Text="Мгновенное" FontFamily="..\..\Resourses\Fonts\#Roboto Medium" Margin="0,0,0,20"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
-                <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
-            </DockPanel>
-            <DockPanel DockPanel.Dock="Right"  MinWidth="420" VerticalAlignment="Bottom">
-                <TextBlock DockPanel.Dock="Top"  HorizontalAlignment="Left" Margin="25,0,25,5" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="128">
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource Multyply}" 
+            --><!--#endregion-->
+            <!--#region cur value --><!--
+            <DockPanel Width="860" Height="164"  Canvas.Top="236">
+                <DockPanel DockPanel.Dock="Left" MaxWidth="414" VerticalAlignment="Bottom">
+                    <TextBlock Text="Мгновенное" FontFamily="..\..\Resourses\Fonts\#Roboto Medium" Margin="0,0,0,20"  DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="36"/>
+                    <Rectangle DockPanel.Dock="Bottom" Fill="#ff9f0a" Height="12" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Right"  MinWidth="420" VerticalAlignment="Bottom">
+                    <TextBlock DockPanel.Dock="Top"  HorizontalAlignment="Left" Margin="25,0,25,5" VerticalAlignment="Bottom" Foreground="#ff9f0a" FontWeight="Bold" FontSize="128">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                            <Binding Path="PhysValueCur.Value" />
-                            <Binding ElementName="MUnit" Path="SelectedItem"/>
-                            <Binding Path="MeasUnitMemoryId"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0" Fill="#ff9f0a" Height="4" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                                <Binding Path="PhysValueCur.Value" />
+                                <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                <Binding Path="MeasUnitMemoryId"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0" Fill="#ff9f0a" Height="4" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                </DockPanel>
             </DockPanel>
-        </DockPanel>
-        <!--#endregion-->
-    </Canvas>    
+            --><!--#endregion-->
+        </StackPanel>
+    </Grid>    
 </UserControl>
