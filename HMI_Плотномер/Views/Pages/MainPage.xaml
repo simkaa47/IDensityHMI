@@ -261,25 +261,18 @@
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            
-            <mr:MeasResult Grid.Row="0"
-                DataContext="{Binding mainModel.MeasResults[0]}" 
-                IndicatorColor="#32d74b" 
-                ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
-                CounterValueVisibility="Visible"/>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" 
-                               IndicatorColor="#64d2ff" 
-                               Grid.Row="1"
-                               ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                               CounterValueVisibility="Collapsed" />
+            <Border Background=" Yellow" MinHeight="450" Grid.Row="0">
+                
+            </Border>
+            <Border Background="Red" MinHeight="450" DockPanel.Dock="Bottom"
+                    Visibility="Collapsed" Grid.Row="0">
+
+            </Border>
+
+
         </Grid>
         
-        <Viewbox Canvas.Left="948" Height="900" >
-            <StackPanel HorizontalAlignment="Stretch">
-                
-            </StackPanel>
-        </Viewbox>
-
+        
         <!--#endregion-->
     </Canvas>    
 </UserControl>

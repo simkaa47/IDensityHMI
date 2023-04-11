@@ -17,10 +17,10 @@
         
     </UserControl.Resources>
     <Grid  Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
-            >        
+            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}" ShowGridLines="True">        
         <!--#region Visible settings -->
         <ToggleButton Background="Transparent" x:Name="OpenVisibleSettingsButton" Height="30" Width="30"
-                      HorizontalAlignment="Right" VerticalAlignment="Top">
+                      HorizontalAlignment="Right" VerticalAlignment="Top" >
             <Image Source="..\..\Resourses\Pictures\TuneIcon.png" />
         </ToggleButton>
         <Popup IsOpen="{Binding ElementName=OpenVisibleSettingsButton, Path=IsChecked}"
@@ -56,8 +56,18 @@
             </Grid>
         </Popup>
         <!--#endregion-->
-        <StackPanel>
-            <!--#region Meas Type and meas unit-->
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        
+        
+        <!--Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition/>                
+            </Grid.RowDefinitions>
+            --><!--#region Meas Type and meas unit--><!--
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <TextBlock VerticalAlignment="Center" Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36"  MaxWidth="300" TextWrapping="Wrap">
@@ -71,18 +81,17 @@
                         </TextBlock.Text>
                     </TextBlock>
                 </StackPanel>
-                <!--#region Meas Unit-->
-                <ComboBox  
-                              HorizontalContentAlignment="Center"
-                              Foreground="White"
-                        BorderBrush="{StaticResource BorderNonActiveColor}"
-                                  Name="MUnit"
-                                    Background="{StaticResource PanelBorderColor}"
-                                  Margin="100,0,0,0"                                    
-                                  VerticalAlignment="Center"
-                              VerticalContentAlignment="Center"                                  
-                                  Height="60"
-                        Width="179">
+                --><!--#region Meas Unit--><!--
+                <ComboBox HorizontalContentAlignment="Center"                    
+                          Foreground="White"
+                          BorderBrush="{StaticResource BorderNonActiveColor}"
+                          Name="MUnit"
+                          Background="{StaticResource PanelBorderColor}"
+                          Margin="100,0,0,0"                                    
+                          VerticalAlignment="Top"
+                          VerticalContentAlignment="Center"                                  
+                          Height="60"
+                          Width="179">
                     <ComboBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
                             <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
@@ -105,30 +114,57 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <!--#endregion-->
-            </StackPanel>
-            <DockPanel MinHeight="100">
-                <Viewbox >
-                    <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,5" 
+                --><!--#endregion--><!--
+            </StackPanel>            
+            --><!--#endregion--><!--
+            <Border BorderBrush="Green" BorderThickness="1" Grid.Row="1">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel>
+                        <Viewbox>
+                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right"  
                            VerticalAlignment="Bottom" 
                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
                            FontWeight="Bold">
-                        <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource Multyply}" 
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                                <Binding Path="PhysValueAvg.Value" />
-                                <Binding ElementName="MUnit" Path="SelectedItem"/>
-                                <Binding Path="MeasUnitMemoryId"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
-                </Viewbox>
-                <DockPanel DockPanel.Dock="Bottom">
-                    
-                </DockPanel>
-            </DockPanel>
-            <!--#endregion-->
-            <!--#region Awg value --><!--
+                                        <Binding Path="PhysValueAvg.Value" />
+                                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                        <Binding Path="MeasUnitMemoryId"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Viewbox>
+                        <DockPanel DockPanel.Dock="Bottom">
+
+                        </DockPanel>
+                    </DockPanel>
+                    <DockPanel>
+                        <Viewbox  Grid.Row="1">
+                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right"  
+                           VerticalAlignment="Bottom" 
+                           Foreground="#ff9f0a"
+                           FontWeight="Bold">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource Multyply}" 
+                                                  ConverterParameter="f1">
+                                        <Binding Path="PhysValueCur.Value" />
+                                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                        <Binding Path="MeasUnitMemoryId"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Viewbox>
+
+                    </DockPanel>
+                </Grid>
+            </Border>
+
+            --><!--#region Awg value --><!--
             <DockPanel   Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=ViewSettings.AvgVisibility}">
                 <DockPanel DockPanel.Dock="Right"  VerticalAlignment="Bottom">
                     <TextBlock Text="Усредненное" DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
@@ -185,7 +221,7 @@
                     <Rectangle DockPanel.Dock="Bottom" Margin="0,-4,0,0" Fill="#ff9f0a" Height="4" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
                 </DockPanel>
             </DockPanel>
-            --><!--#endregion-->
-        </StackPanel>
+            --><!--#endregion--><!--
+        </Grid>-->
     </Grid>    
 </UserControl>
