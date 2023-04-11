@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IDensity.DataAccess.Models;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace IDensity.Core.Views.UserControls.MeasResults
 {
@@ -50,6 +42,18 @@ namespace IDensity.Core.Views.UserControls.MeasResults
             DependencyProperty.Register("CounterValueVisibility", typeof(Visibility), typeof(MeasResult), new PropertyMetadata(Visibility.Collapsed));
 
 
+
+
+
+        public MeasResultViewSett ViewSettings
+        {
+            get { return (MeasResultViewSett)GetValue(ViewSettingsProperty); }
+            set { SetValue(ViewSettingsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ViewSettings.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ViewSettingsProperty =
+            DependencyProperty.Register("ViewSettings", typeof(MeasResultViewSett), typeof(MeasResult), new PropertyMetadata(null));
 
 
 
