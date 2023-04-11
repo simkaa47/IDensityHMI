@@ -17,11 +17,11 @@
         
     </UserControl.Resources>
     <Grid  Background="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=Background}" 
-            Visibility="{Binding IsActive, Converter={StaticResource VisibleConverter}}">        
+            >        
         <!--#region Visible settings -->
         <ToggleButton Background="Transparent" x:Name="OpenVisibleSettingsButton" Height="30" Width="30"
                       HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Image Source="..\..\Resourses\Pictures\TuneIcon.png"/>
+            <Image Source="..\..\Resourses\Pictures\TuneIcon.png" />
         </ToggleButton>
         <Popup IsOpen="{Binding ElementName=OpenVisibleSettingsButton, Path=IsChecked}"
                StaysOpen="False"
@@ -107,7 +107,26 @@
                 </ComboBox>
                 <!--#endregion-->
             </StackPanel>
-
+            <DockPanel MinHeight="100">
+                <Viewbox >
+                    <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="25,0,25,5" 
+                           VerticalAlignment="Bottom" 
+                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=IndicatorColor}" 
+                           FontWeight="Bold">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource Multyply}" 
+                                                  ConverterParameter="f1">
+                                <Binding Path="PhysValueAvg.Value" />
+                                <Binding ElementName="MUnit" Path="SelectedItem"/>
+                                <Binding Path="MeasUnitMemoryId"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Viewbox>
+                <DockPanel DockPanel.Dock="Bottom">
+                    
+                </DockPanel>
+            </DockPanel>
             <!--#endregion-->
             <!--#region Awg value --><!--
             <DockPanel   Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResult}, Path=ViewSettings.AvgVisibility}">
