@@ -9,10 +9,26 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox>
         <!--#region MEas Indication -->
-        <StackPanel>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" IndicatorColor="#32d74b" CounterValueVisibility="Visible"/>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" IndicatorColor="#64d2ff" CounterValueVisibility="Collapsed"/>
-        </StackPanel>
+        <Grid Height="850" Width="950">
+            <Grid.RowDefinitions>
+                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[0].IsActive}"/>
+                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[1].IsActive}"/>
+            </Grid.RowDefinitions>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" 
+                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                           IndicatorColor="#32d74b"
+                           Margin="20,5,20,5"
+                           Grid.Row="0"/>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" 
+                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                           IndicatorColor="#64d2ff"
+                           Margin="20,5,20,5"
+                           Grid.Row="1"/>
+
+
+
+
+        </Grid>
         <!--#endregion-->
     </Viewbox>
 </UserControl>

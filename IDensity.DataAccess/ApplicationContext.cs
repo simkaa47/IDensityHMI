@@ -8,6 +8,7 @@ namespace IDensity.DataAccess
         public DbSet<MeasUnit> MeasUnits => Set<MeasUnit>();
         public DbSet<MeasUnitMemory> MeasUnitMemories => Set<MeasUnitMemory>();
         public DbSet<MeasResultLog> MeasResultLogs => Set<MeasResultLog>();
+        public DbSet<MeasResultViewSett> MeasResultViewSetts => Set<MeasResultViewSett>();
 
         public ApplicationContext()
         {
