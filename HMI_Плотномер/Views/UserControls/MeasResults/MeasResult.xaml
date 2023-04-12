@@ -75,7 +75,7 @@
         </Popup>
         <!--#endregion-->
         <!--#region Meas type -->
-        <TextBlock  Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" MaxWidth="300"  VerticalAlignment="Center" TextWrapping="Wrap">
+        <TextBlock  Foreground="White" FontFamily="Roboto" FontWeight="Medium" FontSize="36" MaxWidth="300"  VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource GetMeasProcType}">
                     <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
