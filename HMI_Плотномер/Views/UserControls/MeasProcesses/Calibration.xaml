@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:IDensity.ViewModels"
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:p="clr-namespace:IDensity.Core.Views.UserControls.Parameters"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -35,9 +36,17 @@
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
             <!--#region Single Meas Time -->
             <DockPanel>
-                <TextBlock Text="Время единичного измерения, x0.1 c." Margin="20,0,0,0"/>
-                <TextBox Text="{Binding CalibrationVm.SingleMeasTime}" Template="{StaticResource TextBoxTemplate}"
-                         Width="165" Height="40" HorizontalAlignment="Right"/>
+                <TextBlock Text="Время единичного измерения, c." Margin="20,0,0,0"/>
+                <TextBox Template="{StaticResource TextBoxTemplate}"
+                         Width="165" Height="40" HorizontalAlignment="Right">
+                    <TextBox.Text>
+                        <Binding Path="CalibrationVm.SingleMeasTime" StringFormat="f1"  Converter="{StaticResource MultiplyOnNumberConverter}" ConverterCulture="RU-RU">
+                            <Binding.ConverterParameter>
+                                <sys:Single>0.1</sys:Single>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </DockPanel>
             <!--#endregion-->
             <!--#region Polynom Deeegre -->

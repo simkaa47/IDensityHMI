@@ -1,5 +1,4 @@
-﻿using IDensity.AddClasses;
-using IDensity.AddClasses.AdcBoardSettings;
+﻿using IDensity.AddClasses.AdcBoardSettings;
 using IDensity.Core.Models.Analogs;
 using IDensity.Core.Models.CheckMaster;
 using IDensity.Core.Models.Counters;
@@ -500,10 +499,10 @@ namespace IDensity.Models
 
             }
         }
-        #endregion      
+        #endregion
 
         #endregion
-        
+
 
     }
 }

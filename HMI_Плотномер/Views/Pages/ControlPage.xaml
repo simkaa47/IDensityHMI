@@ -28,6 +28,29 @@
             <sys:String>..\Resourses\Pictures\DoneGrey.png</sys:String>
         </x:Array>
         <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+        <Style TargetType="Border" x:Key="BorderConnectStyle">
+            <Setter Property="BorderBrush" Value="#33FFFFFF"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding VM.mainModel.UdpWriting}" Value="False">
+                    <Setter Property="BorderBrush" Value="#28BCBA"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="#28BCBA"/>
+                </Trigger>
+
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBox" x:Key="ConnectStyle">
+            <Setter Property="Foreground" Value="#33FFFFFF"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding VM.mainModel.UdpWriting}" Value="False">
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>        
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -297,20 +320,30 @@
                         <DockPanel>
                             <TextBlock Text="IP-адрес получателя"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
-                                 MinWidth="140"
-                                 Height="40"                             
-                                 Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Key="Enter"  Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
+                                <Border Style="{StaticResource BorderConnectStyle}"
+                                        Height="40"                                       
+                                        Width="140"
+                                        CornerRadius="4"
+                                        BorderThickness="2">
+                                    <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                                          Background="Transparent"  
+                                         FontSize="16"
+                                          FontFamily="Roboto"
+                                          FontWeight="Regular"
+                                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
+                                          BorderThickness="0"
+                                          Style="{StaticResource ConnectStyle}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Key="Enter"  Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Border>
                                 <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
-                    Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                                        Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                                     <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
-                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                                           HorizontalAlignment="Center" Height="24" Width="24"/>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDown">
                                             <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
@@ -326,19 +359,30 @@
                             <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Right">
 
-                                <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 MinWidth="140"
-                                 Height="40"                                 
-                                Template="{StaticResource TextBoxTemplate}"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Key="Enter" Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
+                                <Border CornerRadius="4"
+                                        Style="{StaticResource BorderConnectStyle}"
+                                        BorderThickness="2"
+                                        Background="Transparent"
+                                        Height="40"
+                                        Width="140">
+                                    <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                         FontSize="16"
+                                         Style="{StaticResource ConnectStyle}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         FontWeight="Regular"
+                                         CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
+                                         VerticalAlignment="Center"
+                                         Margin="10,0,0,0">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Border>
 
-                                <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
-                    Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                                <Border Height="24" Width="40" Margin="25,0,20,0"
+                                        CornerRadius="4"
+                                        Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                                     <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
                                     <i:Interaction.Triggers>
