@@ -48,7 +48,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Style.Triggers>           
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource BorderNonActiveColor}"/>
+                <Setter Property="Background" Value="#6600FFFF"/>
             </Trigger>
         </Style.Triggers>
         

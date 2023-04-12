@@ -41,6 +41,7 @@ namespace IDensity.Core.ViewModels.MeasUnits
                 if (dialog.ShowDialog() == true)
                 {
                     _measUnitRepository.Add(addMeasNum);
+                    OnPropertyChanged(nameof(MeasUnits));
                 }
             });            
 
@@ -65,6 +66,7 @@ namespace IDensity.Core.ViewModels.MeasUnits
                 {
                     _measUnitRepository.Update(SelectedMeasUnit);
                 }
+                OnPropertyChanged(nameof(MeasUnits));
             });
         }, canExecPar => true));
         #endregion
@@ -84,6 +86,7 @@ namespace IDensity.Core.ViewModels.MeasUnits
             SafetyAction(() =>
             {
                 _measUnitRepository.Delete(SelectedMeasUnit);
+                OnPropertyChanged(nameof(MeasUnits));
             });
         }, canExecPar => true));
         #endregion
