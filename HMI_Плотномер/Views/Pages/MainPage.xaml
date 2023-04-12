@@ -256,18 +256,23 @@
         
         <!--#endregion-->
         <!--#region MEas Indication -->
-        <Grid Canvas.Left="948" Height="900" Width="950">
+        <Grid Canvas.Left="948" Height="850" Width="950">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[0].IsActive}"/>
+                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[1].IsActive}"/>
             </Grid.RowDefinitions>
-            <Border Background=" Yellow" MinHeight="450" Grid.Row="0">
-                
-            </Border>
-            <Border Background="Red" MinHeight="450" DockPanel.Dock="Bottom"
-                    Visibility="Collapsed" Grid.Row="0">
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" 
+                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                           IndicatorColor="#32d74b"
+                           Margin="20,5,20,5"
+                           Grid.Row="0"/>
+            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" 
+                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                           IndicatorColor="#64d2ff"
+                           Margin="20,5,20,5"
+                           Grid.Row="1"/>
 
-            </Border>
+           
 
 
         </Grid>

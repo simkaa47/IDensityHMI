@@ -48,6 +48,14 @@ namespace IDensity.Core.ViewModels
                 new MeasResultViewSett() {AvgVisibility = true, CurVisibility = true, TimeUnit = TimeMeasUnit.Seconds},
                 new MeasResultViewSett() {AvgVisibility = true, CurVisibility = true, TimeUnit = TimeMeasUnit.Seconds}
             });
+            foreach (var sett in MeasResultSetts)
+            {
+                sett.PropertyChanged += (o, e) => 
+                {
+                    var edited = o as MeasResultViewSett;
+                    _measResultViewRepository.Update(edited);
+                };
+            }
         }
 
         #region Команды
