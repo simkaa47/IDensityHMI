@@ -7,9 +7,9 @@
              xmlns:local="clr-namespace:IDensity.Core.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Viewbox HorizontalAlignment="Stretch">
+    <Viewbox>
         <!--#region MEas Indication -->
-        <Grid >
+        <Grid Height="850" Width="950">
             <Grid.RowDefinitions>
                 <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[0].IsActive}"/>
                 <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[1].IsActive}"/>
