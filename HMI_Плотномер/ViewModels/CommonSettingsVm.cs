@@ -91,7 +91,27 @@ namespace IDensity.ViewModels
         }
         #endregion
 
-        #region Команды        
+        #region Команды
+
+        #region Записать SN
+        /// <summary>
+        /// Записать SN
+        /// </summary>
+        RelayCommand _writeSerialNumberCommand;
+        /// <summary>
+        /// Записать SN
+        /// </summary>
+        public RelayCommand WriteSerialNumberCommand => _writeSerialNumberCommand ?? (_writeSerialNumberCommand = new RelayCommand(execPar => 
+        {
+            var str = VM.mainModel.SerialNumber.WriteValue;
+            var substr = str.Substring(0, Math.Min(9, str.Length));
+            substr += Environment.NewLine;
+            VM.mainModel.SerialNumber.IsWriting = true;
+            VM.CommService.WriteCommonSettings($"sn={substr}");
+
+        }, canExecPar => true));
+        #endregion
+
 
         #region Записать имя изотопа
         /// <summary>
