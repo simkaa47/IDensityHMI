@@ -64,7 +64,7 @@
             <!--#endregion-->
             <!--#region Fast Change Threshold -->
             <p:TextParameter DataContext="{Binding SelectedProcess.FastChange.Threshold}"
-                             Coeff="0,1"
+                             Coeff="1"
                              Command="{Binding RelativeSource={RelativeSource AncestorType=local:MeasProcMain}, Path=DataContext.WriteFastChangeThresholdCommand}"/>
             <!--#endregion-->
             <!--#region Pipe diameter -->

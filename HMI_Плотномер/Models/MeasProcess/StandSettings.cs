@@ -36,7 +36,7 @@ namespace IDensity.Core.Models.MeasProcess
         /// Длительность стандартизации
         /// </summary>
         [DataMember]
-        public Parameter<ushort> StandDuration { get; set; } = new Parameter<ushort>("StandDuration", "Длительность стандартизации, x 0.1 c.", 0, 5, 1, "hold");
+        public Parameter<ushort> StandDuration { get; set; } = new Parameter<ushort>("StandDuration", "Длительность стандартизации, c.", 0, 5, 1, "hold");
         #endregion
         #region Дата последней стандартизации
         /// <summary>

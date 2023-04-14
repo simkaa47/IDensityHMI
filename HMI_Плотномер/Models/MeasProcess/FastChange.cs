@@ -28,7 +28,7 @@ namespace IDensity.Core.Models.MeasProcess
         /// Порог реакции
         /// </summary>
         [DataMember]
-        public Parameter<ushort> Threshold { get; set; } = new Parameter<ushort>("FastChangeThreshold", "Порог реакции", 0, ushort.MaxValue, 0, "");
+        public Parameter<ushort> Threshold { get; set; } = new Parameter<ushort>("FastChangeThreshold", "Порог реакции быстрых изменений, %", 0, 100, 0, "");
         #endregion       
 
     }
