@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace IDensity.Core.Views.UserControls.MeasResults
 {
     /// <summary>
-    /// Interaction logic for BigIndicator.xaml
+    /// Interaction logic for AvgTime.xaml
     /// </summary>
-    public partial class BigIndicator : MeasResultCommon
+    public partial class AvgTime : UserControl
     {
-        public BigIndicator()
+        public AvgTime()
         {
             InitializeComponent();
         }

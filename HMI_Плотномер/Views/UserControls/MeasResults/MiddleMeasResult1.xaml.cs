@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace IDensity.Core.Views.UserControls.MeasResults
 {
     /// <summary>
-    /// Interaction logic for BigIndicator.xaml
+    /// Interaction logic for MiddleMeasResult1.xaml
     /// </summary>
-    public partial class BigIndicator : MeasResultCommon
+    public partial class MiddleMeasResult1 : MeasResultCommon
     {
-        public BigIndicator()
+        public MiddleMeasResult1()
         {
             InitializeComponent();
         }

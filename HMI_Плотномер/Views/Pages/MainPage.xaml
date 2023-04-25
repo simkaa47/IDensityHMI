@@ -27,6 +27,28 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <Style TargetType="mr:MiddleMeasResult1" x:Key="MeasSingleIndicatorContainer">
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.AvgVisibility}" Value="True"/>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.CurVisibility}" Value="False"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.AvgVisibility}" Value="False"/>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.CurVisibility}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
         </Canvas.Resources>
         <!--#region Trends -->
         <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="565" BorderThickness="0" DataContext="{Binding MeasResultsVM}">
@@ -256,22 +278,37 @@
         
         <!--#endregion-->
         <!--#region MEas Indication -->
-        <Grid Canvas.Left="948" Height="850" Width="950">
-            <Grid.RowDefinitions>
-                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[0].IsActive}"/>
-                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[1].IsActive}"/>
-            </Grid.RowDefinitions>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" 
-                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
-                           IndicatorColor="#32d74b"
-                           Margin="20,5,20,5"
-                           Grid.Row="0"/>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" 
-                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                           IndicatorColor="#64d2ff"
-                           Margin="20,5,20,5"
-                           Grid.Row="1"/>
+        <Grid Canvas.Left="960" Height="850" Width="950">
+            <StackPanel>
+                <mr:BigIndicator DataContext="{Binding mainModel.MeasResults[0]}"
+                                 Visibility="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.mainModel.MeasResults[1].IsActive}"
+                                 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                                 IndicatorColor="#32d74b"/>
+                <StackPanel>
+                    <StackPanel.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiVisibleConverter}">
+                            <Binding  Path="mainModel.MeasResults[0].IsActive" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
+                            <Binding  Path="mainModel.MeasResults[1].IsActive" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
+                        </MultiBinding>
+                    </StackPanel.Visibility>
+                    <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[0]}"                                 
+                                          ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                                          IndicatorColor="#32d74b">                        
+                    </mr:MiddleMeasResult2>
+                    <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[1]}" 
+                                          Margin="0,54,0,0"
+                                          ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                                          IndicatorColor="#32d74b"/>
+                </StackPanel>
+                <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                                      IndicatorColor="#32d74b" 
+                                      Style="{StaticResource MeasSingleIndicatorContainer}"
+                                      DataContext="{Binding mainModel.MeasResults[0]}"/>
+                <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                                      IndicatorColor="#32d74b"                                      
+                                      DataContext="{Binding mainModel.MeasResults[1]}"/>
 
+            </StackPanel>
            
 
 
