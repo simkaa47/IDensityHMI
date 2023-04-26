@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"          
              xmlns:mr="clr-namespace:IDensity.Core.Models.MeasResults"
+            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:conv="clr-namespace:IDensity.Core.Views.Converters"
              xmlns:m="clr-namespace:IDensity.DataAccess.Models;assembly=IDensity.DataAccess"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
@@ -38,7 +39,7 @@
             <conv:MultiplyNums x:Key="MyltiplyNums"/>
             <x:Array Type="m:TimeUnit" x:Key="TimeUnits">
                 <m:TimeUnit K="1"  Name="сек"/>
-                <m:TimeUnit K="0.0133"  Name="мин"/>
+                <m:TimeUnit K="0.01666"  Name="мин"/>
             </x:Array>
         </DockPanel.Resources>
         <Border Height="40"
@@ -47,27 +48,34 @@
                 CornerRadius="2">
             <TextBox Height="40"
                      Width="80" 
-                     BorderThickness="0"   
+                     IsEnabled="False"
+                     BorderThickness="0" 
                      VerticalContentAlignment="Center"
                      HorizontalContentAlignment="Center"
                      HorizontalAlignment="Left"                       
                      FontSize="16"
                      Background="Transparent"
                      BorderBrush="{StaticResource BorderNonActiveColor}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.WriteMeasDurationWithParameterCommand}" 
+                                 CommandParameter="{Binding Settings}"/>
+                    </i:EventTrigger> 
+                </i:Interaction.Triggers>
                 <TextBox.Text>
                     <MultiBinding Converter="{StaticResource MyltiplyNums}" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                        <Binding ElementName="TimeSelector" Path="SelectedItem.K"/>                       
-                        <Binding Path="Settings.MeasDeep.Value"/>
-                        <Binding Path="Settings.MeasDuration.Value"/>
+                        <Binding ElementName="TimeSelector" Path="SelectedItem.K"/>
+                        <Binding Path="Settings.MeasDeep.WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay"/>
+                        <Binding Path="Settings.MeasDuration.WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay"/>
                     </MultiBinding>
                 </TextBox.Text>
-                <TextBox.InputBindings>
+                <!--<TextBox.InputBindings>
                     <KeyBinding  Key="Enter" 
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Delay=500, Path=DataContext.MeasProcessVm.WriteMeasDurationWithParameterCommand}" 
                                  CommandParameter="{Binding Settings}">
 
                     </KeyBinding>
-                </TextBox.InputBindings>
+                </TextBox.InputBindings>-->
             </TextBox>
         </Border>
         <ComboBox Width="80"

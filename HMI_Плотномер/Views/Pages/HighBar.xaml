@@ -140,7 +140,7 @@
                                 Style="{StaticResource TextBlockRoboto}" 
                                 Text="{Binding CurUser, Converter={StaticResource UserToName}}"
                                 Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
-            <Image Canvas.Left="1550" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
+            <Image Canvas.Left="1620" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>
