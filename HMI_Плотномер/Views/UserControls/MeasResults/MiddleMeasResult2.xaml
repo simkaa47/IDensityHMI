@@ -9,7 +9,7 @@
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasResults"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Height="410" Width="860">
+    <Grid Height="410" Width="860" Background="{StaticResource TabControlCommon}">
         <Grid.Visibility>
             <MultiBinding Converter="{StaticResource MultiVisibleConverter}">
                 <Binding RelativeSource="{RelativeSource AncestorType=local:MeasResultCommon}" Path="ViewSettings.CurVisibility" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
@@ -45,34 +45,7 @@
         <Popup IsOpen="{Binding ElementName=OpenVisibleSettingsButton, Path=IsChecked}"
                StaysOpen="False"
                Placement="MousePoint">
-            <Grid>
-                <Grid.Resources>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-                </Grid.Resources>
-                <Border Style="{StaticResource BorderLight}"
-                        Height="Auto"
-                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=ViewSettings}"
-                        Width="300">
-                    <ListBox Background="Transparent" HorizontalContentAlignment="Stretch">
-                        <!--#region Cur visibility -->
-                        <DockPanel>
-                            <TextBlock Text="Показать мгновенное значение"/>
-                            <CheckBox IsChecked="{Binding CurVisibility}"
-                                      HorizontalAlignment="Right"
-                                      Style="{StaticResource CheckBoxAqvaStyle}"/>
-                        </DockPanel>
-                        <!--#endregion-->
-                        <!--#region Avg visibility -->
-                        <DockPanel>
-                            <TextBlock Text="Показать усредненное значение"/>
-                            <CheckBox IsChecked="{Binding AvgVisibility}"
-                                      HorizontalAlignment="Right"
-                                      Style="{StaticResource CheckBoxAqvaStyle}"/>
-                        </DockPanel>
-                        <!--#endregion-->
-                    </ListBox>
-                </Border>
-            </Grid>
+            <local:MeasResultViewSettingsControl/>
         </Popup>
         <!--#endregion-->
         <!--#region Avg-->

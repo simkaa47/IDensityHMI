@@ -347,7 +347,13 @@ namespace IDensity.Services.ComminicationServices
             RecognizeCompensationFromArr(arr, _model.MeasProcSettings[index].SteamCompensation, 101);
             _model.MeasProcSettings[index].MeasType.Value = (ushort)arr[106];
             RecognizeFastChangeSett(arr, index);
-            _model.MeasProcSettings[index].MeasDuration.Value = arr[109] / 10;
+            if (index == 0)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    _model.MeasProcSettings[i].MeasDuration.Value = arr[109] / 10;
+                }   
+            }          
             _model.MeasProcSettings[index].MeasDeep.Value = (ushort)arr[110];            
             _model.MeasProcSettings[index].PipeDiameter.Value = arr[112] / 10;
             _model.MeasProcSettings[index].AttCoeffs[0].Value = arr[113];

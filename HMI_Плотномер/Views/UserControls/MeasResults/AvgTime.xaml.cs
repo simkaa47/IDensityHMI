@@ -16,7 +16,7 @@ namespace IDensity.Core.Views.UserControls.MeasResults
     /// <summary>
     /// Interaction logic for AvgTime.xaml
     /// </summary>
-    public partial class AvgTime : UserControl
+    public partial class AvgTime : MeasResultCommon
     {
         public AvgTime()
         {

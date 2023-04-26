@@ -98,11 +98,29 @@ namespace IDensity.ViewModels
         /// </summary>
         public RelayCommand WriteMeasDurationCommand => _writeMeasDurationCommand ?? (_writeMeasDurationCommand = new RelayCommand(execPar =>
         {
-            var str = $"*SETT,meas_proc={SelectedProcess.Num},duration={SelectedProcess.MeasDuration.WriteValue * 10}#";
+            var str = $"*SETT,meas_proc=0,duration={SelectedProcess.MeasDuration.WriteValue * 10}#";
             SelectedProcess.MeasDuration.IsWriting = true;
-            VM.CommService.Tcp.WriteMeasProcSettings(str, SelectedProcess.Num);
+            VM.CommService.Tcp.WriteMeasProcSettings(str, 0);
         }, canExecPar => SelectedProcess != null && GetCommandCondition(SelectedProcess.MeasDuration)));
         #endregion
+
+
+        #region Write MeasDuration
+        /// <summary>
+        /// Write MeasDuration
+        /// </summary>
+        RelayCommand _writeMeasDurationWithParameterCommand;
+        /// <summary>
+        /// Write MeasDuration
+        /// </summary>
+        public RelayCommand WriteMeasDurationWithParameterCommand => _writeMeasDurationWithParameterCommand ?? (_writeMeasDurationWithParameterCommand = new RelayCommand(execPar => 
+        {
+            if (!(execPar is MeasProcSettings proc)) return;
+            var str = $"*SETT,meas_proc={proc.Num},aver_depth={proc.MeasDeep.Value}#";            
+            VM.CommService.Tcp.WriteMeasProcSettings(str, proc.Num);
+        }, canExecPar => true));
+        #endregion
+
 
         #region Write Meas Deep
         /// <summary>

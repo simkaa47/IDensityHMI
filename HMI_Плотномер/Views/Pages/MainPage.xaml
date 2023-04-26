@@ -278,10 +278,10 @@
         
         <!--#endregion-->
         <!--#region MEas Indication -->
-        <Grid Canvas.Left="960" Height="850" Width="950">
+        <Grid Canvas.Left="960" Height="880" Width="950">
             <StackPanel>
                 <mr:BigIndicator DataContext="{Binding mainModel.MeasResults[0]}"
-                                 Visibility="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.mainModel.MeasResults[1].IsActive}"
+                                 Visibility="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.mainModel.MeasResults[1].IsActive, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                                  ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
                                  IndicatorColor="#32d74b"/>
                 <StackPanel>
@@ -295,18 +295,21 @@
                                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
                                           IndicatorColor="#32d74b">                        
                     </mr:MiddleMeasResult2>
-                    <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[1]}" 
-                                          Margin="0,54,0,0"
-                                          ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                                          IndicatorColor="#32d74b"/>
-                </StackPanel>
-                <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                    <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
                                       IndicatorColor="#32d74b" 
                                       Style="{StaticResource MeasSingleIndicatorContainer}"
                                       DataContext="{Binding mainModel.MeasResults[0]}"/>
-                <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                                      IndicatorColor="#32d74b"                                      
+                    <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[1]}" 
+                                          Margin="0,28,0,0"
+                                          ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                                          IndicatorColor="#32d74b"/>
+                    
+                    <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                                      IndicatorColor="#32d74b" 
+                                      Style="{StaticResource MeasSingleIndicatorContainer}"
                                       DataContext="{Binding mainModel.MeasResults[1]}"/>
+                </StackPanel>
+                
 
             </StackPanel>
            
