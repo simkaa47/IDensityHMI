@@ -23,22 +23,24 @@ namespace IDensity.Core.Views.Pages
             password.ShowDialog();
         }
 
-        private void Minimaze_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Minimaze_Click(object sender, RoutedEventArgs e)
         {
             if (Application.Current.MainWindow.WindowState == WindowState.Maximized) Application.Current.MainWindow.WindowState = WindowState.Minimized;
             else Application.Current.MainWindow.WindowState = WindowState.Maximized;
             
         }
 
-        private void Normal_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Normal_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.MainWindow.WindowState = WindowState.Normal;
             Application.Current.MainWindow.WindowStyle = WindowStyle.SingleBorderWindow;
         }
 
-        private void Maximize_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Maximize_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.MainWindow.WindowState = WindowState.Maximized;
         }
+
+        
     }
 }

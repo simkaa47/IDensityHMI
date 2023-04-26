@@ -183,6 +183,8 @@
         <!--#region Avg time -->
         <local:AvgTime HorizontalAlignment="Right"
                        Margin="0,0,0,22"
+                       DataContext="{Binding}"
+                       ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=ViewSettings}"
                        Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=ViewSettings.AvgVisibility, Converter={StaticResource VisibleConverter}}"
                        VerticalAlignment="Bottom"/>
         <!--#endregion-->

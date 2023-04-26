@@ -134,6 +134,8 @@
             <!--#endregion-->
             <!--#region Avg time -->
             <local:AvgTime HorizontalAlignment="Right"
+                           DataContext="{Binding}"
+                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=ViewSettings}"
                            VerticalAlignment="Bottom"/>
             <!--#endregion-->
         </StackPanel>
