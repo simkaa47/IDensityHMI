@@ -10,8 +10,7 @@
     <conv:IsFilePathExist x:Key="FileExistConverter"/>
     <conv:UserTextConverter x:Key="UserToName"/>
     <conv:UserLevelConverter x:Key="UserToVisibility"/>
-    <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>
-    <conv:MultiplyNums x:Key="MultiplyNumsConverter"/>
+    <conv:GetAvgTime x:Key="GetAvgTimeConverter"/>   
     <conv:EqualityToVisibilityConverter x:Key="VisibleIfEqual"/>
     <conv:NotEqualityToVisibilityConverter x:Key="VisibleIfNotEqual"/>
     <conv:StringByIndexConverter x:Key="StringByIndex"/>   

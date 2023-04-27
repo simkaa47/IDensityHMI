@@ -48,8 +48,9 @@
                 CornerRadius="2">
             <TextBox Height="40"
                      Width="80" 
-                     IsEnabled="False"
+                     IsEnabled="True"
                      BorderThickness="0" 
+                     CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                      VerticalContentAlignment="Center"
                      HorizontalContentAlignment="Center"
                      HorizontalAlignment="Left"                       
@@ -68,14 +69,7 @@
                         <Binding Path="Settings.MeasDeep.WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay"/>
                         <Binding Path="Settings.MeasDuration.WriteValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay"/>
                     </MultiBinding>
-                </TextBox.Text>
-                <!--<TextBox.InputBindings>
-                    <KeyBinding  Key="Enter" 
-                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Delay=500, Path=DataContext.MeasProcessVm.WriteMeasDurationWithParameterCommand}" 
-                                 CommandParameter="{Binding Settings}">
-
-                    </KeyBinding>
-                </TextBox.InputBindings>-->
+                </TextBox.Text>                
             </TextBox>
         </Border>
         <ComboBox Width="80"

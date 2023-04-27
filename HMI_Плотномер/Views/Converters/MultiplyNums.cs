@@ -29,7 +29,8 @@ namespace IDensity.Core.Views.Converters
             if (value is null) return new object[] {K};
             float num = 0;
             if(!float.TryParse(value.ToString(), out num)) return new object[] { K};
-            return new object[] { K, (ushort)num/Duration/K, K};
+            var arr =  new object[] { K, (ushort)(num/Duration/K), Duration};
+            return arr;
         }
     }
 }

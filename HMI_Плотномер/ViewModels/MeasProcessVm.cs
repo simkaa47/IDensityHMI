@@ -116,7 +116,7 @@ namespace IDensity.ViewModels
         public RelayCommand WriteMeasDurationWithParameterCommand => _writeMeasDurationWithParameterCommand ?? (_writeMeasDurationWithParameterCommand = new RelayCommand(execPar => 
         {
             if (!(execPar is MeasProcSettings proc)) return;
-            var str = $"*SETT,meas_proc={proc.Num},aver_depth={proc.MeasDeep.Value}#";            
+            var str = $"*SETT,meas_proc={proc.Num},aver_depth={proc.MeasDeep.WriteValue}#";            
             VM.CommService.Tcp.WriteMeasProcSettings(str, proc.Num);
         }, canExecPar => true));
         #endregion
