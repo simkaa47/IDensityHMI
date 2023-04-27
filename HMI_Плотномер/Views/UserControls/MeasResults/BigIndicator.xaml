@@ -19,6 +19,10 @@
         <!--#region Имя процесса -->
         <TextBlock Margin="0,25"
                    FontSize="36"
+                   MaxWidth="760"
+                   TextTrimming="CharacterEllipsis"
+                   ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+                   Name="ProcessName"
                    Foreground="White"
                    FontFamily="..\..\Resourses\Fonts\#Roboto Bold">
             <TextBlock.Text>
@@ -29,6 +33,8 @@
                     <Binding Source="{StaticResource LevelCalculation}"/>
                 </MultiBinding>
             </TextBlock.Text>
+           
+            
         </TextBlock>
         <!--#endregion-->
         <!--#region Visible settings -->
