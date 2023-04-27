@@ -27,6 +27,28 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <Style TargetType="mr:MiddleMeasResult1" x:Key="MeasSingleIndicatorContainer">
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.AvgVisibility}" Value="False"/>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.CurVisibility}" Value="False"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.AvgVisibility}" Value="True"/>
+                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ViewSettings.CurVisibility}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
         </Canvas.Resources>
         <!--#region Trends -->
         <TabControl  Canvas.Top="0" Canvas.Left="0" TabStripPlacement="Bottom" Width="948" Height="565" BorderThickness="0" DataContext="{Binding MeasResultsVM}">
@@ -170,83 +192,84 @@
         </TabControl>
         <!--#endregion-->
         <!--#region Indication -->
-        <Border Canvas.Left="24" Canvas.Top="560" Height="300" Width="920" Background="{StaticResource PanelBorderColor}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+        <Border Canvas.Left="24" Canvas.Top="656" Height="184" Width="920" Background="{StaticResource PanelBorderColor}">
+            <Grid>                
                 <!--#region Temperature sensor indication -->
-                <StackPanel VerticalAlignment="Center">
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="160" Margin="50,42,0,0">
                     <TextBlock Text="ТЕМПЕРАТУРА ПРИБОРА, °С" Foreground="{StaticResource AquaColor}" FontSize="15" 
-                               HorizontalAlignment="Center"                              
+                               HorizontalAlignment="Left" 
+                               TextWrapping="Wrap"
                                 FontWeight="Medium"                                
                                VerticalAlignment="Bottom"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock  Text="{Binding mainModel.TempTelemetry.TempInternal.Value, StringFormat=f1, ConverterCulture=RU-ru}" 
                                 Name="InternalTempIndicator"
                                 Foreground="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource InternalTempColors}}"  
                                HorizontalAlignment="Center"
-                               FontSize="64"
+                               FontSize="48"
+                                Margin="0,16,0,0"
                                 FontWeight="Medium"                                
                                 FontFamily="Roboto"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Top"/>
                         <Image Source="..\Resourses\Pictures\AlertReportProblemRed.png"  Height="40" Visibility="{Binding mainModel.TempTelemetry.OverTemp, Converter={StaticResource VisibleConverter}}"/>
                     </StackPanel>
                 </StackPanel>
                 <!--#endregion-->
                 <!--#region HV indication -->
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <StackPanel Width="120"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="225,42,0,0">
                     <TextBlock Text="НАПРЯЖЕНИЕ HV, В"
                                Foreground="{StaticResource AquaColor}" 
                                FontSize="15" 
-                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"
                                 FontWeight="Medium"/>
                     <TextBlock  Grid.Row="1" Text="{Binding mainModel.TelemetryHV.VoltageCurOut.Value , ConverterCulture=RU-ru}" Foreground="White"  
-                               HorizontalAlignment="Center"
-                               FontSize="64"                   
+                               HorizontalAlignment="Left"
+                               FontSize="48"  
+                                Margin="0,16,0,0"
                                 FontWeight="Medium"
                                 FontFamily="Roboto"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Top"/>
                 </StackPanel>
                 <!--#endregion-->
                 <!--#region Count Pulse indication -->
-                <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                <StackPanel Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" Margin="422,42,0,0">
                     <TextBlock Text="КОЛИЧЕСТВО ИМПУЛЬСОВ В СЕКУНДУ"
                                Foreground="{StaticResource AquaColor}" 
                                FontSize="15" 
-                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"
                                 FontWeight="Medium"/>
-                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.MeasResults[0].CounterValue.Value, StringFormat=f1, ConverterCulture=RU-ru}" Foreground="White"  
-                               HorizontalAlignment="Center"
-                               FontSize="64"                   
+                    <TextBlock  Grid.Row="1" Text="{Binding mainModel.MeasResults[0].CounterValue.Value, StringFormat=f1, ConverterCulture=RU-ru}" Foreground="White"
+                               FontSize="48"       
+                                Margin="0,16,0,0"
                                 FontWeight="Medium"
+                                HorizontalAlignment="Left"
                                 FontFamily="Roboto"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Top"/>
                 </StackPanel>
                 <!--#endregion-->
                 <!--#region Switch measuring button -->
-                <Button Grid.Column="1" Grid.Row="1"
-               
-                Width="286"
-                Height="64"
-                BorderBrush="{StaticResource AquaColor}"
-                BorderThickness="1"
-                Style="{StaticResource CommonButton}" 
-                Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsMeasSwitchColors}}"
+                <Button Width="178"
+                        Height="95"
+                        Margin="0,0,48,0"
+                        BorderBrush="{StaticResource AquaColor}"
+                        BorderThickness="1"
+                        Style="{StaticResource CommonButton}" 
+                        Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsMeasSwitchColors}}"
                         FontSize="20"
-                FontStretch="Expanded"
-                FontFamily="..\Resourses\Fonts\#Roboto Medium"
+                        FontStretch="Expanded"
+                        FontFamily="..\Resourses\Fonts\#Roboto Medium"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Content="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
-                        Command="{Binding SwitchMeasCommand}"/>
+                        HorizontalAlignment="Right"                       
+                        Command="{Binding SwitchMeasCommand}">
+                    <Button.Content>
+                        <TextBlock Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
+                                   TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
                 <!--#endregion-->
             </Grid>
             
@@ -256,22 +279,40 @@
         
         <!--#endregion-->
         <!--#region MEas Indication -->
-        <Grid Canvas.Left="948" Height="850" Width="950">
-            <Grid.RowDefinitions>
-                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[0].IsActive}"/>
-                <RowDefinition Style="{StaticResource ChangedRow}" DataContext="{Binding mainModel.MeasResults[1].IsActive}"/>
-            </Grid.RowDefinitions>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[0]}" 
-                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
-                           IndicatorColor="#32d74b"
-                           Margin="20,5,20,5"
-                           Grid.Row="0"/>
-            <mr:MeasResult DataContext="{Binding mainModel.MeasResults[1]}" 
-                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                           IndicatorColor="#64d2ff"
-                           Margin="20,5,20,5"
-                           Grid.Row="1"/>
+        <Grid Canvas.Left="960" Height="880" Width="950">
+            <StackPanel>
+                <mr:BigIndicator DataContext="{Binding mainModel.MeasResults[0]}"
+                                 Visibility="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.mainModel.MeasResults[1].IsActive, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
+                                 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                                 IndicatorColor="#32d74b"/>
+                <StackPanel>
+                    <StackPanel.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiVisibleConverter}">
+                            <Binding  Path="mainModel.MeasResults[0].IsActive" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
+                            <Binding  Path="mainModel.MeasResults[1].IsActive" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
+                        </MultiBinding>
+                    </StackPanel.Visibility>
+                    <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[0]}"                                 
+                                          ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                                          IndicatorColor="#32d74b">                        
+                    </mr:MiddleMeasResult2>
+                    <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[0]}"
+                                      IndicatorColor="#32d74b" 
+                                      Style="{StaticResource MeasSingleIndicatorContainer}"
+                                      DataContext="{Binding mainModel.MeasResults[0]}"/>
+                    <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[1]}" 
+                                          Margin="0,28,0,0"
+                                          ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                                          IndicatorColor="#64d2ff"/>
+                    
+                    <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
+                                      IndicatorColor="#64d2ff" 
+                                      Style="{StaticResource MeasSingleIndicatorContainer}"
+                                      DataContext="{Binding mainModel.MeasResults[1]}"/>
+                </StackPanel>
+                
 
+            </StackPanel>
            
 
 

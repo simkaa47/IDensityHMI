@@ -109,25 +109,18 @@
                                 Text="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvStatuses }}"
                         Canvas.Top="30"
                         Canvas.Left="795"/>            
-            <!--#endregion-->
-            <!--#region Serial Number -->
-            <TextBlock Text="Серийный номер" Style="{StaticResource TextBlockRoboto}" FontSize="14" Foreground="#6CFFFFFF"
-                       Canvas.Top="21" Canvas.Left="1004" FontWeight="Regular"/>
-            <TextBlock Text="{Binding mainModel.SerialNumber.Value}" Style="{StaticResource TextBlockRoboto}" Foreground="#6CFFFFFF"
-                       Canvas.Left="1004" Canvas.Top="38"/>
-            
-            <!--#endregion-->
+            <!--#endregion-->            
             <!--#region DateTime -->
             <Border Background="#2c2c2E"
                     Height="38"
                     Width="208"
                     Canvas.Top="21"
-                    Canvas.Left="1194"
+                    Canvas.Left="1000"
                     >                
             </Border>
             <TextBlock Style="{StaticResource TextBlockRoboto}"
                        Canvas.Top="30"
-                       Canvas.Left="1213"
+                       Canvas.Left="1024"
                        Foreground="#A2FFFFFF"
                        Text="{Binding mainModel.Rtc.Value, StringFormat=HH:mm:ss   dd.MM.yyyy}">
                 
@@ -138,16 +131,16 @@
             <Image     Height="32" Width="32"
                        MouseLeftButtonDown="Logout_click"
                        Source="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserIcons }}" 
-                       Canvas.Left="1442" Canvas.Top="23">
+                       Canvas.Left="1295" Canvas.Top="23">
             </Image>
             <TextBlock    Canvas.Top="30"
-                          Canvas.Left="1497"
+                          Canvas.Left="1343"
                           FontSize="16"
                           FontWeight="Regular"
                                 Style="{StaticResource TextBlockRoboto}" 
                                 Text="{Binding CurUser, Converter={StaticResource UserToName}}"
                                 Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
-            <Image Canvas.Left="1721" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
+            <Image Canvas.Left="1620" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>
@@ -156,26 +149,26 @@
             </Image>            
             <!--#endregion-->
             <!--#region Collapse -->
-            <Button Background="Transparent" BorderThickness="0" Canvas.Left="1765" Canvas.Top="27" Width="30" Height="30">
-                <fa:ImageAwesome Icon="WindowMinimize"  Foreground="White"  VerticalAlignment="Bottom"
-                             MouseDown="Minimaze_Click">
-                    <fa:ImageAwesome.ToolTip>
-                        <TextBlock Text="Свернуть полностью"/>
-                    </fa:ImageAwesome.ToolTip>
-                </fa:ImageAwesome>
+            <Button Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{StaticResource BorderNonActiveColor}" Click="Minimaze_Click" Canvas.Left="1680"  Width="80" Height="80">
+                <Image Source="..\Resourses\Pictures\HorizontalRule.png"
+                       Height="30"
+                       Width="30"/>
+                <Button.ToolTip>
+                    <TextBlock Text="Свернуть полностью"/>
+                </Button.ToolTip>
             </Button>
             
             <!--#endregion-->
             <!--#region Normal-Maximaze -->
-            <Button Background="Transparent" BorderThickness="0" Canvas.Left="1800" Canvas.Top="27"   Width="30" Height="30">
-                <fa:ImageAwesome Icon="WindowRestore" 
-                             MouseDown="Normal_Click"
-                             Foreground="White"
-                             Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=WindowState, Converter={StaticResource VisibleIfEqual}, ConverterParameter=Maximized}">
-                    <fa:ImageAwesome.ToolTip>
-                        <TextBlock Text="Свернуть в окно"/>
-                    </fa:ImageAwesome.ToolTip>
-                </fa:ImageAwesome>
+            <Button Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{StaticResource BorderNonActiveColor}" Canvas.Left="1760"   Width="80" Height="80"
+                    Click="Normal_Click">
+                <Image Source="..\Resourses\Pictures\FilterNone.png"
+                       Height="30"
+                       Width="30"/>
+                
+                <Button.ToolTip>
+                    <TextBlock Text="Свернуть в окно"/>
+                </Button.ToolTip>
             </Button>
             
             

@@ -45,8 +45,8 @@ namespace IDensity.Core.ViewModels
         {
             MeasResultSetts = _measResultViewRepository.Init(new List<MeasResultViewSett>
             {
-                new MeasResultViewSett() {AvgVisibility = true, CurVisibility = true, TimeUnit = TimeMeasUnit.Seconds},
-                new MeasResultViewSett() {AvgVisibility = true, CurVisibility = true, TimeUnit = TimeMeasUnit.Seconds}
+                new MeasResultViewSett() {AvgVisibility = true, CurVisibility = true},
+                new MeasResultViewSett() {AvgVisibility = true, CurVisibility = true}
             });
             foreach (var sett in MeasResultSetts)
             {

@@ -1,0 +1,197 @@
+﻿<local:MeasResultCommon x:Class="IDensity.Core.Views.UserControls.MeasResults.MiddleMeasResult1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:m="clr-namespace:IDensity.Core.Models.MeasResults"
+             xmlns:conv="clr-namespace:IDensity.Core.Views.Converters" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             d:DataContext="{d:DesignInstance m:MeasResult}"
+             xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasResults"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Height="425" Width="860" Background="{StaticResource TabControlCommon}">
+        <Grid.Resources>
+            <conv:MeasUnitMultiplyConverter x:Key="GetMeasNumConverterResult"/>
+            <conv:MeasUnitMultiplyConverter x:Key="Multyply"/>
+            <conv:GetMeasNumConverter x:Key="GetMeasNumConverter"/>
+        </Grid.Resources>
+        <!--#region Имя процесса -->
+        <TextBlock Margin="0,25"
+                   FontSize="36"
+                   MaxWidth="760"
+                   TextTrimming="CharacterEllipsis"
+                   ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+                   Name="ProcessName"
+                   Foreground="White"
+                   FontFamily="..\..\Resourses\Fonts\#Roboto Bold">
+            <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource GetMeasProcType}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"  Mode="OneWay"/>
+                    <Binding Path="Settings.MeasType.Value"/>
+                    <Binding Source="{StaticResource DensityCalculation}"/>
+                    <Binding Source="{StaticResource LevelCalculation}"/>
+                </MultiBinding>
+            </TextBlock.Text>            
+        </TextBlock>
+        <!--#endregion-->
+        <!--#region Visible settings -->
+        <ToggleButton Background="Transparent" x:Name="OpenVisibleSettingsButton" Height="30" Width="30"
+                      HorizontalAlignment="Right" VerticalAlignment="Top"
+                      Margin="0,25">
+            <Image Source="..\..\Resourses\Pictures\TuneIcon.png" />
+        </ToggleButton>
+        <Popup IsOpen="{Binding ElementName=OpenVisibleSettingsButton, Path=IsChecked}"
+               StaysOpen="False"
+               Placement="MousePoint">
+            <local:MeasResultViewSettingsControl/>
+        </Popup>
+        <!--#endregion-->
+        <!--#region Avg-->
+        <Grid>
+            <Grid.Visibility>
+                <MultiBinding Converter="{StaticResource MultiVisibleConverter}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=local:MeasResultCommon}" Path="ViewSettings.CurVisibility" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="False"/>
+                    <Binding RelativeSource="{RelativeSource AncestorType=local:MeasResultCommon}" Path="ViewSettings.AvgVisibility" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
+                </MultiBinding>
+            </Grid.Visibility>
+            <!--#region Длинная полоска -->
+            <Rectangle Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}"
+                       Height="2"
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,0,0"/>
+            <!--#endregion-->
+            <!--#region Толстая полоска -->
+            <Rectangle Fill="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}"
+                       Height="12"
+                       Width="414"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Right"
+                       Margin="0,0,0,0"/>
+            <!--#endregion-->
+            <!--#region Физисеская величина -->
+            <TextBlock FontSize="276"
+                       Margin="0,48,0,0"
+                       HorizontalAlignment="Left"                       
+                       FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
+                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource Multyply}" 
+                                                  ConverterParameter="f1">
+                        <Binding Path="PhysValueAvg.Value" />
+                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                        <Binding Path="MeasUnitMemoryId"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+
+            </TextBlock>
+            <!--#endregion-->
+            <!--#region Надпись усредненное -->
+            <TextBlock Text="Усредненное"
+                       FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
+                       FontSize="36"
+                       VerticalAlignment="Bottom"
+                       Margin="445,0,0,32"
+                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}"/>
+
+            <!--#endregion-->
+
+
+        </Grid>
+        <!--#endregion-->
+        <!--#region Cur-->
+        <Grid>
+            <Grid.Visibility>
+                <MultiBinding Converter="{StaticResource MultiVisibleConverter}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=local:MeasResultCommon}" Path="ViewSettings.CurVisibility" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="True"/>
+                    <Binding RelativeSource="{RelativeSource AncestorType=local:MeasResultCommon}" Path="ViewSettings.AvgVisibility" Converter="{StaticResource VisibleIfEqual}" ConverterParameter="False"/>
+                </MultiBinding>
+            </Grid.Visibility>
+            <!--#region Длинная полоска -->
+            <Rectangle Fill="#ff9f0a"
+                       Height="2"
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,0,0"/>
+            <!--#endregion-->
+            <!--#region Толстая полоска -->
+            <Rectangle Fill="#ff9f0a"
+                       Height="12"
+                       Width="414"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Right"
+                       Margin="0,0,0,0"/>
+            <!--#endregion-->
+            <!--#region Физисеская величина -->
+            <TextBlock FontSize="276"
+                       Margin="0,48,0,0"
+                       HorizontalAlignment="Left"                       
+                       FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
+                       Foreground="#ff9f0a">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource Multyply}" 
+                                                  ConverterParameter="f1">
+                        <Binding Path="PhysValueAvg.Value" />
+                        <Binding ElementName="MUnit" Path="SelectedItem"/>
+                        <Binding Path="MeasUnitMemoryId"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <!--#endregion-->
+            <!--#region Надпись усредненное -->
+            <TextBlock Text="Мгновенное"
+                       FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
+                       FontSize="36"
+                       VerticalAlignment="Bottom"
+                       Margin="445,0,0,32"
+                       Foreground="#ff9f0a"/>
+
+            <!--#endregion-->
+
+
+        </Grid>
+        <!--#endregion-->        
+        <!--#region ЕИ и время усреднения -->
+        <!--#region ЕИ -->
+        <ComboBox HorizontalContentAlignment="Center"
+                  Foreground="White"
+                  BorderBrush="{StaticResource BorderNonActiveColor}"
+                  Name="MUnit"
+                  Background="{StaticResource PanelBorderColor}"                      
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Bottom"
+                  VerticalContentAlignment="Center"                                  
+                  Height="60"
+                  Margin="0,0,0,22"
+                  Width="169">
+            <ComboBox.ItemsSource>
+                <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay" >
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                    <Binding Path="Settings.MeasType.Value"/>
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                </MultiBinding>
+            </ComboBox.ItemsSource>
+            <ComboBox.SelectedItem>
+                <MultiBinding Converter="{StaticResource GetMeasNumConverter}" Mode="OneWay">
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                    <Binding Path="Settings.MeasType.Value"/>
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                    <Binding Path="MeasUnitMemoryId"/>
+                </MultiBinding>
+            </ComboBox.SelectedItem>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}" FontSize="24" Foreground="White" FontWeight="Medium"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <!--#endregion-->
+        <!--#region Avg time -->
+        <local:AvgTime HorizontalAlignment="Right"
+                       Margin="0,0,0,22"
+                       DataContext="{Binding}"
+                       ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=ViewSettings}"
+                       Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=ViewSettings.AvgVisibility, Converter={StaticResource VisibleConverter}}"
+                       VerticalAlignment="Bottom"/>
+        <!--#endregion-->
+        <!--#endregion-->
+    </Grid>
+</local:MeasResultCommon>

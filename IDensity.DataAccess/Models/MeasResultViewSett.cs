@@ -40,11 +40,11 @@ namespace IDensity.DataAccess.Models
 		/// <summary>
 		/// Time unit
 		/// </summary>
-		private TimeMeasUnit _timeUnit;
+		private int _timeUnit;
 		/// <summary>
 		/// Time unit
 		/// </summary>
-		public TimeMeasUnit TimeUnit
+		public int TimeUnit
 		{
 			get => _timeUnit;
 			set => Set(ref _timeUnit, value);
@@ -53,9 +53,12 @@ namespace IDensity.DataAccess.Models
 
 	}
 
-	public enum TimeMeasUnit
+	
+
+	public class TimeUnit
 	{
-		Minutes,
-		Seconds = 60
+		public string Name { get; set; }
+		public float K { get; set; }
+
 	}
 }

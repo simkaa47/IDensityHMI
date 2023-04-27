@@ -68,7 +68,24 @@
                         <!--#endregion-->
                     </TabControl>
                     <!--#endregion-->
-                    
+                    <!--#region Серийный номер -->
+                    <StackPanel Width="200"
+                                Height="45"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Margin="0,0,53,42">
+                        <TextBlock Text="Серийный номер"
+                                   Foreground="#80FFFFFF"
+                                   FontSize="16"
+                                   HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding mainModel.SerialNumber.Value}"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Right"/>
+
+                    </StackPanel>
+                    <!--#endregion-->
                 </Grid>
                 
 
@@ -84,7 +101,7 @@
         </Grid>
 
        
-        <!--<Image Source="..\Views\Resourses\Pictures\Frame 56.png" Opacity="0.4"/>-->
+        <!--<Image Source="..\Views\Resourses\Pictures\Frame 165.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\TrendSettings.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeasProc_main.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeaxProc_Standartisation.png" Opacity="0.4"/>-->

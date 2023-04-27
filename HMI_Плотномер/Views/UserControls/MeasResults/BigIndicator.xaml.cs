@@ -16,7 +16,7 @@ namespace IDensity.Core.Views.UserControls.MeasResults
     /// <summary>
     /// Interaction logic for BigIndicator.xaml
     /// </summary>
-    public partial class BigIndicator : UserControl
+    public partial class BigIndicator : MeasResultCommon
     {
         public BigIndicator()
         {
