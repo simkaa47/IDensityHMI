@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,13 +27,26 @@ namespace IDensity.Core.Views
             SoftVersion.Text = "VERSION " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async  void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-            ShowNameButton.IsEnabled = false;
-            var main = new MainWindow();
-            main.Show();
-            this.Close();
+            ShowNameButtonText.Text = "Загрузка...";
+            ShowNameButtonText.Foreground = Brushes.Black;
+            ShowNameButton.IsEnabled = false;            
+            await Task.Run(() => 
+            {
+                Thread.Sleep(200);
+                Application.Current.Dispatcher.Invoke(new Action(() => 
+                {
+                    var main = new MainWindow();
+                    main.Show();
+                    ShowNameButton.IsEnabled = true;
+                    this.Close();
+                }));                          
+
+            });
+           
+
+
         }
     }
 }
