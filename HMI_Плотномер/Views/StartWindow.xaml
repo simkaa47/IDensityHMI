@@ -1,0 +1,55 @@
+﻿<Window x:Class="IDensity.Core.Views.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IDensity.Core.Views"
+        mc:Ignorable="d"
+         WindowStyle="None" 
+        Title="StartWindow" Height="450" Width="800" WindowState="Maximized">
+    <Window.Background>
+        <ImageBrush ImageSource="Resourses\Pictures\страница_входа 1.png"/>
+    </Window.Background>
+    <Canvas>
+        <!--#region Эмблема -->
+        <Image Source="Resourses\Pictures\Gonvels.png" Canvas.Left="1414" Canvas.Top="175" Width="195"/>
+        <Image Source="Resourses\Pictures\Visma.png" Canvas.Left="1434" Canvas.Top="260" Width="128"/>
+        <!--#endregion-->
+        <!--#region Кнопка -->
+        <Button Click="Button_Click" Width="198" Height="68" 
+                Canvas.Left="650" Canvas.Top="633"   
+                BorderBrush="{StaticResource AquaColor}"
+                BorderThickness="1"
+                Name="ShowNameButton" Background="#1C1c1e" >
+            <TextBlock Text="Вход" HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       Foreground="White"
+                       FontSize="24"/>
+        </Button>
+        <!--#endregion-->
+        <!--#region Виссма меше -->
+        <TextBlock Text="VISSMA" Canvas.Top="294" Canvas.Left="354" FontSize="141"
+                   Foreground="White" FontFamily="Resourses\Fonts\#Roboto Light" 
+                   FontStretch="Normal">
+            <TextBlock.LayoutTransform>
+                <ScaleTransform ScaleX="0.98"/>
+            </TextBlock.LayoutTransform>
+        </TextBlock>
+        <DockPanel Canvas.Top="451" Canvas.Left="361" >
+            <Rectangle VerticalAlignment="Top" Fill="White"  HorizontalAlignment="Center" Width="226" Height="3"/>
+            <TextBlock Foreground="White"
+                       Name="SoftVersion"
+                       FontSize="33" 
+                       Margin="20,-8,0,0"
+                       VerticalAlignment="Top" FontFamily="Resourses\Fonts\#Roboto " />
+        </DockPanel>
+        <TextBlock Text="Measure" Canvas.Top="444" Canvas.Left="352" FontSize="135"
+                   Foreground="White" FontFamily="Resourses\Fonts\#Roboto Thin">
+            <TextBlock.LayoutTransform>
+                <ScaleTransform ScaleX="0.975"/>
+            </TextBlock.LayoutTransform>
+        </TextBlock>
+        <!--#endregion-->
+        
+    </Canvas>
+</Window>

@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:IDensity"             
-             StartupUri="Views/MainWindow.xaml">
-    <Application.Resources>       
+             StartupUri="Views/StartWindow.xaml">
+    <Application.Resources>        
         <ResourceDictionary>
+            <ScaleTransform x:Key="FontStretchCondensed" ScaleX="0.8" />
+            <ScaleTransform x:Key="FontStretchExpanded" ScaleX="1.04" ScaleY="1.05" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Resourses/Styles/TextBlocks.xaml"/>                             
                 <ResourceDictionary Source="Views/Resourses/Styles/TextBoxes.xaml"/>
