@@ -39,6 +39,7 @@ namespace IDensity.Core.Views
                 {
                     var main = new MainWindow();
                     main.Show();
+                    Application.Current.MainWindow = main;
                     ShowNameButton.IsEnabled = true;
                     this.Close();
                 }));                          
