@@ -18,6 +18,7 @@
         <!--#region Имя процесса -->
         <TextBlock Margin="0,25"
                    FontSize="36"
+                   HorizontalAlignment="Left"
                    MaxWidth="760"
                    TextTrimming="CharacterEllipsis"
                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
@@ -69,27 +70,28 @@
                        Margin="0,0,0,0"/>
             <!--#endregion-->
             <!--#region Физисеская величина -->
-            <TextBlock FontSize="276"
-                       Margin="0,48,0,0"
+            <Viewbox Margin="0,48,0,50" HorizontalAlignment="Left">
+                <TextBlock FontSize="276"                       
                        HorizontalAlignment="Left"                       
                        FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource Multyply}" 
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                        <Binding Path="PhysValueAvg.Value" />
-                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                        <Binding Path="MeasUnitMemoryId"/>
-                    </MultiBinding>
-                </TextBlock.Text>
-
-            </TextBlock>
+                            <Binding Path="PhysValueAvg.Value" />
+                            <Binding ElementName="MUnit" Path="SelectedItem"/>
+                            <Binding Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Viewbox>
             <!--#endregion-->
             <!--#region Надпись усредненное -->
             <TextBlock Text="Усредненное"
                        FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
                        FontSize="36"
                        VerticalAlignment="Bottom"
+                       HorizontalAlignment="Left"
                        Margin="445,0,0,32"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}"/>
 
@@ -121,20 +123,21 @@
                        Margin="0,0,0,0"/>
             <!--#endregion-->
             <!--#region Физисеская величина -->
-            <TextBlock FontSize="276"
-                       Margin="0,48,0,0"
+            <Viewbox Margin="0,48,0,50">
+                <TextBlock FontSize="276"                       
                        HorizontalAlignment="Left"                       
                        FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
                        Foreground="#ff9f0a">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource Multyply}" 
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                        <Binding Path="PhysValueAvg.Value" />
-                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                        <Binding Path="MeasUnitMemoryId"/>
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+                            <Binding Path="PhysValueAvg.Value" />
+                            <Binding ElementName="MUnit" Path="SelectedItem"/>
+                            <Binding Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Viewbox>
             <!--#endregion-->
             <!--#region Надпись усредненное -->
             <TextBlock Text="Мгновенное"

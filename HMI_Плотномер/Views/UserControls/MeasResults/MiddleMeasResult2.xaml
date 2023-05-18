@@ -25,6 +25,7 @@
         <TextBlock Margin="0,25"
                    FontSize="36"
                    MaxWidth="760"
+                   HorizontalAlignment="Left"
                    TextTrimming="CharacterEllipsis"
                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
                    Name="ProcessName"
@@ -69,22 +70,21 @@
                        Margin="0,0,0,158"/>
             <!--#endregion-->
             <!--#region Физисеская величина -->
-            <TextBlock FontSize="128"
-                       Margin="12,88,0,0"
-                       MaxWidth="400"
-                       HorizontalAlignment="Left"                       
+            <Viewbox HorizontalAlignment="Left" MaxWidth="400" Margin="12,88,0,0" MaxHeight="150" VerticalAlignment="top">
+                <TextBlock FontSize="128"                           
                        FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource Multyply}" 
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                        <Binding Path="PhysValueAvg.Value" />
-                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                        <Binding Path="MeasUnitMemoryId"/>
-                    </MultiBinding>
-                </TextBlock.Text>
+                            <Binding Path="PhysValueAvg.Value" />
+                            <Binding ElementName="MUnit" Path="SelectedItem"/>
+                            <Binding Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
 
-            </TextBlock>
+                </TextBlock>
+            </Viewbox>
             <!--#endregion-->
             <!--#region Надпись усредненное -->
             <TextBlock Text="Усредненное"
@@ -169,21 +169,20 @@
                        Foreground="#ff9f0a"/>
             <!--#endregion-->
             <!--#region Физисеская величина -->
-            <TextBlock FontSize="64"
-                   Margin="445,0,0,40"
-                   VerticalAlignment="Bottom"                   
-                   FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
+            <Viewbox Margin="445,0,0,40" VerticalAlignment="Bottom" HorizontalAlignment="Left" MaxHeight="75">
+                <TextBlock  FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
                    Foreground="#ff9f0a">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource Multyply}" 
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                        <Binding Path="PhysValueCur.Value" />
-                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                        <Binding Path="MeasUnitMemoryId"/>
-                    </MultiBinding>
-                </TextBlock.Text>
+                            <Binding Path="PhysValueCur.Value" />
+                            <Binding ElementName="MUnit" Path="SelectedItem"/>
+                            <Binding Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
 
-            </TextBlock>
+                </TextBlock>
+            </Viewbox>
             <!--#endregion-->
 
         </Grid>

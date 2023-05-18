@@ -20,6 +20,7 @@
         <TextBlock Margin="0,25"
                    FontSize="36"
                    MaxWidth="760"
+                   HorizontalAlignment="Left"
                    TextTrimming="CharacterEllipsis"
                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
                    Name="ProcessName"
@@ -65,20 +66,20 @@
                        HorizontalAlignment="Right"
                        Margin="0,0,0,156"/><!--#endregion-->
             <!--#region Физисеская величина -->
-            <TextBlock FontSize="276"
-                       Margin="0,44"
-                       FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
+            <Viewbox MaxHeight="323" Margin="0,44" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock FontFamily="..\..\Resourses\Fonts\#Roboto Bold"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:MeasResultCommon}, Path=IndicatorColor}">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource Multyply}" 
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}" 
                                                   ConverterParameter="f1">
-                        <Binding Path="PhysValueAvg.Value" />
-                        <Binding ElementName="MUnit" Path="SelectedItem"/>
-                        <Binding Path="MeasUnitMemoryId"/>
-                    </MultiBinding>
-                </TextBlock.Text>
+                            <Binding Path="PhysValueAvg.Value" />
+                            <Binding ElementName="MUnit" Path="SelectedItem"/>
+                            <Binding Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
 
-            </TextBlock>
+                </TextBlock>
+            </Viewbox>
             <!--#endregion-->
             <!--#region Надпись усредненное -->
             <TextBlock Text="Усредненное"
