@@ -143,7 +143,8 @@ namespace IDensity.Core.ViewModels
         void GetMeasDates()
         {
             MeasDates = _measResultRepository
-                .GetAll().Select(m => m.Time)
+                .GetAll().Select(m => m.Time.Date)
+                .Distinct()
                 .ToList();
         }
         #endregion
@@ -319,7 +320,8 @@ namespace IDensity.Core.ViewModels
         {
             if (!(obj is Calendar calendar)) return;
             DateTime startDate = new DateTime(calendar.DisplayDate.Year, calendar.DisplayDate.Month, 1);
-            var enabledDates = MeasDates.Where(dt => dt >= startDate && dt <= startDate.AddMonths(1));
+            var enabledDates = MeasDates
+                .Where(dt => dt >= startDate && dt <= startDate.AddMonths(1));
             calendar.DisplayDateEnd = startDate.AddMonths(1);
             var tempDate = startDate;
             calendar.BlackoutDates.Clear();
