@@ -33,7 +33,7 @@
                         <TabItem Header="Измерение" MinHeight="68" MinWidth="319"
                              Tag="..\Pictures\MeasIcon.png" FontSize="24"
                              Name="MainTab" 
-                             IsSelected="{Binding CurUser.Level, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys1:String.Empty}}">
+                             IsSelected="{Binding CurUser, Mode=OneWay, Converter={StaticResource NotEqual}, ConverterParameter=null}">
                             <Grid>
                                 <!--#region Vissma measure -->
                                 <oth:VissmaMeasure/>
@@ -73,7 +73,7 @@
                                 Height="45"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
-                                Margin="0,0,53,42">
+                                Margin="0,0,80,42">
                         <TextBlock Text="Серийный номер"
                                    Foreground="#80FFFFFF"
                                    FontSize="16"
@@ -100,8 +100,8 @@
             <pages:IndicationWindow Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=WindowState, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=Maximized}"/>
         </Grid>
 
-       
-        <!--<Image Source="..\Views\Resourses\Pictures\Frame 165.png" Opacity="0.4"/>-->
+
+        <!--<Image Source="..\Views\Resourses\Pictures\Meas_Proc_Calibration.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\TrendSettings.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeasProc_main.png" Opacity="0.4"/>-->
         <!--<Image Source="..\Views\Resourses\Pictures\MeaxProc_Standartisation.png" Opacity="0.4"/>-->

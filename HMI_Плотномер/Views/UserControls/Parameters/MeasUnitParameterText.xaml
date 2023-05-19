@@ -42,11 +42,13 @@
                 </Style.Triggers>
             </Style>
         </DockPanel.Resources>
+        <!--#region Описание -->
         <TextBlock Text="{Binding Description}"
                    HorizontalAlignment="Left"
                    Style="{StaticResource Common}"
                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=DescriptionNotVisible, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
                    VerticalAlignment="Center"/>
+        <!--#endregion-->
         <StackPanel HorizontalAlignment="Right"
                     Orientation="Horizontal">
             <Border CornerRadius="4"
@@ -55,8 +57,7 @@
                     Width="{Binding RelativeSource={RelativeSource AncestorType=local:MeasUnitParameterText}, Path=ParameterWidth, TargetNullValue=205}"
                     BorderThickness="2"
                     Background="Transparent">
-                <DockPanel VerticalAlignment="Center">
-                    <TextBox Background="Transparent"
+                <TextBox Background="Transparent"
                          Name="Input"                         
                          BorderThickness="0"                                                 
                          FontFamily="Roboto"
@@ -67,28 +68,31 @@
                          MaxWidth="65"
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                          FontWeight="Regular">
-                        <TextBox.InputBindings>
-                            <KeyBinding  Key="Enter"   Command="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=Command}" 
+                    <TextBox.InputBindings>
+                        <KeyBinding  Key="Enter"   Command="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=Command}" 
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommanDParameter }">
 
-                            </KeyBinding>
-                        </TextBox.InputBindings>
-                        <TextBox.Text>
-                            <MultiBinding Converter="{StaticResource Multyply}"  UpdateSourceTrigger="PropertyChanged"
+                        </KeyBinding>
+                    </TextBox.InputBindings>
+                    <TextBox.Text>
+                        <MultiBinding Converter="{StaticResource Multyply}"  UpdateSourceTrigger="PropertyChanged"
                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" TargetNullValue="" ConverterCulture="RU-ru">
-                                <Binding Path="WriteValue" ConverterCulture="RU-ru" StringFormat="N2" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource NumericConverter}">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule />
-                                        <ExceptionValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                                <Binding ElementName="MeasUnitSelector" Path="SelectedItem"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasUnitMemoryId"/>
-                            </MultiBinding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <ComboBox Width="100" Name="MeasUnitSelector" 
-                             
+                            <Binding Path="WriteValue" ConverterCulture="RU-ru" StringFormat="N2" UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource NumericConverter}">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                    <ExceptionValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                            <Binding ElementName="MeasUnitSelector" Path="SelectedItem"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasUnitMemoryId"/>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+
+            </Border>
+            <!--#region ЕИ -->
+            <ComboBox Width="100" Name="MeasUnitSelector" 
+                             Margin="8,0,0,0"                      
                               VerticalContentAlignment="Center"
                               VerticalAlignment="Center"
                               BorderBrush="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxBorderBrushes}}"
@@ -96,32 +100,30 @@
                               HorizontalContentAlignment="Center"
                               Background="{StaticResource PanelBorderColor}"
                               HorizontalAlignment="Right">
-                        <ComboBox.ItemsSource>
-                            <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay" >
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasType"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
-                            </MultiBinding>
-                        </ComboBox.ItemsSource>
-                        <ComboBox.SelectedItem>
-                            <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay">
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasType"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
-                                <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasUnitMemoryId"/>
-                            </MultiBinding>
-                        </ComboBox.SelectedItem>
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}"
+                <ComboBox.ItemsSource>
+                    <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay" >
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasType"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                    </MultiBinding>
+                </ComboBox.ItemsSource>
+                <ComboBox.SelectedItem>
+                    <MultiBinding Converter="{StaticResource GetMeasNum}" Mode="OneWay">
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.MeasUnitSettingsVm.MeasUnits"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasType"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.mainModel.DeviceType.Value"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=local:MeasUnitParameterText}" Path="MeasUnitMemoryId"/>
+                    </MultiBinding>
+                </ComboBox.SelectedItem>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <UserControl Content="{Binding Name, Converter={StaticResource HighRegisterConverter}}"
                                              FontSize="16" Foreground="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=Foreground}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </DockPanel>
-                
-            </Border>
-
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <!--#endregion-->
+            <!--#region Индикатор -->
             <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
@@ -134,6 +136,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Border>
+            <!--#endregion-->
         </StackPanel>
         <DockPanel.ToolTip>
             <ToolTip Placement="MousePoint" BorderThickness="0">

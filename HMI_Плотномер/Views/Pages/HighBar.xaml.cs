@@ -3,6 +3,7 @@ using IDensity.ViewModels;
 using IDensity.Views;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace IDensity.Core.Views.Pages
 {
@@ -18,9 +19,16 @@ namespace IDensity.Core.Views.Pages
 
         private void Logout_click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as VM;
+            var vm = this.DataContext as VM;           
+            System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
+            objBlur.Radius = 10;
+            Application.Current.MainWindow.Effect = objBlur;
             AuthorizationWindow password = new AuthorizationWindow(vm);            
             password.ShowDialog();
+            Application.Current.MainWindow.Effect = null;
+
+
+
         }
 
         private void Minimaze_Click(object sender, RoutedEventArgs e)

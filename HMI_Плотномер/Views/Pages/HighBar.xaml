@@ -44,6 +44,29 @@
             <sys:String>..\Resourses\Pictures\AccountCircleNonAuthorized.png</sys:String>
             <sys:String>..\Resourses\Pictures\AccountCircleAuthorized.png</sys:String>
         </x:Array>
+
+        <!--#region Стиль для кнопок "Свернуть, развернуть, закрыть" -->
+        <Style TargetType="Button" x:Key="ChangeWindowButtonStyle">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="1,0,0,0"
+                                BorderBrush="#5B5B5B">                            
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2c2c2e"/>
+                </Trigger>                
+            </Style.Triggers>
+        </Style>
+        <!--#endregion-->
+
     </UserControl.Resources>
     <Border >
         <Canvas Background="#1C1C1E">
@@ -137,10 +160,10 @@
                           Canvas.Left="1343"
                           FontSize="16"
                           FontWeight="Regular"
-                                Style="{StaticResource TextBlockRoboto}" 
+                                
                                 Text="{Binding CurUser, Converter={StaticResource UserToName}}"
                                 Foreground="{Binding IsAuthorized, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource UserBackground }}"/>
-            <Image Canvas.Left="1620" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\ResetTv.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
+            <Image Canvas.Left="1620" Canvas.Top="24" Height="32" Width="32" Source="..\Resourses\Pictures\Logout.png" Visibility="{Binding IsAuthorized, Converter={StaticResource VisibleConverter}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding LogoutCommand}"/>
@@ -149,42 +172,43 @@
             </Image>            
             <!--#endregion-->
             <!--#region Collapse -->
-            <Button Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{StaticResource BorderNonActiveColor}" Click="Minimaze_Click" Canvas.Left="1680"  Width="80" Height="80">
+            <Button Style="{StaticResource ChangeWindowButtonStyle}" Click="Minimaze_Click" Canvas.Left="1680"  Width="80" Height="80">
                 <Image Source="..\Resourses\Pictures\HorizontalRule.png"
                        Height="30"
                        Width="30"/>
                 <Button.ToolTip>
-                    <TextBlock Text="Свернуть полностью"/>
+                    <TextBlock Text="Свернуть"/>
                 </Button.ToolTip>
             </Button>
             
             <!--#endregion-->
             <!--#region Normal-Maximaze -->
-            <Button Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{StaticResource BorderNonActiveColor}" Canvas.Left="1760"   Width="80" Height="80"
+            <Button  Style="{StaticResource ChangeWindowButtonStyle}" Canvas.Left="1760"   Width="80" Height="80"
                     Click="Normal_Click">
                 <Image Source="..\Resourses\Pictures\FilterNone.png"
                        Height="30"
-                       Width="30"/>
-                
+                       Width="30"/>                
                 <Button.ToolTip>
                     <TextBlock Text="Свернуть в окно"/>
                 </Button.ToolTip>
             </Button>
             
             
-            <!--#endregion-->
-            
+            <!--#endregion-->            
             <!--#region Buttom Exit -->
-            <Border  BorderBrush="#5B5B5B" BorderThickness="1,0,0,1" Background="Black" Canvas.Left="1840" Width="80" Height="80">
-                
-            </Border>
-            <Image Source="..\Resourses\Pictures\Clear.png" MaxHeight="32" MaxWidth="32" Canvas.Left="1864" Canvas.Top="23">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeftButtonDown">
-                        <i:InvokeCommandAction Command="{Binding CloseAppCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Image>
+            <Button  Style="{StaticResource ChangeWindowButtonStyle}"
+                     BorderThickness="1,0,0,0"                      
+                     Canvas.Left="1840" 
+                     Command="{Binding CloseAppCommand}"
+                     Width="80" Height="80">
+                <Image Source="..\Resourses\Pictures\Clear.png"
+                       Height="30"
+                       Width="30"/>
+                <Button.ToolTip>
+                    <TextBlock Text="Закрыть приложение"/>
+                </Button.ToolTip>
+            </Button>
+            
             <!--#endregion-->            
         </Canvas>        
     </Border>

@@ -9,17 +9,49 @@
              d:DataContext="{d:DesignInstance Type=vm:VM}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Canvas HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,35">
-            <Label Content="VISSMA" FontSize="60" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Regular" Canvas.Bottom="65" Canvas.Right="0"/>
+        <Canvas HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,75,30">
+            <Label Content="VISSMA" FontSize="60" 
+                   Foreground="#4affffff" 
+                   FontFamily="..\..\Resourses\Fonts\#Roboto Light" 
+                   FontWeight="Regular" 
+                   Canvas.Bottom="65" 
+                   Canvas.Right="0">
+                <Label.LayoutTransform>
+                    <ScaleTransform ScaleX="0.98"/>
+                </Label.LayoutTransform>
+            </Label>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Canvas.Bottom="58" Canvas.Right="0">
-                <Rectangle Height="2" Width="80" HorizontalAlignment="Stretch" Fill="#4affffff"/>
-                <Label Content="VERSION" FontSize="15" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Normal"/>
-                <Label Content="{Binding SoftVersion}" FontSize="15" Foreground="#4affffff" FontFamily="Roboto" FontWeight="Normal"
-                       />
+                <Rectangle Height="2" Width="68" 
+                           VerticalAlignment="Bottom" 
+                           Margin="0,0,6,12"
+                           HorizontalAlignment="Stretch" 
+                           Fill="#4affffff"/>
+                <Label Content="VERSION" 
+                       FontSize="16" 
+                       Margin="0,0,0,-5"
+                       VerticalAlignment="Bottom" 
+                       Foreground="#4affffff" 
+                       FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
+                       FontWeight="Normal"/>
+                <Label Content="{Binding SoftVersion}" 
+                       FontSize="16" 
+                       Margin="0,0,0,-5"
+                       Foreground="#4affffff" 
+                       FontFamily="..\..\Resourses\Fonts\#Roboto Medium"
+                       FontWeight="Normal">
+                    
+                </Label>
 
             </StackPanel>
-            <Label Content="Measure" FontSize="57" Foreground="#4affffff" FontFamily="Roboto" FontWeight="UltraLight"
-                   Canvas.Bottom="0" Canvas.Right="0"/>
+            <Label Content="Measure" 
+                   FontSize="57" 
+                   Foreground="#4affffff" 
+                   FontFamily="..\..\Resourses\Fonts\#Roboto Thin"
+                   Canvas.Bottom="0" Canvas.Right="0">
+                <Label.LayoutTransform>
+                    <ScaleTransform ScaleX="0.975"/>
+                </Label.LayoutTransform>
+            </Label>
         </Canvas>
     </Grid>
 </UserControl>

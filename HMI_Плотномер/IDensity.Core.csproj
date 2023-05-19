@@ -53,11 +53,13 @@
     <None Remove="Views\Resourses\Pictures\Frame 164.png" />
     <None Remove="Views\Resourses\Pictures\Frame 165.png" />
     <None Remove="Views\Resourses\Pictures\Frame 169.png" />
+    <None Remove="Views\Resourses\Pictures\Frame 38.png" />
     <None Remove="Views\Resourses\Pictures\Frame 56.png" />
     <None Remove="Views\Resourses\Pictures\Gonvels.png" />
     <None Remove="Views\Resourses\Pictures\HorizontalRule.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
     <None Remove="Views\Resourses\Pictures\ListIcon.png" />
+    <None Remove="Views\Resourses\Pictures\Logout.png" />
     <None Remove="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
     <None Remove="Views\Resourses\Pictures\ManageAccounts.png" />
     <None Remove="Views\Resourses\Pictures\MeasIcon.png" />
@@ -147,11 +149,13 @@
     <Resource Include="Views\Resourses\Pictures\Frame 164.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 165.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 169.png" />
+    <Resource Include="Views\Resourses\Pictures\Frame 38.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 56.png" />
     <Resource Include="Views\Resourses\Pictures\Gonvels.png" />
     <Resource Include="Views\Resourses\Pictures\HorizontalRule.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />
     <Resource Include="Views\Resourses\Pictures\ListIcon.png" />
+    <Resource Include="Views\Resourses\Pictures\Logout.png" />
     <Resource Include="Views\Resourses\Pictures\Logo_Konvels_blue.png" />
     <Resource Include="Views\Resourses\Pictures\ManageAccounts.png" />
     <Resource Include="Views\Resourses\Pictures\MeasIcon.png" />

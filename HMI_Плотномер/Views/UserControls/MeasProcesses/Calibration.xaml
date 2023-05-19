@@ -30,13 +30,14 @@
         <ListBox HorizontalContentAlignment="Stretch"  Width="601"                 
                  HorizontalAlignment="Left" 
                  Margin="0,20,0,0"
+                 BorderThickness="0,1,0,0"
                  Background="Transparent"
-                 BorderThickness="0"
+                 BorderBrush="{StaticResource BorderNonActiveColor}"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
             <!--#region Single Meas Time -->
             <DockPanel>
-                <TextBlock Text="Время единичного измерения, c." Margin="20,0,0,0"/>
+                <TextBlock Text="Время единичного измерения, c" Margin="20,0,0,0"/>
                 <TextBox Template="{StaticResource TextBoxTemplate}"
                          Width="165" Height="40" HorizontalAlignment="Right">
                     <TextBox.Text>
@@ -109,8 +110,8 @@
         <!--#region Single meas results panel -->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             <WrapPanel Orientation="Horizontal">                
                 <GroupBox Margin="0,30,0,0"
@@ -125,6 +126,7 @@
                              SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"                            
                              BorderThickness="1,0,1,0"
                              FontWeight="Normal"
+                                  Height="380"
                              Background="Transparent"
                                   BorderBrush="{StaticResource BorderNonActiveColor}"
                              CanUserDeleteRows="False" 
@@ -137,8 +139,9 @@
                                                                IsReadOnly="True" Width="60">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Id}" Margin="20" 
+                                            <TextBlock Text="{Binding Id, StringFormat=d2}" Margin="2" 
                                                        HorizontalAlignment="Center"
+                                                       FontSize="15"
                                                        VerticalAlignment="Center"
                                                        Foreground="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver,
                                                 Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxColors}}"/>
@@ -156,7 +159,7 @@
                                                                  CommandButtonVisibility="Collapsed"
                                                                  VerticalAlignment="Center"
                                                                  DataTimeFormat="d"
-                                                                 Height="50"
+                                                                 Height="50"                                                                 
                                                                  ParameterWidth="154"
                                                              HorizontalAlignment="Center"
                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.DateWriteCommand}"/>
@@ -171,7 +174,7 @@
                                         <DataTemplate>
                                             <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Weak}"  HorizontalAlignment="Center"
                                                              ParameterWidth="104"
-                                                             Margin="20,5,0,5"
+                                                             Margin="26,5,0,5"
                                                          Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.WeakWriteCommand}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -185,7 +188,8 @@
                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CalibrationVm.ValueWriteCommand}"
                                                                  DataContext="{Binding CounterValue}"
                                                                  HorizontalAlignment="Center"
-                                                                  Margin="20,5,0,5"
+                                                                     ParameterWidth="86"
+                                                                  Margin="33,5,25,5"
                                                                  MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
                                                                  MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"/>
 
@@ -198,7 +202,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <CheckBox Style="{StaticResource CheckBoxAqvaStyle}" IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      Margin="5" HorizontalAlignment="Center"/>
+                                                      Margin="10,0,10,0" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -210,9 +214,9 @@
                     <!--#endregion-->
                 </GroupBox>
                 <!--#region Coeffs -->
-                <GroupBox  FontSize="20" BorderThickness="0" Margin="0,30,0,0">
+                <GroupBox  FontSize="20" BorderThickness="0" Margin="60,30,0,0">
                     <GroupBox.Header>
-                        <TextBlock Text="Расчитанные к-ты полинома" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="12,0,0,0"/>
+                        <TextBlock Text="Расcчитанные к-ты полинома" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="12,0,0,0"/>
                     </GroupBox.Header>
                     <StackPanel>
                         <Border Background="Black" Margin="-6,28,0,0">
@@ -223,7 +227,10 @@
                               ItemsSource="{Binding CalibrationVm.CalculatedCoeefs}"
                               CanUserDeleteRows="False">
                                 <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="СТЕПЕНЬ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                    <DataGridTemplateColumn Width="160">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock Text="СТЕПЕНЬ" FontSize="13.5" Margin="60,0,0,0" />
+                                        </DataGridTemplateColumn.Header>
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Deg}" Margin="20"
@@ -232,7 +239,10 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="ВЕЛИЧИНА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                                    <DataGridTemplateColumn Width="200">
+                                        <DataGridTemplateColumn.Header>
+                                            <TextBlock Text="ВЕЛИЧИНА" FontSize="13.5" Margin="60,0,0,0"/>
+                                        </DataGridTemplateColumn.Header>
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Coeff}" Margin="20"
@@ -262,8 +272,8 @@
                         Style="{StaticResource ButtonWithBackground}"
                         Background="{StaticResource AquaColor}"
                         VerticalContentAlignment="Center"
-                        Margin="0,1,0,1"
-                        Width="220"
+                        
+                        Width="195"
                         CommandParameter="{Binding SelectedProcess.IsActive.Value}">
                     <Button.Content>
                         <StackPanel Margin="10" VerticalAlignment="Center">
@@ -283,12 +293,11 @@
                 <!--#endregion-->
                 <!--#region Расчитать к-ты -->
                 <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}" Style="{StaticResource ButtonWithBackground}"
-                        Background="{StaticResource AquaColor}" Margin="0,1,0,1" Width="200"
+                        Background="{StaticResource AquaColor}"  Width="245"
                         Content="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ" FontSize="13"/>
                 <!--#endregion-->
                 <!--#region Показать зависимость -->
-                <ToggleButton  Width="220"
-                               Margin="0,1,0,1"
+                <ToggleButton  Width="215"                               
                                FontSize="13"
                                Style="{StaticResource ToggleButtonLikeButtonWithBackround}"  
                                Background="{StaticResource AquaColor}"
@@ -300,8 +309,8 @@
                 <!--#endregion-->
                 <!--#region Записать коэффиценты -->
                 <Button Command="{Binding CalibrationVm.WriteCalibrCoeefsCommand}" Style="{StaticResource ButtonWithBackground}"
-                        Background="{StaticResource AquaColor}" Width="200"
-                        Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ" Margin="0,1,0,1" FontSize="13"/>
+                        Background="{StaticResource AquaColor}" Width="240"
+                        Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ"  FontSize="13"/>
                 <!--#endregion-->
             </WrapPanel>
             <!--#endregion-->

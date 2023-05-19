@@ -88,6 +88,7 @@
                                              DescriptionNotVisible="True"
                                              HorizontalAlignment="Center"
                                              Margin="20,5,0,5"
+                                                             ParameterWidth="86"
                                              MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
                                              MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>

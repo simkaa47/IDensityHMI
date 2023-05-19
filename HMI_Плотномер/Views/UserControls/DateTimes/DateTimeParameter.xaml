@@ -37,7 +37,7 @@
                    VerticalAlignment="Center"
                     FontSize="12"
                     FontWeight="Medium"
-                    Margin="10,5,0,0"
+                    Margin="14,5,0,0"
                     Foreground="#B1FFFFFF"
                      
                    HorizontalAlignment="Left"

@@ -107,7 +107,7 @@
         <sys1:String>Счетчики</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList x:Key="SingleMeasures">
-        <sys1:String>ПРОИЗВЕСТИ ИЗМЕРЕНИЕ</sys1:String>
+        <sys1:String>ПРОВЕСТИ ИЗМЕРЕНИЕ</sys1:String>
         <sys1:String>ПРОИЗВОДИТСЯ ИЗМЕРЕНИЕ</sys1:String>        
     </col1:ArrayList>
     <col1:ArrayList x:Key="Activities">
@@ -129,14 +129,14 @@
         <sys1:String>ОТМЕНА</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList x:Key="MeasProcNums">
-        <sys1:String>0</sys1:String>
-        <sys1:String>1</sys1:String>
-        <sys1:String>2</sys1:String>
-        <sys1:String>3</sys1:String>
-        <sys1:String>4</sys1:String>
-        <sys1:String>5</sys1:String>
-        <sys1:String>6</sys1:String>
-        <sys1:String>7</sys1:String>
+        <sys1:String> № 00</sys1:String>
+        <sys1:String> № 01</sys1:String>
+        <sys1:String> № 02</sys1:String>
+        <sys1:String> № 03</sys1:String>
+        <sys1:String> № 04</sys1:String>
+        <sys1:String> № 05</sys1:String>
+        <sys1:String> № 06</sys1:String>
+        <sys1:String> № 07</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList   x:Key="CountModes">
         <sys1:String>Фиксированный</sys1:String>
@@ -150,10 +150,10 @@
     </x:Array>
     <x:Array Type="sys1:String"   x:Key="CurveNames">
         <sys1:String>Значение счетчика</sys1:String>
-        <sys1:String>Процесс 1:мгновенное значение</sys1:String>
-        <sys1:String>Процесс 1:усредненное значение</sys1:String>        
-        <sys1:String>Процесс 2:мгновенное значение</sys1:String>
-        <sys1:String>Процесс 2:усредненное значение</sys1:String>
+        <sys1:String>Процесс 1: мгновенное значение</sys1:String>
+        <sys1:String>Процесс 1: усредненное значение</sys1:String>        
+        <sys1:String>Процесс 2: мгновенное значение</sys1:String>
+        <sys1:String>Процесс 2: усредненное значение</sys1:String>
         <sys1:String>Значение тока на AI0, мкА</sys1:String>
         <sys1:String>Значение тока на AI1, мкА</sys1:String>
         <sys1:String>Значение HV, В</sys1:String>

@@ -38,7 +38,7 @@
             </Style>
             <conv:MultiplyNums x:Key="MyltiplyNums"/>
             <x:Array Type="m:TimeUnit" x:Key="TimeUnits">
-                <m:TimeUnit K="1"  Name="сек"/>
+                <m:TimeUnit K="1"  Name="c"/>
                 <m:TimeUnit K="0.01666"  Name="мин"/>
             </x:Array>
         </DockPanel.Resources>

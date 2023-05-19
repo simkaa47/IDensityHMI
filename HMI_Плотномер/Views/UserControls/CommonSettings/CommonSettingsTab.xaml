@@ -22,17 +22,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--#region Left panel -->
-        <ListBox HorizontalContentAlignment="Stretch" Margin="40,12,0,0"                 
+        <StackPanel  Margin="40,12,0,0"                 
                  HorizontalAlignment="Left" 
-                 Background="Transparent"
-                 BorderThickness="0"
-                 VerticalAlignment="Top"
-                 ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
+                 Background="Transparent"                 
+                 VerticalAlignment="Top">
             <!--#region Calman settings -->
-            <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+            <ListBoxItem >
                 <GroupBox BorderThickness="0"
-                      Margin="0,20,0,20"
-                      FontSize="20">
+                          Margin="0,20,0,20"
+                          Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}"
+                          FontSize="20">
                     <GroupBox.Header>
                         <TextBlock Text="Настройки фильтра Калмана" Foreground="White" FontSize="20" FontWeight="SemiBold" FontFamily="Roboto" Margin="24,0,0,20"/>
                     </GroupBox.Header>
@@ -105,13 +104,14 @@
                 <ListBox HorizontalContentAlignment="Stretch" Margin="0,0,20,0"                 
                  HorizontalAlignment="Stretch" 
                  Background="Transparent"
-                 BorderThickness="0"
+                 BorderThickness="0,1,0,0"
+                         BorderBrush="{StaticResource BorderNonActiveColor}"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">
                     <!--#region Source -->
                     <DockPanel>
                         <TextBlock Text="Источник температуры" Margin="20"/>
-                        <ComboBox Height="40" Width="165" HorizontalAlignment="Right"
+                        <ComboBox Height="40" Width="104" Margin="0,0,50,0" HorizontalAlignment="Right"
                                   SelectedIndex="{Binding Source}"
                                   BorderBrush="{StaticResource BorderNonActiveColor}"
                                   ItemsSource="{StaticResource TempSrc}"
@@ -128,7 +128,7 @@
                     </DockPanel>
                     <!--#endregion-->
                     <!--#region Coeffs -->
-                    <Border Background="Black" Visibility="{Binding Source, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}">
+                    <Border Background="Black" Margin="0,20,0,0" Visibility="{Binding Source, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}">
                         <DataGrid Background="Transparent"
                                   BorderBrush="{StaticResource BorderNonActiveColor}"
                                   BorderThickness="1"
@@ -141,7 +141,7 @@
                                 <DataGridTemplateColumn Header="№ МОДУЛЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}"  Width="124">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Style="{StaticResource Common}" Text="{Binding ModNum}"
+                                            <TextBlock Style="{StaticResource Common}" Text="{Binding ModNum, StringFormat=d2}"
                                                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -183,7 +183,7 @@
                 </ListBox>
             </GroupBox>
             <!--#endregion-->
-        </ListBox>
+        </StackPanel>
         <!--#endregion-->
         <!--#region Right panel -->
         <ListBox Grid.Column="1" HorizontalContentAlignment="Stretch"                  
@@ -216,12 +216,16 @@
                              Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteIsotopNameCommand}"/>
             <!--#endregion-->
             <!--#region Source installation date -->
-            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceInstallDate}" CommandButtonVisibility="Hidden" DataTimeFormat="d" ParameterWidth="165"
+            <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceInstallDate}" CommandButtonVisibility="Hidden" DataTimeFormat="d" ParameterWidth="165"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceInstallDateCommand}"/>
+            </ListBoxItem>
             <!--#endregion-->
             <!--#region Source expiration date date -->
-            <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceExpirationDate}" CommandButtonVisibility="Hidden" DataTimeFormat="d" ParameterWidth="165"
+            <ListViewItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
+                <p:DateTimeParameter DataContext="{Binding VM.mainModel.SourceExpirationDate}" CommandButtonVisibility="Hidden" DataTimeFormat="d" ParameterWidth="165"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.WriteSourceExpirationDateCommand}"/>
+            </ListViewItem>
             <!--#endregion-->
             <!--#region Serial number -->
             <ListBoxItem Visibility="{Binding  VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
@@ -261,20 +265,30 @@
             <!--#region rtc set command -->
             <p:DateTimeParameter DataContext="{Binding VM.mainModel.Rtc}"
                              CommandButtonVisibility="Collapsed"
+                                 Margin="0,0,80,0"                                 
                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.VM.SetRtcCommand}"/>
             <!--#endregion-->
             <!--#region Synchronize with PC time -->
             <DockPanel MinHeight="50">
                 <TextBlock Text="Синхронизировать с временем ПК" Style="{StaticResource Common}" Margin="20,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource Common}" 
-                           Text="{Binding VM.CurPcDateTime, StringFormat=F,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}">
+                    <Border Width="165" Height="40"   BorderThickness="2" CornerRadius="4" BorderBrush="{StaticResource BorderNonActiveColor}">
+                        <TextBlock Style="{StaticResource Common}" 
+                           Text="{Binding VM.CurPcDateTime, StringFormat=G,   UpdateSourceTrigger=PropertyChanged, ConverterCulture=ru-RU,  Mode=OneWay}" HorizontalAlignment="Center">
 
-                    </TextBlock>
-                    <Button Style="{StaticResource TypicalButton0}" Height="40" Width="40" Content="-->" FontSize="16"
-                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                        Command="{Binding VM.SyncRtcCommand}"
-                        Margin="5,0,0,0"/>
+                        </TextBlock>
+                    </Border>
+                    
+                    <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                    Background="{Binding  RelativeSource={RelativeSource Self}, Path=IsFocused, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
+                        <Image Source="{Binding  RelativeSource={RelativeSource Self}, Path=IsFocused, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
+                       HorizontalAlignment="Center" Height="24" Width="24"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDown">
+                                <i:InvokeCommandAction Command="{Binding VM.SyncRtcCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Border>
                 </StackPanel>
             </DockPanel>
             <!--#endregion-->

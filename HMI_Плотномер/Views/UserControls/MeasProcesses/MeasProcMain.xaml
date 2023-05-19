@@ -15,8 +15,9 @@
     <Grid> 
         <ListBox HorizontalContentAlignment="Stretch"  Width="687" Margin="0,20,0,0" 
                  HorizontalAlignment="Left" 
+                 BorderBrush="{StaticResource BorderNonActiveColor}"
                  Background="Transparent"
-                 BorderThickness="0"
+                 BorderThickness="0,1,0,0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">            
             <ListBox.Resources>

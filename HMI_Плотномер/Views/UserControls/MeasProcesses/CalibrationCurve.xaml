@@ -12,8 +12,9 @@
     <Grid>
         <ListBox HorizontalContentAlignment="Stretch"  Width="667" Margin="0,24,0,0"                 
                  HorizontalAlignment="Left" 
-                 Background="Transparent"
-                 BorderThickness="0"
+                 Background="Transparent"                 
+                 BorderBrush="{StaticResource BorderNonActiveColor}"
+                 BorderThickness="0,1,0,0"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">           
             <!--#region Calibration result -->

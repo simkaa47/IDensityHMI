@@ -107,7 +107,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="0.3*"/>
+                                <ColumnDefinition Width="0.5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" 
                                        FontSize="16"
@@ -116,8 +116,8 @@
                                        
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"/>
-                            <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\DriveFileMove.png" Opacity="0.5"
-                                           MouseLeftButtonDown="BrowseLogPath"/>
+                            <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\DriveFileMove.png"
+                                           MouseLeftButtonDown="BrowseLogPath" Height="24"/>
                         </Grid>
                     </Border>
                     <!--#endregion-->
@@ -125,7 +125,7 @@
                     <Border Height="56" Width="121"  BorderThickness="0,0,0,2" Style="{StaticResource SelectedBoeder}"
                             Canvas.Bottom="0" Canvas.Left="635"
                                     IsEnabled="{Binding LogPath, Converter={StaticResource FileExistConverter}}"
-                                    Opacity="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource Opacities}}"
+                                   
                                     Background="#16FFFFFF" CornerRadius="4,4,0,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -135,14 +135,15 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="0.3*"/>
+                                <ColumnDefinition Width="0.5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Запись" 
                                                TextWrapping="Wrap" Foreground="#B1FFFFFF" 
                                                VerticalAlignment="Center"
-                                       FontSize="16"
+                                               FontSize="16"
+                                                Opacity="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource Opacities}}"
                                                HorizontalAlignment="Center"/>
-                            <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\SystemUpdateAlt.png" 
+                            <Image Margin="0,0,8,0" Grid.Column="1" Source="..\Resourses\Pictures\SystemUpdateAlt.png" Height="24"
                                            Visibility="{Binding ArchivalTrendUploading, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"/>
                             <fa:ImageAwesome Grid.Column="1"
                                                 Margin="2" 
@@ -154,10 +155,16 @@
                     </Border>
                     <!--#endregion-->
                     <!--#region ShowTrendButton -->
-                    <Button   Style="{StaticResource TypicalButton0}" Height="56" Width="174" Canvas.Bottom="0" Canvas.Left="772"
-                                    Content="Показать тренд"
+                    <Button   Height="56" Width="174" Canvas.Bottom="0" Canvas.Left="772"                              
+                              BorderThickness="1"
+                              Style="{StaticResource ButtonWithBackgroundAbdBorder}"                              
+                              Background="Transparent" 
+                              BorderBrush="{StaticResource AquaColor}"
                               FontSize="16" FontWeight="Medium"
-                                    Command="{Binding ShowArchivalTrendCommand}"/>
+                             Command="{Binding ShowArchivalTrendCommand}">
+                        <TextBlock Text="Показать тренд"
+                                   Foreground="White"/>
+                    </Button>
                     <!--#endregion-->
                     <!--#region Trend -->
                     <trends:MainTrendControl DataSource="{Binding ArchivalDataPotnts}"  Height="360"   Width="924"  Margin="24,24,0,0"                                             
@@ -267,7 +274,12 @@
                         Command="{Binding SwitchMeasCommand}">
                     <Button.Content>
                         <TextBlock Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap" 
+                                   FontFamily="..\Resourses\Fonts\#Roboto Medium">
+                            <TextBlock.LayoutTransform>
+                                <ScaleTransform ScaleX="1.0" ScaleY="1.15"/>
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
                     </Button.Content>
                 </Button>
                 <!--#endregion-->

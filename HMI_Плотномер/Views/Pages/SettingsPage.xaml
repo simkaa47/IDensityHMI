@@ -38,33 +38,38 @@
     <TabControl TabStripPlacement="Left" Template="{StaticResource TabControlHorizontalScroll}" BorderThickness="0" Background="Transparent">
         <!--#region Измерительные процессы -->
         <TabItem Name="MeasProcTab"
+                 IsSelected="{Binding ElementName=Expander, Path=IsChecked}"
                  DataContext="{Binding MeasProcessVm}"
                  Style="{StaticResource MeasProcSettingsStyle}">
             <TabItem.Header>
                 <StackPanel HorizontalAlignment="Left">
-                    <DockPanel Margin="27,5,0,5">
-                        <Label Name="L2"
+                    <Grid>
+                        <DockPanel Margin="27,5,0,5">
+                            <Label Name="L2"
                                VerticalContentAlignment="Center"                                                                                             
                                FontWeight="Normal"  FontSize="16" FontFamily="Roboto"                                   
                                Content="Измерительные процессы"
                                HorizontalAlignment="Left" 
                                HorizontalContentAlignment="Left"
                                VerticalAlignment="Center"></Label>
-                        <Image Source="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource MeasProcTabIcons}}"
-                                   HorizontalAlignment="Center"/>
-                    </DockPanel>
+                            <Image Source="..\Resourses\Pictures\ArrUp.png"
+                                   HorizontalAlignment="Left"
+                               Margin="12,0,0,0"/>
+                        </DockPanel>
+                        <CheckBox x:Name="Expander" Opacity="0"/>
+                    </Grid>
 
                     <ListBox x:Name="MeasSettSelector" SelectedIndex="0" HorizontalContentAlignment="Stretch"
                              BorderThickness="0" Width="286"  Margin="0"     
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              Background="#3F3F42"
-                             Visibility="{Binding ElementName=MeasProcTab, Path=IsSelected, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
+                             Visibility="{Binding ElementName=Expander, Path=IsChecked, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Основное"/>
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Стандартизация"  />
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Калибровочная кривая"  />
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Калибровка"  />
                         <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Настройки плотности"  />
-                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Компенсации"  />
+                        <ListBoxItem HorizontalAlignment="Left" Style="{StaticResource MeasProcItem}" Content="Компенсации" Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" />
                     </ListBox>                    
                 </StackPanel>
             </TabItem.Header>

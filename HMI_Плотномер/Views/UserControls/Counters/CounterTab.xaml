@@ -36,7 +36,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Mode -->
-                        <DataGridTemplateColumn  Header="РЕЖИМ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
+                        <DataGridTemplateColumn   MaxWidth="220">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="РЕЖИМ" Foreground="White" FontSize="13" Margin="20"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:CompoBoxParameter DescriptionNotVisible="True"
@@ -53,7 +56,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Start -->
-                        <DataGridTemplateColumn Header="СТАРТ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn >
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="СТАРТ" Foreground="White" FontSize="13" Margin="20"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
@@ -68,7 +74,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Width -->
-                        <DataGridTemplateColumn Header="ШИРИНА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="ШИРИНА" Foreground="White" FontSize="13" Margin="20"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
@@ -83,7 +92,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Smooth by spectr -->
-                        <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ СГЛАЖИВАНИЯ ПО СПЕКТРУ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
+                        <DataGridTemplateColumn  MaxWidth="220">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="КОЭФФИЦИЕНТ СГЛАЖИВАНИЯ ПО СПЕКТРУ" Foreground="White" FontSize="13" Margin="20,0,0,0" TextWrapping="Wrap"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
@@ -97,7 +109,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Smooth by time -->
-                        <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ СГЛАЖИВАНИЯ ПО ВРЕМЕНИ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
+                        <DataGridTemplateColumn  MaxWidth="220">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="КОЭФФИЦИЕНТ СГЛАЖИВАНИЯ ПО ВРЕМЕНИ" Foreground="White" FontSize="13" Margin="20,0,10,0" TextWrapping="Wrap"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
@@ -111,7 +126,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Deviation - -->
-                        <DataGridTemplateColumn Header="ОТКЛОНЕНИЕ ВНИЗ, %" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
+                        <DataGridTemplateColumn  MaxWidth="220">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="ОТКЛОНЕНИЕ ВНИЗ, %" Foreground="White" FontSize="13" Margin="20,0,10,0" TextWrapping="Wrap"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"
@@ -125,7 +143,10 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Deviation + -->
-                        <DataGridTemplateColumn Header="ОТКЛОНЕНИЕ ВВЕРХ, %" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" MaxWidth="220">
+                        <DataGridTemplateColumn MaxWidth="220">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="ОТКЛОНЕНИЕ ВВЕРХ, %" Foreground="White" FontSize="13" Margin="20,0,10,0" TextWrapping="Wrap"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DescriptionNotVisible="True"

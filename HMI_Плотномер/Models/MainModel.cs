@@ -413,7 +413,7 @@ namespace IDensity.Models
 
         #region Номер заказчика
         [DataMember]
-        public Parameter<string> CustNumber { get; set; } = new Parameter<string>("CustNumber", "Номер заказчика", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        public Parameter<string> CustNumber { get; set; } = new Parameter<string>("CustNumber", "Номер проекта", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
         #endregion
 
         #region Данные прочитаны

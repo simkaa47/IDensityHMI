@@ -12,6 +12,7 @@
     <Style TargetType="ListBoxItem" x:Key="ParameterListBoxItem">       
         <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
         <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Background" Value="{DynamicResource TabControlCommon}"/>
         <Setter Property="Margin" Value="0,0,0,0"/>
         <Setter Property="MinHeight" Value="0"/>
     </Style>
