@@ -37,7 +37,7 @@
             </oxy:Plot>
             <!--#endregion-->
             <!--#region Гистограмма в режиме максимальных амплитуд -->
-            <oxy:Plot Grid.Row="1"    PlotMargins="50,0,40,50" 
+            <oxy:Plot Grid.Row="1"    PlotMargins="33,16,16,110" 
                                       TextColor="#FFFFFF"                                      
                                       SelectionColor="WhiteSmoke"
                                       PlotAreaBorderColor="WhiteSmoke"         

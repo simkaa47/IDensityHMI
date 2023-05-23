@@ -269,7 +269,7 @@
                 </WrapPanel.Resources>
                 <!--#region Произвести ед измерение -->
                 <Button Command="{Binding CalibrationVm.SingleMeasCommand}"
-                        Style="{StaticResource ButtonWithBackground}"
+                        Style="{StaticResource TrendControlStyleFirst}"
                         Background="{StaticResource AquaColor}"
                         VerticalContentAlignment="Center"
                         
@@ -292,23 +292,44 @@
                 </Button>
                 <!--#endregion-->
                 <!--#region Расчитать к-ты -->
-                <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}" Style="{StaticResource ButtonWithBackground}"
+                <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}" Style="{StaticResource TrendControlStyleMedium}"
                         Background="{StaticResource AquaColor}"  Width="245"
                         Content="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ" FontSize="13"/>
                 <!--#endregion-->
                 <!--#region Показать зависимость -->
-                <ToggleButton  Width="215"                               
-                               FontSize="13"
-                               Style="{StaticResource ToggleButtonLikeButtonWithBackround}"  
-                               Background="{StaticResource AquaColor}"
-                              Name="PopupOpen" 
-                              Command="{Binding CalibrationVm.ShowPolinomTrendCommand}"
-                         Content="ПОКАЗАТЬ ЗАВИСИМОСТЬ">
-                    
+                <ToggleButton   Width="215"                               
+                                FontSize="13"                                
+                                Background="{StaticResource AquaColor}"
+                                Name="PopupOpen"
+                                Command="{Binding CalibrationVm.ShowPolinomTrendCommand}"
+                                Content="ПОКАЗАТЬ ЗАВИСИМОСТЬ">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Margin" Value="1,0,0,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="{DynamicResource AquaColor}"/>
+                            <Setter Property="FontFamily" Value="..\Resourses\Fonts\#Roboto Medium"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#a028bcba"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
                 </ToggleButton>
                 <!--#endregion-->
                 <!--#region Записать коэффиценты -->
-                <Button Command="{Binding CalibrationVm.WriteCalibrCoeefsCommand}" Style="{StaticResource ButtonWithBackground}"
+                <Button Command="{Binding CalibrationVm.WriteCalibrCoeefsCommand}" Style="{StaticResource TrendControlStyleLast}"
                         Background="{StaticResource AquaColor}" Width="240"
                         Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ"  FontSize="13"/>
                 <!--#endregion-->
