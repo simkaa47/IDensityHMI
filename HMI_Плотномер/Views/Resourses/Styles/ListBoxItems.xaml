@@ -35,14 +35,14 @@
                                    VerticalAlignment="Center"></Label>
                             </DockPanel>
                         </Border>
-                        <Border Height="40" HorizontalAlignment="Left" BorderBrush="#28BCBA" Width="50"/>
+                        <Rectangle HorizontalAlignment="Left" Width="5" Height="40" Name="Rect"/>
                     </Grid>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="L2" Property="Foreground" Value="#FFFFFF"/>
                             <Setter TargetName="L2" Property="Opacity" Value="1"/>
-                            
+                            <Setter TargetName="Rect" Property="Fill" Value="#28bcba"/>
 
                             <Setter TargetName="Border" Property="Background" Value="#FF808080"/>
                         </Trigger>
