@@ -28,43 +28,60 @@
                         <Setter Property="Visibility" Value="{Binding IsActive, Converter={StaticResource VisibleConverter}}"/>
                     </Style>
                 </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="MinHeight" Value="34"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
                     <!--#region Time-->
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="470">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" Style="{StaticResource Common}" Margin="20,10,20,10"/>
+                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" 
+                                       FontSize="13" 
+                                       FontFamily="Roboto" 
+                                       Foreground="White" 
+                                       Style="{StaticResource Common}" Margin="37,0,0,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding LastExecDate, StringFormat=F,ConverterCulture=ru-RU}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                                <TextBlock Text="{Binding EventTime, StringFormat=F,ConverterCulture=ru-RU}" Style="{StaticResource Common}" Margin="40,5,20,5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <!--#endregion-->                    
+                    <!--#endregion-->
                     <!--#region Code-->
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="250">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="КОД СОБЫТИЯ" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                            <TextBlock Text="КОД СОБЫТИЯ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,0,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Event.Num, StringFormat=d4}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                                <TextBlock Text="{Binding Event.Num, StringFormat=d4}" Style="{StaticResource Common}" Margin="20,5,0,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <!--#endregion-->
                     <!--#region Message-->
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="390">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="СООБЩЕНИЕ" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                            <TextBlock Text="СООБЩЕНИЕ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,20,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Event.Title}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                                <TextBlock Text="{Binding Event.Title}" Style="{StaticResource Common}" Margin="20,5,20,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <!--#endregion-->                    
+                    <!--#endregion-->
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

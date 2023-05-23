@@ -111,11 +111,10 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="LogPath" Text="{Binding LogPath, Mode=TwoWay}" 
                                        FontSize="16"
-                                               TextWrapping="Wrap" Foreground="#B1FFFFFF" 
+                                       TextWrapping="Wrap" Foreground="#B1FFFFFF" 
                                        FontFamily="Roboto"
-                                       
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
                             <Image Margin="2" Grid.Column="1" Source="..\Resourses\Pictures\DriveFileMove.png"
                                            MouseLeftButtonDown="BrowseLogPath" Height="24"/>
                         </Grid>

@@ -12,8 +12,15 @@ namespace IDensity.Core.Views
         public MeasUnitDialog(MeasUnit data)
         {
             InitializeComponent();
+            System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
+            objBlur.Radius = 10;
+            Application.Current.MainWindow.Effect = objBlur;
             Data = data;
             this.DataContext = Data;
+            this.Closing += (o, s) => 
+            {
+                Application.Current.MainWindow.Effect = null;
+            };
         }
 
         public MeasUnit Data { get; }
@@ -22,5 +29,7 @@ namespace IDensity.Core.Views
         {
             DialogResult = true;
         }
+
+        
     }
 }

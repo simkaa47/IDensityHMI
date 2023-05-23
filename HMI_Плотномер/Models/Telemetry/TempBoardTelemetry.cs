@@ -7,14 +7,14 @@ namespace IDensity.Core.Models.Telemetry
     public class TempBoardTelemetry : PropertyChangedBase
     {
         #region Температура с внешнего датчика, С
-        public Parameter<float> TempInternal { get; } = new Parameter<float>("TempInternal", "Температура с внешнего датчика, С", 0, float.PositiveInfinity, 8, "read")
+        public Parameter<float> TempInternal { get; } = new Parameter<float>("TempInternal", "Температура с внешнего датчика, °C", 0, float.PositiveInfinity, 8, "read")
         {
             OnlyRead = true
         };
         #endregion
 
         #region Температура с внутреннего датчика, С
-        public Parameter<float> TempExternal { get; } = new Parameter<float>("TempExternal", "Температура с внутреннего датчика, С", 0, float.PositiveInfinity, 9, "read")
+        public Parameter<float> TempExternal { get; } = new Parameter<float>("TempExternal", "Температура с внутреннего датчика, °C", 0, float.PositiveInfinity, 9, "read")
         {
             OnlyRead = true
         };

@@ -26,7 +26,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--#region Table -->
-        <Border Background="Black" Margin="40,20"  HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Border Background="Black" Margin="20,20"  HorizontalAlignment="Left" VerticalAlignment="Top">
             <StackPanel>
                 <!--#region Table -->
                 <DataGrid CanUserAddRows="False"
@@ -36,12 +36,16 @@
                       Foreground="White"
                   BorderThickness="0"
                   Background="Transparent"
+                          
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding FileNames}"
                   SelectedItem="{Binding SelectedFileInfo}">
                     <DataGrid.Columns>
                         <!--#region № -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="№">
+                        <DataGridTemplateColumn Width="68">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="№" FontSize="13" Foreground="White" Margin="24"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Id}" Style="{StaticResource Common}" Margin="10"/>
@@ -50,7 +54,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region File name -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ИМЯ ФАЙЛА">
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ИМЯ ФАЙЛА" Width="314">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" Style="{StaticResource Common}" Margin="10"/>
@@ -59,7 +63,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Count -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЛИЧЕСТВО ЗАПИСЕЙ">
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОЛИЧЕСТВО ЗАПИСЕЙ" Width="115">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding WriteNumber}" Style="{StaticResource Common}" Margin="10"/>
@@ -68,7 +72,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Start num -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="СТАРТОВЫЙ НОМЕР ДЛЯ ЧТЕНИЯ">
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="СТАРТОВЫЙ НОМЕР ДЛЯ ЧТЕНИЯ" Width="179">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Foreground="White" Template="{StaticResource TextBoxTemplate}" Text="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
@@ -78,7 +82,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Finish num -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОНЕЧНЫЙ НОМЕР ДЛЯ ЧТЕНИЯ">
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="КОНЕЧНЫЙ НОМЕР ДЛЯ ЧТЕНИЯ" Width="174">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Foreground="White" Template="{StaticResource TextBoxTemplate}" Text="{Binding Finish, UpdateSourceTrigger=PropertyChanged}"/>
@@ -88,7 +92,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region To read -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ПРОЧИТАТЬ">
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ПРОЧИТАТЬ" Width="152">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Background="Transparent" Margin="5" BorderThickness="0" >
@@ -106,16 +110,17 @@
                 </DataGrid>
                 <!--#endregion-->
                 <!--#region Buttons -->
-                <Grid Height="60">
+                <Grid Height="60" Margin="10,20,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="223"/>
+                        <ColumnDefinition Width="234"/>
+                        <ColumnDefinition Width="232"/>
+                        <ColumnDefinition Width="1.3*"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <!--#region Запуск логирования -->
                     <Button Style="{StaticResource ButtonWithBackground}"
+                            Height="40"
                                    Command="{Binding SwitchSdCardLogCommand}"
                                    Background="{Binding VM.mainModel.IsSdWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}"
                                    Content="ЗАПУСК ЛОГИРОВАНИЯ"/>
@@ -123,13 +128,15 @@
                     <!--#region Запрос имен файлов -->
                     <Button Style="{StaticResource ButtonWithBackground}"
                             Grid.Column="1"
+                            Height="40"
                             Background="#28BCBA"
                             Command="{Binding GetFilesSdCommand}"
-                            Content="ЗАПРОС ИМЕН ФАЙЛОВ"/>  
+                            Content="ЗАПРОСИТЬ ИМЕНА ФАЙЛОВ"/>  
                     <!--#endregion-->
                     <!--#region Очистить список файлов -->
                     <Button Content="ОЧИСТИТЬ СПИСОК ФАЙЛОВ"
                             Grid.Column="2"
+                            Height="40"
                             Background="#28BCBA"
                             Style="{StaticResource ButtonWithBackground}"
                             Command="{Binding ClearSdFileListCommand}"/>    
@@ -139,14 +146,19 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="0.3*"/>
+                                <ColumnDefinition Width="0.2*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="SdCardWritePath" Text="{Binding WriteToFilePath, Mode=TwoWay, TargetNullValue=ВЫБРАТЬ ФАЙЛ}" 
-                                               TextWrapping="Wrap" Foreground="#B1FFFFFF" 
+                                               TextWrapping="Wrap" 
+                                       FontSize="13"
+                                       Margin="0,0,10,0"
+                                       HorizontalAlignment="Right"
+                                       FontWeight="Medium"
                                                VerticalAlignment="Center"
-                                               HorizontalAlignment="Center"/>
+                                       Foreground="{StaticResource AquaColor}"
+                                               />
                             <Image Margin="2" Grid.Column="1" Source="..\..\Resourses\Pictures\BroeseAquaIcon.png" Opacity="0.5"
-                                           MouseLeftButtonDown="SdCardWritePathShow"/>
+                                           MouseLeftButtonDown="SdCardWritePathShow" Width="18"/>
                         </Grid>
                     </Border>
                     <!--#endregion-->
@@ -154,9 +166,10 @@
                     <ToggleButton IsChecked="{Binding IsWritingToFile}" Background="Transparent" Margin="5" BorderThickness="0" Grid.Column="4"
                                  Style="{StaticResource ToggleButtonLikeButtonWithBackround}" >
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <Image Source="..\..\Resourses\Pictures\ReadAquaIcon.png"/>
-                            <Label FontSize="14" Foreground="{Binding IsWritingToFile, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}" 
-                                   Content="{Binding IsWritingToFile, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}"/>
+                            <Label Foreground="{Binding IsWritingToFile, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}" 
+                                   Content="{Binding IsWritingToFile, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}" FontSize="13"/>
+                            <Image Source="..\..\Resourses\Pictures\ReadAquaIcon.png" Width="18"/>
+                            
                         </StackPanel>
                     </ToggleButton>
                     <!--#endregion-->

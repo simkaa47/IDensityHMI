@@ -6,7 +6,7 @@
     <ControlTemplate x:Key="AdcTrend" TargetType="UserControl" >
         <Grid>
             <!--#region Тренд в режиме осциллографа-->
-            <oxy:Plot PlotMargins="50,0,40,50"  
+            <oxy:Plot PlotMargins="33,16,16,110"  
                       Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=3}"
                       PlotType="XY"                                         
                       PlotAreaBorderThickness="1" 

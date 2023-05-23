@@ -5,126 +5,143 @@
         xmlns:vm="clr-namespace:IDensity.DataAccess.Models;assembly=IDensity.DataAccess"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IDensity.Core.Views"
-        mc:Ignorable="d" 
-        BorderBrush="Aqua"
-        BorderThickness="1"
+        mc:Ignorable="d"         
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Background="Transparent"
         VerticalContentAlignment="Top"
         d:DataContext="{d:DesignInstance Type=vm:MeasUnit}"
-        Title="MeasUnitDialog" Background="Black" WindowStyle="None" Height="504" Width="400"
+        Title="MeasUnitDialog"  WindowStyle="None" Height="504" Width="380"
         >
-    <StackPanel>
-        <StackPanel.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
-            <Style TargetType="DockPanel">
-                <Setter Property="MinHeight" Value="50"/>
-            </Style>
-            <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle1}">
-                <Setter Property="Height" Value="40"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="FontSize" Value="16"/>
-            </Style>
-            <Style TargetType="TextBox">
-                <Setter Property="Height" Value="40"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="FontSize" Value="16"/>
-            </Style>
-        </StackPanel.Resources>
-        <TextBlock Text="Добавление или редактирование ЕИ" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-        <Border Margin="0,20,0,20" BorderThickness="0,1,0,1" BorderBrush="{StaticResource BorderNonActiveColor}">
-            <ListBox ItemContainerStyle="{StaticResource   ParameterListBoxItem}"
-                 Background="#1C1C1E"                 
+    <Border Background="Black" CornerRadius="4">
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Common}"/>
+                <Style TargetType="DockPanel">
+                    <Setter Property="MinHeight" Value="50"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle1}">
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="16"/>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="16"/>
+                </Style>
+                
+            </StackPanel.Resources>
+            <TextBlock Text="Добавление или редактирование ЕИ" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                       Foreground="White" Margin="0,20,0,0"/>
+            <Border Margin="0,20,0,20" BorderThickness="0,1,0,1" BorderBrush="{StaticResource BorderNonActiveColor}">
+                <ListBox ItemContainerStyle="{StaticResource   ListBoxItemZebraStyle}"
+                 Background="#1C1C1E"   
+                         AlternationCount="5"
                  BorderThickness="0"
                  HorizontalContentAlignment="Stretch"
                  Margin="20">
-                <!--#region Название -->
-                <DockPanel>
-                    <TextBlock Text="НАЗВАНИЕ" 
+                    <!--#region Название -->
+                    <ListBoxItem>
+                        <DockPanel>
+                            <TextBlock Text="ИМЯ" FontSize="13" 
                    VerticalAlignment="Center" Foreground="White" Margin="5"/>
-                    <TextBox Text="{Binding Name}" Template="{StaticResource TextBoxTemplate}"
+                            <TextBox Text="{Binding Name}" Template="{StaticResource TextBoxTemplate}"
                          Width="165"
                          HorizontalAlignment="Right"
                    VerticalAlignment="Center" />
-                </DockPanel>
+                        </DockPanel>
+                    </ListBoxItem>
 
-                <!--#endregion-->
-                <!--#region К-т -->
-                <DockPanel>
-                    <TextBlock Text="К-Т" Foreground="White" Margin="5" 
+                    <!--#endregion-->
+                    <!--#region К-т -->
+                    <ListBoxItem>
+                        <DockPanel>
+                            <TextBlock Text="К-Т" Foreground="White" Margin="5" FontSize="13"
                    VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding K, ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
+                            <TextBox Text="{Binding K, ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
                    VerticalAlignment="Center" Width="165" HorizontalAlignment="Right" />
-                </DockPanel>
+                        </DockPanel>
+                    </ListBoxItem>
 
-                <!--#endregion-->
-                <!--#region Смещение -->
-                <DockPanel>
-                    <TextBlock Text="СМЕЩЕНИЕ" Foreground="White" Margin="5" 
+                    <!--#endregion-->
+                    <!--#region Смещение -->
+                    <ListBoxItem>
+                        <DockPanel>
+                            <TextBlock Text="СМЕЩЕНИЕ" Foreground="White" Margin="5" FontSize="13"
                    VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Offset,  ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
+                            <TextBox Text="{Binding Offset,  ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
                    VerticalAlignment="Center" Width="165" HorizontalAlignment="Right" />
-                </DockPanel>
-                <!--#endregion-->
-                <!--#region Тип прибора -->
-                <DockPanel>
-                    <TextBlock Text="ТИП ПРИБОРА" Foreground="White" Margin="5"
+                        </DockPanel>
+                    </ListBoxItem>
+                    <!--#endregion-->
+                    <!--#region Тип прибора -->
+                    <DockPanel>
+                        <TextBlock Text="ТИП УСТРОЙСТВА" Foreground="White" Margin="5" FontSize="13"
                    VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" 
+                        <ComboBox Grid.Column="1" 
                   SelectedIndex="{Binding DeviceType}"    
+                                  Padding="10,0,0,0"
                                BorderBrush="{StaticResource BorderNonActiveColor}"
                               Background="{StaticResource PanelBorderColor}"
                   VerticalAlignment="Center"
                   Width="165"
                           HorizontalAlignment="Right"
                   ItemsSource="{StaticResource DeviceTypes}">
-                    </ComboBox>
-                </DockPanel>
+                        </ComboBox>
+                    </DockPanel>
 
-                <!--#endregion-->
-                <!--#region Тип измерения -->
-                <DockPanel>
-                    <TextBlock Text="ТИП ИЗМЕРЕНИЯ" Foreground="White" Margin="5"
+                    <!--#endregion-->
+                    <!--#region Тип измерения -->
+                    <ListBoxItem>
+                        <DockPanel>
+                            <TextBlock Text="ТИП ИЗМЕРЕНИЯ" Foreground="White" Margin="5" FontSize="13"
                    VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" Width="165"
+                            <ComboBox Grid.Column="1" Width="165"
                           HorizontalAlignment="Right"
+                                      HorizontalContentAlignment="Left"
+                                      Padding="10,0,0,0"
                                Background="{StaticResource PanelBorderColor}"
                               BorderBrush="{StaticResource BorderNonActiveColor}"
                   SelectedIndex="{Binding Mode}"                  
                   VerticalAlignment="Center">
-                        <ComboBox.ItemsSource>
-                            <MultiBinding Converter="{StaticResource Multiselector}">
-                                <Binding  Path="DeviceType" UpdateSourceTrigger="PropertyChanged"/>
-                                <Binding Source="{StaticResource DensityCalculation}"/>
-                                <Binding Source="{StaticResource LevelCalculation}"/>
-                            </MultiBinding>
-                        </ComboBox.ItemsSource>
-                    </ComboBox>
-                </DockPanel>
+                                <ComboBox.ItemsSource>
+                                    <MultiBinding Converter="{StaticResource Multiselector}">
+                                        <Binding  Path="DeviceType" UpdateSourceTrigger="PropertyChanged"/>
+                                        <Binding Source="{StaticResource DensityCalculation}"/>
+                                        <Binding Source="{StaticResource LevelCalculation}"/>
+                                    </MultiBinding>
+                                </ComboBox.ItemsSource>
+                            </ComboBox>
+                        </DockPanel>
+                    </ListBoxItem>
 
-                <!--#endregion-->
-            </ListBox>
-        </Border>
-        <DockPanel VerticalAlignment="Center">
-            <Button Width="110"
+                    <!--#endregion-->
+                </ListBox>
+            </Border>
+            <DockPanel VerticalAlignment="Center">
+                <Button Width="110"
                     Height="36"
                     IsDefault="True" 
                     Click="Accept_Click"
                     VerticalAlignment="Center"
-                    Foreground="{StaticResource BorderNonActiveColor}"
+                    Foreground="White"
                     Margin="20,0,0,20" 
                     HorizontalAlignment="Left"
                     Style="{StaticResource ButtonWithBackground}" Background="{StaticResource PanelBorderColor}">OK</Button>
-            <Button Width="110"
+                <Button Width="110"
                     Height="36"
                     Foreground="{StaticResource BorderNonActiveColor}"
                     HorizontalAlignment="Right"
                     IsCancel="True" 
                    Margin="20,0,20,20" 
                    Style="{StaticResource ButtonWithBackground}" Background="{StaticResource PanelBorderColor}">ОТМЕНИТЬ</Button>
-        </DockPanel>
-        
-    </StackPanel>
+            </DockPanel>
+
+        </StackPanel>
+    </Border>
 </Window>

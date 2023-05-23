@@ -456,7 +456,7 @@ namespace IDensity.ViewModels
         #endregion
 
         #region Логирование спектра
-        private string _spetrLogPath;
+        private string _spetrLogPath = "ВЫБРАТЬ ФАЙЛ";
 
         public string SpetrLogPath
         {

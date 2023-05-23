@@ -30,22 +30,24 @@
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <!--#region Number -->
-                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="№">
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="№" FontSize="13" Margin="20,0,0,0" Foreground="White"/>
+                    </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding GroupNum}" Margin="20" Style="{StaticResource Common}" Foreground="White"/>
+                            <TextBlock Text="{Binding GroupNum, StringFormat=d2}" Margin="24,0,24,0" Style="{StaticResource Common}" Foreground="White"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!--#endregion-->
                 <!--#region Power -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ПИТАНИЕ">
+                                        Header="ПИТАНИЕ" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding CommState.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons}}"
-                                   Margin="20" Height="24" Width="24">
+                                    Height="24" Width="24" >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
                                         <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SwithPowerCommand}"
@@ -59,7 +61,7 @@
                 <!--#endregion-->
                 <!--#region Current -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ТОК AI, MA">
+                                        Header="ТОК AI, mA" Width="124">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource Common}"
@@ -77,15 +79,16 @@
                 </DataGridTemplateColumn>
                 <!--#endregion-->
                 <!--#region Activity -->
-                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="АКТИВНОСТЬ АЦП"
-                                        Width="120">
+                <DataGridTemplateColumn Width="140">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="АКТИВНОСТЬ АЦП" FontSize="13" Margin="20,0,10,0" Foreground="White"/>
+                    </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <p:CompoBoxParameter ItemsSource="{StaticResource On/Off}" 
                                                 HorizontalAlignment="Center"
                                                  CommandButtonVisibility="Collapsed"
-                                                 ParameterWidth="80"
+                                                 ParameterWidth="88"
                                                  DataContext="{Binding Activity}"
                                                  DescriptionNotVisible="True"
                                                 Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

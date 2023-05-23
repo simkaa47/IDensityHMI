@@ -30,18 +30,20 @@
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <!--#region Number -->
-                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="№">
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="№" FontSize="13" Margin="20,0,0,0" Foreground="White"/>
+                    </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding GroupNum}" Margin="20" Style="{StaticResource Common}"/>
+                            <TextBlock Text="{Binding GroupNum, StringFormat=d2}" Margin="24,0,24,0" Style="{StaticResource Common}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!--#endregion-->
                 <!--#region Power -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ПИТАНИЕ">
+                                        Header="ПИТАНИЕ" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding CommState.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource StatusIcons}}"
@@ -59,8 +61,7 @@
                 <!--#endregion-->
                 <!--#region DAC -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ТОК, MA"
-                                        Width="100">
+                                        Header="ТОК AI, mA" Width="124">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource Common}"
@@ -80,7 +81,7 @@
                 <!--#region test -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                         Header="НАПРЯЖЕНИЕ TEST, КАУНТЫ"
-                                        Width="120">
+                                        Width="124">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource Common}" Text="{Binding AdcValue.Value}"
@@ -93,7 +94,7 @@
                 <!--#region rx -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
                                         Header="НАПРЯЖЕНИЕ RX, КАУНТЫ"
-                                        Width="120">
+                                        Width="124">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource Common}" Text="{Binding VoltageTest.Value}"

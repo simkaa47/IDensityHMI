@@ -24,8 +24,8 @@
     <conv:NumericConverter x:Key="NumericConverter"/>
     <conv:HighRegisterConverter x:Key="HighRegisterConverter"/>
     <conv:GetFromMeasTypeMultyConverter x:Key="GetFromMeasTypeMultyConverter"/>
-    <conv:AddOpacityToColorConverter x:Key="AddOpacityToColorConverter"/>
-    <conv:IfEvenConverter x:Key="IfEvenConverter"/>
+    <conv:AddOpacityToColorConverter x:Key="AddOpacityToColorConverter"/>    
     <conv:MultiplyOnNumberConverter x:Key="MultiplyOnNumberConverter"/>
+    <conv:IfEvenConverter x:Key="IfEvenConverter"/>
     <conv:MultiVisibleConverter x:Key="MultiVisibleConverter"/>
 </ResourceDictionary>

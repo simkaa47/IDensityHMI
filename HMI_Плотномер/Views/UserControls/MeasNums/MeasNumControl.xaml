@@ -24,17 +24,20 @@
                       CanUserDeleteRows="False"
                       Background="Transparent"
                       BorderThickness="0"
-                          EnableRowVirtualization="False"
+                      EnableRowVirtualization="False"
                       IsReadOnly="True"
                       Margin="10"                      
                       ItemsSource="{Binding MeasUnits}"
                       SelectedItem="{Binding SelectedMeasUnit}">
                     <DataGrid.Columns>
-                        <!--#region Name -->                       
+                        <!--#region № -->                       
                         <DataGridTemplateColumn Header="№" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="75">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Style="{StaticResource Common}" Margin="20" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, UpdateSourceTrigger=PropertyChanged}" Foreground="White" HorizontalAlignment="Left"/>
+                                    <TextBlock Style="{StaticResource Common}" 
+                                               Margin="20" 
+                                               Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, UpdateSourceTrigger=PropertyChanged, StringFormat=d2}" Foreground="White" 
+                                               HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -52,7 +55,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Coeff k -->
-                        <DataGridTemplateColumn Header="КОЭФФИЦИЕНТ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn Header="КОЭФ-Т" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding K}"  Margin="20" Style="{StaticResource Common}" Foreground="White" HorizontalAlignment="Left"/>
@@ -61,7 +64,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Offset -->
-                        <DataGridTemplateColumn Header="СМЕЩЕНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn Header="СМЕЩЕНИЕ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="122">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Offset}" Margin="20" Style="{StaticResource Common}" Foreground="White" HorizontalAlignment="Left"/>
@@ -70,7 +73,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Device type -->                        
-                        <DataGridTemplateColumn Header="ТИП УСТРОЙСТВА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn Header="ТИП УСТРОЙСТВА" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="192">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock  Margin="20" Style="{StaticResource Common}" Foreground="White" HorizontalAlignment="Left"
@@ -82,7 +85,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Meas type -->
-                        <DataGridTemplateColumn Header="ТИП ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}">
+                        <DataGridTemplateColumn Header="ТИП ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="394">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel VerticalAlignment="Center">
@@ -139,12 +142,13 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <!--#region Add new item -->
-                <Button Grid.Row="1"  Style="{StaticResource ButtonWithBackground}" Width="380" Height="40" HorizontalAlignment="Center" Margin="5"
+                <Button Grid.Row="1"  Style="{StaticResource ButtonWithBackground}" Width="380" Height="38" HorizontalAlignment="Left" Margin="340,15,15,15"
                         Background="{StaticResource AquaColor}"
+                        VerticalAlignment="Top"
                          Command="{Binding AddMeasUnitCommand}">
                     <DockPanel  VerticalAlignment="Center">
-                        <Image Source="..\..\Resourses\Pictures\AddCircleOutline.png"  Height="20"/>
-                        <TextBlock Text="ДОБАВИТЬ НОВУЮ ЕДИНИЦУ ИЗМЕРЕНИЯ" Margin="10,0,0,0" FontSize="16"
+                        <Image Source="..\..\Resourses\Pictures\AddCircleOutline.png"  Height="20" Margin="0,0,10,0"/>
+                        <TextBlock Text="ДОБАВИТЬ НОВУЮ ЕДИНИЦУ ИЗМЕРЕНИЯ" Margin="10,0,0,0" FontSize="13"
                                    VerticalAlignment="Center"/>
                     </DockPanel>
                 </Button>

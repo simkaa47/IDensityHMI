@@ -16,9 +16,10 @@
             <sys:String>..\..\Resourses\Pictures\Comm_Ok.png</sys:String>
         </x:Array>
     </UserControl.Resources>
-    <ListBox Width="550" Background="Transparent"
-             BorderThickness="0"
+    <ListBox Width="520" Background="Transparent"
+             BorderThickness="0,1,0,0"
              Margin="40,20"
+             BorderBrush="{StaticResource BorderNonActiveColor}"
              HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
              ItemContainerStyle="{StaticResource ParameterListBoxItem}">
@@ -52,15 +53,16 @@
         <!--#region Switch HV -->
         <DockPanel MinHeight="50" >
             <TextBlock Text="Управление высоким напряжением" Style="{StaticResource Common}"  Margin="20,0,0,0"/>
-            <Button Style="{StaticResource TypicalButton0}"
+            <Button Style="{StaticResource ButtonWithBackgroundAbdBorder}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Margin="5,5,20,5"
+                    Margin="5,5,25,5"
                     Width="146"
-                    
+                    Background="Transparent"
+                    BorderBrush="{StaticResource AquaColor}"
                      Command="{Binding AdcViewModel.switchHvCommandCommand}"
                     Height="40"
-                   
+                   BorderThickness="2"
                     Content="{Binding mainModel.TelemetryHV.HvOn.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource HvButn}}"
                     FontSize="16"/>
         </DockPanel>

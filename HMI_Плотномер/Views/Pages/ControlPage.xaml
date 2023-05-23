@@ -14,13 +14,13 @@
              mc:Ignorable="d" 
              Background="Transparent"
              d:DataContext="{d:DesignInstance Type=vm:AdcViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="984" d:DesignWidth="1920">
     <UserControl.Resources>
         <Style TargetType="DockPanel">
             <Setter Property="MinHeight" Value="50"/>
         </Style>
         <x:Array Type="sys:String"   x:Key="ButtonColorsSdCard">
-            <sys:String>#FFFFFFFF</sys:String>
+            <sys:String>#28bcba</sys:String>
             <sys:String>#FFFF0000</sys:String>
         </x:Array>
         <x:Array Type="sys:String" x:Key="ButtonsParametersImages1">
@@ -54,156 +54,382 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1192"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="0.66*"/>
         </Grid.ColumnDefinitions>
         <!--#region Trends -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition/>                
-                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="360"/>
                 
             </Grid.RowDefinitions>
-            <Grid Background="#2C2C2E">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid Background="#2C2C2E" Margin="24,24,23,0">                
                 <!--#region График -->
                 <UserControl Grid.Row="0"
                      Template="{StaticResource AdcTrend}">
                 </UserControl>
                 <!--#endregion-->
                 <!--#region Statistics -->
-                <ListBox Grid.Row="0" HorizontalAlignment="Right" FontSize="16" HorizontalContentAlignment="Stretch" Background="Black"
-                     Margin="10,10,50,0"
-                     BorderThickness="1" BorderBrush="{StaticResource BorderNonActiveColor}"
-                     Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}"
+                <Border Background="Black" HorizontalAlignment="Right" VerticalAlignment="Top"
+                        Margin="0,35,25,0"
+                        Visibility="{Binding UdpService.Mode, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}">
+                    <ListBox Grid.Row="0"  FontSize="16" HorizontalContentAlignment="Stretch" Background="Black"                     
+                     BorderThickness="0" Margin="16,16,12,16"
+                             
                      VerticalAlignment="Top">
-                    <ListBox.Resources>
-                        <Style TargetType="DockPanel"></Style>
-                    </ListBox.Resources>
-                    <DockPanel>
-                        <TextBlock Text="Общее кол-во импульсов: "/>
-                        <TextBlock Text="{Binding CheckPulseService.CommontCount}" HorizontalAlignment="Right"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="Кол-во импульсов с пересветом: "/>
-                        <TextBlock Text="{Binding CheckPulseService.OverValuePulses}" HorizontalAlignment="Right"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="Кол-во импульсов с шумами: "/>
-                        <TextBlock Text="{Binding CheckPulseService.NoisePulses}" HorizontalAlignment="Right"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Text="% корректных импульсов: "/>
-                        <TextBlock Text="{Binding CheckPulseService.SuccessDeviation, StringFormat=f3}" HorizontalAlignment="Right"/>
-                    </DockPanel>
-                    <Button Content="Clear" Command="{Binding ClearPulseStaticticCommand}"/>
-                </ListBox>
+                        <ListBox.Resources>
+                            <Style TargetType="DockPanel"></Style>
+                        </ListBox.Resources>
+                        <DockPanel>
+                            <TextBlock Text="Общее кол-во импульсов: " Margin="0,0,50,0"/>
+                            <TextBlock Text="{Binding CheckPulseService.CommontCount}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="Кол-во импульсов с пересветом: " Margin="0,0,50,0"/>
+                            <TextBlock Text="{Binding CheckPulseService.OverValuePulses}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="Кол-во импульсов с шумами: " Margin="0,0,50,0"/>
+                            <TextBlock Text="{Binding CheckPulseService.NoisePulses}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="% корректных импульсов: " Margin="0,0,50,0"/>
+                            <TextBlock Text="{Binding CheckPulseService.SuccessDeviation, StringFormat=f3}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <Button Content="ПОЧИСТИТЬ СТАТИСТИКУ" Command="{Binding ClearPulseStaticticCommand}"/>
+                    </ListBox>
+                </Border>
                 <!--#endregion-->
                 <!--#region Buttons -->
-                <Grid Grid.Row="1" Margin="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="12,426,0,24">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button" x:Key="TrendControlStyleCommon">
+                            <Setter Property="FontSize" Value="13"/>                            
+                            <Setter Property="Foreground" Value="White"/>                            
+                            <Setter Property="Background" Value="{DynamicResource AquaColor}"/>
+                            <Setter Property="FontFamily" Value="..\Resourses\Fonts\#Roboto Medium"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#a028bcba"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource TrendControlStyleCommon}" x:Key="TrendControlStyleFirst">
+                           
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="4,0,0,4">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource TrendControlStyleCommon}" x:Key="TrendControlStyleMedium">
+                            <Setter Property="Margin" Value="1,0,0,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource TrendControlStyleCommon}" x:Key="TrendControlStyleLast">
+                            <Setter Property="Margin" Value="1,0,0,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="0,4,4,0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                   
                     <!--#region Show oscillogramma -->
-                    <Button Grid.Column="0"
-                             Margin="2"
-                            Command="{Binding ShowOscillCommand}"
-                            Style="{StaticResource ButtonWithBackground}"
+                    <Button Command="{Binding ShowOscillCommand}"                        
                             Content="ПОКАЗАТЬ ОСЦИЛЛОГРАММУ"
+                            Style="{StaticResource TrendControlStyleFirst}"                            
                             Height="40"
-                            Background="{StaticResource AquaColor}"/>
+                            Width="263"/>
                     <!--#endregion-->
                     <!--#region Show oscillogramma -->
-                    <Button Grid.Column="1"
-                            Margin="2"
-                            Command="{Binding ShowSpectrCommand}"
-                            Style="{StaticResource ButtonWithBackground}"
+                    <Button Command="{Binding ShowSpectrCommand}"
+                            Style="{StaticResource TrendControlStyleMedium}"
                             Content="ПОКАЗАТЬ СПЕКТР"
                             Height="40"
+                            Width="191"
                             Background="{StaticResource AquaColor}"/>
                     <!--#endregion-->
                     <!--#region Clear spectr -->
-                    <Button Grid.Column="2"
-                            Margin="2"
-                            Command="{Binding ClearSpectrCommand}"
-                            Style="{StaticResource ButtonWithBackground}"
+                    <Button Command="{Binding ClearSpectrCommand}"
+                            Style="{StaticResource TrendControlStyleLast}"
                             Content="ОЧИСТИТЬ СПЕКТР"
                             Height="40"
-                            Background="{StaticResource AquaColor}"/>
+                            Width="184"/>
                     <!--#endregion-->
-                </Grid>
+                </StackPanel>   
                 <!--#endregion-->
             </Grid>
+            <!--#region Запись спетра -->
+            <TextBlock Text="Запись спектра" FontSize="20" 
+                       Foreground="White"
+                       FontFamily="..\Resourses\Fonts\#Roboto Medium"
+                       Grid.Row="1"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Margin="41,13,0,0"/>
+            <!--#region Browse -->
+            <StackPanel MouseDown="SpectrLogPathShow"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal"
+                        
+                        Grid.Row="1"
+                        Margin="0,20,636,0"
+                        HorizontalAlignment="Right">
+                <TextBlock FontSize="13"
+                       FontFamily="..\Resourses\Fonts\#Roboto Medium"
+                       x:Name="SpectrLogPath"
+                       MaxWidth="400"                       
+                       Foreground="{StaticResource AquaColor}"
+                       Text="{Binding SpetrLogPath, Mode=TwoWay}"/>
+                <Image Source="..\Resourses\Pictures\BroeseAquaIcon.png"                   
+                   Height="18"
+                       Margin="8,0,0,0"
+                   Width="18"/>
+            </StackPanel>
+            <!--#endregion-->
+            <!--#region Write -->
+            <Button  Background="Transparent" Margin="570,12,0,0" 
+                     Grid.Row="1"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     Style="{StaticResource ButtonWithBackgroundAbdBorder}"
+                     BorderThickness="0"
+                     Command="{Binding StartStopSpectrLogCommand}">
+                <StackPanel Orientation="Horizontal" >
+                    <Label FontSize="13" FontFamily="..\Resourses\Fonts\#Roboto Medium" Foreground="{Binding IsSpectrLogging, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}" 
+                           Content="{Binding IsSpectrLogging, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}"/>
+                    <Image Source="..\Resourses\Pictures\ReadAquaIcon.png" Width="20" Margin="8,0,0,0"/>
+                    
+
+                </StackPanel>
+            </Button>           
+            <!--#endregion-->
+            <ListBox Grid.Row="1"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     Width="460"
+                     HorizontalContentAlignment="Stretch"
+                     Margin="709,65,0,0"
+                     Background="Transparent"
+                     BorderBrush="{StaticResource BorderNonActiveColor}"
+                     BorderThickness="0,1,0,0"
+                     ItemContainerStyle="{StaticResource ParameterListBoxItem}">
+                
+                <!--#region Cyclic writing -->
+                <DockPanel>
+                    <TextBlock Text="Циклическая запись спектра"/>
+                    <CheckBox Margin="0,0,40,0" IsChecked="{Binding SpectrLogSettings.CyclicLog}" Style="{StaticResource CheckBoxAqvaStyle}" HorizontalAlignment="Right"/>
+                </DockPanel>
+                <!--#endregion-->
+                <!--#region Log frequence -->
+                <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
+                    <DockPanel>
+                        <TextBlock Text="Частота циклического логирования спектра, с" Style="{StaticResource Common}"/>
+                        <TextBox Width="87"  Template="{StaticResource TextBoxTemplate}"
+                                     Height="40"
+                                             HorizontalAlignment="Right" 
+                                             Text="{Binding SpectrLogSettings.LogFreq}"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Log clear frequence -->
+                <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
+                    <DockPanel >
+                        <TextBlock Text="Частота очистки спектра, сек" Style="{StaticResource Common}"/>
+                        <TextBox Width="87"  Height="40" Template="{StaticResource TextBoxTemplate}"
+                                             HorizontalAlignment="Right" 
+                                         
+                                             Text="{Binding SpectrLogSettings.FreqClearSpectr}"/>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+                <!--#region Next time to clear spectr -->
+                <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
+                    <DockPanel >
+                        <TextBlock Text="Время следующей очистки спектра" />
+                        <Border Width="87"
+                                BorderThickness="2"
+                                CornerRadius="4"
+                                Height="40"
+                                HorizontalAlignment="Right"
+                                BorderBrush="{StaticResource BorderNonActiveColor}">
+                            <TextBlock HorizontalAlignment="Center"
+                                       Foreground="{StaticResource BorderNonActiveColor}"
+                                       Text="{Binding NextSpectrClearTime, StringFormat=HH:mm:ss}"/>
+                        </Border>
+                    </DockPanel>
+                </ListBoxItem>
+                <!--#endregion-->
+            </ListBox>
+            <!--#endregion-->
             <!--#region Counters -->
-            <Viewbox Grid.Row="2">
-                <c:CounterTab Grid.Row="2" Margin="0,0,1,0"/>
-            </Viewbox>
+            
+            <Border Background="Black" Margin="24,52,0,0" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" >
+                <DataGrid Background="Transparent"
+                      CanUserAddRows="False"                          
+                      HorizontalAlignment="Left"
+                      Margin="10"
+                      SelectedItem="{Binding SelectedCountDiapasone}"
+                      CanUserDeleteRows="False"
+                      BorderThickness="0,0,1,1"
+                      BorderBrush="{StaticResource BorderNonActiveColor}"
+                      SelectedIndex="0"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding VM.mainModel.CountDiapasones}">
+                    <DataGrid.Columns>
+                        <!--#region Id -->
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
+                                            Header="№">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Num.Value, StringFormat=d2}" Margin="20" HorizontalAlignment="Center" Foreground="White"
+                                           Style="{StaticResource Common}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Mode -->
+                        <DataGridTemplateColumn Width="220" >
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="РЕЖИМ" Foreground="White" FontSize="13" Margin="20"/>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <p:CompoBoxParameter DescriptionNotVisible="True"
+                                                     CommandButtonVisibility="Collapsed" 
+                                                     
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource NotEqual}, ConverterParameter=2}" 
+                                                     ItemsSource="{StaticResource CountModes}"
+                                                     DataContext="{Binding CounterMode}"
+                                                     Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                     Margin="20,5,20,5"
+                                                     HorizontalAlignment="Center"
+                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterModeCommand}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Start -->
+                        <DataGridTemplateColumn >
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="СТАРТ" Foreground="White" FontSize="13" Margin="20"/>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <p:TextParameter DescriptionNotVisible="True"
+                                                     ParameterWidth="75"
+                                                     CommandButtonVisibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource NotEqual}, ConverterParameter=2}"
+                                                    DataContext="{Binding Start}"
+                                                    HorizontalAlignment="Center" Margin="15,5,0,5"
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterStartCommand}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->
+                        <!--#region Width -->
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="ШИРИНА" Foreground="White" FontSize="13" Margin="20"/>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <p:TextParameter DescriptionNotVisible="True"
+                                                     ParameterWidth="75"
+                                                     CommandButtonVisibility="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=2}"
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource NotEqual}, ConverterParameter=2}"
+                                                 DataContext="{Binding Width}" Margin="15,5,0,5"
+                                                 HorizontalAlignment="Center"
+                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.WriteCounterWidthCommand}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--#endregion-->                        
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
             
             <!--#endregion-->
         </Grid>
         <!--#endregion-->
         <!--#region Parameters -->
-        <Border Background="Black" Grid.Column="1">
+        <Border Background="Black" Grid.Column="1" Margin="0,0,80,0">
+
             <ListBox Background="{StaticResource TabControlCommon}"
                      BorderThickness="0"
+                     AlternationCount="20"
+                     BorderBrush="{StaticResource BorderNonActiveColor}"
                      VerticalAlignment="Top"
                      HorizontalContentAlignment="Stretch"
-                     Margin="20"
-                     ItemContainerStyle="{StaticResource ParameterListBoxItem}">
+                     Margin="32,24,32,0"
+                     ItemContainerStyle="{StaticResource ListBoxItemZebraStyle}">
                 <!--#region Synch level -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.AdcBoardSettings.AdcSyncLevel}" 
-                                 ParameterWidth="104"
+                                 ParameterWidth="75"
                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.SetAdcSyncLevelChangeCommand}"/>
                 <!--#endregion-->
                 <!--#region Gain -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.AdcBoardSettings.PreampGain}" 
-                                 ParameterWidth="104"
+                                 ParameterWidth="75"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetPreampGainChangeCommand}"/>
                 <!--#endregion-->
                 <!--#region Timer -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.AdcBoardSettings.TimerMax}" 
-                                 ParameterWidth="104"
+                                 ParameterWidth="75"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetTimerMaxChangeCommand}"/>
                 <!--#endregion-->
                 <!--#region Avg deep -->
                 <DockPanel>
                     <TextBlock Text="Глубина усреднения спектра"  TextWrapping="Wrap" Margin="20,0,0,0"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}" 
-                             Width="104" Margin="0,0,85,0"
+                             Width="75" Margin="0,0,85,0"
                              Height="40"
                              HorizontalAlignment="Right"
                              Text="{Binding AdcAvgSettings.SpectrFilterDeep, UpdateSourceTrigger=PropertyChanged}"/>
-                    
+
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region HV SV -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.TelemetryHV.VoltageSV}"  
-                                 ParameterWidth="104"
+                                 ParameterWidth="75"
                                  Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.SetHvCommand}" />
                 <!--#endregion-->
                 <!--#region Output voltage -->
                 <p:TextParameter DataContext="{Binding VM.mainModel.TelemetryHV.VoltageCurOut}"
-                                 ParameterWidth="104" CommandButtonVisibility="Hidden"
+                                 ParameterWidth="75" CommandButtonVisibility="Hidden"
                                  IsOnlyRead="True"/>
                 <!--#endregion-->
                 <!--#region Limits to find Spectr -->
                 <DockPanel>
-                    <TextBlock Text="Диапазон поика максимума спектра, мин|макс" Margin="20,0,0,0"/>
+                    <TextBlock Text="Диапазон поиcка максимума спектра, мин/макс" Margin="20,0,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Text="{Binding AdcAvgSettings.SpectrMinLimit, UpdateSourceTrigger=LostFocus}" 
-                                 Width="80" Height="40" 
-                                 Margin="0,0,5,0"
+                                 Width="68" Height="40" 
+                                 Margin="0,0,24,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalAlignment="Right"
                                   VerticalContentAlignment="Center"/>
                         <TextBox Text="{Binding AdcAvgSettings.SpectrMaxLimit, UpdateSourceTrigger=LostFocus}" 
-                                 Width="80" Height="40" 
-                                 Margin="0,0,85,0"
+                                 Width="68" Height="40"
                                  Template="{StaticResource TextBoxTemplate}"
                                   HorizontalAlignment="Right"
                                   VerticalContentAlignment="Center"/>
@@ -239,93 +465,16 @@
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
-                <!--#region Spectr log -->
-                <GroupBox  BorderThickness="0" FontSize="20">
-                    <GroupBox.Header>
-                        <TextBlock Text="Запись спектра" Foreground="White" FontSize="20" Margin="20" FontWeight="Medium"/>
-                    </GroupBox.Header>
-                    <ListBox Background="{StaticResource TabControlCommon}"
-                     BorderThickness="0"
-                     VerticalAlignment="Top"
-                     HorizontalContentAlignment="Stretch"
-                     ItemContainerStyle="{StaticResource ParameterListBoxItem}">
-                        <!--#region LogPath  And write-->
-                        <DockPanel>
-                            <TextBlock x:Name="SpectrLogPath"
-
-                                       Text="{Binding SpetrLogPath, TargetNullValue=Нажмите Browse чтобы указать путь, Mode=TwoWay}"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <!--#region Browse -->
-                                <Button  Background="Transparent" Margin="5" BorderThickness="0" 
-                                 Style="{StaticResource ButtonWithBackground}" Click="SpectrLogPathShow">
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Image Source="..\Resourses\Pictures\ReadAquaIcon.png"/>
-                                        <Label FontSize="14" 
-                                   Content="Browse"/>
-                                    </StackPanel>
-                                </Button>
-                                <!--#endregion-->
-                                <!--#region Write -->
-                                <Button  Background="Transparent" Margin="5" BorderThickness="0" 
-                                 Style="{StaticResource ButtonWithBackground}" Command="{Binding StartStopSpectrLogCommand}">
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Image Source="..\Resourses\Pictures\ReadAquaIcon.png"/>
-                                        <Label FontSize="14" Foreground="{Binding IsSpectrLogging, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonColorsSdCard}}" 
-                                   Content="{Binding IsSpectrLogging, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}"/>
-                                  
-                                    </StackPanel>
-                                </Button>
-                                <!--#endregion-->
-                            </StackPanel>
-                        </DockPanel>
-                        <!--#endregion-->
-                        <!--#region Cyclic writing -->
-                        <DockPanel>
-                            <TextBlock Text="Циклическая запись спектра"/>
-                            <CheckBox IsChecked="{Binding SpectrLogSettings.CyclicLog}" Style="{StaticResource CheckBoxAqvaStyle}" HorizontalAlignment="Right"/>
-                        </DockPanel>
-                        <!--#endregion-->
-                        <!--#region Log frequence -->
-                        <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
-                            <DockPanel>
-                                <TextBlock Text="Частота циклического логирования спектра, сек" Style="{StaticResource Common}"/>
-                                <TextBox Width="104" Margin="0,0,85,0"  Template="{StaticResource TextBoxTemplate}"
-                                     Height="40"
-                                             HorizontalAlignment="Right" 
-                                             Text="{Binding SpectrLogSettings.LogFreq}"/>
-                            </DockPanel>
-                        </ListBoxItem>
-                        <!--#endregion-->
-                        <!--#region Log clear frequence -->
-                        <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
-                            <DockPanel >
-                                <TextBlock Text="Частота очистки спектра, сек" Style="{StaticResource Common}"/>
-                                <TextBox Width="104"  Height="40" Template="{StaticResource TextBoxTemplate}"
-                                             HorizontalAlignment="Right" 
-                                         Margin="0,0,85,0"
-                                             Text="{Binding SpectrLogSettings.FreqClearSpectr}"/>
-                            </DockPanel>
-                        </ListBoxItem>
-                        <!--#endregion-->
-                        <!--#region Next time to clear spectr -->
-                        <ListBoxItem Visibility="{Binding SpectrLogSettings.CyclicLog, Converter={StaticResource VisibleIfEqual}, ConverterParameter=True}">
-                            <DockPanel >
-                                <TextBlock Text="Время следующей очистки спектра" />
-                                <TextBlock HorizontalAlignment="Right" Margin="0,0,85,0"
-                                       Text="{Binding NextSpectrClearTime, StringFormat=HH:mm:ss}"/>
-                            </DockPanel>
-                        </ListBoxItem>
-                        <!--#endregion-->
-                        <!--#region IP -->
-                        <DockPanel>
-                            <TextBlock Text="IP-адрес получателя"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <Border Style="{StaticResource BorderConnectStyle}"
+                <!--#region IP -->
+                <DockPanel>
+                    <TextBlock Text="IP-адрес получателя" Margin="20,0,0,0"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Border Style="{StaticResource BorderConnectStyle}"
                                         Height="40"                                       
                                         Width="140"
                                         CornerRadius="4"
                                         BorderThickness="2">
-                                    <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding VM.mainModel.UdpAddrString, UpdateSourceTrigger=PropertyChanged}"
                                           Background="Transparent"  
                                          FontSize="16"
                                           FontFamily="Roboto"
@@ -335,37 +484,37 @@
                                           Style="{StaticResource ConnectStyle}"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center">
-                                        <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter"  Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
-                                        </TextBox.InputBindings>
-                                    </TextBox>
-                                </Border>
-                                <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter"  Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </Border>
+                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                                         Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
-                                    <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
+                            <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
                                            HorizontalAlignment="Center" Height="24" Width="24"/>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDown">
-                                            <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Border>
-                            </StackPanel>
-                        </DockPanel>
-                        <!--#endregion-->
-                        <!--#region Port num -->
-                        <DockPanel>
-                            <TextBlock Text="Номер порта получателя"/>
-                            <StackPanel Orientation="Horizontal"
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </StackPanel>
+                </DockPanel>
+                <!--#endregion-->
+                <!--#region Port num -->
+                <DockPanel>
+                    <TextBlock Text="Номер порта получателя" Margin="20,0,0,0"/>
+                    <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Right">
 
-                                <Border CornerRadius="4"
+                        <Border CornerRadius="4"
                                         Style="{StaticResource BorderConnectStyle}"
                                         BorderThickness="2"
                                         Background="Transparent"
                                         Height="40"
                                         Width="140">
-                                    <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            <TextBox Text="{Binding VM.mainModel.PortUdp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                          FontSize="16"
                                          Style="{StaticResource ConnectStyle}"
                                          Background="Transparent"
@@ -374,30 +523,27 @@
                                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                                          VerticalAlignment="Center"
                                          Margin="10,0,0,0">
-                                        <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter" Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
-                                        </TextBox.InputBindings>
-                                    </TextBox>
-                                </Border>
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </Border>
 
-                                <Border Height="24" Width="40" Margin="25,0,20,0"
+                        <Border Height="24" Width="40" Margin="25,0,20,0"
                                         CornerRadius="4"
                                         Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
-                                    <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
+                            <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDown">
-                                            <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Border>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
 
-                            </StackPanel>
-                        </DockPanel>
-                        <!--#endregion-->
-                    </ListBox>
-                </GroupBox>
-                <!--#endregion-->
+                    </StackPanel>
+                </DockPanel>
+                <!--#endregion-->               
             </ListBox>
         </Border>
         <!--#endregion-->

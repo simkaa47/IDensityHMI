@@ -39,7 +39,7 @@
             </ListBox>
             <!--#endregion-->
             <!--#region Dates Panel -->
-            <Border BorderBrush="{StaticResource BorderNonActiveColor}" BorderThickness="1" HorizontalAlignment="Stretch" Grid.Column="1"
+            <Border BorderBrush="{StaticResource BorderNonActiveColor}" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch" Grid.Column="1"
                     Visibility="{Binding ElementName=EventsSelector, Path=SelectedIndex, Converter={StaticResource VisibleIfEqual}, ConverterParameter=0}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -55,7 +55,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Начальная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
-                                   Style="{StaticResource Common}"  Margin="60,0,0,0"/>
+                                   Style="{StaticResource Common}" FontSize="14" Margin="60,0,10,00"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Left"
@@ -71,7 +71,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Конечная точка событий" Foreground="{StaticResource BorderNonActiveColor}"
-                                   Style="{StaticResource Common}"  Margin="30,0,0,0"/>
+                                   Style="{StaticResource Common}" FontSize="14"  Margin="30,0,14,0"/>
                         <dt:DateTimeParameter Grid.Column="1"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Left"

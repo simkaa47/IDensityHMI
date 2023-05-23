@@ -29,7 +29,7 @@
     <DataTemplate x:Key="DataGridHeaderTemplate">
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Center">
             <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
-                               Margin="10"
+                               Margin="20,0,0,0"
                                FontSize="13"
                    Foreground="White"
                                 HorizontalAlignment="Center"

@@ -29,7 +29,7 @@
                                             Header="№">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Num.Value}" Margin="10" HorizontalAlignment="Center" Foreground="White"
+                                    <TextBlock Text="{Binding Num.Value, StringFormat=d2}" Margin="20" HorizontalAlignment="Center" Foreground="White"
                                            Style="{StaticResource Common}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

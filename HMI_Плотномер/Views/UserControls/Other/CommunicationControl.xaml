@@ -162,7 +162,7 @@
                      HorizontalContentAlignment="Stretch"
                      ItemContainerStyle="{StaticResource ParameterListBoxItem}">
                 <!--#region ip -->
-                <DockPanel>
+                <DockPanel Margin="20,0,0,0">
                     <TextBlock Text="IP-адрес" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Border CornerRadius="4"
@@ -199,7 +199,7 @@
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region mask -->
-                <DockPanel>
+                <DockPanel Margin="20,0,0,0">
                     <TextBlock Text="Маска подсети"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Border CornerRadius="4"
@@ -236,7 +236,7 @@
                 </DockPanel>
                 <!--#endregion-->
                 <!--#region gateway -->
-                <DockPanel>
+                <DockPanel Margin="20,0,0,0">
                     <TextBlock Text="Сетевой шлюз"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Border CornerRadius="4"
@@ -274,7 +274,7 @@
                 <!--#endregion-->
                 <!--Mac-->
                 <ListBoxItem Visibility="{Binding VM.CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}">
-                    <DockPanel>
+                    <DockPanel Margin="20,0,0,0">
                         <TextBlock Text="MAC-адрес"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <Border CornerRadius="4"
@@ -362,8 +362,12 @@
             </ListBox>
         </GroupBox>
         <!--#endregion-->
-        <Button Style="{StaticResource TypicalButton0}" Height="40" FontSize="16" HorizontalAlignment="Left" Command="{Binding RstBoardCommand}">
-            <TextBlock Text="ПЕРЕЗАГРУЗИТЬ ПРИБОР" FontSize="15" Margin="10,5,10,5"/>
+        <Button Style="{StaticResource ButtonWithBackgroundAbdBorder}" Height="40" 
+                FontSize="16" HorizontalAlignment="Left" Command="{Binding RstBoardCommand}"
+                Background="Transparent"
+                BorderBrush="{StaticResource AquaColor}">
+            <TextBlock Text="ПЕРЕЗАГРУЗИТЬ ПРИБОР" FontSize="15" Margin="10,5,10,5"
+                        />
         </Button>
     </ListBox>
         

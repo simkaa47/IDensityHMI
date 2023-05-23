@@ -48,6 +48,7 @@
     <None Remove="Views\Resourses\Pictures\FailGray.png" />
     <None Remove="Views\Resourses\Pictures\FilterNone.png" />
     <None Remove="Views\Resourses\Pictures\Frame 1.png" />
+    <None Remove="Views\Resourses\Pictures\Frame 151.png" />
     <None Remove="Views\Resourses\Pictures\Frame 161.png" />
     <None Remove="Views\Resourses\Pictures\Frame 162.png" />
     <None Remove="Views\Resourses\Pictures\Frame 164.png" />
@@ -55,6 +56,7 @@
     <None Remove="Views\Resourses\Pictures\Frame 169.png" />
     <None Remove="Views\Resourses\Pictures\Frame 38.png" />
     <None Remove="Views\Resourses\Pictures\Frame 56.png" />
+    <None Remove="Views\Resourses\Pictures\Frame 75.png" />
     <None Remove="Views\Resourses\Pictures\Gonvels.png" />
     <None Remove="Views\Resourses\Pictures\HorizontalRule.png" />
     <None Remove="Views\Resourses\Pictures\konvels_logo_white.png" />
@@ -144,6 +146,7 @@
     <Resource Include="Views\Resourses\Pictures\FailGray.png" />
     <Resource Include="Views\Resourses\Pictures\FilterNone.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 1.png" />
+    <Resource Include="Views\Resourses\Pictures\Frame 151.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 161.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 162.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 164.png" />
@@ -151,6 +154,7 @@
     <Resource Include="Views\Resourses\Pictures\Frame 169.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 38.png" />
     <Resource Include="Views\Resourses\Pictures\Frame 56.png" />
+    <Resource Include="Views\Resourses\Pictures\Frame 75.png" />
     <Resource Include="Views\Resourses\Pictures\Gonvels.png" />
     <Resource Include="Views\Resourses\Pictures\HorizontalRule.png" />
     <Resource Include="Views\Resourses\Pictures\konvels_logo_white.png" />

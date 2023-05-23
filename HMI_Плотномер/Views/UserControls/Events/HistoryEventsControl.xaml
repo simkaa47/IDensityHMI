@@ -39,7 +39,7 @@
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="MinHeight" Value="42"/>
+                        <Setter Property="MinHeight" Value="34"/>
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 
@@ -47,7 +47,11 @@
                     <!--#region Time-->
                     <DataGridTemplateColumn Width="470">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" FontSize="13" FontFamily="Roboto" Foreground="White" Style="{StaticResource Common}" Margin="40,10,20,10"/>
+                            <TextBlock Text="ВРЕМЯ ВОЗНИКНОВЕНИЯ ОШИБКИ" 
+                                       FontSize="13" 
+                                       FontFamily="Roboto" 
+                                       Foreground="White" 
+                                       Style="{StaticResource Common}" Margin="37,0,0,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -59,11 +63,11 @@
                     <!--#region User-->
                     <DataGridTemplateColumn Width="410">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="ПОЛЬЗОВАТЕЛЬ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                            <TextBlock Text="ПОЛЬЗОВАТЕЛЬ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,0,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding UserName}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                                <TextBlock Text="{Binding UserName}" Style="{StaticResource Common}" Margin="20,5,0,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -71,11 +75,11 @@
                     <!--#region Code-->
                     <DataGridTemplateColumn Width="250">
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="КОД СОБЫТИЯ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                            <TextBlock Text="КОД СОБЫТИЯ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,0,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Event.Num, StringFormat=d4}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                                <TextBlock Text="{Binding Event.Num, StringFormat=d4}" Style="{StaticResource Common}" Margin="20,5,0,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -87,7 +91,7 @@
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Event.Title}" Style="{StaticResource Common}" Margin="20,5,20,5"/>
+                                <TextBlock Text="{Binding Event.Title}" Style="{StaticResource Common}" Margin="20,5,20,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -95,7 +99,7 @@
                     <!--#region Activity-->
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.Header>
-                            <TextBlock Text="АКТИВНОСТЬ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,20,0"/>
+                            <TextBlock Text="АКТИВНОСТЬ" FontSize="13" Style="{StaticResource Common}" Margin="20,0,0,0"/>
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
