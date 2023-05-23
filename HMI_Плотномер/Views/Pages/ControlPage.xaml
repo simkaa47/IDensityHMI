@@ -119,8 +119,7 @@
                             Style="{StaticResource TrendControlStyleMedium}"
                             Content="ПОКАЗАТЬ СПЕКТР"
                             Height="40"
-                            Width="191"
-                            Background="{StaticResource AquaColor}"/>
+                            Width="191"/>
                     <!--#endregion-->
                     <!--#region Clear spectr -->
                     <Button Command="{Binding ClearSpectrCommand}"

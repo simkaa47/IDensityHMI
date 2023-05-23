@@ -269,10 +269,8 @@
                 </WrapPanel.Resources>
                 <!--#region Произвести ед измерение -->
                 <Button Command="{Binding CalibrationVm.SingleMeasCommand}"
-                        Style="{StaticResource TrendControlStyleFirst}"
-                        Background="{StaticResource AquaColor}"
-                        VerticalContentAlignment="Center"
-                        
+                        Style="{StaticResource TrendControlStyleFirst}"                        
+                        VerticalContentAlignment="Center"                        
                         Width="195"
                         CommandParameter="{Binding SelectedProcess.IsActive.Value}">
                     <Button.Content>
@@ -293,13 +291,11 @@
                 <!--#endregion-->
                 <!--#region Расчитать к-ты -->
                 <Button Command="{Binding CalibrationVm.CalculatePolinomCommand}" Style="{StaticResource TrendControlStyleMedium}"
-                        Background="{StaticResource AquaColor}"  Width="245"
+                        Width="245"
                         Content="РАССЧИТАТЬ КОЭФФИЦИЕНТЫ" FontSize="13"/>
                 <!--#endregion-->
                 <!--#region Показать зависимость -->
-                <ToggleButton   Width="215"                               
-                                FontSize="13"                                
-                                Background="{StaticResource AquaColor}"
+                <ToggleButton   Width="215"
                                 Name="PopupOpen"
                                 Command="{Binding CalibrationVm.ShowPolinomTrendCommand}"
                                 Content="ПОКАЗАТЬ ЗАВИСИМОСТЬ">
@@ -330,7 +326,7 @@
                 <!--#endregion-->
                 <!--#region Записать коэффиценты -->
                 <Button Command="{Binding CalibrationVm.WriteCalibrCoeefsCommand}" Style="{StaticResource TrendControlStyleLast}"
-                        Background="{StaticResource AquaColor}" Width="240"
+                        Width="240"
                         Content="ЗАПИСАТЬ КОЭФФИЦИЕНТЫ"  FontSize="13"/>
                 <!--#endregion-->
             </WrapPanel>
