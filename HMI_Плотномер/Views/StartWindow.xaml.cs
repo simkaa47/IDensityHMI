@@ -29,8 +29,7 @@ namespace IDensity.Core.Views
 
         private async  void Button_Click(object sender, RoutedEventArgs e)
         {
-            ShowNameButtonText.Text = "Загрузка...";
-            ShowNameButtonText.Foreground = Brushes.Black;
+            ShowNameButtonText.Text = "Загрузка...";            
             ShowNameButton.IsEnabled = false;            
             await Task.Run(() => 
             {

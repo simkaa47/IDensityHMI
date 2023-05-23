@@ -18,11 +18,13 @@
         <!--#region Кнопка -->
         <Button Click="Button_Click" Width="198" Height="68" 
                 Canvas.Left="650" Canvas.Top="633"   
+                Style="{StaticResource ButtonWithBackgroundAbdBorder}"
                 BorderBrush="{StaticResource AquaColor}"
                 BorderThickness="1"
                 Name="ShowNameButton" Background="#1C1c1e" >
             <TextBlock Text="Вход" HorizontalAlignment="Center" 
                        Name="ShowNameButtonText"
+                       
                        VerticalAlignment="Center"
                        Foreground="White"
                        FontSize="24"/>
