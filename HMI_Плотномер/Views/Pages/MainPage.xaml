@@ -136,7 +136,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="0.5*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Запись" 
+                            <TextBlock Text="Записать" 
                                                TextWrapping="Wrap" Foreground="#B1FFFFFF" 
                                                VerticalAlignment="Center"
                                                FontSize="16"
@@ -261,23 +261,21 @@
                         Margin="0,0,48,0"
                         BorderBrush="{StaticResource AquaColor}"
                         BorderThickness="1"
-                        Style="{StaticResource CommonButton}" 
+                        Style="{StaticResource ButtonWithBackgroundAbdBorder}" 
                         Background="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsMeasSwitchColors}}"
                         FontSize="20"
                         FontStretch="Expanded"
-                        FontFamily="..\Resourses\Fonts\#Roboto Medium"
-                        HorizontalContentAlignment="Center"
+                        FontFamily="..\Resourses\Fonts\#Roboto Medium"                        
                         VerticalContentAlignment="Center"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"                       
                         Command="{Binding SwitchMeasCommand}">
                     <Button.Content>
                         <TextBlock Text="{Binding mainModel.CycleMeasStatus.Value, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource measStatusBtn}}"
-                                   TextWrapping="Wrap" 
-                                   FontFamily="..\Resourses\Fonts\#Roboto Medium">
-                            <TextBlock.LayoutTransform>
-                                <ScaleTransform ScaleX="1.0" ScaleY="1.15"/>
-                            </TextBlock.LayoutTransform>
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   LineStackingStrategy="BlockLineHeight" LineHeight="32"
+                                   FontFamily="..\Resourses\Fonts\#Roboto Medium">                            
                         </TextBlock>
                     </Button.Content>
                 </Button>

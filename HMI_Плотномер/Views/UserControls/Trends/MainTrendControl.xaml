@@ -51,7 +51,7 @@
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility3}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle3, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="AvgValue1" Color="#FF008000"/>
+                                           DataFieldX="Time" DataFieldY="AvgValue1" Color="#32D74B"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility4}"
@@ -61,7 +61,7 @@
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility5}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle5, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="AvgValue2" Color="#FF000000"/>
+                                           DataFieldX="Time" DataFieldY="AvgValue2" Color="#64D2FF"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility6}"

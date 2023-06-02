@@ -128,9 +128,10 @@
                     <ComboBox Name="MeasNumSelector"  ItemsSource="{StaticResource  MeasProcNums}" Style="{StaticResource ComboboxParameterStyle}"                              
                               FontSize="16"
                               BorderBrush="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxBorderBrushes}}"
-                              Height="40"
-                              VerticalContentAlignment="Center"
-                              Background="Transparent"
+                              Height="40"                              
+                              Background="Gray"
+                              VerticalContentAlignment="Center"      
+                              
                               Width="165"
                               SelectedIndex="0">
                         <i:Interaction.Triggers>

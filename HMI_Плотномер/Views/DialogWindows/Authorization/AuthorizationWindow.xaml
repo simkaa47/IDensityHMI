@@ -42,13 +42,17 @@
                 <Grid>
                     <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
                     <TextBlock  Visibility="Hidden" x:Name="WatermarkText" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" 
-                              Background="Transparent" Foreground="{StaticResource InputTextColor}" Text="Введите логин" />
+                              Background="Transparent" Foreground="{StaticResource InputTextColor}" Text="Логин" />
                 </Grid>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="Text" Value="">
                     <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
                 </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Collapsed"/>
+                </Trigger>
+                
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <!--#endregion-->
@@ -59,12 +63,15 @@
                     CornerRadius="4,4,0,0">
                 <Grid>
                     <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
-                    <TextBlock Visibility="Hidden" x:Name="WatermarkText" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{StaticResource InputTextColor}" Text="Введите пароль"  />
+                    <TextBlock Visibility="Hidden" x:Name="WatermarkText" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{StaticResource InputTextColor}" Text="Пароль"  />
                 </Grid>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property ="Tag"  Value="">
                     <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Collapsed"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -90,9 +97,11 @@
                     <ScaleTransform ScaleX="1.03"/>
                 </TextBlock.LayoutTransform>
             </TextBlock>
+            
             <TextBox  x:Name="Login" 
                       Canvas.Top="124"
                       Canvas.Left="40"
+                      
                       CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                       Background="{StaticResource InputBackgroundColor}"  
                       Template="{StaticResource WatermarkLogin}"
@@ -109,7 +118,7 @@
                          Template="{StaticResource pboxTemplate}" 
                          HorizontalContentAlignment="Left" 
                          VerticalContentAlignment="Center" Width="380" Height="56" PasswordChanged="Password_PasswordChanged"/>
-            <Button  Canvas.Top="276"
+            <Button  Canvas.Top="276" Style="{StaticResource ButtonWithBackgroundAbdBorder}"
                       Canvas.Left="40" Background="{StaticResource SelectionColor}"  Width="380" Height="55"  Click="EnterClick">
                 <TextBlock Foreground="White" Text="ВОЙТИ" FontSize="15" FontWeight="Bold"/>
             </Button>

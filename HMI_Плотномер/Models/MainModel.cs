@@ -408,7 +408,7 @@ namespace IDensity.Models
 
         #region Версия firmware
         [DataMember]
-        public Parameter<string> FwVersion { get; set; } = new Parameter<string>("FwVersion", "Версия FW", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
+        public Parameter<string> FwVersion { get; set; } = new Parameter<string>("FwVersion", "Версия встроенного ПО", string.Empty, "zzzzzzzzzzzzzzz", 0, "", true);
         #endregion
 
         #region Номер заказчика

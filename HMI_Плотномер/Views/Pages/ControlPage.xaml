@@ -82,20 +82,20 @@
                             <Style TargetType="DockPanel"></Style>
                         </ListBox.Resources>
                         <DockPanel>
-                            <TextBlock Text="Общее кол-во импульсов: " Margin="0,0,50,0"/>
-                            <TextBlock Text="{Binding CheckPulseService.CommontCount}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Общее кол-во импульсов:" Width="270"/>
+                            <TextBlock Text="{Binding CheckPulseService.CommontCount}" HorizontalAlignment="Left"/>
                         </DockPanel>
                         <DockPanel>
-                            <TextBlock Text="Кол-во импульсов с пересветом: " Margin="0,0,50,0"/>
-                            <TextBlock Text="{Binding CheckPulseService.OverValuePulses}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Кол-во импульсов с пересветом: " Width="270"/>
+                            <TextBlock Text="{Binding CheckPulseService.OverValuePulses}" HorizontalAlignment="Left"/>
                         </DockPanel>
                         <DockPanel>
-                            <TextBlock Text="Кол-во импульсов с шумами: " Margin="0,0,50,0"/>
-                            <TextBlock Text="{Binding CheckPulseService.NoisePulses}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="Кол-во импульсов с шумами: "  Width="270"/>
+                            <TextBlock Text="{Binding CheckPulseService.NoisePulses}" HorizontalAlignment="Left"/>
                         </DockPanel>
                         <DockPanel>
-                            <TextBlock Text="% корректных импульсов: " Margin="0,0,50,0"/>
-                            <TextBlock Text="{Binding CheckPulseService.SuccessDeviation, StringFormat=f3}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="% корректных импульсов: " Width="270"/>
+                            <TextBlock Text="{Binding CheckPulseService.SuccessDeviation, StringFormat=f3}" HorizontalAlignment="Left"/>
                         </DockPanel>
                         <Button Content="ПОЧИСТИТЬ СТАТИСТИКУ" Command="{Binding ClearPulseStaticticCommand}"/>
                     </ListBox>
@@ -261,7 +261,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Mode -->
-                        <DataGridTemplateColumn Width="220" >
+                        <DataGridTemplateColumn  >
                             <DataGridTemplateColumn.Header>
                                 <TextBlock Text="РЕЖИМ" Foreground="White" FontSize="13" Margin="20"/>
                             </DataGridTemplateColumn.Header>

@@ -61,7 +61,7 @@
                 <!--#endregion-->
                 <!--#region Current -->
                 <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                        Header="ТОК AI, mA" Width="124">
+                                        Header="ТОК AI, мА" Width="124">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource Common}"
@@ -79,21 +79,32 @@
                 </DataGridTemplateColumn>
                 <!--#endregion-->
                 <!--#region Activity -->
-                <DataGridTemplateColumn Width="140">
+                <DataGridTemplateColumn Width="120">
                     <DataGridTemplateColumn.Header>
                         <TextBlock Text="АКТИВНОСТЬ АЦП" FontSize="13" Margin="20,0,10,0" Foreground="White"/>
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <p:CompoBoxParameter ItemsSource="{StaticResource On/Off}" 
-                                                HorizontalAlignment="Center"
-                                                 CommandButtonVisibility="Collapsed"
-                                                 ParameterWidth="88"
-                                                 DataContext="{Binding Activity}"
-                                                 DescriptionNotVisible="True"
-                                                Index="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.AiSwitchActivityCommand}"
-                                                CommanDParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"/>
+                            <ComboBox Height="40" Width="80" 
+                                      BorderBrush="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource GetByIndexFromParameterConverter}, ConverterParameter={StaticResource On/Off_Colors}}"
+                                      ItemsSource="{StaticResource On/Off}"
+                                      Foreground="White"
+                                      Background="Gray"
+                                      DataContext="{Binding Activity}"
+                                      SelectedIndex="{Binding WriteValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      VerticalContentAlignment="Center"
+                                      Padding="10,0,0,0"
+                                      FontSize="13"
+                                      FontWeight="Regular">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownClosed">
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.AiSwitchActivityCommand}"
+                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                
+                            </ComboBox>
+                            
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

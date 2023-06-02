@@ -36,9 +36,13 @@
         <sys1:String>ИЗМРЕННАЯВЕЛИЧИНА</sys1:String>
     </col1:ArrayList>
     <col1:ArrayList x:Key="On/Off">
-        <sys1:String>ВЫКЛ</sys1:String>
+        <sys1:String>ОТКЛ</sys1:String>
         <sys1:String>ВКЛ</sys1:String>
     </col1:ArrayList>
+    <x:Array Type="sys1:String" x:Key="On/Off_Colors">
+        <sys1:String>#FF3b30</sys1:String>
+        <sys1:String>#28BCBA</sys1:String>
+    </x:Array>
     <col1:ArrayList x:Key="Diapasons">
         <sys1:String>Диапазон 0</sys1:String>
         <sys1:String>Диапазон 1</sys1:String>
@@ -75,7 +79,7 @@
     </col1:ArrayList>
     <x:Array Type="sys1:String" x:Key="measStatusBtn">
         <sys1:String>Включить измерения</sys1:String>
-        <sys1:String>Выключить измерения</sys1:String>
+        <sys1:String>Отключить измерения</sys1:String>
     </x:Array>
     <col1:ArrayList x:Key="PortModes">
         <sys1:String>RS485</sys1:String>
@@ -83,7 +87,7 @@
     </col1:ArrayList>
     <x:Array Type="sys1:String" x:Key="HvButn">
         <sys1:String>ВКЛЮЧИТЬ HV</sys1:String>
-        <sys1:String>ВЫКЛЮЧИТЬ HV</sys1:String>
+        <sys1:String>ОТКЛЮЧИТЬ HV</sys1:String>
     </x:Array>
     <col1:ArrayList x:Key="EventTypes">
         <sys1:String>Ошибка</sys1:String>
@@ -162,9 +166,9 @@
     <x:Array Type="sys1:String"   x:Key="CurveColors">
         <sys1:String>#FFFF0000</sys1:String>
         <sys1:String>#FF0000FF</sys1:String>
-        <sys1:String>#FF008000</sys1:String>
+        <sys1:String>#32D74B</sys1:String>
         <sys1:String>#FFA52A2A</sys1:String>
-        <sys1:String>#FF000000</sys1:String>
+        <sys1:String>#64D2FF</sys1:String>
         <sys1:String>#FFFFC0CB</sys1:String>
         <sys1:String>#FF00FFFF</sys1:String>
         <sys1:String>#FF800080</sys1:String>

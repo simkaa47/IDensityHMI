@@ -9,6 +9,7 @@
         AllowsTransparency="True"
         ResizeMode="NoResize"
         Background="Transparent"
+        WindowStartupLocation="CenterScreen"       
         VerticalContentAlignment="Top"
         d:DataContext="{d:DesignInstance Type=vm:MeasUnit}"
         Title="MeasUnitDialog"  WindowStyle="None" Height="504" Width="380"
@@ -61,7 +62,7 @@
                     <!--#region К-т -->
                     <ListBoxItem>
                         <DockPanel>
-                            <TextBlock Text="К-Т" Foreground="White" Margin="5" FontSize="13"
+                            <TextBlock Text="КОЭФ-Т" Foreground="White" Margin="5" FontSize="13"
                    VerticalAlignment="Center"/>
                             <TextBox Text="{Binding K, ConverterCulture=RU-ru}" Template="{StaticResource TextBoxTemplate}"
                    VerticalAlignment="Center" Width="165" HorizontalAlignment="Right" />

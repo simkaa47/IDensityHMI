@@ -7,6 +7,8 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:IDensity.Core.Views.UserControls.MeasNums"
              mc:Ignorable="d" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             
              d:DataContext="{d:DesignInstance Type=vm:MeasUnitVm}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -15,6 +17,16 @@
         <Border Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Margin="40,20,40,20">
             <Grid>
+                <Grid.Resources>
+                    <x:Array Type="sys:String" x:Key="DeleteIcons">
+                        <sys:String>..\..\Resourses\Pictures\DeleteIcon.png</sys:String>
+                        <sys:String>..\..\Resourses\Pictures\DeleteGreen.png</sys:String>
+                    </x:Array>
+                    <x:Array Type="sys:String" x:Key="EditIcons">
+                        <sys:String>..\..\Resourses\Pictures\EditIcon.png</sys:String>
+                        <sys:String>..\..\Resourses\Pictures\EditGreen.png</sys:String>
+                    </x:Array>
+                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="0.1*" />
@@ -35,9 +47,9 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Style="{StaticResource Common}" 
-                                               Margin="20" 
+                                                Margin="20"
                                                Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, UpdateSourceTrigger=PropertyChanged, StringFormat=d2}" Foreground="White" 
-                                               HorizontalAlignment="Center"/>
+                                               HorizontalAlignment="Left"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -116,23 +128,26 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <!--#region Edit -->
-                                        <Button BorderThickness="0" Background="Transparent"
-                                                Visibility="{Binding UserCantDelete, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditMeasNumCommand}">
-                                            <Image Source="..\..\Resourses\Pictures\EditIcon.png" Margin="10" />
-                                            <Button.ToolTip>
-                                                <TextBlock Text="Редактировать"/>
-                                            </Button.ToolTip>
-                                        </Button>
+                                        <Image Source="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource EditIcons}}" 
+                                               Margin="10"
+                                               Visibility="{Binding UserCantDelete, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseDown">
+                                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditMeasNumCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Image>                                       
                                         <!--#endregion-->
                                         <!--#region Remove -->
-                                        <Button BorderThickness="0" Background="Transparent" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DelMeasNumCommand}"
-                                                Visibility="{Binding UserCantDelete, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
-                                            <Image Source="..\..\Resourses\Pictures\DeleteIcon.png" Margin="10" />
-                                            <Button.ToolTip>
-                                                <TextBlock Text="Удалить"/>
-                                            </Button.ToolTip>
-                                        </Button>
+                                        <Image Source="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource DeleteIcons}}" 
+                                               Margin="10"
+                                               Visibility="{Binding UserCantDelete, Converter={StaticResource VisibleIfEqual}, ConverterParameter=False}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseDown">
+                                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DelMeasNumCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Image>                                        
                                         <!--#endregion-->
                                     </StackPanel>
                                 </DataTemplate>
@@ -142,8 +157,9 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <!--#region Add new item -->
-                <Button Grid.Row="1"  Style="{StaticResource ButtonWithBackground}" Width="380" Height="38" HorizontalAlignment="Left" Margin="340,15,15,15"
+                <Button Grid.Row="1"  Style="{StaticResource ButtonWithBackground}" Width="380" Height="38"  Margin="0,15,0,15"
                         Background="{StaticResource AquaColor}"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                          Command="{Binding AddMeasUnitCommand}">
                     <DockPanel  VerticalAlignment="Center">

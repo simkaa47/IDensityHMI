@@ -37,11 +37,13 @@
     <None Remove="Views\Resourses\Pictures\Compensation_Settings.png" />
     <None Remove="Views\Resourses\Pictures\ControlIcon.png" />
     <None Remove="Views\Resourses\Pictures\Counters.png" />
+    <None Remove="Views\Resourses\Pictures\DeleteGreen.png" />
     <None Remove="Views\Resourses\Pictures\DeleteIcon.png" />
     <None Remove="Views\Resourses\Pictures\DensitySettings.png" />
     <None Remove="Views\Resourses\Pictures\DoneGrey.png" />
     <None Remove="Views\Resourses\Pictures\DoneWhite.png" />
     <None Remove="Views\Resourses\Pictures\DriveFileMove.png" />
+    <None Remove="Views\Resourses\Pictures\EditGreen.png" />
     <None Remove="Views\Resourses\Pictures\EditIcon.png" />
     <None Remove="Views\Resourses\Pictures\Events.png" />
     <None Remove="Views\Resourses\Pictures\EventsIcon.png" />
@@ -135,11 +137,15 @@
     <Resource Include="Views\Resourses\Pictures\Compensation_Settings.png" />
     <Resource Include="Views\Resourses\Pictures\ControlIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Counters.png" />
+    <Resource Include="Views\Resourses\Pictures\DeleteGreen.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Resourses\Pictures\DeleteIcon.png" />
     <Resource Include="Views\Resourses\Pictures\DensitySettings.png" />
     <Resource Include="Views\Resourses\Pictures\DoneGrey.png" />
     <Resource Include="Views\Resourses\Pictures\DoneWhite.png" />
     <Resource Include="Views\Resourses\Pictures\DriveFileMove.png" />
+    <Resource Include="Views\Resourses\Pictures\EditGreen.png" />
     <Resource Include="Views\Resourses\Pictures\EditIcon.png" />
     <Resource Include="Views\Resourses\Pictures\Events.png" />
     <Resource Include="Views\Resourses\Pictures\EventsIcon.png" />

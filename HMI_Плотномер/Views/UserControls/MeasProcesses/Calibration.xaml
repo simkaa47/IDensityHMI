@@ -219,13 +219,26 @@
                         <TextBlock Text="Расcчитанные к-ты полинома" FontSize="20"  FontWeight="SemiBold" FontFamily="Roboto" Margin="12,0,0,0"/>
                     </GroupBox.Header>
                     <StackPanel>
-                        <Border Background="Black" Margin="-6,28,0,0">
+                        <Border Background="Black" Margin="-6,28,0,0" MinHeight="400">
                             <DataGrid AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               BorderThickness="0"
                               Background="Transparent"
                               ItemsSource="{Binding CalibrationVm.CalculatedCoeefs}"
                               CanUserDeleteRows="False">
+                                <DataGrid.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                    </Style>
+                                </DataGrid.CellStyle>
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="MinHeight" Value="60"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Width="160">
                                         <DataGridTemplateColumn.Header>
