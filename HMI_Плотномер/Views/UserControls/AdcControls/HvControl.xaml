@@ -53,13 +53,12 @@
         <!--#region Switch HV -->
         <DockPanel MinHeight="50" >
             <TextBlock Text="Управление высоким напряжением" Style="{StaticResource Common}"  Margin="20,0,0,0"/>
-            <Button Style="{StaticResource ButtonWithBackgroundAbdBorder}"
+            <Button Style="{StaticResource TrendControlStyleSingle}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Margin="5,5,25,5"
                     Width="146"
-                    Background="Transparent"
-                    BorderBrush="{StaticResource AquaColor}"
+                    Background="Gray"                    
                      Command="{Binding AdcViewModel.switchHvCommandCommand}"
                     Height="40"
                    BorderThickness="2"

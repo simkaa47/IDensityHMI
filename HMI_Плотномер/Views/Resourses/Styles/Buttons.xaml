@@ -123,11 +123,14 @@
     <Style TargetType="Button" x:Key="TrendControlStyleCommon">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Background" Value="{DynamicResource AquaColor}"/>
+        <Setter Property="Background" Value="Gray"/>
         <Setter Property="FontFamily" Value="..\Resourses\Fonts\#Roboto Medium"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#a028bcba"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="Green"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -137,6 +140,19 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Background="{TemplateBinding Background}" CornerRadius="4,0,0,4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" BasedOn="{StaticResource TrendControlStyleCommon}" x:Key="TrendControlStyleSingle">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="4,4,4,4">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>

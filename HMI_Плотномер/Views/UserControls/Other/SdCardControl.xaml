@@ -13,7 +13,7 @@
     <Grid>
         <Grid.Resources>
             <x:Array Type="sys:String"   x:Key="ButtonColorsSdCard">
-                <sys:String>#28BCBA</sys:String>
+                <sys:String>Gray</sys:String>
                 <sys:String>#FFFF0000</sys:String>
             </x:Array>
             <x:Array Type="sys:String"   x:Key="ButtonColorsSdCardInverse">
@@ -133,15 +133,13 @@
                     <Button Style="{StaticResource TrendControlStyleMedium}"
                             Grid.Column="1"
                             Height="40"
-                            Background="#28BCBA"
                             Command="{Binding GetFilesSdCommand}"
                             Content="ЗАПРОСИТЬ ИМЕНА ФАЙЛОВ"/>  
                     <!--#endregion-->
                     <!--#region Очистить список файлов -->
                     <Button Content="ОЧИСТИТЬ СПИСОК ФАЙЛОВ"
                             Grid.Column="2"
-                            Height="40"
-                            Background="#28BCBA"
+                            Height="40"                            
                             Style="{StaticResource TrendControlStyleLast}"
                             Command="{Binding ClearSdFileListCommand}"/>    
                     <!--#endregion-->

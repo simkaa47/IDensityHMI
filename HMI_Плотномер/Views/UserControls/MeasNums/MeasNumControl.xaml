@@ -157,8 +157,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <!--#region Add new item -->
-                <Button Grid.Row="1"  Style="{StaticResource ButtonWithBackground}" Width="380" Height="38"  Margin="0,15,0,15"
-                        Background="{StaticResource AquaColor}"
+                <Button Grid.Row="1"  Style="{StaticResource TrendControlStyleSingle}" Width="380" Height="38"  Margin="0,15,0,15"                        
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                          Command="{Binding AddMeasUnitCommand}">

@@ -125,6 +125,7 @@
                         <DataGrid CanUserAddRows="False" 
                              SelectedIndex="{Binding CalibrationVm.SingleMeasIndex}"                            
                              BorderThickness="1,0,1,0"
+                             VerticalAlignment="Top"
                              FontWeight="Normal"
                                   Height="380"
                              Background="Transparent"
@@ -151,7 +152,11 @@
 
                                 <!--#endregion-->
                                 <!--#region Дата измерения-->
-                                <DataGridTemplateColumn Header="ДАТА ИЗМЕРЕНИЯ" HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Width="220">
+                                <DataGridTemplateColumn  Width="220">
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="ДАТА ИЗМЕРЕНИЯ" FontSize="13" TextWrapping="Wrap"
+                                                   Margin="34,0,0,0" MaxWidth="100"/>
+                                    </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:DateTimeParameter DataContext="{Binding Date}"
@@ -168,8 +173,11 @@
                                 </DataGridTemplateColumn>
                                <!--#endregion-->
                                 <!--#region Weak -->
-                                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}"
-                                                    Header="ОСЛАБЛЕНИЕ">
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="ОСЛАБЛЕНИЕ" FontSize="13" TextWrapping="Wrap"
+                                                   Margin="32,0,0,0" MaxWidth="100"/>
+                                    </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Weak}"  HorizontalAlignment="Center"
@@ -181,7 +189,11 @@
                                 </DataGridTemplateColumn>
                                <!--#endregion-->
                                 <!--#region Физическая величина -->
-                                <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ФИЗИЧЕСКАЯ ВЕЛИЧИНА">
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="ФИЗИЧЕСКАЯ ВЕЛИЧИНА" FontSize="13" TextWrapping="Wrap"
+                                                   Margin="32,0,0,0" />
+                                    </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <p:MeasUnitParameterText DescriptionNotVisible="True"
@@ -326,11 +338,14 @@
                             </Setter>
                             <Setter Property="FontSize" Value="13"/>
                             <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="Background" Value="{DynamicResource AquaColor}"/>
+                            <Setter Property="Background" Value="Gray"/>
                             <Setter Property="FontFamily" Value="..\Resourses\Fonts\#Roboto Medium"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="#a028bcba"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="Green"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
