@@ -151,6 +151,12 @@
             <oth:SaveLoadSettingsControl DataContext="{Binding CommonSettingsVm}"/>
         </TabItem>
         <!--#endregion-->
+        <!--#region States Control -->
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Переменные соcтояний" Visibility="{Binding CurUser, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор}" >
+            <oth:StatesControl/>
+        </TabItem>
+        <!--#endregion-->
+
     </TabControl>
     
     
