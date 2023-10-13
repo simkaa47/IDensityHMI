@@ -188,7 +188,7 @@ namespace IDensity.Models
         #endregion        
 
         #region Статус связи с платой АЦП
-        public Parameter<bool> AdcBoardCommState { get; } = new Parameter<bool>("AdcBoardCommState", "Статус связи с платой АЦП", false, true, 0, "");
+        public Parameter<bool> AdcBoardCommState { get; } = new Parameter<bool>("AdcBoardCommState", "Статус связи с платой АЦП", false, true, 0, "") { Value = true};
         #endregion
 
         #region Переменные связи

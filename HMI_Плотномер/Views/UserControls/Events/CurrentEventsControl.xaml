@@ -10,6 +10,7 @@
         <Border Background="Black" VerticalAlignment="Top" Margin="20">
             <DataGrid Background="Transparent"
                       Margin="10"
+                      Foreground="White"
                       BorderThickness="0"
                       IsReadOnly="True" 
                      AutoGenerateColumns="False" 
@@ -25,6 +26,7 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource EventRowStyle}">
                         <Setter Property="Background" Value="{Binding ActiveBrush}"/>
+                        <Setter Property="Foreground" Value="White"/>
                         <Setter Property="Visibility" Value="{Binding IsActive, Converter={StaticResource VisibleConverter}}"/>
                     </Style>
                 </DataGrid.RowStyle>
@@ -32,6 +34,7 @@
                     <Style TargetType="DataGridCell">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Foreground" Value="White"/>
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.ColumnHeaderStyle>

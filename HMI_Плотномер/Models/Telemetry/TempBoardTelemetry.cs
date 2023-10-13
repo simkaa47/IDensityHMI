@@ -21,7 +21,7 @@ namespace IDensity.Core.Models.Telemetry
         #endregion
 
         #region Статус связи с платой питания
-        public Parameter<bool> TempBoardCommState { get; } = new Parameter<bool>("TempBoardCommState", "Статус связи с платой питания", false, true, 0, "");
+        public Parameter<bool> TempBoardCommState { get; } = new Parameter<bool>("TempBoardCommState", "Статус связи с платой питания", false, true, 0, "") {Value=true };
         #endregion
 
         #region OverTemp

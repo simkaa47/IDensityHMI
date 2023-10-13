@@ -37,6 +37,9 @@ namespace IDensity.ViewModels
         #region Событие потери связи с платой HV
         public EventDevice EventHvBoardCommErr { get; } = new EventDevice("EventHvBoardCommErr");
         #endregion
+        #region Событие потери связи с платой питания
+        public EventDevice EventPowerBoardCommErr { get; } = new EventDevice("EventPowerBoardCommErr");
+        #endregion
         #region Событие потери связи с платой ADC
         public EventDevice EventAdcBoardCommErr { get; } = new EventDevice("EventAdcBoardCommErr");
         #endregion
@@ -98,11 +101,20 @@ namespace IDensity.ViewModels
             };
             #endregion
             #region Связь с платой АЦП
-            Model.AdcBoardCommState.PropertyChanged += (obj, args) =>
+            Model.AdcBoardSettings.CommState.PropertyChanged += (obj, args) =>
             {
                 if ((obj as Parameter<bool>) != null && args.PropertyName == nameof(Parameter<bool>.Value))
                 {
                     EventAdcBoardCommErr.IsActive = !(obj as Parameter<bool>).Value;
+                }
+            };
+            #endregion
+            #region Связь с платой питания
+            Model.TempTelemetry.TempBoardCommState.PropertyChanged += (obj, args) =>
+            {
+                if ((obj as Parameter<bool>) != null && args.PropertyName == nameof(Parameter<bool>.Value))
+                {
+                    EventPowerBoardCommErr.IsActive = !(obj as Parameter<bool>).Value;
                 }
             };
             #endregion
