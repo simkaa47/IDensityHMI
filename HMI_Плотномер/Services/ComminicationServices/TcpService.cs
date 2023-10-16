@@ -135,6 +135,7 @@ namespace IDensity.Services.ComminicationServices
                     CloseConnection();
                     Thread.Sleep(1000);
                     errCommCount = 0;
+                    _model.Connecting.Value = Client.Connected;
                 }
                 else Thread.Sleep(_model.TcpConnectData.Pause);
                 TcpEvent?.Invoke(ex.Message + $" ({ex.StackTrace})");

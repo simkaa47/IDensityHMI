@@ -165,7 +165,7 @@ namespace IDensity.Models
         /// <summary>
         /// Статус соединения с платой
         /// </summary>
-        public Parameter<bool> Connecting { get; } = new Parameter<bool>("ConnectBoard", "Статус соединения с платой", false, true, 0, "");
+        public Parameter<bool> Connecting { get; } = new Parameter<bool>("ConnectBoard", "Статус соединения с платой", false, true, 0, "") {Value=true };
 
         #endregion
 
