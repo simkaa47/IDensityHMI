@@ -26,12 +26,16 @@
             </x:Array>
         </Grid.Resources>
         <Grid.RowDefinitions>            
-            <RowDefinition Height="0.6*"/>            
+            <RowDefinition/>            
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--#region Table -->
         <Border Background="Black" Margin="20,20"  HorizontalAlignment="Left" VerticalAlignment="Top">
-            <StackPanel>
+            <Grid>                
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
                 <!--#region Table -->
                 <DataGrid CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -43,10 +47,10 @@
                           
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding FileNames}"
-                  SelectedItem="{Binding SelectedFileInfo}">
+                  SelectedItem="{Binding SelectedFileInfo}">                    
                     <DataGrid.Columns>
                         <!--#region № -->
-                        <DataGridTemplateColumn Width="68">
+                        <DataGridTemplateColumn Width="68" SortMemberPath="Id">
                             <DataGridTemplateColumn.Header>
                                 <TextBlock Text="№" FontSize="13" Foreground="White" Margin="24"/>
                             </DataGridTemplateColumn.Header>
@@ -58,7 +62,9 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region File name -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ИМЯ ФАЙЛА" Width="314">
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" 
+                                                Header="ИМЯ ФАЙЛА" Width="314"
+                                                SortMemberPath="Name">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" Style="{StaticResource Common}" Margin="10"/>
@@ -99,7 +105,8 @@
                         <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ПРОЧИТАТЬ" Width="152">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Background="Transparent" Margin="5" BorderThickness="0" >
+                                    <Button Background="Transparent" Margin="5" BorderThickness="0" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.GetSdCardWritesCommand}"
+                                            CommandParameter="{Binding}">
                                         <StackPanel Orientation="Horizontal" Margin="5">
                                             <Image Source="..\..\Resourses\Pictures\ReadAquaIcon.png"/>
                                             <Label FontSize="14" Foreground="Aqua" Content="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.IsReading, Converter={StaticResource StatusFromNum}, ConverterParameter={StaticResource SdBtnStatus}}"/>
@@ -114,7 +121,7 @@
                 </DataGrid>
                 <!--#endregion-->
                 <!--#region Buttons -->
-                <Grid Height="60" Margin="10,20,0,0">
+                <Grid Grid.Row="1" Height="60" Margin="10,20,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="223"/>
                         <ColumnDefinition Width="234"/>
@@ -177,17 +184,17 @@
                     <!--#endregion-->
                 </Grid>               
                 
-            </StackPanel>
+            </Grid>
         </Border>
         <!--#endregion-->
         <!--#region Meas results -->
         <Border Background="Black" Margin="20" Grid.Row="1" HorizontalAlignment="Left">
             <ListView Grid.Row="3" 
                       ItemsSource="{Binding SdCardMeasDatas}"
-                      Visibility="{Binding RelativeSource={RelativeSource Self}, Path=AlternationCount, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=0}">
+                      Visibility="{Binding SdCardMeasDatas.Count, Converter={StaticResource VisibleIfNotEqual}, ConverterParameter=0}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time, StringFormat=dd.MM.yyyy hh:mm:ss}"/>
+                        <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time, StringFormat=dd.MM.yyyy HH:mm:ss}"/>
                         <GridViewColumn Header="№ проц. 1" DisplayMemberBinding="{Binding MeasResults[0].ProcNum}" Width="60"/>
                         <GridViewColumn Header="Счетчик 1" DisplayMemberBinding="{Binding MeasResults[0].CounterValue}" Width="80"/>
                         <GridViewColumn Header="Мгнов. ФВ 1:" DisplayMemberBinding="{Binding MeasResults[0].PhysValueCur, StringFormat=f1}" Width="80"/>
