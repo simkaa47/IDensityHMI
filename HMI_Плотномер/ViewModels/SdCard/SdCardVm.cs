@@ -82,10 +82,16 @@ namespace IDensity.ViewModels.SdCard
         RelayCommand _getSdCardWritesCommand;
         public RelayCommand GetSdCardWritesCommand => _getSdCardWritesCommand ?? (_getSdCardWritesCommand = new RelayCommand(par =>
         {
-            GetWrites();
+            if(par is SdFileInfo info)
+            {
+                SelectedFileInfo = info;
+                GetWrites();
+            }
+            
         }, o => true));
 
         #endregion
+
 
         #region Запуск - останов записи на карту
         RelayCommand _switchSdCardLogCommand;
@@ -166,7 +172,7 @@ namespace IDensity.ViewModels.SdCard
 
         public void GetWrites()
         {
-            if (SelectedFileInfo != null)
+            if (SelectedFileInfo != null && IsReading == false)
             {
                 IsReading = true;
                 SdCardMeasDatas.Clear();

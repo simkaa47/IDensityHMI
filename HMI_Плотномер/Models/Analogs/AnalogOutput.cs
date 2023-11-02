@@ -44,7 +44,7 @@ namespace IDensity.Core.Models.Analogs
 
         #region Тип переменной
         [DataMember]
-        public Parameter<ushort> VarNdx { get; set; } = new Parameter<ushort>("AnalogVarNdx", "Тип переменной", 0, 1, 1, "");
+        public Parameter<ushort> VarNdx { get; set; } = new Parameter<ushort>("AnalogVarNdx", "Тип переменной", 0, 2, 1, "");
         #endregion
 
         #region Нижняя граница ЦАП
