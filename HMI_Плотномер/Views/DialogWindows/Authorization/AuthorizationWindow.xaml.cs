@@ -1,16 +1,8 @@
 ﻿using IDensity.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IDensity.Core.Views.DialogWindows.Authorization
 {
@@ -20,12 +12,14 @@ namespace IDensity.Core.Views.DialogWindows.Authorization
     public partial class AuthorizationWindow : Window
     {
         VM vM;
+        LoginRequest _loginRequest;
         public AuthorizationWindow(VM vM)
         {
             InitializeComponent();
             if (vM == null) return;
             else this.vM = vM;
             this.DataContext = vM;
+            _loginRequest = (LoginRequest)Resources["LoginRequest"];
         }
 
         private void EnterClick(object sender, RoutedEventArgs e)
@@ -44,25 +38,17 @@ namespace IDensity.Core.Views.DialogWindows.Authorization
             }
             else
             {
-                Pword.Foreground = Brushes.Red;
-                Login.Foreground = Brushes.Red;
+                _loginRequest.IsError = true;
             }
         }
 
 
 
-        private void Login_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var brush = (SolidColorBrush)Resources["InputTextColor"];
-            Pword.Foreground = brush;
-            Login.Foreground = brush;
-        }
+        
         private void Password_PasswordChanged(object sender, RoutedEventArgs e)
         {
             this.Pword.Tag = this.Pword.Password;
-            var brush = (SolidColorBrush)Resources["InputTextColor"];
-            Pword.Foreground = brush;
-            Login.Foreground = brush;
+            _loginRequest.IsError = false;
         }
 
 
@@ -75,6 +61,11 @@ namespace IDensity.Core.Views.DialogWindows.Authorization
         private void CloseWindowHandler(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Login_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            _loginRequest.IsError = false;
         }
     }
 }

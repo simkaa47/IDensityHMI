@@ -5,14 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IDensity.Core.Views.DialogWindows.Authorization"
         mc:Ignorable="d"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Topmost="True"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"       
         ResizeMode="NoResize"        
         Background="Transparent"
-        Title="AuthorizationWindow" WindowStyle="None" Height="390" Width="460">
+        Title="AuthorizationWindow" WindowStyle="None" >
     <Window.Resources>
+        <Style TargetType="Border" x:Key="CommonBorderStyle">
+            <Setter Property="Height"  Value="390"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsError}" Value="True">
+                    <Setter Property="Height"  Value="410"/>                    
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonWithBackgroundAbdBorder}" x:Key="LoginButtonStyle">
+            <Setter Property="Canvas.Top" Value="276"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsError}" Value="True">
+                    <Setter Property="Canvas.Top"  Value="306"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <local:LoginRequest x:Key="LoginRequest"/>
         <!--#region Colors -->
         <SolidColorBrush x:Key="InputBackgroundColor" Color="#4FFFFFFF"/>
         <SolidColorBrush x:Key="SelectionColor" Color="#2BBCBA"/>
@@ -38,21 +56,29 @@
         <!--#region Логин -->
         <ControlTemplate TargetType="TextBox" x:Key="WatermarkLogin">
             <Border BorderThickness="0,0,0,2" Background="{TemplateBinding Background}" BorderBrush="{StaticResource SelectionColor}"
-                    CornerRadius="4,4,0,0">
-                <Grid>
-                    <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
-                    <TextBlock  Visibility="Hidden" x:Name="WatermarkText" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" 
+                    CornerRadius="4,4,0,0" Name="Border">
+                <StackPanel VerticalAlignment="Center">
+
+                    <TextBlock   x:Name="WatermarkText" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" FontSize="12"
                               Background="Transparent" Foreground="{StaticResource InputTextColor}" Text="Логин" />
-                </Grid>
+                    <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                </StackPanel>
             </Border>
             <ControlTemplate.Triggers>
-                <Trigger Property="Text" Value="">
-                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Collapsed"/>
-                </Trigger>
-                
+                <DataTrigger Binding="{Binding IsError}" Value="True">
+                    <Setter Property="Foreground" TargetName="WatermarkText" Value="#F44336"/>
+                    <Setter Property="BorderBrush" TargetName="Border" Value="#F44336"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="False"/>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys:String.Empty}}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Collapsed"/>
+                        <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>  
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <!--#endregion-->
@@ -60,27 +86,36 @@
         <!--#region Пароль -->
         <ControlTemplate TargetType="{x:Type PasswordBox}" x:Key="pboxTemplate">
             <Border BorderThickness="0,0,0,2" Background="{TemplateBinding Background}" BorderBrush="{StaticResource SelectionColor}"
-                    CornerRadius="4,4,0,0">
-                <Grid>
+                    CornerRadius="4,4,0,0" Name="Border">
+                <StackPanel VerticalAlignment="Center">                    
+                    <TextBlock  x:Name="WatermarkText" FontSize="12" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{StaticResource InputTextColor}" Text="Пароль"  />
                     <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
-                    <TextBlock Visibility="Hidden" x:Name="WatermarkText" Margin="12,0,0,0"  VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{StaticResource InputTextColor}" Text="Пароль"  />
-                </Grid>
+                </StackPanel>
             </Border>
             <ControlTemplate.Triggers>
-                <Trigger Property ="Tag"  Value="">
-                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="Visibility" TargetName="WatermarkText" Value="Collapsed"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsError}" Value="True">
+                    <Setter Property="Foreground" TargetName="WatermarkText" Value="#F44336"/>
+                    <Setter Property="BorderBrush" TargetName="Border" Value="#F44336"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="False"/>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource NotEqual}, ConverterParameter={x:Static sys:String.Empty}}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Collapsed"/>
+                        <Setter Property="Visibility" TargetName="WatermarkText" Value="Visible"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+            </ControlTemplate.Triggers>           
         </ControlTemplate>
         <!--#endregion-->
 
         
 
     </Window.Resources>
-    <Border Background="Black" CornerRadius="4">
+    <Border Background="Black" Name="CommonBorder" CornerRadius="4" DataContext="{StaticResource LoginRequest}" 
+            Width="460" Style="{StaticResource CommonBorderStyle}" >
         
         <Canvas>
             <Image Source="..\..\Resourses\Pictures\Clear.png"
@@ -89,7 +124,10 @@
                Canvas.Right="10"
                    Canvas.Top="10"
                Width="40">
-        </Image>
+                
+            </Image>
+            <TextBlock Text="Неверный логин или пароль" FontSize="18" Foreground="White"
+                       Canvas.Left="40" Canvas.Top="265" Visibility="{Binding IsError, Converter={StaticResource VisibleConverter}}"/>
             <TextBlock Text="VISSMA / Авторизация" Foreground="White" 
                        Canvas.Left="40"  Canvas.Top="58"  
                        FontFamily="..\..\Resourses\Fonts\#Roboto Light" FontSize="34">
@@ -101,24 +139,26 @@
             <TextBox  x:Name="Login" 
                       Canvas.Top="124"
                       Canvas.Left="40"
-                      
+                      TextChanged="Login_TextChanged"
                       CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                       Background="{StaticResource InputBackgroundColor}"  
+                      Foreground="White"
                       Template="{StaticResource WatermarkLogin}"
                       Padding="12,0,0,0"
-                      HorizontalContentAlignment="Left" MouseEnter="Login_MouseEnter" 
+                      HorizontalContentAlignment="Left" 
                       VerticalContentAlignment="Center" Height="56" Width="380" 
                       />
             <PasswordBox Background="{StaticResource InputBackgroundColor}" 
                          Canvas.Top="196"
                          Canvas.Left="40" 
                          Padding="12,0,0,0"
+                         Foreground="White"
                          CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"
                          KeyUp="Pword_KeyUp" x:Name="Pword" Tag="" 
                          Template="{StaticResource pboxTemplate}" 
                          HorizontalContentAlignment="Left" 
                          VerticalContentAlignment="Center" Width="380" Height="56" PasswordChanged="Password_PasswordChanged"/>
-            <Button  Canvas.Top="276" Style="{StaticResource ButtonWithBackgroundAbdBorder}"
+            <Button   Style="{StaticResource LoginButtonStyle}"
                       Canvas.Left="40" Background="{StaticResource SelectionColor}"  Width="380" Height="55"  Click="EnterClick">
                 <TextBlock Foreground="White" Text="ВОЙТИ" FontSize="15" FontWeight="Bold"/>
             </Button>
