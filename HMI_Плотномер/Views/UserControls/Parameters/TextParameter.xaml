@@ -25,9 +25,9 @@
                     <DataTrigger Binding="{Binding IsWriting}" Value="False">
                         <Setter Property="BorderBrush" Value="#28BCBA"/>
                     </DataTrigger>
-                    <Trigger Property="IsMouseOver" Value="True">
+                    <!--<Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderBrush" Value="#28BCBA"/>
-                    </Trigger>
+                    </Trigger>-->
                    
                 </Style.Triggers>
             </Style>
@@ -89,7 +89,7 @@
                     </MultiBinding>
                 </TextBox>
             </Border>
-            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+            <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}">
                 <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
@@ -100,7 +100,7 @@
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TextParameter}, Path=CommanDParameter }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </Border>            
+            </Border>-->            
         </StackPanel>
         <DockPanel.ToolTip>
             <ToolTip Placement="MousePoint" BorderThickness="0">

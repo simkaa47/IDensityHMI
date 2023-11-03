@@ -33,6 +33,7 @@
                   HorizontalContentAlignment="Left"
                   VerticalContentAlignment="Center"                  
                   FontSize="16"
+                      Padding="12,0,0,0"
                   Background="{StaticResource PanelBorderColor}"
                   BorderBrush="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource CompoboxBorderBrushes}}"
                   FontFamily="Roboto"
@@ -46,7 +47,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
-            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+            <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                 <Image Source="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
@@ -57,7 +58,7 @@
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:CompoBoxParameter}, Path=CommanDParameter }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </Border>
+            </Border>-->
         </StackPanel>        
     </DockPanel>
 </local:CommandExtention>

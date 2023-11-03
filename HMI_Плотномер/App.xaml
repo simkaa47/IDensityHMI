@@ -34,6 +34,7 @@
                 <ResourceDictionary Source="Views/Resourses/Styles/GridViewColumnHeader.xaml"/>
                 <ResourceDictionary Source="Views\CheckMaster\AnalogMeasPointTemplate.xaml"/>
                 <ResourceDictionary Source="Views/Resourses/Styles/RowDefinitions.xaml"/>
+                <ResourceDictionary Source="Views/Resourses/Styles/CompoboxItems.xaml"/>
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
         

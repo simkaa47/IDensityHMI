@@ -28,4 +28,5 @@
     <conv:MultiplyOnNumberConverter x:Key="MultiplyOnNumberConverter"/>
     <conv:IfEvenConverter x:Key="IfEvenConverter"/>
     <conv:MultiVisibleConverter x:Key="MultiVisibleConverter"/>
+    <conv:GetIfFalseConverter x:Key="GetIfFalse"/>
 </ResourceDictionary>

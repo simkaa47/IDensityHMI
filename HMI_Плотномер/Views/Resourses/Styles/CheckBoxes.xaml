@@ -15,6 +15,7 @@
     <Style TargetType="CheckBox" x:Key="CheckBoxAqvaStyle">
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="#33FFFFFF"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -28,5 +29,26 @@
                 <Setter Property="Background"  Value="Transparent"/>
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="CheckBox" x:Key="CheckBoxParameterStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border Height="24" Width="40"  CornerRadius="4" Name="Border" Background="#606061">
+                        <Grid>
+                            <Image Source="../Pictures/DoneGrey.png" Name="Image"/>
+                        </Grid> 
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="Border" Value="#28BCBA"/>
+                            <Setter Property="Source" TargetName="Image" Value="../Pictures/DoneWhite.png"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+                
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>
