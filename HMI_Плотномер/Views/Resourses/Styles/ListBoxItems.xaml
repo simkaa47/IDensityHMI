@@ -11,12 +11,20 @@
         <sys:String>Transparent</sys:String>
         <sys:String>#2190CAF9</sys:String>
     </x:Array>
-    <Style TargetType="ListBoxItem" x:Key="ParameterListBoxItem">       
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderNonActiveColor}"/>
-        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        <Setter Property="Background" Value="{DynamicResource TabControlCommon}"/>
-        <Setter Property="Margin" Value="0,0,0,0"/>
-        <Setter Property="MinHeight" Value="0"/>
+    <Style TargetType="ListBoxItem" x:Key="ParameterListBoxItem">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border BorderBrush="{DynamicResource BorderNonActiveColor}"
+                            Background="{DynamicResource TabControlCommon}"
+                            BorderThickness="0,0,0,1" Margin="0" MinHeight="0">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="ListBoxItem" x:Key="MeasProcItem">
         <Setter Property="Template">

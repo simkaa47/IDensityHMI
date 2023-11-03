@@ -135,7 +135,7 @@ namespace IDensity.Core.ViewModels
         }
         #endregion
         #region Путь к логируемому файлу
-        string _logPath = "Выберите файл";
+        string _logPath = "Выбрать";
         public string LogPath { get => _logPath; set => Set(ref _logPath, value); }
         #endregion
          #region Список дат, когда происходили измерения
@@ -212,8 +212,8 @@ namespace IDensity.Core.ViewModels
                     AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value,
                     CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value,
                     AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value,
-                    Current1 = mainModel.AnalogGroups[0].AI.AdcValue.Value,
-                    Current2 = mainModel.AnalogGroups[1].AI.AdcValue.Value,
+                    Current1 = ((float)mainModel.AnalogGroups[0].AI.AdcValue.Value)/1000,
+                    Current2 = ((float)mainModel.AnalogGroups[1].AI.AdcValue.Value)/1000,
                     HvValue1 = mainModel.TelemetryHV.VoltageCurOut.Value,
                     Temperature = mainModel.TempTelemetry.TempInternal.Value
                 };
@@ -270,7 +270,7 @@ namespace IDensity.Core.ViewModels
                     builder.Append("Дата Время" + "\t" + "Счетчик" + "\t" + "Процесс 0: мгновенная ФВ" + "\t"
                              + "Процесс 0: усредненная ФВ" + "\t"
                              + "Процесс 1: мгновенная ФВ" + "\t" + "Процесс 1: усредненная ФВ" + "\t"
-                             + "Ток AI0, мкA" + "\t" + "Ток AI1, мкA" + "\t" + "Значение HV out, V" + "\t" + "Температура" + "\n");
+                             + "Ток AI0, mA" + "\t" + "Ток AI1, mA" + "\t" + "Значение HV out, V" + "\t" + "Температура" + "\n");
                     foreach (var item in ArchivalDataPotnts)
                     {
                         builder.Append(item.Time.ToString("dd/MM/yyyy HH:mm:ss:f") + "\t" + item.Pulses.ToString("0.000") + "\t" + item.CurValue1.ToString("0.000") + "\t"

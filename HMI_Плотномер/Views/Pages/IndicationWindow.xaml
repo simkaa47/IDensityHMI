@@ -57,10 +57,10 @@
                     <mr:MiddleMeasResult2 DataContext="{Binding mainModel.MeasResults[1]}" 
                                           Margin="0,28,0,0"
                                           ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                                          IndicatorColor="#32d74b"/>
+                                          IndicatorColor="#64D2FF"/>
 
                     <mr:MiddleMeasResult1 ViewSettings="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.MeasResultsVM.MeasResultSetts[1]}"
-                                      IndicatorColor="#32d74b" 
+                                      IndicatorColor="#64D2FF" 
                                       Style="{StaticResource MeasSingleIndicatorContainer}"
                                       DataContext="{Binding mainModel.MeasResults[1]}"/>
                 </StackPanel>

@@ -18,6 +18,7 @@
                  BorderBrush="{StaticResource BorderNonActiveColor}"
                  Background="Transparent"
                  BorderThickness="0,1,0,0"
+                 SelectionMode="Single"
                  VerticalAlignment="Top"
                  ItemContainerStyle="{StaticResource   ParameterListBoxItem}">            
             <ListBox.Resources>

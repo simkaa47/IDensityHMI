@@ -40,13 +40,13 @@
                                             
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility1}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle1, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time"  DataFieldY="Pulses"   Color="#FFFF0000">
+                                           DataFieldX="Time"  DataFieldY="Pulses"   Color="#FF453A">
             </oxy:LineSeries>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility2}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle2, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="CurValue1" Color="#FF0000FF"/>
+                                           DataFieldX="Time" DataFieldY="CurValue1" Color="#FF9F0A"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility3}"
@@ -56,7 +56,7 @@
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility4}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle4, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="CurValue1" Color="#FFA52A2A"/>
+                                           DataFieldX="Time" DataFieldY="CurValue1" Color="#FFF350"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility5}"
@@ -66,22 +66,22 @@
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility6}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle6, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="Current1" Color="#FFFFC0CB"/>
+                                           DataFieldX="Time" DataFieldY="Current1" Color="#BE38F3"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility7}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle7, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="Current2" Color="#FF00FFFF"/>
+                                           DataFieldX="Time" DataFieldY="Current2" Color="#5138F3"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility8}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle8, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="HvValue1" Color="#FF800080"/>
+                                           DataFieldX="Time" DataFieldY="HvValue1" Color="#603206"/>
 
             <oxy:LineSeries                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=DataSource}"
                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineVisibility9}"
                                            Title="{Binding RelativeSource={RelativeSource AncestorType=local:MainTrendControl}, Path=LineTitle9, UpdateSourceTrigger=PropertyChanged}"
-                                           DataFieldX="Time" DataFieldY="Temperature" Color="#FFFFA500"/>
+                                           DataFieldX="Time" DataFieldY="Temperature" Color="#076006"/>
             
         </oxy:Plot>
     </Grid>

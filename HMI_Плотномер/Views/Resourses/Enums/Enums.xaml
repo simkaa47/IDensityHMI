@@ -158,21 +158,21 @@
         <sys1:String>Процесс 1: усредненное значение</sys1:String>        
         <sys1:String>Процесс 2: мгновенное значение</sys1:String>
         <sys1:String>Процесс 2: усредненное значение</sys1:String>
-        <sys1:String>Значение тока на AI0, мкА</sys1:String>
-        <sys1:String>Значение тока на AI1, мкА</sys1:String>
-        <sys1:String>Значение HV, В</sys1:String>
-        <sys1:String>Значение температуры, °C</sys1:String>        
+        <sys1:String>Ток AI0, mА</sys1:String>
+        <sys1:String>Ток AI1, mА</sys1:String>
+        <sys1:String>Напряжение HV, В</sys1:String>
+        <sys1:String>Температура прибора, °C</sys1:String>        
     </x:Array>
     <x:Array Type="sys1:String"   x:Key="CurveColors">
-        <sys1:String>#FFFF0000</sys1:String>
-        <sys1:String>#FF0000FF</sys1:String>
+        <sys1:String>#FF453A</sys1:String>
+        <sys1:String>#FF9F0A</sys1:String>
         <sys1:String>#32D74B</sys1:String>
-        <sys1:String>#FFA52A2A</sys1:String>
+        <sys1:String>#FFF350</sys1:String>
         <sys1:String>#64D2FF</sys1:String>
-        <sys1:String>#FFFFC0CB</sys1:String>
-        <sys1:String>#FF00FFFF</sys1:String>
-        <sys1:String>#FF800080</sys1:String>
-        <sys1:String>#FFFFA500</sys1:String>
+        <sys1:String>#BE38F3</sys1:String>
+        <sys1:String>#5138F3</sys1:String>
+        <sys1:String>#603206</sys1:String>
+        <sys1:String>#076006</sys1:String>
         <sys1:String>#FFFFFF00</sys1:String>
     </x:Array>
     <x:Array Type="sys1:String" x:Key="Opacities">

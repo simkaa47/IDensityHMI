@@ -49,13 +49,9 @@
             </StackPanel>
             <!--#endregion-->
             <!--#region Other trend settings-->
-            <ListBox Grid.Column="1" 
-                     HorizontalContentAlignment="Stretch"
+            <StackPanel Grid.Column="1"                      
                      VerticalAlignment="Top"
-                     Margin="0,58,0,0"
-                     BorderThickness="0"
-                     FontSize="16"
-                               FontFamily="Roboto"
+                     Margin="0,58,0,0"                     
                      Height="142"
                      Width="280"
                      Background="Transparent">
@@ -64,6 +60,7 @@
                     <TextBlock Foreground="White"
                            TextWrapping="Wrap"
                            MaxWidth="200"
+                               FontSize="16"
                            VerticalAlignment="Center"
                            Text="Запись данных в график вне режима измерения"/>
                     <CheckBox Style="{StaticResource CheckBoxAqvaStyle}"                              
@@ -81,7 +78,7 @@
                                FontSize="16"
                                FontFamily="Roboto"
                            VerticalAlignment="Center"
-                           Text="Максимальное время отображения, мин"/>
+                           Text="Максимальное время отображения"/>
                     <GroupBox Style="{StaticResource GroupBoxTrendStyle}" 
                                   HorizontalAlignment="Right">
                         <GroupBox.Header>
@@ -95,7 +92,7 @@
                     </GroupBox>
                 </DockPanel>
                 <!--#endregion-->
-            </ListBox>
+            </StackPanel>
             <!--#endregion-->
         </Grid>
        
