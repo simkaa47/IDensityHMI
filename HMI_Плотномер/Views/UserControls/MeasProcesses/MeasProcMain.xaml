@@ -132,7 +132,7 @@
                               Height="40"                              
                               Background="Gray"
                               VerticalContentAlignment="Center"      
-                              
+                              Padding="12,0,0,0"
                               Width="165"
                               SelectedIndex="0">
                         <i:Interaction.Triggers>
@@ -141,19 +141,8 @@
                                     CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </ComboBox>
-                   
-                    <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
-                    Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
-                        <Image Source="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
-                       HorizontalAlignment="Center" Height="24" Width="24"/>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDown">
-                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MeasProcessVm.CopyMeasProcessCommand}"
-                                    CommandParameter="{Binding ElementName=MeasNumSelector, Path=SelectedItem}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Border>
+                    </ComboBox>                  
+                    
                 </StackPanel>
             </DockPanel>
             <!--#endregion-->

@@ -21,9 +21,9 @@
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="#33FFFFFF"/>
                 <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
+                    <!--<Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderBrush" Value="{StaticResource AquaColor}"/>
-                    </Trigger>
+                    </Trigger>-->
                     <DataTrigger Binding="{Binding IsWriting}" Value="False">
                         <Setter Property="BorderBrush"  Value="{StaticResource AquaColor}"/>
                     </DataTrigger>
@@ -123,7 +123,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <!--#endregion-->
-            <!--#region Индикатор -->
+            <!--#region Индикатор --><!--
             <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:CommandExtention}, Path=CommandButtonVisibility}"
                     Background="{Binding IsWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
@@ -136,7 +136,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Border>
-            <!--#endregion-->
+            --><!--#endregion-->
         </StackPanel>
         <DockPanel.ToolTip>
             <ToolTip Placement="MousePoint" BorderThickness="0">

@@ -19,7 +19,7 @@
             <StackPanel.Resources>
                 <conv:MultiplyOnNumberConverter x:Key="MultiplyOnNumberConverter"   Offset="0"/>
             </StackPanel.Resources>
-            <Border Background="Black" Margin="-10,20,0,0" HorizontalAlignment="Left">
+            <Border Background="Black" Margin="0,20,0,0" HorizontalAlignment="Left">
                 <DataGrid Background="Transparent"
                   Margin="10"
                   HorizontalAlignment="Left"
@@ -69,11 +69,11 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->                        
                         <!--#region Stand duartion -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ,  C" MaxWidth="223">                            
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДЛИТЕЛЬНОСТЬ СТАНДАРТИЗАЦИИ,  C" MaxWidth="180">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter  DataContext="{Binding StandDuration}" DescriptionNotVisible="True" Margin="20,5,0,5"
-                                              HorizontalAlignment="Center"
+                                              HorizontalAlignment="Left"
                                               ParameterWidth="109"
                                               Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.DurationWriteCommand}"/>
                                 </DataTemplate>
@@ -84,21 +84,21 @@
                         <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ФИЗИЧЕСКАЯ ВЕЛИЧИНА">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"
-                                             DescriptionNotVisible="True"
-                                             HorizontalAlignment="Center"
-                                             Margin="20,5,0,5"
+                                    <p:MeasUnitParameterText DataContext="{Binding StandPhysValue}"                                             
+                                                             DescriptionNotVisible="True"
+                                                             Margin="20,5,20,5"
                                                              ParameterWidth="86"
-                                             MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
-                                             MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
-                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/>
+                                                             HorizontalAlignment="Left"
+                                                             MeasType="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=DataContext.MeasType.Value}"
+                                                             MeasUnitMemoryId="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.MeasUnitMemoryId}"
+                                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.PhysValueWriteCommand}"/> 
 
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region Last stand date -->
-                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДАТА ПОСЛЕДНЕЙ СТАНДАРТИЗАЦИИ" MaxWidth="223">                            
+                        <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" Header="ДАТА ПОСЛЕДНЕЙ СТАНДАРТИЗАЦИИ" MaxWidth="200">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:DateTimeParameter DataContext="{Binding LastStandDate}" 
@@ -108,7 +108,8 @@
                                                          ParameterWidth="150"
                                                          VerticalAlignment="Center"
                                                          DataTimeFormat="d"
-                                                         HorizontalAlignment="Center"
+                                                         Margin="20,0,20,0"
+                                                         HorizontalAlignment="Left"
                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.LastStandDateWriteCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -120,9 +121,9 @@
                                 <DataTemplate>
                                     <p:TextParameter DataContext="{Binding StandResult}"
                                              DescriptionNotVisible="True"
-                                                     Margin="20,5,0,5"
+                                                     Margin="20,5,20,5"
                                                      ParameterWidth="104"
-                                             HorizontalAlignment="Center"
+                                             HorizontalAlignment="Left"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.ResultWriteCommand}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -132,12 +133,12 @@
                         <DataGridTemplateColumn HeaderTemplate="{StaticResource DataGridHeaderTemplate}" 
                                                 
                                                 Visibility="{Binding Source={StaticResource AdminVisibility}, Path=Data, Mode=TwoWay, Converter={StaticResource UserToVisibility}, ConverterParameter=Администратор, UpdateSourceTrigger=PropertyChanged}"
-                                                Header="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА" MaxWidth="225">                            
+                                                Header="ЗНАЧЕНИЕ С УЧЕТОМ ПОЛУРАСПАДА" MaxWidth="180">                            
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <p:TextParameter DataContext="{Binding HalfLifeCorr}"
                                              DescriptionNotVisible="True"
-                                             HorizontalAlignment="Center"
+                                             HorizontalAlignment="Left"
                                                     Margin="20,5,0,5"
                                                      ParameterWidth="104"
                                              Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StandVm.HalfLifeCorrWriteCommand}"/>

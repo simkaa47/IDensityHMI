@@ -29,11 +29,12 @@
     <DataTemplate x:Key="DataGridHeaderTemplate">
         <Border BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Center">
             <TextBlock TextWrapping="Wrap" Style="{DynamicResource Common}"
-                               Margin="20,0,0,0"
-                               FontSize="13"
-                   Foreground="White"
-                                HorizontalAlignment="Center"
-                                 VerticalAlignment="Center">
+                       Margin="20,0,0,0"
+                       FontSize="13"
+                       Foreground="White"
+                       LineStackingStrategy="BlockLineHeight" LineHeight="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
                 <TextBlock.Text>
                     <Binding/>
                 </TextBlock.Text>

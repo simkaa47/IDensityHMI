@@ -41,7 +41,7 @@ namespace IDensity.ViewModels
         /// <summary>
         /// Флаг копирования изм процесса
         /// </summary>
-        private bool _isCopying;
+        private bool _isCopying = true;
         /// <summary>
         /// Флаг копирования изм процесса
         /// </summary>
