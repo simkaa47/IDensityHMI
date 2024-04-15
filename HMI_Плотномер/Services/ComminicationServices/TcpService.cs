@@ -62,6 +62,7 @@ namespace IDensity.Services.ComminicationServices
         #region Соединение
         void Connect()
         {
+            int timeout = 5000;
             commands?.Clear();
             var ip = _model.TcpConnectData.IP;
             var port = _model.TcpConnectData.PortNum;
@@ -69,7 +70,10 @@ namespace IDensity.Services.ComminicationServices
             Client.ReceiveTimeout = 2000;
             Client.SendTimeout = 2000;
             TcpEvent?.Invoke($"Выполняется подключение к {ip}:{port}");
-            Client.Connect(ip, port);
+            if (!Client.ConnectAsync(ip, port).Wait(timeout))
+            {
+                throw new Exception($"Не удалось подключиться к {ip}:{port} в течение интервала {timeout}");
+            }
             currentIp = ip;
             TcpEvent?.Invoke($"Произведено подключение к {ip}:{port}");
             Stream = Client.GetStream();

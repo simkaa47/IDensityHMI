@@ -39,7 +39,8 @@ namespace IDensity.Core.Views.Converters
             if (!(value is IConvertible)) return new object[] {value };            
             if (!float.TryParse(value.ToString(), out temp)) return new object[] { value.ToString() };
             if (IsValid(value)) return new object[] { value.ToString() };
-            return new object[] { (temp - Offset) / K };
+            var floatValue = Math.Round((temp - Offset) / K, 5);
+            return new object[] { floatValue };
         }
 
         // Some types have Parse methods that are more successful than their type converters at converting strings
