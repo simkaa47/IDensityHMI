@@ -29,7 +29,7 @@ namespace IDensity.Core.Views.Converters
             {
                 float.TryParse(values[3].ToString(), out Offset);
             }
-            return (value * K + Offset).ToString(format);
+            return Math.Round(value * K + Offset,5).ToString(format);
             
         }
 
@@ -39,7 +39,7 @@ namespace IDensity.Core.Views.Converters
             if (!(value is IConvertible)) return new object[] {value };            
             if (!float.TryParse(value.ToString(), out temp)) return new object[] { value.ToString() };
             if (IsValid(value)) return new object[] { value.ToString() };
-            var floatValue = Math.Round((temp - Offset) / K, 5);
+            var floatValue = Math.Round((temp - Offset) / K);
             return new object[] { floatValue };
         }
 
