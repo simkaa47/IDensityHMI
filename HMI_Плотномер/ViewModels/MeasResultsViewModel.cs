@@ -219,8 +219,8 @@ namespace IDensity.Core.ViewModels
                 };
                 _measResultRepository.Add(tp);
                 tp.CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
-                tp.CurValue2 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
-                tp.AvgValue1 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
+                tp.AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                tp.CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
                 tp.AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
                 PlotCollection.Add(tp);
                 int i = 0;
