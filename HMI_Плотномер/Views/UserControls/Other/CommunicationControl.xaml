@@ -43,7 +43,7 @@
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.IP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Width="140"
-                             Margin="0,0,85,0"
+                             Margin="0,0,0,0"
                              Height="40"/>
                 </DockPanel>
                 <!--#endregion-->
@@ -54,7 +54,7 @@
                              HorizontalAlignment="Right"
                              Text="{Binding VM.mainModel.TcpConnectData.PortNum, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Width="140"
-                             Margin="0,0,85,0"
+                             Margin="0,0,0,0"
                              Height="40"/>
                 </DockPanel>
                 <!--#endregion-->
@@ -64,7 +64,7 @@
                         <TextBlock Text="Частота опроса прибора, мс" />
                         <TextBox Template="{StaticResource TextBoxTemplate}"
                              HorizontalAlignment="Right"
-                                 Margin="0,0,85,0"
+                                 Margin="0,0,0,0"
                              Text="{Binding VM.mainModel.TcpConnectData.Pause, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Width="145"
                              Height="40"/>
@@ -185,7 +185,7 @@
                                 
                             </TextBox>
                         </Border>
-                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                        <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
@@ -194,7 +194,7 @@
                                     <i:InvokeCommandAction Command="{Binding WriteEthParamsCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </Border>
+                        </Border>-->
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -222,7 +222,7 @@
 
                             </TextBox>
                         </Border>
-                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                        <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
@@ -231,7 +231,7 @@
                                     <i:InvokeCommandAction Command="{Binding WriteEthParamsCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </Border>
+                        </Border>-->
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -259,7 +259,7 @@
 
                             </TextBox>
                         </Border>
-                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                        <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
@@ -268,7 +268,7 @@
                                     <i:InvokeCommandAction Command="{Binding WriteEthParamsCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </Border>
+                        </Border>-->
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -344,7 +344,7 @@
                                 </StackPanel>
                                
                             </Border>
-                            <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                            <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.MacWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                                 <Image Source="{Binding  VM.mainModel.MacWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages}}"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
@@ -353,7 +353,7 @@
                                         <i:InvokeCommandAction Command="{Binding MacAddrWriteCommand}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </Border>
+                            </Border>-->
                         </StackPanel>
                     </DockPanel>
                 </ListBoxItem>

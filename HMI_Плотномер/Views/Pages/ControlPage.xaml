@@ -354,7 +354,7 @@
                 <DockPanel>
                     <TextBlock Text="Глубина усреднения спектра"  TextWrapping="Wrap" Margin="20,0,0,0"/>
                     <TextBox Template="{StaticResource TextBoxTemplate}" 
-                             Width="75" Margin="0,0,85,0"
+                             Width="75" Margin="0,0,0,0"
                              Height="40"
                              HorizontalAlignment="Right"
                              Text="{Binding AdcAvgSettings.SpectrFilterDeep, UpdateSourceTrigger=PropertyChanged}"/>
@@ -376,8 +376,8 @@
                     <TextBlock Text="Диапазон поиcка максимума спектра, мин/макс" Margin="20,0,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Text="{Binding AdcAvgSettings.SpectrMinLimit, UpdateSourceTrigger=LostFocus}" 
-                                 Width="68" Height="40" 
-                                 Margin="0,0,24,0"
+                                 Width="67" Height="40" 
+                                 Margin="0,0,5,0"
                                  Template="{StaticResource TextBoxTemplate}"
                                  HorizontalAlignment="Right"
                                   VerticalContentAlignment="Center"/>
@@ -394,18 +394,26 @@
                     <TextBlock Text="Расчет пределов с заданными отклонениями" TextWrapping="Wrap" Margin="20,0,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBox Text="{Binding AdcAvgSettings.LeftCounterCoeff, StringFormat=f2,ConverterCulture=RU-ru, UpdateSourceTrigger=LostFocus}" 
-                                        Width="80" Height="40" 
+                                 Width="67" Height="40" 
                                  Margin="0,5,5,0"
                                  Template="{StaticResource TextBoxTemplate}"
-                                         HorizontalAlignment="Right"
-                                         VerticalContentAlignment="Center"/>
+                                 HorizontalAlignment="Right"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding TuneCounterDiapasoneCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
                         <TextBox Text="{Binding AdcAvgSettings.RightCounterCoeff, StringFormat=f2, ConverterCulture=RU-ru, UpdateSourceTrigger=LostFocus}" 
-                                         Width="80" Height="40" 
-                                 Margin="0,5,5,0"
+                                 Width="68" Height="40" 
+                                 Margin="0,5,0,0"
                                  Template="{StaticResource TextBoxTemplate}"
-                                         HorizontalAlignment="Right"
-                                         VerticalContentAlignment="Center"/>
-                        <Border Height="24" Width="40" Margin="20,0,20,0" CornerRadius="4"
+                                 HorizontalAlignment="Right"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding TuneCounterDiapasoneCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <!--<Border Height="24" Width="40" Margin="20,0,20,0" CornerRadius="4"
                     Background="{Binding  VM.mainModel.TcpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="..\Resourses\Pictures\DoneGrey.png"
                        HorizontalAlignment="Center" Height="24" Width="24"/>
@@ -414,7 +422,7 @@
                                     <i:InvokeCommandAction Command="{Binding TuneCounterDiapasoneCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </Border>
+                        </Border>-->
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -442,7 +450,7 @@
                                 </TextBox.InputBindings>
                             </TextBox>
                         </Border>
-                        <Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
+                        <!--<Border Height="24" Width="40" Margin="25,0,20,0" CornerRadius="4"
                                         Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
                                            HorizontalAlignment="Center" Height="24" Width="24"/>
@@ -451,7 +459,7 @@
                                     <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </Border>
+                        </Border>-->
                     </StackPanel>
                 </DockPanel>
                 <!--#endregion-->
@@ -482,7 +490,7 @@
                             </TextBox>
                         </Border>
 
-                        <Border Height="24" Width="40" Margin="25,0,20,0"
+                        <!--<Border Height="24" Width="40" Margin="25,0,20,0"
                                         CornerRadius="4"
                                         Background="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersColors}}">
                             <Image Source="{Binding  VM.mainModel.UdpWriting, Converter={StaticResource GetIfTrue}, ConverterParameter={StaticResource ButtonsParametersImages1}}"
@@ -492,7 +500,7 @@
                                     <i:InvokeCommandAction Command="{Binding VM.ConnectSettingsVm.SetUpsAddrCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </Border>
+                        </Border>-->
 
                     </StackPanel>
                 </DockPanel>
