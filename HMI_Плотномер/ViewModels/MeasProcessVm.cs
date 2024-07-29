@@ -255,11 +255,6 @@ namespace IDensity.ViewModels
         }, canExecPar => true));
         #endregion
 
-
-
-
-
-
         void WriteTempCompensation<T>(string id, Parameter<T> par) where T : IComparable
         {
             var proc = SelectedProcess;
@@ -295,7 +290,7 @@ namespace IDensity.ViewModels
 
         #region Записать- тип расчета
         RelayCommand _writeCalcTypeCommand;
-        public RelayCommand WriteCalcTypeCommand => _writeCalcTypeCommand ?? (_writeCalcTypeCommand = new RelayCommand(exec =>
+        public RelayCommand WriteCalcTypeCommand => _writeCalcTypeCommand ??= new RelayCommand(exec =>
         {
 
             if (SelectedProcess is null) return;
@@ -304,7 +299,7 @@ namespace IDensity.ViewModels
             VM.CommService.WriteMeasProcSettings(cmd, SelectedProcess.Num);
             SelectedProcess.CalculationType.IsWriting = true;
 
-        }, canExec => SelectedProcess != null && GetCommandCondition(SelectedProcess.CalculationType)));
+        }, canExec => SelectedProcess != null);
         #endregion
 
         #region Записать к-ты расчета обьема

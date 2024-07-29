@@ -73,7 +73,7 @@
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationCoeffCommand}"
                                                       CommanDParameter="0"
                                                          ParameterWidth="104"
-                                                         Margin="20,0,0,0"
+                                                         Margin="20,0,10,0"
                                                       HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"/>
                                     </DataTemplate>
@@ -88,7 +88,7 @@
                                         <p:TextParameter DescriptionNotVisible="True" DataContext="{Binding Coeffs[1]}"
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TempCompensationCoeffCommand}"
                                                       CommanDParameter="1"
-                                                         Margin="20,0,0,0"
+                                                         Margin="20,0,10,0"
                                                          ParameterWidth="104"
                                                       HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"/>
