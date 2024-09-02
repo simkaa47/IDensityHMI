@@ -101,9 +101,27 @@ namespace IDensity.ViewModels
         public RelayCommand switchHvCommandCommand => 
             _switchHvCommandCommand ?? (_switchHvCommandCommand = new RelayCommand(execPar => 
             {
+                
                 VM.CommService.SwitchHv();
             }, canExecPar => true));
         #endregion
+
+        #region Проброс данных ФЭУ на RS
+        /// <summary>
+        /// Включить-выключить Hv
+        /// </summary>
+        RelayCommand _switchHvDataToRsCommand;
+        /// <summary>
+        /// Включить-выключить Hv
+        /// </summary>
+        public RelayCommand SwitchHvDataToRsCommand =>
+            _switchHvDataToRsCommand ?? (_switchHvDataToRsCommand = new RelayCommand(execPar =>
+            {
+                VM.CommService.SwitchHvToRs();
+            }, canExecPar => true));
+        #endregion
+
+
 
         #region Установить напряжение HV
         /// <summary>

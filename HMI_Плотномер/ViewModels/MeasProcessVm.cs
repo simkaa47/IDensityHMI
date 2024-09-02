@@ -363,7 +363,7 @@ namespace IDensity.ViewModels
             int i = 0;
             if (!int.TryParse(execPar.ToString(), out i)) return;
             WriteCalibrCurveData(i.ToString(), SelectedProcess.CalibrCurve.Coeffs[i]);
-        }, canExecPar => VM.mainModel.Connecting.Value && SelectedProcess != null));
+        }, canExecPar => SelectedProcess != null));
         #endregion
 
         #region Write density liq settings

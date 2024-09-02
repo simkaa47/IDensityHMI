@@ -102,6 +102,14 @@ namespace IDensity.Services.ComminicationServices
         }
         #endregion
 
+        #region Управление пробросом данных на RS
+        public void SwitchHvToRs()
+        {
+            var value = _mainModel.TelemetryHV.HvToRs.Value ? 0 : 1;
+            Tcp.SwitchHvToRs(value);
+        }
+        #endregion
+
         #region Команда "Поменять UDP адрес источника"
         public void SetUdpAddr(byte[] addr, int portNum)
         {

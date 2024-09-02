@@ -725,6 +725,12 @@ namespace IDensity.Services.ComminicationServices
             {
                 _model.Mac = list[0].Select(num => (byte)num).ToArray();
             }
+            // Hv to Rs485
+            list = GetNumber("hv_to_485", 1, 1, str);
+            if (list != null) 
+            {
+                _model.TelemetryHV.HvToRs.Value = list[0][0] != 0;
+            }
         }
         #endregion
 
@@ -844,6 +850,14 @@ namespace IDensity.Services.ComminicationServices
         {
             var str = $"*SETT,hv_target={value * 20}#";
             commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings7(); }, Encoding.ASCII.GetBytes(str)));
+        }
+        #endregion
+
+        #region Уставка проброса Rs
+        public void SwitchHvToRs(int value)
+        {
+            var str = $"*SETT,hv_to_485={value}#";
+            commands.Enqueue(new TcpWriteCommand((buf) => { SendTlg(buf); GetSettings8(); }, Encoding.ASCII.GetBytes(str)));
         }
         #endregion
 

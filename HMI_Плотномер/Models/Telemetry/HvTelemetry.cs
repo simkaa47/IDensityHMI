@@ -36,5 +36,10 @@ namespace IDensity.Core.Models.Telemetry
         #region Статус связи с платой HV
         public Parameter<bool> HvCommState { get; } = new Parameter<bool>("HvCommState", "Статус связи с платой ФЭУ", false, true, 0, "") {Value = true };
         #endregion
+        #region Проброс данных на Rs485
+        public Parameter<bool> HvToRs { get; } = new Parameter<bool>("HvToRs", "Проброс данных платы ФЭУ на Rs485", false, true, 0, "") ;
+        #endregion
+
+
     }
 }

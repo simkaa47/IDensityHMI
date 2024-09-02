@@ -112,7 +112,7 @@
         </TabItem>
         <!--#endregion-->
         <!--#region Boards -->
-        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Плата  ФЭУ" >
+        <TabItem Style="{StaticResource TabItemSettingsStyle}" Header="Платы  ФЭУ и питания" >
             <adc:HvControl/>
         </TabItem>
         <!--#endregion--> 
