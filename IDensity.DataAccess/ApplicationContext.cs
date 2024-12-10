@@ -19,6 +19,7 @@ namespace IDensity.DataAccess
         {
             optionsBuilder
                // .UseLazyLoadingProxies()
+               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .UseSqlite("Data Source=application.db");
         }
     }

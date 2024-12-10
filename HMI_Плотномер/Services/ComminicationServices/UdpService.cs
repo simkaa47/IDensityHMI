@@ -64,7 +64,7 @@ namespace IDensity.Services.ComminicationServices
             
             await Task.Run(() =>
             {
-                SetClient(_vM.mainModel.PortUdp);
+                SetClient(40058);
                 while (true)
                 {
 
@@ -83,7 +83,7 @@ namespace IDensity.Services.ComminicationServices
                     finally
                     {
                         Client?.Close();
-                        SetClient(_vM.mainModel.PortUdp);
+                        SetClient(40058);
                     } 
                 }
             });

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text;
+using System.Threading;
 using IDensity.ViewModels.Commands;
 using System.Windows.Controls;
 using IDensity.Models;
@@ -30,6 +31,8 @@ namespace IDensity.Core.ViewModels
             Init();
         }
 
+        private Timer? _timer;
+
         public VM VM { get; }
 
         private void Init()
@@ -39,6 +42,11 @@ namespace IDensity.Core.ViewModels
             _trendsVisible = XmlInit.ClassInit<TrendVisible>();
             InitViewSettings();
             GetMeasDates();
+            /*_timer = new Timer((s) =>
+            {
+                AddDataToCollection();
+            });
+            _timer.Change(0, 5000);*/
         }
 
         private void InitViewSettings()
@@ -166,26 +174,40 @@ namespace IDensity.Core.ViewModels
                 ArchivalTrendDownloading = true;
                 await Task.Run(() =>
                 {
-                    var list = _measResultRepository.GetWhere(m => m.Time >= DisplayDateStart && m.Time <= DisplayDateEnd);
-                    for (int j = 0; j < 2; j++)
+                    List<MeasResultLog>? logs = null;
+                    using (ApplicationContext dbContext = new ApplicationContext())
                     {
-                        var unit = GetCoeff(VM.mainModel.MeasResults[j].MeasUnitMemoryId);
-                        foreach (var point in list)
+                        try
                         {
-                            if (j == 0)
-                            {
-                                point.CurValue1 = point.CurValue1 * unit.K + unit.Offset;
-                                point.AvgValue1 = point.AvgValue1 * unit.K + unit.Offset;
-                            }
-                            else
-                            {
-                                point.CurValue2 = point.CurValue2 * unit.K + unit.Offset;
-                                point.AvgValue2 = point.AvgValue2 * unit.K + unit.Offset;
-                            }
+                            logs = dbContext.MeasResultLogs.Where(m => m.Time >= DisplayDateStart && m.Time <= DisplayDateEnd)
+                                                    .ToList();
                         }
-                        MeasResultMeasUnits[j] = unit;
+                        catch (Exception)
+                        {
+
+                           
+                        }
+                        
                     }
-                    ArchivalDataPotnts = list;
+                        for (int j = 0; j < 2; j++)
+                        {
+                            var unit = GetCoeff(VM.mainModel.MeasResults[j].MeasUnitMemoryId);
+                            foreach (var point in logs)
+                            {
+                                if (j == 0)
+                                {
+                                    point.CurValue1 = point.CurValue1 * unit.K + unit.Offset;
+                                    point.AvgValue1 = point.AvgValue1 * unit.K + unit.Offset;
+                                }
+                                else
+                                {
+                                    point.CurValue2 = point.CurValue2 * unit.K + unit.Offset;
+                                    point.AvgValue2 = point.AvgValue2 * unit.K + unit.Offset;
+                                }
+                            }
+                            MeasResultMeasUnits[j] = unit;
+                        }
+                    ArchivalDataPotnts = logs;
                     ArchivalTrendDownloading = false;
                 });
 
@@ -204,51 +226,62 @@ namespace IDensity.Core.ViewModels
             if (!(mainModel.CycleMeasStatus.Value || TrendSettings.WriteIfNoMeasState)) return;
             App.Current?.Dispatcher?.Invoke(() =>
             {
-                var tp = new MeasResultLog
+                try
                 {
-                    Time = DateTime.Now,
-                    Pulses = mainModel.MeasResults[0].CounterValue.Value,
-                    CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value,
-                    AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value,
-                    CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value,
-                    AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value,
-                    Current1 = ((float)mainModel.AnalogGroups[0].AI.AdcValue.Value)/1000,
-                    Current2 = ((float)mainModel.AnalogGroups[1].AI.AdcValue.Value)/1000,
-                    HvValue1 = mainModel.TelemetryHV.VoltageCurOut.Value,
-                    Temperature = mainModel.TempTelemetry.TempInternal.Value
-                };
-                _measResultRepository.Add(tp);
-                tp.CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
-                tp.AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
-                tp.CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
-                tp.AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
-                PlotCollection.Add(tp);
-                int i = 0;
-                while (PlotCollection.Count > 0 && PlotCollection[0].Time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 10)
-                {
-                    PlotCollection.RemoveAt(0);
-                    i++;
-                }
-                for (int j = 0; j < 2; j++)
-                {
-                    var unit = GetCoeff(mainModel.MeasResults[j].MeasUnitMemoryId);
-                    if (!(MeasUnit.CompareMeasUnits(unit, MeasResultMeasUnits[j])))
+                    var tp = new MeasResultLog
                     {
-                        foreach (var point in PlotCollection)
-                        {
-                            if (j == 0)
-                            {
-                                point.CurValue1 = ((point.CurValue1 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
-                                point.AvgValue1 = ((point.AvgValue1 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
-                            }
-                            else
-                            {
-                                point.CurValue2 = ((point.CurValue2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
-                                point.AvgValue2 = ((point.AvgValue2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
-                            }
-                        }
-                        MeasResultMeasUnits[j] = unit;
+                        Time = DateTime.Now,
+                        Pulses = mainModel.MeasResults[0].CounterValue.Value,
+                        CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value,
+                        AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value,
+                        CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value,
+                        AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value,
+                        Current1 = ((float)mainModel.AnalogGroups[0].AI.AdcValue.Value)/1000,
+                        Current2 = ((float)mainModel.AnalogGroups[1].AI.AdcValue.Value)/1000,
+                        HvValue1 = mainModel.TelemetryHV.VoltageCurOut.Value,
+                        Temperature = mainModel.TempTelemetry.TempInternal.Value
+                    };
+                    using (ApplicationContext dbContext = new ApplicationContext())
+                    {                        
+                        dbContext.MeasResultLogs.Add(tp);
+                        dbContext.SaveChanges();
+                    }                   
+                    tp.CurValue1 = mainModel.MeasResults[0].PhysValueCur.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                    tp.AvgValue1 = mainModel.MeasResults[0].PhysValueAvg.Value * MeasResultMeasUnits[0].K + MeasResultMeasUnits[0].Offset;
+                    tp.CurValue2 = mainModel.MeasResults[1].PhysValueCur.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
+                    tp.AvgValue2 = mainModel.MeasResults[1].PhysValueAvg.Value * MeasResultMeasUnits[1].K + MeasResultMeasUnits[1].Offset;
+                    PlotCollection.Add(tp);
+                    int i = 0;
+                    while (PlotCollection.Count > 0 && PlotCollection[0].Time < DateTime.Now.AddMinutes(TrendSettings.PlotTime * (-1)) && i < 10)
+                    {
+                        PlotCollection.RemoveAt(0);
+                        i++;
                     }
+                    for (int j = 0; j < 2; j++)
+                    {
+                        var unit = GetCoeff(mainModel.MeasResults[j].MeasUnitMemoryId);
+                        if (!(MeasUnit.CompareMeasUnits(unit, MeasResultMeasUnits[j])))
+                        {
+                            foreach (var point in PlotCollection)
+                            {
+                                if (j == 0)
+                                {
+                                    point.CurValue1 = ((point.CurValue1 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.AvgValue1 = ((point.AvgValue1 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                }
+                                else
+                                {
+                                    point.CurValue2 = ((point.CurValue2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                    point.AvgValue2 = ((point.AvgValue2 - MeasResultMeasUnits[j].Offset) / MeasResultMeasUnits[j].K) * unit.K + unit.Offset;
+                                }
+                            }
+                            MeasResultMeasUnits[j] = unit;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
 
             });

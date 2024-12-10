@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-                    xmlns:uc="clr-namespace:IDensity.Views.Resourses.UserControls"
-                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Styles">
+                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
 
     <!--Control colors.-->
     <x:Array Type="sys:String" x:Key="CompoboxColors">

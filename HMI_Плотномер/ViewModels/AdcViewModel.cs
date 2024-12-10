@@ -1,5 +1,4 @@
-﻿using IDensity.AddClasses;
-using IDensity.Core.Models.Adc;
+﻿using IDensity.Core.Models.Adc;
 using IDensity.Core.Models.Counters;
 using IDensity.DataAccess;
 using IDensity.Models;

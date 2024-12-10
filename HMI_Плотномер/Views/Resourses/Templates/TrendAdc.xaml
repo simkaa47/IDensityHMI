@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:oxy="http://oxyplot.org/wpf"
                     xmlns:vm="clr-namespace:IDensity.ViewModels"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:IDensity.Views.Resourses.Templates">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ControlTemplate x:Key="AdcTrend" TargetType="UserControl" >
         <Grid>
             <!--#region Тренд в режиме осциллографа-->
